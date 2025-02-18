@@ -9,6 +9,11 @@ The Library Management System is a software application designed to manage and a
 - **Transaction Management**: Issue and return books, track due dates, and manage fines.
 - **Reports**: Generate various reports such as issued books, overdue books, and member activity.
 
+## DATABASE
+```sh
+https://dbdiagram.io/d/Library-66eea16ea0828f8aa695fb58
+```
+
 ## Installation
 1. Clone the repository:
     ```sh
@@ -18,10 +23,7 @@ The Library Management System is a software application designed to manage and a
     ```sh
     cd LibraryManagement
     ```
-3. Install the required dependencies:
-    ```sh
-    npm install
-    ```
+
 
 ## Usage
 
