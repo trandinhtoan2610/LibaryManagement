@@ -5,11 +5,10 @@ import DTO.Employee;
 import java.util.List;
 
 
-public interface IRepositoryBase {
-    Employee findById(Long id);
-    List<Employee> findAll();
-    Long create(Employee employee);
-    boolean update(Employee employee);
+public interface IRepositoryBase<T> {
+    T findById(Long id);
+    List<T> findAll();
+    Long create(T t);
+    boolean update(T t);
     boolean delete(Long id);
-
 }
