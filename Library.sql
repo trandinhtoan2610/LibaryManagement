@@ -1,99 +1,101 @@
 CREATE TABLE `Role` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) UNIQUE NOT NULL,
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `username` varchar(255) UNIQUE,
+  `username` varchar(255) UNIQUE NOT NULL,
   `passord` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
   `phone` varchar(20) NOT NULL,
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Customer` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255),
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `name` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Author` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255),
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `name` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Bookshelf` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255)
+  `name` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Category` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `createdAt` datetime DEFAULT now(),
-  `updatedAt` datetime DEFAULT null ON UPDATE now() 
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Book` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `categoryId` bigint,
-  `authorId` bigint,
-  `publisherId` bigint,
-  `bookshelfId` bigint,
-  `quantity` int,
+  `categoryId` bigint NOT NULL,
+  `authorId` bigint NOT NULL,
+  `publisherId` bigint NOT NULL,
+  `bookshelfId` bigint NOT NULL,
+  `quantity` int NOT NULL,
   `yeayearOfpublication` year,
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Publisher` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address` varchar(255),
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Borrow` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `employeeId` bigint,
-  `customerId` bigint,
-  `status` ENUM ('Borrowed', 'Returned', 'Overdue') DEFAULT 'Borrowed',
-  `duedate` datetime,
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `employeeId` bigint NOT NULL,
+  `customerId` bigint NOT NULL,
+  `status` ENUM ('Borrowed', 'Returned', 'Overdue') NOT NULL DEFAULT 'Borrowed',
+  `duedate` datetime NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `BorrowDetails` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `borrowId` bigint,
-  `bookId` bigint,
-  `quatity` int DEFAULT 1
+  `borrowId` bigint NOT NULL,
+  `bookId` bigint NOT NULL,
+  `quatity` int NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Supplier` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255),
-  `createdAt` datetime DEFAULT (now()),
-  `updatedAt` datetime DEFAULT null ON UPDATE now()
+  `name` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
+  `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `PurchaseOrders` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `supplierId` bigint NOT NULL,
   `employeeId` bigint NOT NULL,
-  `status` ENUM ('Pending', 'Completed', 'Cancelled') DEFAULT 'Pending',
-  `totalAmount` decimal(10,2) DEFAULT 0,
-  `createdAt` datetime DEFAULT (now()),
+  `status` ENUM ('Pending', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Pending',
+  `totalAmount` decimal(10,2) NOT NULL DEFAULT 0,
+  `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatdeAt` datetime DEFAULT null
 );
 
