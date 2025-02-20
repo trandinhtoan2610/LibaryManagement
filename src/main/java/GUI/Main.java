@@ -23,9 +23,6 @@ public class Main extends Thread{
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException _) {
 
         }
-
-        Book book = new Book();
-        book.set
         new LoginForm();
     }
 
