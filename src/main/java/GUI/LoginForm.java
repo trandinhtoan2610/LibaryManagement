@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
+import static GUI.Main.Sleep;
+
 public class LoginForm extends JFrame {
     public static String username = "";
     public EmployeeBUS employeeBUS = new EmployeeBUS();
@@ -93,16 +95,18 @@ public class LoginForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String password = new String(passwordField.getPassword());
                 Employee user = employeeBUS.login(usernameField.getText(),password);
+                setVisible(false);
 
-//                loading load = new loading();
-//                load.setVisible(true);
-//                Sleep(2000);
-//                load.setVisible(false);
-//                load.dispose();
+                loading load = new loading();
+                load.setVisible(true);
+                Sleep(2000);
+                load.setVisible(false);
+                load.dispose();
 
                 if (user != null) {
                     username = user.getUsername();
                     setVisible(false);
+                    new MainFrame();
                 } else {
                     JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }

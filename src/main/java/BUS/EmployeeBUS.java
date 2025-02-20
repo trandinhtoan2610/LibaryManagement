@@ -1,11 +1,13 @@
 package BUS;
 
+import DAL.EmployeeDAL;
 import DAL.Interface.IEmployeeDAL;
 import DTO.Employee;
 
 
 public class EmployeeBUS {
-    private IEmployeeDAL employeeDAL;
+    private final IEmployeeDAL employeeDAL = new EmployeeDAL();
+
     public Employee login(String username, String password){
         if(username == null || password == null)
             return null;
