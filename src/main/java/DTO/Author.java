@@ -1,4 +1,6 @@
 package DTO;
 
-public class Author {
+import DTO.Abstract.EntityAuditNameBase;
+
+public class Author extends EntityAuditNameBase<Long> {
 }

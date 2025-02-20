@@ -1,4 +1,6 @@
 package DTO;
 
-public class Category {
+import DTO.Abstract.EntityAuditNameBase;
+
+public class Category extends EntityAuditNameBase<Long> {
 }

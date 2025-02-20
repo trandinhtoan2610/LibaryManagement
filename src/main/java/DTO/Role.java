@@ -1,4 +1,7 @@
 package DTO;
 
-public class Role {
+import DTO.Abstract.EntityAuditNameBase;
+
+public class Role extends EntityAuditNameBase<Long> {
+
 }

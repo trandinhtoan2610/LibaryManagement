@@ -1,38 +1,27 @@
 package GUI;
 
 
-import GUI.Styles.RoundedPasswordField;
-import GUI.Styles.RoundedTextField;
+import BUS.EmployeeBUS;
+import DTO.Employee;
+import GUI.Component.RoundedPasswordField;
+import GUI.Component.RoundedTextField;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.Objects;
-import java.util.prefs.Preferences;
 
 public class LoginForm extends JFrame {
-    public Preferences pref = Preferences.userRoot().node("remember");
-    public static long role;
-    public static boolean isLogin = false;
     public static String username = "";
-
-
-
-
-
-
-
+    public EmployeeBUS employeeBUS = new EmployeeBUS();
 
     /**
      * Create the frame.
      */
     public LoginForm() {
         // Tạo cửa sổ JFrame
-        setTitle("Login Form");
+        setTitle("Đăng nhập");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(960, 650);
         setLocationRelativeTo(null);
@@ -49,79 +38,81 @@ public class LoginForm extends JFrame {
         };
         add(image, BorderLayout.WEST);
 
+        RoundedTextField usernameField = new RoundedTextField(20, 15, 15);
+        usernameField.setPlaceholder("Nhập tài khoản");
+        usernameField.setBackground(new Color(245, 245, 245));
+        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        usernameField.setBorderColor(new Color(200, 200, 200));
+        usernameField.setFocusBorderColor(new Color(0, 120, 215));
+        RoundedPasswordField passwordField = new RoundedPasswordField(20, 15, 15);
+        passwordField.setPlaceholder("Nhập mật khẩu");
+        passwordField.setBackground(new Color(245, 245, 245));
+        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 
-
-
-        JTextField usernameField = new RoundedTextField(20, 100, 100);
-        usernameField.setForeground(Color.GRAY);
-        usernameField.setText("Nhập tài khoản");
-        usernameField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (usernameField.getText().equals("Nhập tài khoản")) {
-                    usernameField.setText("");
-                    usernameField.setForeground(Color.BLACK);
-                }
+        JButton loginButton = new JButton("ĐĂNG NHẬP");
+        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setBackground(new Color(0, 120, 215));
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        loginButton.setFocusPainted(false);
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                loginButton.setBackground(new Color(0, 90, 180));
             }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (usernameField.getText().isEmpty()) {
-                    usernameField.setText("Nhập tài khoản");
-                    usernameField.setForeground(Color.GRAY);
-                }
-            }
-        });
-
-        JPasswordField passwordField = new RoundedPasswordField(20, 100, 100);
-        passwordField.setText("<PASSWORD>");
-        passwordField.setForeground(Color.GRAY);
-        passwordField.setBorder(new LineBorder(Color.BLACK, 1, true));
-        passwordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (passwordField.getText().equals("<PASSWORD>")) {
-                    passwordField.setText("");
-                    passwordField.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (passwordField.getText().isEmpty()) {
-                    passwordField.setText("<PASSWORD>");
-                    passwordField.setForeground(Color.GRAY);
-                }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                loginButton.setBackground(new Color(0, 120, 215));
             }
         });
 
-        JButton loginButton = new JButton("Login");
+
         JPanel form = new JPanel();
-        form.setLayout(new GridLayout(6, 1));
-        // Thêm các thành phần vào form
-
-        form.add(usernameField);
-        form.add(passwordField);
-        form.add(loginButton);
-
-        // Thêm form vào cửa sổ JFrame
+        form.setLayout(new GridBagLayout());
+        form.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 10, 10); // Padding
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 0;
+        form.add(createLabel("Tài khoản:"), gbc);
+        gbc.gridy = 1;
+        form.add(usernameField, gbc);
+        gbc.gridy = 2;
+        form.add(createLabel("Mật khẩu:"), gbc);
+        gbc.gridy = 3;
+        form.add(passwordField, gbc);
+        gbc.gridy = 4;
+        gbc.insets = new Insets(15, 10, 5, 10); // Tăng padding trên dưới cho nút
+        form.add(loginButton, gbc);
         add(form);
         setVisible(true);
 
-        // Thêm sự kiện khi nhấn nút login
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
+                Employee user = employeeBUS.login(usernameField.getText(),password);
 
+//                loading load = new loading();
+//                load.setVisible(true);
+//                Sleep(2000);
+//                load.setVisible(false);
+//                load.dispose();
 
-                if (username.equals("admin") && password.equals("1234")) {
-                    JOptionPane.showMessageDialog(LoginForm.this, "Đăng nhập thành công!");
+                if (user != null) {
+                    username = user.getUsername();
+                    setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+    }
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        label.setForeground(new Color(80, 80, 80));
+        return label;
     }
 }

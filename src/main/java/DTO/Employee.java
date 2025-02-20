@@ -1,10 +1,12 @@
 package DTO;
 import DTO.Abstract.EntityAuditBase;
+import DTO.Abstract.EntityAuditNameBase;
+
 import java.util.Date;
 
 
-public class Employee extends EntityAuditBase<Long> {
-    private String name,username,password,phone;
+public class Employee extends EntityAuditNameBase<Long> {
+    private String username,password,phone;
     private Long roleId;
 
     public Employee(Long id, Long roleId, String name, String username, String password, String phone, Date createdAt, Date updatedAt) {
@@ -26,22 +28,12 @@ public class Employee extends EntityAuditBase<Long> {
         this.phone = phone;
     }
 
-
-
     public Long getRoleId() {
         return roleId;
     }
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {

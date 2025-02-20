@@ -1,4 +1,6 @@
 package DTO;
 
-public class Bookshelf {
+import DTO.Abstract.EntityAuditNameBase;
+
+public class Bookshelf extends EntityAuditNameBase<Long> {
 }

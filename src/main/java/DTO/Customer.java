@@ -1,4 +1,6 @@
-package DTO.Interface;
+package DTO;
 
-public class Customer {
+import DTO.Abstract.EntityAuditNameBase;
+
+public class Customer extends EntityAuditNameBase<Long> {
 }

@@ -1,16 +1,10 @@
 package GUI;
-import DAL.DatabaseConnection;
-import DAL.EmployeeDAL;
-import DTO.Employee;
+
+
+import DTO.Book;
 
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
+
 
 
 
@@ -29,9 +23,10 @@ public class Main extends Thread{
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException _) {
 
         }
-       LoginForm login = new LoginForm();
 
-//       Login();
+        Book book = new Book();
+        book.set
+        new LoginForm();
     }
 
     public static void Sleep(long j) {
@@ -42,17 +37,5 @@ public class Main extends Thread{
             e.printStackTrace();
         }
     }
-//    public static void Login() {
-//        System.out.println("Hello word");
-//        while(!LoginForm.isLogin) {
-//            Sleep(1000);
-//        }
-//        if(LoginForm.isLogin) {
-//            loading load = new loading();
-//            load.setVisible(true);
-//            Sleep(2000);
-//            load.setVisible(false);
-//            load.dispose();
-//        }
-//    }
+
 }

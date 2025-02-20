@@ -14,19 +14,6 @@ public class loading extends JFrame {
 
     private JPanel contentPane;
 
-    /**
-     * Launch the application.
-     */
-
-
-    public static void Sleep(long j) {
-        try {
-            Thread.sleep(j);
-        } catch (InterruptedException e) {
-
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Create the frame.
