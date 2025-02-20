@@ -3,6 +3,7 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.util.Objects;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ public class loading extends JFrame {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 659, 465);
+        setBackground(Color.cyan);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -29,7 +31,7 @@ public class loading extends JFrame {
 
         JLabel lblNewLabel = new JLabel("");
         lblNewLabel
-                .setIcon(new ImageIcon("img\\unnamed.gif"));
+                .setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/unnamed.gif"))));
         lblNewLabel.setBounds(230, 73, 294, 272);
         contentPane.add(lblNewLabel);
         contentPane.setBackground(new Color(0, 0, 0, 0));

@@ -3,11 +3,13 @@ package DAL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import DAL.Interface.IEmployeeDAL;
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
 import DTO.Employee;
 
-public class EmployeeDAL implements IRepositoryBase<Employee> {
+public class EmployeeDAL implements IEmployeeDAL {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Employee> employeeRowMapper = this::mapRowToEmployee;
 
@@ -24,7 +26,9 @@ public class EmployeeDAL implements IRepositoryBase<Employee> {
         );
     }
 
-    public  Employee Login(String username, String password){
+
+    @Override
+    public  Employee login(String username, String password){
         String sql = "SELECT * FROM employee WHERE username = ? AND password = ?";
         return genericDAL.queryForObject(sql, employeeRowMapper, username, password);
     }
