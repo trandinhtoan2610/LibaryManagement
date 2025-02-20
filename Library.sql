@@ -52,7 +52,7 @@ CREATE TABLE `Book` (
   `publisherId` bigint NOT NULL,
   `bookshelfId` bigint NOT NULL,
   `quantity` int NOT NULL,
-  `yeayearOfpublication` year,
+  `yearOfpublication` year,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
