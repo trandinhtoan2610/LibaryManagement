@@ -5,14 +5,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import DAL.Interface.IEmployeeDAL;
-import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
 import DTO.Employee;
 
 public class EmployeeDAL implements IEmployeeDAL {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Employee> employeeRowMapper = this::mapRowToEmployee;
-
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
         return new Employee(
                 rs.getLong("id"),

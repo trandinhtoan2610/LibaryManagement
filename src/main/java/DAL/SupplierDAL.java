@@ -1,7 +1,7 @@
 package DAL;
 
 import DAL.Interface.IRepositoryBase;
-import DTO.Employee;
+import DAL.Interface.RowMapper;
 import DTO.Supplier;
 
 import java.sql.ResultSet;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class SupplierDAL implements IRepositoryBase<Supplier>{
     private final GenericDAL genericDAL = new GenericDAL();
-
-    private Supplier mapRowToEmployee(ResultSet rs) throws SQLException {
+    private final RowMapper<Supplier> SupplierRowMapper = this::mapRowToSupplier;
+    private Supplier mapRowToSupplier(ResultSet rs) throws SQLException {
         return new Supplier(
                 rs.getLong("id"),
                 rs.getString("name"),
@@ -23,26 +23,30 @@ public class SupplierDAL implements IRepositoryBase<Supplier>{
     @Override
     public Supplier findById(Long id) {
         String sql = "SELECT * FROM supplier WHERE id = ?";
-        return genericDAL.queryForObject(sql, this::mapRowToEmployee, id);
+        return genericDAL.queryForObject(sql, SupplierRowMapper, id);
     }
 
     @Override
     public List<Supplier> findAll() {
-        return List.of();
+        String sql = "SELECT * FROM supplier";
+        return genericDAL.queryForList(sql,SupplierRowMapper);
     }
 
     @Override
     public Long create(Supplier supplier) {
-        return 0L;
+        String sql = "INSERT INTO supplier (name) VALUES (?)";
+        return genericDAL.insert(sql, supplier.getName());
     }
 
     @Override
     public boolean update(Supplier supplier) {
-        return false;
+        String sql = "UPDATE supplier SET name = ? WHERE id = ?";
+        return genericDAL.update(sql, supplier.getName(), supplier.getId());
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        String sql = "DELETE FROM supplier WHERE id = ?";
+        return genericDAL.delete(sql, id);
     }
 }

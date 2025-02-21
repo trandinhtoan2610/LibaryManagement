@@ -95,14 +95,12 @@ public class LoginForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String password = new String(passwordField.getPassword());
                 Employee user = employeeBUS.login(usernameField.getText(),password);
-                setVisible(false);
 
                 loading load = new loading();
                 load.setVisible(true);
                 Sleep(2000);
                 load.setVisible(false);
                 load.dispose();
-
                 if (user != null) {
                     username = user.getUsername();
                     setVisible(false);

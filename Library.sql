@@ -9,7 +9,7 @@ CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `username` varchar(255) UNIQUE NOT NULL,
-  `passord` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
   `phone` varchar(20) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
@@ -133,3 +133,9 @@ ALTER TABLE `PurchaseOrders` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee
 ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`purchaseOrderId`) REFERENCES `PurchaseOrders` (`id`);
 
 ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`);
+
+INSERT INTO `role`(`name`) VALUES ('admin');
+INSERT INTO `role`(`name`) VALUES ('staff');
+
+INSERT INTO `employee`(`name`, `username`, `password`, `roleId`, `phone`) VALUES ('admin','admin','admin',1,'0329997881');
+INSERT INTO `employee`(`name`, `username`, `password`, `roleId`, `phone`) VALUES ('staff','staff','staff',2,'0329997881');
