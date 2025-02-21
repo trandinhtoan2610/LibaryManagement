@@ -8,11 +8,13 @@ import java.util.Date;
 public class Employee extends EntityAuditNameBase<Long> {
     private String username,password,phone;
     private Long roleId;
+    private boolean gender;
 
-    public Employee(Long id, Long roleId, String name, String username, String password, String phone, Date createdAt, Date updatedAt) {
+    public Employee(Long id, Long roleId, String name, boolean gender,  String username, String password, String phone, Date createdAt, Date updatedAt) {
         this.id = id;
         this.roleId = roleId;
         this.name = name;
+        this.gender = gender;
         this.username = username;
         this.password = password;
         this.phone = phone;
@@ -20,9 +22,10 @@ public class Employee extends EntityAuditNameBase<Long> {
         this.updatedAt = updatedAt;
     }
 
-    public Employee(Long roleId, String name, String username, String password, String phone) {
+    public Employee(Long roleId, String name,boolean gender, String username, String password, String phone) {
         this.roleId = roleId;
         this.name = name;
+        this.gender = gender;
         this.username = username;
         this.password = password;
         this.phone = phone;
@@ -60,4 +63,11 @@ public class Employee extends EntityAuditNameBase<Long> {
         this.phone = phone;
     }
 
+    public boolean isGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
 }

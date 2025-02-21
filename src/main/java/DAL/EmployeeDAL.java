@@ -16,6 +16,7 @@ public class EmployeeDAL implements IEmployeeDAL {
                 rs.getLong("id"),
                 rs.getLong("roleId"),
                 rs.getString("name"),
+                rs.getBoolean("gender"),
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("phone"),
