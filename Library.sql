@@ -8,10 +8,12 @@ CREATE TABLE `Role` (
 CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `gender` ENUM(Male,Female) NOT NULL DEFAULT 'Male',
   `username` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
   `phone` varchar(20) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
@@ -19,13 +21,16 @@ CREATE TABLE `Employee` (
 CREATE TABLE `Customer` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `phone` varchar(10),
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
 
 CREATE TABLE `Author` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `gender` ENUM(Male,Female) NOT NULL DEFAULT 'Male',
   `name` varchar(255) NOT NULL,
+  `address` varchar[255] NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
@@ -52,7 +57,7 @@ CREATE TABLE `Book` (
   `publisherId` bigint NOT NULL,
   `bookshelfId` bigint NOT NULL,
   `quantity` int NOT NULL,
-  `yearOfpublication` year,
+  `yeayearOfpublication` year,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
@@ -60,7 +65,8 @@ CREATE TABLE `Book` (
 CREATE TABLE `Publisher` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `address` varchar(255),
+  `phone` varchar(10) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
@@ -85,6 +91,8 @@ CREATE TABLE `BorrowDetails` (
 CREATE TABLE `Supplier` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
