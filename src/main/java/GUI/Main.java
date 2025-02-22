@@ -2,6 +2,7 @@ package GUI;
 
 
 import DTO.Book;
+import DTO.Employee;
 
 import javax.swing.*;
 
@@ -21,7 +22,6 @@ public class Main extends Thread{
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException _) {
-
         }
         new LoginForm();
     }

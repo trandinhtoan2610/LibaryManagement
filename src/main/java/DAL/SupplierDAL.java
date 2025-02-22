@@ -15,6 +15,8 @@ public class SupplierDAL implements IRepositoryBase<Supplier>{
         return new Supplier(
                 rs.getLong("id"),
                 rs.getString("name"),
+                rs.getString("phone"),
+                rs.getString("address"),
                 rs.getDate("createdAt"),
                 rs.getDate("updatedAt")
         );
@@ -34,14 +36,14 @@ public class SupplierDAL implements IRepositoryBase<Supplier>{
 
     @Override
     public Long create(Supplier supplier) {
-        String sql = "INSERT INTO supplier (name) VALUES (?)";
+        String sql = "INSERT INTO supplier (name, phone, address) VALUES (?, ?, ?)";
         return genericDAL.insert(sql, supplier.getName());
     }
 
     @Override
     public boolean update(Supplier supplier) {
-        String sql = "UPDATE supplier SET name = ? WHERE id = ?";
-        return genericDAL.update(sql, supplier.getName(), supplier.getId());
+        String sql = "UPDATE supplier SET name = ?, SET phone = ?, SET address = ? WHERE id = ?";
+        return genericDAL.update(sql, supplier.getName(), supplier.getPhone(), supplier.getAddress(), supplier.getId());
     }
 
     @Override

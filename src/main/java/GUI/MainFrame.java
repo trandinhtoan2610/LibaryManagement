@@ -30,6 +30,9 @@ public class MainFrame extends JFrame {
     private JButton statisticButton = new JButton("Thống kê");
     private JButton logoutButton = new JButton("Đăng xuất");
 //    private JButton
+    //center
+    private JPanel centerPanel = new JPanel();
+
     public MainFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 600);
@@ -37,6 +40,7 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
         mainBar();
         leftMenu();
+        centerContent();
         setVisible(true);
     }
     public void mainBar() {
@@ -76,32 +80,28 @@ public class MainFrame extends JFrame {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainFrame.this, "Chuyển đến trang chủ.");
-                // Add logic to switch to home page
+
             }
         });
 
         bookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainFrame.this, "Chuyển đến trang quản lý sách.");
-                // Add logic to switch to book management page
+
             }
         });
 
         authorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainFrame.this, "Chuyển đến trang quản lý tác giả.");
-                // Add logic to switch to author management page
+
             }
         });
 
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MainFrame.this, "Chuyển đến trang quản lý khách hàng.");
-                // Add logic to switch to customer management page
+
             }
         });
         logoutButton.addActionListener(new ActionListener() {
@@ -113,18 +113,29 @@ public class MainFrame extends JFrame {
         });
         add(leftPanel, BorderLayout.WEST);
     }
+    public void centerContent(){
+        centerPanel.setLayout(new BorderLayout());
+
+        JLabel welcomeLabel = new JLabel("Chào mừng đến với hệ thống quản lý thư viện!", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        centerPanel.add(welcomeLabel, BorderLayout.NORTH);
+
+        // Thêm hình ảnh
+        ImageIcon homeImage = new ImageIcon("path/to/image.jpg");
+        JLabel imageLabel = new JLabel(homeImage);
+        centerPanel.add(imageLabel, BorderLayout.CENTER);
+
+        // Thêm thông báo chào mừng
+        JTextArea welcomeText = new JTextArea("Xin chào! Đây là hệ thống quản lý thư viện. \n" +
+                "Sử dụng menu bên trái để điều hướng đến các tính năng.");
+        welcomeText.setEditable(false);
+        welcomeText.setFont(new Font("Arial", Font.PLAIN, 14));
+        welcomeText.setBackground(new Color(240, 240, 240));
+        centerPanel.add(welcomeText, BorderLayout.SOUTH);
+
+        add(centerPanel, BorderLayout.CENTER);
+    }
     public static void main(String[] args) {
-        try {
-            new MainFrame();
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        new MainFrame();
     }
 }

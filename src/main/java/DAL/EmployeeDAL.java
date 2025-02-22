@@ -7,6 +7,7 @@ import java.util.List;
 import DAL.Interface.IEmployeeDAL;
 import DAL.Interface.RowMapper;
 import DTO.Employee;
+import DTO.Enum.Gender;
 
 public class EmployeeDAL implements IEmployeeDAL {
     private final GenericDAL genericDAL = new GenericDAL();
@@ -16,7 +17,7 @@ public class EmployeeDAL implements IEmployeeDAL {
                 rs.getLong("id"),
                 rs.getLong("roleId"),
                 rs.getString("name"),
-                rs.getBoolean("gender"),
+                Gender.valueOf(rs.getString("gender").toString()),
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("phone"),

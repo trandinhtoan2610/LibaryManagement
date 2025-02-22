@@ -1,16 +1,18 @@
 package DTO;
 import DTO.Abstract.EntityAuditBase;
 import DTO.Abstract.EntityAuditNameBase;
+import DTO.Enum.Gender;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
-
-
+@Getter
+@Setter
 public class Employee extends EntityAuditNameBase<Long> {
     private String username,password,phone;
     private Long roleId;
-    private boolean gender;
-
-    public Employee(Long id, Long roleId, String name, boolean gender,  String username, String password, String phone, Date createdAt, Date updatedAt) {
+    private Gender gender;
+    public Employee(Long id, Long roleId, String name, Gender gender,  String username, String password, String phone, Date createdAt, Date updatedAt) {
         this.id = id;
         this.roleId = roleId;
         this.name = name;
@@ -22,52 +24,12 @@ public class Employee extends EntityAuditNameBase<Long> {
         this.updatedAt = updatedAt;
     }
 
-    public Employee(Long roleId, String name,boolean gender, String username, String password, String phone) {
+    public Employee(Long roleId, String name,Gender gender, String username, String password, String phone) {
         this.roleId = roleId;
         this.name = name;
         this.gender = gender;
         this.username = username;
         this.password = password;
         this.phone = phone;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
     }
 }

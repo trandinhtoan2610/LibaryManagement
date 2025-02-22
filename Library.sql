@@ -8,7 +8,7 @@ CREATE TABLE `Role` (
 CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `gender` ENUM(Male,Female) NOT NULL DEFAULT 'Male',
+  `gender` ENUM ('Male', 'Female') NOT NULL DEFAULT 'Male',
   `username` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
@@ -28,9 +28,9 @@ CREATE TABLE `Customer` (
 
 CREATE TABLE `Author` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `gender` ENUM(Male,Female) NOT NULL DEFAULT 'Male',
+  `gender` ENUM ('Male', 'Female') NOT NULL DEFAULT 'Male',
   `name` varchar(255) NOT NULL,
-  `address` varchar[255] NOT NULL,
+  `address` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );
@@ -142,8 +142,10 @@ ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`purchaseOrderId`) REFERENCE
 
 ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`);
 
+
 INSERT INTO `role`(`name`) VALUES ('admin');
 INSERT INTO `role`(`name`) VALUES ('staff');
+INSERT INTO `role`(`name`) VALUES ('employee');
 
-INSERT INTO `employee`(`name`, `username`, `password`, `roleId`, `phone`) VALUES ('admin','admin','admin',1,'0329997881');
-INSERT INTO `employee`(`name`, `username`, `password`, `roleId`, `phone`) VALUES ('staff','staff','staff',2,'0329997881');
+
+INSERT INTO `employee`(`name`, `username`, `password`, `roleId`, `phone`, `address`) VALUES ('Hoang','admin','admin',1,'0123456789','VietNam')
