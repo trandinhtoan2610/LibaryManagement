@@ -3,6 +3,7 @@ package DAL;
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
 import DTO.Customer;
+import DTO.Enum.Gender;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,8 @@ public class CustomerDAL implements IRepositoryBase<Customer> {
         return new Customer(
                 rs.getLong("id"),
                 rs.getString("name"),
+                Gender.valueOf(rs.getString("gender").toString()),
+                rs.getString("phone"),
                 rs.getDate("createdAt"),
                 rs.getDate("updatedAt")
         );
@@ -34,14 +37,14 @@ public class CustomerDAL implements IRepositoryBase<Customer> {
 
     @Override
     public Long create(Customer customer) {
-        String sql = "INSERT INTO customer (name) VALUES (?)";
-        return genericDAL.insert(sql, customer.getName());
+        String sql = "INSERT INTO customer (name, gender, phone) VALUES (?, ?, ?)";
+        return genericDAL.insert(sql, customer.getName(), customer.getGender(), customer.getPhone());
     }
 
     @Override
     public boolean update(Customer customer) {
-        String sql = "UPDATE customer SET name = ? WHERE id = ?";
-        return genericDAL.update(sql, customer.getName(), customer.getId());
+        String sql = "UPDATE customer SET name = ? SET gender = ? SET phone = ? WHERE id = ?";
+        return genericDAL.update(sql, customer.getName(),customer.getGender(),customer.getPhone(), customer.getId());
     }
 
     @Override

@@ -37,14 +37,20 @@ public class AuthorDAL implements IRepositoryBase<Author> {
 
     @Override
     public Long create(Author author) {
-        String sql = "INSERT INTO author (name, phone, address) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, authorRowMapper);
+        String sql = "INSERT INTO author (name, gender, phone, address) VALUES (?, ?, ?, ?)";
+        return genericDAL.insert(sql, author.getName(),author.getGender(),author.getPhone(), author.getAddress());
     }
 
     @Override
     public boolean update(Author author) {
-        String sql = "UPDATE author SET name = ?, SET phone = ?, SET address = ? WHERE id = ?";
-        return genericDAL.update(sql, authorRowMapper);
+        String sql = "UPDATE author SET name = ?,SET gender = ? SET phone = ?, SET address = ? WHERE id = ?";
+        return genericDAL.update(sql,
+                author.getName(),
+                author.getGender(),
+                author.getPhone(),
+                author.getAddress(),
+                author.getId()
+                );
     }
 
     @Override

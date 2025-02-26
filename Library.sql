@@ -28,9 +28,10 @@ CREATE TABLE `Customer` (
 
 CREATE TABLE `Author` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `gender` ENUM ('Male', 'Female') NOT NULL DEFAULT 'Male',
   `name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `gender` ENUM ('Male', 'Female') NOT NULL DEFAULT 'Male',
+  `phone` varchar(10) NULL,
+  `address` varchar(255)  NULL,
   `createdAt` datetime NOT NULL DEFAULT (now()),
   `updatedAt` datetime DEFAULT null
 );

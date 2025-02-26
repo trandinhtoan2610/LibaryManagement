@@ -21,6 +21,7 @@ public class EmployeeDAL implements IEmployeeDAL {
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("phone"),
+                rs.getString("address"),
                 rs.getDate("createdAt"),
                 rs.getDate("updatedAt")
         );
@@ -48,25 +49,27 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public Long create(Employee employee) {
-        String sql = "INSERT INTO employee (roleId, name, username, password, phone) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employee (roleId, name, gender, username, password, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
         return genericDAL.insert(sql,
                 employee.getRoleId(),
                 employee.getName(),
+                employee.getGender(),
                 employee.getUsername(),
                 employee.getPassword(),
-                employee.getPhone()
+                employee.getPhone(),
+                employee.getAddress()
         );
     }
 
     @Override
     public boolean update(Employee employee) {
-        String sql = "UPDATE employee SET name = ?, username = ?, password = ?, phone = ? WHERE id = ?";
-        return genericDAL.update(sql, employee.getName(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getId());
+        String sql = "UPDATE employee SET name = ?, gender = ? username = ?, password = ?, phone = ?, address = ? WHERE id = ?";
+        return genericDAL.update(sql, employee.getName(),employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(),employee.getAddress(), employee.getId());
     }
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM users WHERE id = ?";
+        String sql = "DELETE FROM employee WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
 }

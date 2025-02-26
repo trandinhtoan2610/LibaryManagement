@@ -8,13 +8,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class Publisher extends EntityAuditNameBase<Long> {
-    private String address;
-    public String getAddress() {
-        return address;
-    }
-    public Publisher(Long id, String name, String address, Date createdAt, Date UpdateAt) {
+    private String phone, address;
+    public Publisher(Long id, String name,String phone, String address, Date createdAt, Date UpdateAt) {
         this.id = id;
         this.name = name;
+        this.phone = phone;
         this.address = address;
         this.createdAt = createdAt;
         this.updatedAt = UpdateAt;

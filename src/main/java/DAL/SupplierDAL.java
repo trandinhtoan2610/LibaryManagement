@@ -37,7 +37,7 @@ public class SupplierDAL implements IRepositoryBase<Supplier>{
     @Override
     public Long create(Supplier supplier) {
         String sql = "INSERT INTO supplier (name, phone, address) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, supplier.getName());
+        return genericDAL.insert(sql, supplier.getName(), supplier.getPhone(), supplier.getAddress());
     }
 
     @Override
