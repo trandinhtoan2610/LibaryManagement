@@ -9,9 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class CustomerDAL implements IRepositoryBase<Customer> {
+public class ReaderDAL implements IRepositoryBase<Customer> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<Customer> CustomerRowMapper = this::mapRowToCustomer ;
+    private final RowMapper<Customer> CustomerRowMapper = this::mapRowToCustomer;
+
     private Customer mapRowToCustomer(ResultSet rs) throws SQLException {
         return new Customer(
                 rs.getLong("id"),
@@ -44,7 +45,7 @@ public class CustomerDAL implements IRepositoryBase<Customer> {
     @Override
     public boolean update(Customer customer) {
         String sql = "UPDATE customer SET name = ? SET gender = ? SET phone = ? WHERE id = ?";
-        return genericDAL.update(sql, customer.getName(),customer.getGender(),customer.getPhone(), customer.getId());
+        return genericDAL.update(sql, customer.getName(), customer.getGender(), customer.getPhone(), customer.getId());
     }
 
     @Override

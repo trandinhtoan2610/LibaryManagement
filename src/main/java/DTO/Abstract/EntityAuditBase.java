@@ -1,4 +1,5 @@
 package DTO.Abstract;
+
 import DTO.Interface.IAuditable;
 
 import java.util.Date;

@@ -5,7 +5,10 @@ import java.util.Date;
 
 public interface IDateTracking {
     Date getCreatedAt();
-    void setCreatedAt(Date  createdAt);
+
+    void setCreatedAt(Date createdAt);
+
     Date getUpdatedAt();
+
     void setUpdatedAt(Date updatedAt);
 }

@@ -8,25 +8,25 @@ import DTO.Employee;
 public class EmployeeBUS {
     private final IEmployeeDAL employeeDAL = new EmployeeDAL();
 
-    public Employee login(String username, String password){
-        if(username == null || password == null)
+    public Employee login(String username, String password) {
+        if (username == null || password == null)
             return null;
-        return employeeDAL.login(username,password);
+        return employeeDAL.login(username, password);
     }
 
-    public Employee create(Employee employee){
+    public Employee create(Employee employee) {
         Long id = employeeDAL.create(employee);
-        if (id != null){
+        if (id != null) {
             return employeeDAL.findById(id);
         }
         return null;
     }
 
-    public boolean update(Employee employee){
+    public boolean update(Employee employee) {
         return employeeDAL.update(employee);
     }
 
-    public boolean delete(Long id){
+    public boolean delete(Long id) {
         return employeeDAL.delete(id);
     }
 }

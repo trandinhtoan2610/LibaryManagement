@@ -1,6 +1,6 @@
 package DTO.Enum;
 
-public enum Status{
+public enum Status {
     Borrow,
     Returned,
     Overdue

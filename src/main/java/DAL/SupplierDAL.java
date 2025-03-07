@@ -8,9 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SupplierDAL implements IRepositoryBase<Supplier>{
+public class SupplierDAL implements IRepositoryBase<Supplier> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Supplier> SupplierRowMapper = this::mapRowToSupplier;
+
     private Supplier mapRowToSupplier(ResultSet rs) throws SQLException {
         return new Supplier(
                 rs.getLong("id"),
@@ -31,7 +32,7 @@ public class SupplierDAL implements IRepositoryBase<Supplier>{
     @Override
     public List<Supplier> findAll() {
         String sql = "SELECT * FROM supplier";
-        return genericDAL.queryForList(sql,SupplierRowMapper);
+        return genericDAL.queryForList(sql, SupplierRowMapper);
     }
 
     @Override

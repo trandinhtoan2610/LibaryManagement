@@ -12,6 +12,7 @@ public class PurchaseOrder extends EntityAuditBase<Long> {
         COMPLETED,
         REJECTED
     }
+
     private long supplierId, employeeId;
     private Status status;
     private Long totalAmount;

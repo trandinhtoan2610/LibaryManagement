@@ -1,4 +1,5 @@
 package DTO.Abstract;
+
 import DTO.Interface.IEntityBase;
 
 public abstract class EntityBase<T> implements IEntityBase<T> {

@@ -7,10 +7,7 @@ import DTO.Employee;
 import javax.swing.*;
 
 
-
-
-
-public class Main extends Thread{
+public class Main extends Thread {
 
     public static void main(String[] args) {
 
@@ -21,7 +18,8 @@ public class Main extends Thread{
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException _) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException _) {
         }
         new LoginForm();
     }

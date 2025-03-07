@@ -82,8 +82,8 @@ public class RoundedTextField extends JTextField {
         float borderThickness = 1f;
         g2.setStroke(new BasicStroke(hasFocus ? focusBorderThickness : borderThickness));
         g2.draw(new RoundRectangle2D.Float(
-                hasFocus ? focusBorderThickness/2 : borderThickness /2,
-                hasFocus ? focusBorderThickness/2 : borderThickness /2,
+                hasFocus ? focusBorderThickness / 2 : borderThickness / 2,
+                hasFocus ? focusBorderThickness / 2 : borderThickness / 2,
                 getWidth() - (hasFocus ? focusBorderThickness : borderThickness),
                 getHeight() - (hasFocus ? focusBorderThickness : borderThickness),
                 arcWidth,

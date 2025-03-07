@@ -11,6 +11,7 @@ import java.util.List;
 public class PublisherDAL implements IRepositoryBase<Publisher> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Publisher> publisherRowMapper = this::mapRowToPublisher;
+
     public Publisher mapRowToPublisher(ResultSet rs) throws SQLException {
         return new Publisher(
                 rs.getLong("id"),
@@ -21,6 +22,7 @@ public class PublisherDAL implements IRepositoryBase<Publisher> {
                 rs.getDate("updatedAt")
         );
     }
+
     @Override
     public Publisher findById(Long id) {
         String sql = "SELECT * FROM publisher WHERE id = ?";
@@ -36,13 +38,13 @@ public class PublisherDAL implements IRepositoryBase<Publisher> {
     @Override
     public Long create(Publisher publisher) {
         String sql = "INSERT INTO publisher (name, phone, address) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, publisher.getName(),publisher.getPhone(), publisher.getAddress());
+        return genericDAL.insert(sql, publisher.getName(), publisher.getPhone(), publisher.getAddress());
     }
 
     @Override
     public boolean update(Publisher publisher) {
         String sql = "UPDATE publisher SET name = ?,SET phone = ? address = ? WHERE id = ?";
-        return genericDAL.update(sql, publisher.getName(),publisher.getPhone(), publisher.getAddress(), publisher.getId());
+        return genericDAL.update(sql, publisher.getName(), publisher.getPhone(), publisher.getAddress(), publisher.getId());
     }
 
     @Override

@@ -2,16 +2,15 @@ package DAL;
 
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.Author;
 import DTO.Borrow;
-import DTO.Enum.Gender;
 import DTO.Enum.Status;
 
 import java.util.List;
 
-public class BorrowDAL implements IRepositoryBase<Borrow> {
+public class BorrowSheetDAL implements IRepositoryBase<Borrow> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Borrow> borrowRowMapper = this::mapRowToBorrow;
+
     private Borrow mapRowToBorrow(java.sql.ResultSet rs) throws java.sql.SQLException {
         return new Borrow(
                 rs.getLong("id"),
@@ -44,7 +43,7 @@ public class BorrowDAL implements IRepositoryBase<Borrow> {
                 borrow.getCustomerId(),
                 borrow.getStatus(),
                 borrow.getDuedate()
-                );
+        );
     }
 
     @Override
@@ -56,7 +55,7 @@ public class BorrowDAL implements IRepositoryBase<Borrow> {
                 borrow.getStatus(),
                 borrow.getDuedate(),
                 borrow.getId()
-                );
+        );
     }
 
     @Override

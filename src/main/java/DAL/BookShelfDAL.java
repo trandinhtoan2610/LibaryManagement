@@ -9,14 +9,14 @@ import java.util.List;
 public class BookShelfDAL implements IRepositoryBase<Bookshelf> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Bookshelf> bookshelfRowMapper = this::mapRowToBookShelf;
+
     private Bookshelf mapRowToBookShelf(java.sql.ResultSet rs) throws java.sql.SQLException {
         return new Bookshelf(
                 rs.getLong("id"),
-                rs.getString("name"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
+                rs.getString("name")
         );
     }
+
     @Override
     public Bookshelf findById(Long id) {
         String sql = "SELECT * FROM bookshelf WHERE id = ?";

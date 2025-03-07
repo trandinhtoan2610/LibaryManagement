@@ -11,22 +11,22 @@ import java.util.List;
 public class AuthorDAL implements IRepositoryBase<Author> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Author> authorRowMapper = this::mapRowToAuthor;
+
     private Author mapRowToAuthor(java.sql.ResultSet rs) throws java.sql.SQLException {
         return new Author(
                 rs.getLong("id"),
-                rs.getString("name"),
+                rs.getString("firstname"),
+                rs.getString("lastname"),
                 Gender.valueOf(rs.getString("gender").toString()),
                 rs.getString("phone"),
-                rs.getString("address"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
+                rs.getString("address")
         );
     }
 
     @Override
     public Author findById(Long id) {
         String sql = "SELECT * FROM author WHERE id = ?";
-        return genericDAL.queryForObject(sql, authorRowMapper, id) ;
+        return genericDAL.queryForObject(sql, authorRowMapper, id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class AuthorDAL implements IRepositoryBase<Author> {
     @Override
     public Long create(Author author) {
         String sql = "INSERT INTO author (name, gender, phone, address) VALUES (?, ?, ?, ?)";
-        return genericDAL.insert(sql, author.getName(),author.getGender(),author.getPhone(), author.getAddress());
+        return genericDAL.insert(sql, author.getName(), author.getGender(), author.getPhone(), author.getAddress());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AuthorDAL implements IRepositoryBase<Author> {
                 author.getPhone(),
                 author.getAddress(),
                 author.getId()
-                );
+        );
     }
 
     @Override

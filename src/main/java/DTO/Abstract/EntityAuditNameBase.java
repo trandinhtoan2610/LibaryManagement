@@ -1,4 +1,5 @@
 package DTO.Abstract;
+
 import DTO.Interface.INameBase;
 
 public abstract class EntityAuditNameBase<T> extends EntityAuditBase<T> implements INameBase {

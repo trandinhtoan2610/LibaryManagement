@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 import static GUI.Main.Sleep;
@@ -27,7 +29,7 @@ public class LoginForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(960, 650);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(1,2));
+        setLayout(new GridLayout(1, 2));
 
 
         JPanel image = new JPanel() {
@@ -94,7 +96,7 @@ public class LoginForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String password = new String(passwordField.getPassword());
-                Employee user = employeeBUS.login(usernameField.getText(),password);
+                Employee user = employeeBUS.login(usernameField.getText(), password);
 
                 loading load = new loading();
                 load.setVisible(true);
@@ -104,13 +106,33 @@ public class LoginForm extends JFrame {
                 if (user != null) {
                     username = user.getUsername();
                     setVisible(false);
-                    new MainFrame();
                 } else {
                     JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+        loginButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String password = new String(passwordField.getPassword());
+                    Employee user = employeeBUS.login(usernameField.getText(), password);
+                    loading load = new loading();
+                    load.setVisible(true);
+                    Sleep(2000);
+                    load.setVisible(false);
+                    load.dispose();
+                    if (user != null) {
+                        username = user.getUsername();
+                        setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
     }
+
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.PLAIN, 13));

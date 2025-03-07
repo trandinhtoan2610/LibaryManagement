@@ -12,6 +12,7 @@ import DTO.Enum.Gender;
 public class EmployeeDAL implements IEmployeeDAL {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Employee> employeeRowMapper = this::mapRowToEmployee;
+
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
         return new Employee(
                 rs.getLong("id"),
@@ -29,7 +30,7 @@ public class EmployeeDAL implements IEmployeeDAL {
 
 
     @Override
-    public  Employee login(String username, String password){
+    public Employee login(String username, String password) {
         String sql = "SELECT * FROM employee WHERE username = ? AND password = ?";
         return genericDAL.queryForObject(sql, employeeRowMapper, username, password);
     }
@@ -64,7 +65,7 @@ public class EmployeeDAL implements IEmployeeDAL {
     @Override
     public boolean update(Employee employee) {
         String sql = "UPDATE employee SET name = ?, gender = ? username = ?, password = ?, phone = ?, address = ? WHERE id = ?";
-        return genericDAL.update(sql, employee.getName(),employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(),employee.getAddress(), employee.getId());
+        return genericDAL.update(sql, employee.getName(), employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getId());
     }
 
     @Override

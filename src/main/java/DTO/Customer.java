@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
 @Getter
 @Setter
 public class Customer extends EntityAuditNameBase<Long> {
     private String phone;
     private Gender gender;
-    public Customer(Long id, String name,Gender gender, String phone, Date createdAt, Date updatedAt) {
+
+    public Customer(Long id, String name, Gender gender, String phone, Date createdAt, Date updatedAt) {
         this.id = id;
         this.name = name;
         this.gender = gender;
