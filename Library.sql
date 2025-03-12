@@ -34,11 +34,6 @@ CREATE TABLE `Author` (
   `address` varchar(255) NOT NULL
 );
 
-CREATE TABLE `Bookshelf` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL
-);
-
 CREATE TABLE `Category` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL
@@ -50,8 +45,7 @@ CREATE TABLE `Book` (
   `categoryId` bigint NOT NULL,
   `authorId` bigint NOT NULL,
   `publisherId` bigint NOT NULL,
-  `bookshelfId` bigint NOT NULL,
-  `quatity` int NOT NULL,
+  `quantity` int NOT NULL,
   `unitprice` bigint NOT NULL,
   `yeayearOfpublication` year
 );
@@ -77,7 +71,8 @@ CREATE TABLE `Borrow_in_Sheet` (
 CREATE TABLE `BorrowDetails` (
   `borrowId` bigint NOT NULL,
   `bookId` bigint NOT NULL,
-  `quatity` int NOT NULL DEFAULT 1,
+  `quantity` int NOT NULL DEFAULT 1,
+  `substatus` ENUM ('Not_Returned', 'Returned') NOT NULL DEFAULT 'Not_Returned',
   PRIMARY KEY (`borrowId`, `bookId`)
 );
 
@@ -107,15 +102,23 @@ CREATE TABLE `PurchaseOrderDetails` (
 );
 
 CREATE TABLE `Penalty` (
+  `id` bigint NOT NULL,
+  `penaltyDate` datetime NOT NULL,
   `borrowId` bigint NOT NULL,
-  `lawId` bigint NOT NULL,
-  `reason` varchar(255)
+  `penaltyDetailsID` bigint NOT NULL,
+  `status` ENUM ('paid', 'not_paid') NOT NULL DEFAULT (not_paid),
+  `totalamount` decimal(10,2) NOT NULL
+);
+
+CREATE TABLE `PenaltyDetails` (
+  `id` bigint NOT NULL,
+  `lawid` bigint NOT NULL,
+  `subamount` demical(10,2) NOT NULL
 );
 
 CREATE TABLE `Law` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `punish` ENUM ('Lost', 'Torn', 'Dirty', 'Delay') NOT NULL,
-  `amount` demical(10,2) NOT NULL
+  `punish` ENUM ('Lost', 'Torn', 'Dirty', 'Delay') NOT NULL
 );
 
 ALTER TABLE `Employee` ADD FOREIGN KEY (`roleId`) REFERENCES `Role` (`id`);
@@ -125,8 +128,6 @@ ALTER TABLE `Book` ADD FOREIGN KEY (`categoryId`) REFERENCES `Category` (`id`);
 ALTER TABLE `Book` ADD FOREIGN KEY (`authorId`) REFERENCES `Author` (`id`);
 
 ALTER TABLE `Book` ADD FOREIGN KEY (`publisherId`) REFERENCES `Publisher` (`id`);
-
-ALTER TABLE `Book` ADD FOREIGN KEY (`bookshelfId`) REFERENCES `Bookshelf` (`id`);
 
 ALTER TABLE `Borrow_in_Sheet` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee` (`id`);
 
@@ -146,4 +147,6 @@ ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` 
 
 ALTER TABLE `Penalty` ADD FOREIGN KEY (`borrowId`) REFERENCES `Borrow_in_Sheet` (`id`);
 
-ALTER TABLE `Penalty` ADD FOREIGN KEY (`lawId`) REFERENCES `Law` (`id`);
+ALTER TABLE `Penalty` ADD FOREIGN KEY (`penaltyDetailsID`) REFERENCES `PenaltyDetails` (`id`);
+
+ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`lawid`) REFERENCES `Law` (`id`);
