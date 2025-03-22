@@ -7,22 +7,41 @@ import java.awt.*;
 import java.net.URI;
 import java.net.URL;
 
-public class SearchNavBarLabel extends Panel {
+public class SearchNavBarLabel extends JPanel {
     public SearchNavBarLabel(){
-        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(240, 240, 240));
+        JPanel panel = SearchNavBarLabelChild();
+        panel.setBackground(new Color(240, 240, 240));
+        this.add(panel, BorderLayout.CENTER);
+    }
+    public JPanel SearchNavBarLabelChild(){
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 8));
         String type[] = {"Tên", "Thể Loại", "Tác Giả", "Năm"};
         JComboBox searchtype = new JComboBox(type);
         searchtype.setSelectedIndex(0);
         searchtype.setEditable(false);
-        searchtype.setPreferredSize(new Dimension(100, 30));
+        searchtype.setPreferredSize(new Dimension(120, 40));
         searchtype.setBackground(Color.WHITE);
         searchtype.setForeground(new Color(50, 50, 50));
-        add(searchtype);
+        searchtype.setFont(new Font("Verdana", Font.PLAIN, 18));
+        searchtype.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 3),
+                BorderFactory.createEmptyBorder(0,0,0,0)
+        ));
+        panel.add(searchtype);
 
         JTextField searchfield = new JTextField();
-        searchfield.setPreferredSize(new Dimension(200, 30));
-        searchfield.setBackground(new Color(66, 135, 245));
-        add(searchfield);
+        searchfield.setPreferredSize(new Dimension(200, 40));
+        searchfield.setBackground(Color.WHITE);
+        searchfield.setForeground(new Color(50, 50, 50));
+        searchfield.setFont(new Font("Verdana", Font.PLAIN, 18));
+        searchfield.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 3),
+                BorderFactory.createEmptyBorder(0,0,0,0)
+        ));
+        panel.add(searchfield);
 
         URL refreshurl = getClass().getResource("/icons/refresh.svg");
         if(refreshurl == null) {
@@ -32,18 +51,14 @@ public class SearchNavBarLabel extends Panel {
         refreshIcon.setSvgURI(URI.create(refreshurl.toString()));
         refreshIcon.setPreferredSize(new Dimension(20,30));
         JButton refreshButton = new JButton("Làm mới", refreshIcon);
-        refreshButton.setPreferredSize(new Dimension(130, 30));
-
-        add(refreshButton);
-    }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("SearchNavBarLabel Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        SearchNavBarLabel searchNavBar = new SearchNavBarLabel();
-        frame.add(searchNavBar);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        refreshButton.setPreferredSize(new Dimension(130, 40));
+        refreshButton.setBackground(new Color(189, 0, 85));
+        refreshButton.setForeground(Color.WHITE);
+        refreshButton.setFont(new Font("Verdana", Font.PLAIN, 18));
+        refreshButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        refreshButton.setFocusPainted(false);
+        refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(refreshButton);
+        return panel;
     }
 }

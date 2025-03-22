@@ -21,6 +21,7 @@ public class IconNavBarLabel extends JPanel {
             JLabel label = createLabel(item[0], item[1]);
             add(label);
         }
+        setBackground(new Color(240, 240, 240));
     }
 
     private JLabel createLabel(String text, String iconPath) {
@@ -38,15 +39,5 @@ public class IconNavBarLabel extends JPanel {
         label.setIconTextGap(5);
         label.setFont(new Font("Verdana", Font.PLAIN, 24));
         return label;
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        IconNavBarLabel navBar = new IconNavBarLabel();
-        frame.add(navBar);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }
