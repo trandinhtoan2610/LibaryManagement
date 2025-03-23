@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <!-- Book cover -->
+    <path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" fill="#FF6F61"/>
+    <!-- Pages -->
+    <path d="M6 4h2v8l2.5-1.5L13 12V4h5v16H6V4z" fill="#FFD166"/>
+    <!-- Book spine -->
+    <path d="M6 20h12V4h-2v16H6z" fill="#FF6F61"/>
+    <!-- Minus sign -->
+    <path d="M19 11H9v2h10v-2z" fill="#4ECDC4"/>
+</svg>

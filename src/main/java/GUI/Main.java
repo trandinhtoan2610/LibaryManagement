@@ -28,7 +28,6 @@ public class Main extends Thread {
         try {
             Thread.sleep(j);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

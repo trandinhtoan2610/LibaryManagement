@@ -16,7 +16,11 @@ public class IconNavBarLabel extends JPanel {
     };
 
     public IconNavBarLabel() {
-        setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        AccountNameLabel accountNameLabel = new AccountNameLabel();
+        this.add(accountNameLabel);
+        JLabel space = new JLabel("           ");
+        this.add(space);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
         for (String[] item : st) {
             JLabel label = createLabel(item[0], item[1]);
             add(label);

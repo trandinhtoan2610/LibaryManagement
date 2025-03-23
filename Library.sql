@@ -102,23 +102,17 @@ CREATE TABLE `PurchaseOrderDetails` (
 );
 
 CREATE TABLE `Penalty` (
-  `id` bigint NOT NULL,
+  `penaltyId` bigint NOT NULL,
   `penaltyDate` datetime NOT NULL,
   `borrowId` bigint NOT NULL,
-  `penaltyDetailsID` bigint NOT NULL,
   `status` ENUM ('paid', 'not_paid') NOT NULL DEFAULT (not_paid),
   `totalamount` decimal(10,2) NOT NULL
 );
 
 CREATE TABLE `PenaltyDetails` (
-  `id` bigint NOT NULL,
-  `lawid` bigint NOT NULL,
+  `penaltyId` bigint NOT NULL,
+  `punish` varchar(255) NOT NULL,
   `subamount` demical(10,2) NOT NULL
-);
-
-CREATE TABLE `Law` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `punish` ENUM ('Lost', 'Torn', 'Dirty', 'Delay') NOT NULL
 );
 
 ALTER TABLE `Employee` ADD FOREIGN KEY (`roleId`) REFERENCES `Role` (`id`);
@@ -147,6 +141,4 @@ ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` 
 
 ALTER TABLE `Penalty` ADD FOREIGN KEY (`borrowId`) REFERENCES `Borrow_in_Sheet` (`id`);
 
-ALTER TABLE `Penalty` ADD FOREIGN KEY (`penaltyDetailsID`) REFERENCES `PenaltyDetails` (`id`);
-
-ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`lawid`) REFERENCES `Law` (`id`);
+ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`penaltyId`) REFERENCES `Penalty` (`penaltyId`);
