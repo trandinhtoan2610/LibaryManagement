@@ -39,7 +39,7 @@ public class ItemSideBarLabel extends JPanel {
     }
 
     private JPanel createItem(String text, String iconPath) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10));
         panel.setBorder(new LineBorder(Color.BLACK));
         panel.setBackground(Color.WHITE);
         URL url = getClass().getResource(iconPath);
