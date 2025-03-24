@@ -20,12 +20,12 @@ public class NavBarPanel extends JPanel {
         rightNavBar = new SearchNavBarLabel();
         accountNameLabel = new AccountNameLabel();
         rightNavBar.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
-        add(Box.createVerticalStrut(20));
-        add(Box.createHorizontalStrut(5));
-        add(accountNameLabel);
+//        add(Box.createVerticalStrut(20));
+//        add(Box.createHorizontalStrut(5));
+//        add(accountNameLabel);
         add(Box.createHorizontalStrut(10));
         add(leftNavBar);
-        add(Box.createHorizontalStrut(280));
+        add(Box.createHorizontalStrut(250));
         add(rightNavBar);
     }
 
