@@ -16,16 +16,12 @@ public class IconNavBarLabel extends JPanel {
     };
 
     public IconNavBarLabel() {
-        AccountNameLabel accountNameLabel = new AccountNameLabel();
-        this.add(accountNameLabel);
-        JLabel space = new JLabel("           ");
-        this.add(space);
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new FlowLayout(FlowLayout.LEFT, 25, 10));
         for (String[] item : st) {
             JLabel label = createLabel(item[0], item[1]);
             add(label);
         }
-        setBackground(new Color(240, 240, 240));
+        setBackground(Color.WHITE);
     }
 
     private JLabel createLabel(String text, String iconPath) {

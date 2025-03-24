@@ -12,7 +12,7 @@ public class FrameTest extends JFrame {
     public FrameTest() {
         this.setTitle("FrameTest");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setSize(1500, 800);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());

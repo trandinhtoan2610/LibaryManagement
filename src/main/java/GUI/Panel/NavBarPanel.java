@@ -1,5 +1,6 @@
 package GUI.Panel;
 
+import GUI.Component.AccountNameLabel;
 import GUI.Component.IconNavBarLabel;
 import GUI.Component.SearchNavBarLabel;
 
@@ -9,20 +10,23 @@ import java.awt.*;
 public class NavBarPanel extends JPanel {
     IconNavBarLabel leftNavBar;
     SearchNavBarLabel rightNavBar;
-
+    AccountNameLabel accountNameLabel;
     public NavBarPanel() {
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setPreferredSize(new Dimension(1200, 100));
-        setBackground(new Color(240, 240, 240));
+        setBackground(Color.WHITE);
         setForeground(new Color(240, 240, 240));
         leftNavBar = new IconNavBarLabel();
         rightNavBar = new SearchNavBarLabel();
-
-        rightNavBar.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); // 20px margin-top
-
-        add(leftNavBar, BorderLayout.WEST);
-
-        add(rightNavBar, BorderLayout.EAST);
+        accountNameLabel = new AccountNameLabel();
+        rightNavBar.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        add(Box.createVerticalStrut(20));
+        add(Box.createHorizontalStrut(5));
+        add(accountNameLabel);
+        add(Box.createHorizontalStrut(10));
+        add(leftNavBar);
+        add(Box.createHorizontalStrut(280));
+        add(rightNavBar);
     }
 
     public static void main(String[] args) {

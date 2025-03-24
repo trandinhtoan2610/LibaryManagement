@@ -10,9 +10,9 @@ import java.net.URL;
 public class SearchNavBarLabel extends JPanel {
     public SearchNavBarLabel(){
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(240, 240, 240));
+        this.setBackground(Color.WHITE);
         JPanel panel = SearchNavBarLabelChild();
-        panel.setBackground(new Color(240, 240, 240));
+        panel.setBackground(Color.WHITE);
         this.add(panel, BorderLayout.CENTER);
     }
     public JPanel SearchNavBarLabelChild(){
