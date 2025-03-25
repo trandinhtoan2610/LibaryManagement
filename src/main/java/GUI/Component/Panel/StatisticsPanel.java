@@ -5,30 +5,48 @@ import javax.swing.JPanel;
 
 
 public class StatisticsPanel extends javax.swing.JPanel {
-    private final Color defaultColor = new Color(240, 240, 240);
-    private final Color selectedColor = new Color(158, 226, 218); 
-    private final Color hoverColor = new Color(192, 226, 255);
+    private final Color defaultColor = new Color(255, 255, 255);
+    private final Color selectedColor = new Color(100, 200, 250); 
+    private final Color hoverColor = new Color(180, 220, 250); 
+    
+
     private JPanel selectedPanel;
     
     public StatisticsPanel() {
+        
+
         initComponents();
+        OverviewStatTab.setOpaque(true);
+        ReaderStatTab.setOpaque(true);
+        EmployeeStatTab.setOpaque(true);
+        InventoryStatTab.setOpaque(true);
+        LoanSlipStatTab.setOpaque(true);
+        SupplierStatTab.setOpaque(true);
         isSelected(OverviewStatTab);
     }
 
     public void clearSelect(){
-        if(selectedPanel != null){
-            selectedPanel.setBackground(defaultColor);
-            selectedPanel.setBorder(null);
-        }
-            
+    if (selectedPanel != null) {
+        selectedPanel.setBackground(defaultColor);
+        selectedPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
+        selectedPanel.revalidate();
+        selectedPanel.repaint();
+        
     }
+}
+
     
-    public void isSelected(JPanel p){
+    public void isSelected(JPanel p) {
         clearSelect();
         selectedPanel = p;
         p.setBackground(selectedColor);
-        p.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 3, 0, new java.awt.Color(55, 153, 255)));
+        p.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLUE));
+        p.setOpaque(true);  // Đảm bảo JPanel không bị trong suốt
+        this.revalidate();
+        this.repaint();
     }
+
+
     
     public void addHover(JPanel p){
         if(selectedPanel != p){
@@ -37,10 +55,14 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
     
     public void deleteHover(JPanel p){
-        if(selectedPanel != p){
-            p.setBackground(defaultColor);
-        }
+    if (selectedPanel != p) {
+        p.setBackground(defaultColor);
+        p.setOpaque(true);  // Đảm bảo JPanel hiển thị màu nền
+        p.revalidate();
+        p.repaint();
     }
+}
+
     
    
     
@@ -48,6 +70,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        LayerPane = new javax.swing.JLayeredPane();
         divTaskbar = new javax.swing.JPanel();
         statisticsTaskbar = new javax.swing.JPanel();
         OverviewStatTab = new javax.swing.JPanel();
@@ -62,17 +85,19 @@ public class StatisticsPanel extends javax.swing.JPanel {
         lblLoanSlipStatTab = new javax.swing.JLabel();
         SupplierStatTab = new javax.swing.JPanel();
         lblSupplierStatTab = new javax.swing.JLabel();
-        LayerPane = new javax.swing.JLayeredPane();
 
         setLayout(new java.awt.BorderLayout());
 
-        divTaskbar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        divTaskbar.setBackground(new java.awt.Color(255, 255, 255));
+        divTaskbar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 51, 51)));
         divTaskbar.setPreferredSize(new java.awt.Dimension(892, 30));
         divTaskbar.setLayout(new java.awt.BorderLayout(5, 5));
 
         statisticsTaskbar.setPreferredSize(new java.awt.Dimension(600, 50));
-        statisticsTaskbar.setLayout(new java.awt.GridLayout(1, 5, 5, 5));
+        statisticsTaskbar.setLayout(new java.awt.GridLayout(1, 5, 0, 5));
 
+        OverviewStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        OverviewStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         OverviewStatTab.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         OverviewStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -92,6 +117,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         statisticsTaskbar.add(OverviewStatTab);
 
+        ReaderStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        ReaderStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         ReaderStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ReaderStatTabMouseClicked(evt);
@@ -110,6 +137,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         statisticsTaskbar.add(ReaderStatTab);
 
+        EmployeeStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        EmployeeStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         EmployeeStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EmployeeStatTabMouseClicked(evt);
@@ -128,6 +157,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         statisticsTaskbar.add(EmployeeStatTab);
 
+        InventoryStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        InventoryStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         InventoryStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 InventoryStatTabMouseClicked(evt);
@@ -146,6 +177,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         statisticsTaskbar.add(InventoryStatTab);
 
+        LoanSlipStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        LoanSlipStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         LoanSlipStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LoanSlipStatTabMouseClicked(evt);
@@ -164,6 +197,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         statisticsTaskbar.add(LoanSlipStatTab);
 
+        SupplierStatTab.setBackground(new java.awt.Color(255, 255, 255));
+        SupplierStatTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
         SupplierStatTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SupplierStatTabMouseClicked(evt);
@@ -184,17 +219,21 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         divTaskbar.add(statisticsTaskbar, java.awt.BorderLayout.LINE_START);
 
-        add(divTaskbar, java.awt.BorderLayout.PAGE_START);
+        LayerPane.setLayer(divTaskbar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout LayerPaneLayout = new javax.swing.GroupLayout(LayerPane);
         LayerPane.setLayout(LayerPaneLayout);
         LayerPaneLayout.setHorizontalGroup(
             LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 892, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LayerPaneLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         LayerPaneLayout.setVerticalGroup(
             LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 534, Short.MAX_VALUE)
+            .addGroup(LayerPaneLayout.createSequentialGroup()
+                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 534, Short.MAX_VALUE))
         );
 
         add(LayerPane, java.awt.BorderLayout.CENTER);
