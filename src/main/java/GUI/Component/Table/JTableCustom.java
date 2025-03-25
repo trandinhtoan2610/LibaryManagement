@@ -9,30 +9,38 @@ public class JTableCustom extends JTable {
         super();
         initialize();
     }
+
     public JTableCustom(TableModel dm) {
         super(dm);
         initialize();
     }
+
     public JTableCustom(Object[][] rowData, Object[] columnNames) {
         super(rowData, columnNames);
         initialize();
     }
+
     private void initialize() {
         setRowHeight(28);
         setGridColor(new Color(220, 220, 220));
         setShowGrid(true);
         setFillsViewportHeight(true);
-        JTableHeader header = getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        header.setBackground(new Color(70, 90, 110));
-        header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(0, 32));
+
+        // Áp dụng font và màu sắc cho header
+        setHeaderStyle(new Font("Segoe UI", Font.BOLD, 15), new Color(60, 80, 100));
+
         setDefaultRenderer(Object.class, new CustomTableCellRenderer());
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
-        setHeaderStyle(new Font("Segoe UI", Font.BOLD, 15), new Color(60, 80, 100));
     }
 
+    // Ngăn không cho chỉnh sửa ô trong bảng
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false; // Không cho phép chỉnh sửa
+    }
+
+    // Renderer cho ô dữ liệu
     private class CustomTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -43,14 +51,37 @@ public class JTableCustom extends JTable {
                 c.setBackground(new Color(100, 149, 237));
                 c.setForeground(Color.WHITE);
             } else {
-                c.setBackground(row % 2 == 0 ?
-                        new Color(245, 245, 245) :
-                        new Color(235, 238, 240));
+                c.setBackground(row % 2 == 0 ? new Color(245, 245, 245) : new Color(235, 238, 240));
                 c.setForeground(Color.BLACK);
             }
 
             setHorizontalAlignment(SwingConstants.CENTER);
             return c;
+        }
+    }
+
+    // Renderer tùy chỉnh cho header của bảng
+    private class CustomHeaderRenderer extends DefaultTableCellRenderer {
+        private Color background;
+        private Font font;
+
+        public CustomHeaderRenderer(Color background, Font font) {
+            this.background = background;
+            this.font = font;
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            label.setBackground(background);
+            label.setForeground(Color.WHITE); // Màu chữ
+            label.setFont(font);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setOpaque(true); // Bắt buộc để màu nền hiển thị đúng
+            return label;
         }
     }
 
@@ -61,20 +92,23 @@ public class JTableCustom extends JTable {
 
     public void setHeaderStyle(Font font, Color background) {
         JTableHeader header = getTableHeader();
+        header.setDefaultRenderer(new CustomHeaderRenderer(background, font));
         header.setFont(font);
-        header.setBackground(background);
     }
 
     @Override
     public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
     }
+
+    // Test bảng với JFrame
 //    public static void main(String[] args) {
 //        JFrame frame = new JFrame("Custom Table Demo");
-//        frame.setLayout(new FlowLayout());
+//        frame.setLayout(new BorderLayout());
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(400, 300);
+//        frame.setSize(500, 400);
 //        frame.setLocationRelativeTo(null);
+//
 //        Object[][] data = {
 //                {"John", "Doe", 25},
 //                {"Jane", "Smith", 30},
@@ -83,7 +117,8 @@ public class JTableCustom extends JTable {
 //        String[] columnNames = {"First Name", "Last Name", "Age"};
 //        JTableCustom table = new JTableCustom(data, columnNames);
 //        JScrollPane scrollPane = new JScrollPane(table);
-//        frame.add(scrollPane);
+//        frame.add(scrollPane, BorderLayout.CENTER);
+//        
 //        frame.setVisible(true);
 //    }
 }
