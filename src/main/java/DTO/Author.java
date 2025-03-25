@@ -11,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Author extends EntityAuditGPABase<Long> {
+    public Author(){};
     public Author(Long id, String firstName,String lastName, Gender gender, String phone, String address) {
         this.id = id;
         this.firstName = firstName;

@@ -1,4 +1,4 @@
-package GUI.Component;
+package GUI.Component.Panel.Components;
 
 import com.kitfox.svg.app.beans.SVGIcon;
 

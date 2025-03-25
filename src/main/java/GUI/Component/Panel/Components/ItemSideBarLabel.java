@@ -1,8 +1,6 @@
-package GUI.Component;
+package GUI.Component.Panel.Components;
 
 import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
-import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

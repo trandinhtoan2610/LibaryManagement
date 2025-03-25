@@ -1,7 +1,7 @@
-package GUI.Panel;
+package GUI.Component.Panel;
 
-import GUI.Component.AccountNameLabel;
-import GUI.Component.ItemSideBarLabel;
+import GUI.Component.Panel.Components.AccountNameLabel;
+import GUI.Component.Panel.Components.ItemSideBarLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +16,5 @@ public class TaskBarPanel extends JPanel {
         add(accountNameLabel);
         itemSideBarLabel = new ItemSideBarLabel();
         this.add(itemSideBarLabel);
-    }
-
-    public static void main(String[] args) {
-        Frame frame = new Frame();
-        TaskBarPanel panel = new TaskBarPanel();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
     }
 }

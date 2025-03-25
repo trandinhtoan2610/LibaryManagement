@@ -1,4 +1,4 @@
-package GUI.Panel;
+package GUI.Component.Panel;
 
 import java.awt.Color;
 import javax.swing.JPanel;

@@ -1,4 +1,4 @@
-package GUI.Component;
+package GUI.Component.Panel.Components;
 
 import org.apache.batik.swing.JSVGCanvas;
 

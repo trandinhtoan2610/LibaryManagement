@@ -1,4 +1,4 @@
-package GUI.Component;
+package GUI.Component.TextField;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

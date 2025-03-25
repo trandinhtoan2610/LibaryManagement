@@ -3,8 +3,8 @@ package GUI;
 
 import BUS.EmployeeBUS;
 import DTO.Employee;
-import GUI.Component.RoundedPasswordField;
-import GUI.Component.RoundedTextField;
+import GUI.Component.TextField.RoundedPasswordField;
+import GUI.Component.TextField.RoundedTextField;
 
 import javax.swing.*;
 import java.awt.*;
