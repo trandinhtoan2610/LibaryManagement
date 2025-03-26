@@ -16,15 +16,15 @@ public class EmployeeDAL implements IEmployeeDAL {
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
         return new Employee(
                 rs.getLong("id"),
-                rs.getLong("roleId"),
-                rs.getString("name"),
+                rs.getString("firstName"),
+                rs.getString("lastName"),
                 Gender.valueOf(rs.getString("gender").toString()),
                 rs.getString("username"),
                 rs.getString("password"),
+                rs.getLong("roleID"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
+                rs.getLong("salary")
         );
     }
 
@@ -50,10 +50,11 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public Long create(Employee employee) {
-        String sql = "INSERT INTO employee (roleId, name, gender, username, password, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employee (roleId, firstName, lastName, gender, username, password, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         return genericDAL.insert(sql,
-                employee.getRoleId(),
-                employee.getName(),
+                employee.getRoleID(),
+                employee.getFirstName(),
+                employee.getLastName(),
                 employee.getGender(),
                 employee.getUsername(),
                 employee.getPassword(),
@@ -64,8 +65,8 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public boolean update(Employee employee) {
-        String sql = "UPDATE employee SET name = ?, gender = ? username = ?, password = ?, phone = ?, address = ? WHERE id = ?";
-        return genericDAL.update(sql, employee.getName(), employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getId());
+        String sql = "UPDATE employee SET firstName = ?, lastName = ?, gender = ? username = ?, password = ?, phone = ?, address = ? WHERE id = ?";
+        return genericDAL.update(sql, employee.getFirstName(),employee.getLastName(), employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getId());
     }
 
     @Override

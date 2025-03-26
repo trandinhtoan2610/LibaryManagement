@@ -8,7 +8,7 @@ import java.awt.event.*;
 import java.net.URI;
 import java.net.URL;
 
-public class ButtonDelete extends JLabel {
+public class ButtonExportExcel extends JLabel {
     // Màu sắc chuyên nghiệp
     private Color TEXT_DEFAULT = new Color(51, 51, 51);    // #333333
     private Color TEXT_HOVER = new Color(26, 115, 232);   // #1A73E8
@@ -22,10 +22,10 @@ public class ButtonDelete extends JLabel {
     private int VERTICAL_PADDING = 12;
     private int BORDER_RADIUS = 8;
 
-    public ButtonDelete() {
+    public ButtonExportExcel() {
         try {
             // Tải icon SVG
-            URL url = getClass().getResource("/icons/delete.svg");
+            URL url = getClass().getResource("/icons/export-excel.svg");
             if (url == null) throw new RuntimeException("Icon not found");
 
             SVGIcon icon = new SVGIcon();
@@ -34,7 +34,7 @@ public class ButtonDelete extends JLabel {
 
             // Cấu hình giao diện
             setIcon(icon);
-            setText("Xóa");
+            setText("Xuất Excel");
             setFont(new Font("Verdana", Font.PLAIN, 25));
             setOpaque(true);
             setBackground(BG_DEFAULT);
