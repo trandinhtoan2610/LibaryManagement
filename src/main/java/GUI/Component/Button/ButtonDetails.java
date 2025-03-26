@@ -1,10 +1,12 @@
 package GUI.Component.Button;
 
 import com.kitfox.svg.app.beans.SVGIcon;
+
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.URL;
 
@@ -97,7 +99,7 @@ public class ButtonDetails extends JLabel {
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(color);
             g2d.setStroke(new BasicStroke(thickness));
-            g2d.drawRoundRect(x, y, width-1, height-1, radius, radius);
+            g2d.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
             g2d.dispose();
         }
 

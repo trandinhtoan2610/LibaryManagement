@@ -1,5 +1,6 @@
 package GUI.Component.Table;
 
+import BUS.EmployeeBUS;
 import DTO.Employee;
 import DTO.Enum.Gender;
 
@@ -10,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
 public class EmployeeTable extends JTableCustom {
     private static final String[] HEADER = {
             "ID", "First Name", "Last Name", "Gender",
@@ -41,15 +43,16 @@ public class EmployeeTable extends JTableCustom {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if (e.getClickCount() == 2) {
                     Employee selectedEmployee = getSelectedEmployee();
-                    if(selectedEmployee != null) {
+                    if (selectedEmployee != null) {
                         openEmployeeDetails(selectedEmployee);
                     }
                 }
             }
         });
     }
+
     private void openEmployeeDetails(Employee employee) {
         JOptionPane.showMessageDialog(
                 this,
@@ -60,6 +63,7 @@ public class EmployeeTable extends JTableCustom {
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
+
     public void setEmployees(List<Employee> employees) {
         this.employees = employees != null ? new ArrayList<>(employees) : new ArrayList<>();
         refreshTable();
@@ -85,6 +89,7 @@ public class EmployeeTable extends JTableCustom {
         }
         return null;
     }
+
     private String formatVND(double amount) {
         if (amount >= 1_000_000_000) {
             return String.format("%,.2f tỷ đ", amount / 1_000_000_000);
@@ -94,6 +99,7 @@ public class EmployeeTable extends JTableCustom {
             return String.format("%,.2f đ", amount);
         }
     }
+
     private void refreshTable() {
         tableModel.setRowCount(0);
         for (Employee emp : employees) {
@@ -112,19 +118,19 @@ public class EmployeeTable extends JTableCustom {
             tableModel.addRow(rowData);
         }
     }
-    public static void main(String[] args) {
-            JFrame frame = new JFrame("Employee Table");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            List<Employee> sampleData = new ArrayList<>();
-            sampleData.add(new Employee(1L, "Hoàng Lê Nhất Thống", "Chí", Gender.Female, "jdoe", "pass123", 1L,
-                    "0329997881", "270 Phan Đình Phùng", 550000000.0f));
-            sampleData.add(new Employee(2L, "Jane", "Smith", Gender.Female, "jsmith", "pass456", 2L,
-                    "555-0202", "456 Oak Ave", 65000.0f));
-            EmployeeTable table = new EmployeeTable();
-            table.setEmployees(sampleData);
-            frame.add(new JScrollPane(table));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//            JFrame frame = new JFrame("Employee Table");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            List<Employee> sampleData = new ArrayList<>();
+//            sampleData.add(new Employee(1L, "Hoàng Lê Nhất Thống", "Chí", Gender.Female, "jdoe", "pass123", 1L,
+//                    "0329997881", "270 Phan Đình Phùng", 550000000.0f));
+//            sampleData.add(new Employee(2L, "Jane", "Smith", Gender.Female, "jsmith", "pass456", 2L,
+//                    "555-0202", "456 Oak Ave", 65000.0f));
+//            EmployeeTable table = new EmployeeTable();
+//            table.setEmployees(sampleData);
+//            frame.add(new JScrollPane(table));
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//    }
 }

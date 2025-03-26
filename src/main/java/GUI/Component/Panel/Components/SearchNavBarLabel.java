@@ -9,14 +9,15 @@ import java.net.URI;
 import java.net.URL;
 
 public class SearchNavBarLabel extends JPanel {
-    public SearchNavBarLabel(){
+    public SearchNavBarLabel() {
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
         JPanel panel = SearchNavBarLabelChild();
         panel.setBackground(Color.WHITE);
         this.add(panel, BorderLayout.CENTER);
     }
-    public JPanel SearchNavBarLabelChild(){
+
+    public JPanel SearchNavBarLabelChild() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 8));
         String type[] = {"Tên", "Thể Loại", "Tác Giả", "Năm"};
@@ -29,7 +30,7 @@ public class SearchNavBarLabel extends JPanel {
         searchtype.setFont(new Font("Verdana", Font.PLAIN, 18));
         searchtype.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 3),
-                BorderFactory.createEmptyBorder(0,0,0,0)
+                BorderFactory.createEmptyBorder(0, 0, 0, 0)
         ));
         panel.add(searchtype);
 
@@ -42,12 +43,12 @@ public class SearchNavBarLabel extends JPanel {
         panel.add(searchfield);
 
         URL refreshurl = getClass().getResource("/icons/refresh.svg");
-        if(refreshurl == null) {
+        if (refreshurl == null) {
             throw new RuntimeException("Refresh Icon Not Found");
         }
         SVGIcon refreshIcon = new SVGIcon();
         refreshIcon.setSvgURI(URI.create(refreshurl.toString()));
-        refreshIcon.setPreferredSize(new Dimension(20,30));
+        refreshIcon.setPreferredSize(new Dimension(20, 30));
         JButton refreshButton = new JButton("Làm mới", refreshIcon);
         refreshButton.setPreferredSize(new Dimension(130, 40));
         refreshButton.setBackground(new Color(211, 163, 131));
