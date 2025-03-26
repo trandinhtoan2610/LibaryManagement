@@ -10,7 +10,8 @@ public class GenericDAL {
     private final DatabaseConnection dbConnection;
 
     public GenericDAL() {
-        this.dbConnection = DatabaseConnection.getInstance();
+        this.dbConnection = new DatabaseConnection();
+//        this.dbConnection = DatabaseConnection.getInstance();
     }
 
     public <T> T queryForObject(String sql, RowMapper<T> rowMapper, Object... params) {
