@@ -21,10 +21,10 @@ public class EmployeeDAL implements IEmployeeDAL {
                 Gender.valueOf(rs.getString("gender").toString()),
                 rs.getString("username"),
                 rs.getString("password"),
-                rs.getLong("roleID"),
+                rs.getLong("roleId"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getLong("salary")
+                rs.getFloat("salary")
         );
     }
 

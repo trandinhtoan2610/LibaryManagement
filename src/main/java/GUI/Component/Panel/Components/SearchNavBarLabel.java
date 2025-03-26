@@ -50,7 +50,7 @@ public class SearchNavBarLabel extends JPanel {
         refreshIcon.setPreferredSize(new Dimension(20,30));
         JButton refreshButton = new JButton("Làm mới", refreshIcon);
         refreshButton.setPreferredSize(new Dimension(130, 40));
-        refreshButton.setBackground(new Color(189, 0, 85));
+        refreshButton.setBackground(new Color(211, 163, 131));
         refreshButton.setForeground(Color.WHITE);
         refreshButton.setFont(new Font("Verdana", Font.PLAIN, 18));
         refreshButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));

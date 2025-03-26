@@ -3,6 +3,7 @@ package GUI.Component.Table;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class JTableCustom extends JTable {
     public JTableCustom() {
@@ -84,6 +85,10 @@ public class JTableCustom extends JTable {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setOpaque(true);
             return label;
+        }
+        public String getToolTipText(MouseEvent e) {
+            int row = rowAtPoint(e.getPoint());
+            return "Nhấn đúp chuột để xem chi tiết";
         }
     }
 
