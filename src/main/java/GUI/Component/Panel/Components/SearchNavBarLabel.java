@@ -34,7 +34,7 @@ public class SearchNavBarLabel extends JPanel {
         panel.add(searchtype);
 
         RoundedTextField searchfield = new RoundedTextField(20, 15, 15);
-        searchfield.setPlaceholder("Từ khóa tìm kiếm");
+        searchfield.setPlaceholder("Từ khóa tìm kiếm....");
         searchfield.setBackground(new Color(245, 245, 245));
         searchfield.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         searchfield.setBorderColor(new Color(200, 200, 200));
