@@ -69,21 +69,21 @@ public class JTableCustom extends JTable {
     public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
     }
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Custom Table Demo");
-//        frame.setLayout(new FlowLayout());
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(400, 300);
-//        frame.setLocationRelativeTo(null);
-//        Object[][] data = {
-//                {"John", "Doe", 25},
-//                {"Jane", "Smith", 30},
-//                {"Alice", "Johnson", 28}
-//        };
-//        String[] columnNames = {"First Name", "Last Name", "Age"};
-//        JTableCustom table = new JTableCustom(data, columnNames);
-//        JScrollPane scrollPane = new JScrollPane(table);
-//        frame.add(scrollPane);
-//        frame.setVisible(true);
-//    }
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Custom Table Demo");
+        frame.setLayout(new FlowLayout());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        Object[][] data = {
+                {"John", "Doe", 25},
+                {"Jane", "Smith", 30},
+                {"Alice", "Johnson", 28}
+        };
+        String[] columnNames = {"First Name", "Last Name", "Age"};
+        JTableCustom table = new JTableCustom(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        frame.add(scrollPane);
+        frame.setVisible(true);
+    }
 }
