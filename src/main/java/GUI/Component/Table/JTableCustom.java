@@ -29,7 +29,12 @@ public class JTableCustom extends JTable {
         // Áp dụng font và màu sắc cho header
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 15), new Color(60, 80, 100));
 
+        // Đăng ký renderer cho các kiểu dữ liệu cụ thể
         setDefaultRenderer(Object.class, new CustomTableCellRenderer());
+        setDefaultRenderer(String.class, new CustomTableCellRenderer());
+        setDefaultRenderer(Long.class, new CustomTableCellRenderer());
+        setDefaultRenderer(Float.class, new CustomTableCellRenderer());
+
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
     }
@@ -54,13 +59,10 @@ public class JTableCustom extends JTable {
                 c.setBackground(row % 2 == 0 ? new Color(245, 245, 245) : new Color(235, 238, 240));
                 c.setForeground(Color.BLACK);
             }
-
             setHorizontalAlignment(SwingConstants.CENTER);
             return c;
         }
     }
-
-    // Renderer tùy chỉnh cho header của bảng
     private class CustomHeaderRenderer extends DefaultTableCellRenderer {
         private Color background;
         private Font font;
@@ -77,10 +79,10 @@ public class JTableCustom extends JTable {
                                                        int row, int column) {
             JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             label.setBackground(background);
-            label.setForeground(Color.WHITE); // Màu chữ
+            label.setForeground(Color.WHITE);
             label.setFont(font);
             label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setOpaque(true); // Bắt buộc để màu nền hiển thị đúng
+            label.setOpaque(true);
             return label;
         }
     }
@@ -118,7 +120,7 @@ public class JTableCustom extends JTable {
 //        JTableCustom table = new JTableCustom(data, columnNames);
 //        JScrollPane scrollPane = new JScrollPane(table);
 //        frame.add(scrollPane, BorderLayout.CENTER);
-//        
+//
 //        frame.setVisible(true);
 //    }
 }

@@ -1,5 +1,6 @@
 package GUI.Component.Panel.Components;
 
+import GUI.Component.TextField.RoundedTextField;
 import com.kitfox.svg.app.beans.SVGIcon;
 
 import javax.swing.*;
@@ -32,15 +33,12 @@ public class SearchNavBarLabel extends JPanel {
         ));
         panel.add(searchtype);
 
-        JTextField searchfield = new JTextField();
-        searchfield.setPreferredSize(new Dimension(200, 40));
-        searchfield.setBackground(Color.WHITE);
-        searchfield.setForeground(new Color(50, 50, 50));
-        searchfield.setFont(new Font("Verdana", Font.PLAIN, 18));
-        searchfield.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 3),
-                BorderFactory.createEmptyBorder(0,0,0,0)
-        ));
+        RoundedTextField searchfield = new RoundedTextField(20, 15, 15);
+        searchfield.setPlaceholder("Từ khóa tìm kiếm");
+        searchfield.setBackground(new Color(245, 245, 245));
+        searchfield.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        searchfield.setBorderColor(new Color(200, 200, 200));
+        searchfield.setFocusBorderColor(new Color(0, 120, 215));
         panel.add(searchfield);
 
         URL refreshurl = getClass().getResource("/icons/refresh.svg");
