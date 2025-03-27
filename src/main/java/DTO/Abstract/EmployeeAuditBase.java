@@ -1,25 +1,24 @@
 package DTO.Abstract;
 
-import DTO.Interface.IGPABase;
-
 public class EmployeeAuditBase extends EntityAuditGPABase<Long> {
-    protected Long salary, roleID;
+    protected float salary;
+    protected Long roleId;
     protected String username, password;
 
-    public Long getSalary() {
+    public float getSalary() {
         return salary;
     }
 
-    public void setSalary(Long salary) {
+    public void setSalary(float salary) {
         this.salary = salary;
     }
 
     public Long getRoleID() {
-        return roleID;
+        return roleId;
     }
 
     public void setRoleID(Long roleID) {
-        this.roleID = roleID;
+        this.roleId = roleID;
     }
 
     public String getUsername() {

@@ -3,30 +3,29 @@ package DAL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DatabaseConnection {
-    
-     public static Connection getConnection() throws SQLException {
+
+    public static Connection getConnection() throws SQLException {
         Connection c = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mySQL://localhost:3306/library_management";
             String username = "root";
             String password = "";
             c = DriverManager.getConnection(url, username, password);
-            
-        }catch(ClassNotFoundException e){
+
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException("Không tìm th driver MySQL", e);
         }
         return c;
     }
-    
-    public static void closeConnection(Connection c){
+
+    public static void closeConnection(Connection c) {
         try {
             if (c != null)
                 c.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

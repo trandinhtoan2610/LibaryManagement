@@ -1,19 +1,19 @@
 package GUI.Component.Panel;
 
-import java.awt.Color;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 
 public class StatisticsPanel extends javax.swing.JPanel {
     private final Color defaultColor = new Color(255, 255, 255);
-    private final Color selectedColor = new Color(100, 200, 250); 
-    private final Color hoverColor = new Color(180, 220, 250); 
-    
+    private final Color selectedColor = new Color(100, 200, 250);
+    private final Color hoverColor = new Color(180, 220, 250);
+
 
     private JPanel selectedPanel;
-    
+
     public StatisticsPanel() {
-        
+
 
         initComponents();
         OverviewStatTab.setOpaque(true);
@@ -25,17 +25,17 @@ public class StatisticsPanel extends javax.swing.JPanel {
         isSelected(OverviewStatTab);
     }
 
-    public void clearSelect(){
-    if (selectedPanel != null) {
-        selectedPanel.setBackground(defaultColor);
-        selectedPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
-        selectedPanel.revalidate();
-        selectedPanel.repaint();
-        
-    }
-}
+    public void clearSelect() {
+        if (selectedPanel != null) {
+            selectedPanel.setBackground(defaultColor);
+            selectedPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
+            selectedPanel.revalidate();
+            selectedPanel.repaint();
 
-    
+        }
+    }
+
+
     public void isSelected(JPanel p) {
         clearSelect();
         selectedPanel = p;
@@ -47,25 +47,22 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
 
-    
-    public void addHover(JPanel p){
-        if(selectedPanel != p){
+    public void addHover(JPanel p) {
+        if (selectedPanel != p) {
             p.setBackground(hoverColor);
         }
     }
-    
-    public void deleteHover(JPanel p){
-    if (selectedPanel != p) {
-        p.setBackground(defaultColor);
-        p.setOpaque(true);  // Đảm bảo JPanel hiển thị màu nền
-        p.revalidate();
-        p.repaint();
-    }
-}
 
-    
-   
-    
+    public void deleteHover(JPanel p) {
+        if (selectedPanel != p) {
+            p.setBackground(defaultColor);
+            p.setOpaque(true);  // Đảm bảo JPanel hiển thị màu nền
+            p.revalidate();
+            p.repaint();
+        }
+    }
+
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -103,9 +100,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 OverviewStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 OverviewStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 OverviewStatTabMouseExited(evt);
             }
@@ -123,9 +122,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ReaderStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 ReaderStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 ReaderStatTabMouseExited(evt);
             }
@@ -143,9 +144,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EmployeeStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 EmployeeStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 EmployeeStatTabMouseExited(evt);
             }
@@ -163,9 +166,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 InventoryStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 InventoryStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 InventoryStatTabMouseExited(evt);
             }
@@ -183,9 +188,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 LoanSlipStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 LoanSlipStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 LoanSlipStatTabMouseExited(evt);
             }
@@ -203,9 +210,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SupplierStatTabMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 SupplierStatTabMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 SupplierStatTabMouseExited(evt);
             }
@@ -224,16 +233,16 @@ public class StatisticsPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout LayerPaneLayout = new javax.swing.GroupLayout(LayerPane);
         LayerPane.setLayout(LayerPaneLayout);
         LayerPaneLayout.setHorizontalGroup(
-            LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LayerPaneLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LayerPaneLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         LayerPaneLayout.setVerticalGroup(
-            LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LayerPaneLayout.createSequentialGroup()
-                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 534, Short.MAX_VALUE))
+                LayerPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(LayerPaneLayout.createSequentialGroup()
+                                .addComponent(divTaskbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 534, Short.MAX_VALUE))
         );
 
         add(LayerPane, java.awt.BorderLayout.CENTER);
@@ -272,7 +281,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_ReaderStatTabMouseExited
 
     private void OverviewStatTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OverviewStatTabMouseEntered
-       addHover(OverviewStatTab);
+        addHover(OverviewStatTab);
     }//GEN-LAST:event_OverviewStatTabMouseEntered
 
     private void OverviewStatTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OverviewStatTabMouseExited
@@ -310,8 +319,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private void SupplierStatTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SupplierStatTabMouseExited
         deleteHover(SupplierStatTab);
     }//GEN-LAST:event_SupplierStatTabMouseExited
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel EmployeeStatTab;

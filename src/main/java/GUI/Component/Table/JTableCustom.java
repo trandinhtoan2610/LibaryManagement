@@ -1,8 +1,11 @@
 package GUI.Component.Table;
 
 import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class JTableCustom extends JTable {
     public JTableCustom() {
@@ -63,6 +66,7 @@ public class JTableCustom extends JTable {
             return c;
         }
     }
+
     private class CustomHeaderRenderer extends DefaultTableCellRenderer {
         private Color background;
         private Font font;
@@ -85,6 +89,11 @@ public class JTableCustom extends JTable {
             label.setOpaque(true);
             return label;
         }
+
+        public String getToolTipText(MouseEvent e) {
+            int row = rowAtPoint(e.getPoint());
+            return "Nhấn đúp chuột để xem chi tiết";
+        }
     }
 
     public void setCustomGrid(Color gridColor, int rowHeight) {
@@ -102,25 +111,4 @@ public class JTableCustom extends JTable {
     public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
     }
-
-    // Test bảng với JFrame
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Custom Table Demo");
-//        frame.setLayout(new BorderLayout());
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(500, 400);
-//        frame.setLocationRelativeTo(null);
-//
-//        Object[][] data = {
-//                {"John", "Doe", 25},
-//                {"Jane", "Smith", 30},
-//                {"Alice", "Johnson", 28}
-//        };
-//        String[] columnNames = {"First Name", "Last Name", "Age"};
-//        JTableCustom table = new JTableCustom(data, columnNames);
-//        JScrollPane scrollPane = new JScrollPane(table);
-//        frame.add(scrollPane, BorderLayout.CENTER);
-//
-//        frame.setVisible(true);
-//    }
 }
