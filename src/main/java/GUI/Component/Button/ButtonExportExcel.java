@@ -26,6 +26,8 @@ public class ButtonExportExcel extends JLabel {
 
     public ButtonExportExcel() {
         try {
+            setPreferredSize(new Dimension(168,100));
+
             // Tải icon SVG
             URL url = getClass().getResource("/icons/export-excel.svg");
             if (url == null) throw new RuntimeException("Icon not found");
@@ -37,7 +39,7 @@ public class ButtonExportExcel extends JLabel {
             // Cấu hình giao diện
             setIcon(icon);
             setText("Xuất Excel");
-            setFont(new Font("Verdana", Font.PLAIN, 25));
+            setFont(new Font("Verdana", Font.PLAIN, 20));
             setOpaque(true);
             setBackground(BG_DEFAULT);
             setForeground(TEXT_DEFAULT);
