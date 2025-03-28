@@ -2,55 +2,60 @@ package DAL;
 
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.Customer;
 import DTO.Enum.Gender;
+import DTO.ReaderDTO;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-public class ReaderDAL implements IRepositoryBase<Customer> {
+public class ReaderDAL implements IRepositoryBase<ReaderDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<Customer> CustomerRowMapper = this::mapRowToCustomer;
+    private final RowMapper<ReaderDTO> readerRowMapper = (ResultSet rs) -> {
+        Long id = rs.getLong("id");
+        String firstName = rs.getString("firstName");
+        String lastName = rs.getString("lastName");
+        Gender gender = Gender.valueOf(rs.getString("gender"));
+        String phone = rs.getString("phone");
+        String address = rs.getString("address");
+        return new ReaderDTO(id,firstName,lastName,gender,phone,address);
+    };
 
-    private Customer mapRowToCustomer(ResultSet rs) throws SQLException {
-        return new Customer(
-                rs.getLong("id"),
-                rs.getString("name"),
-                Gender.valueOf(rs.getString("gender").toString()),
-                rs.getString("phone"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
-        );
+    @Override
+    public ReaderDTO findById(Long id) {
+        String sql = "SELECT * FROM Reader WHERE id = ?";
+        return genericDAL.queryForObject(sql, readerRowMapper, id);
     }
 
     @Override
-    public Customer findById(Long id) {
-        String sql = "SELECT * FROM customer WHERE id = ?";
-        return genericDAL.queryForObject(sql, CustomerRowMapper, id);
+    public List<ReaderDTO> findAll() {
+        String sql = "SELECT * FROM Reader";
+        return genericDAL.queryForList(sql,readerRowMapper);
     }
 
     @Override
-    public List<Customer> findAll() {
-        String sql = "SELECT * FROM customer";
-        return genericDAL.queryForList(sql, CustomerRowMapper);
+    public Long create(ReaderDTO readerDTO) {
+        String sql = "INSERT INTO Reader ( firstName, lastName, gender, phone, address) " +
+                "Values(?,?,?,?,?)";
+        return genericDAL.insert(sql, readerDTO.getFirstName(), readerDTO.getLastName(),
+                readerDTO.getGender().toString(), readerDTO.getPhone(), readerDTO.getAddress());
     }
 
     @Override
-    public Long create(Customer customer) {
-        String sql = "INSERT INTO customer (name, gender, phone) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, customer.getName(), customer.getGender(), customer.getPhone());
-    }
-
-    @Override
-    public boolean update(Customer customer) {
-        String sql = "UPDATE customer SET name = ? SET gender = ? SET phone = ? WHERE id = ?";
-        return genericDAL.update(sql, customer.getName(), customer.getGender(), customer.getPhone(), customer.getId());
+    public boolean update(ReaderDTO readerDTO) {
+        String sql = "UPDATE Reader " +
+                "SET firstName = ?, " +
+                "lastName = ?, " +
+                "gender = ?, " +
+                "phone = ?, " +
+                "address = ?" +
+                "WHERE id = ?";
+        return genericDAL.update(sql, readerDTO.getFirstName(), readerDTO.getLastName(),
+                readerDTO.getGender().toString(), readerDTO.getPhone(), readerDTO.getAddress(), readerDTO.getId());
     }
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM customer WHERE id = ?";
-        return genericDAL.delete(sql, id);
+        String sql = "DELETE FROM Reader WHERE id = ? ";
+        return genericDAL.delete(sql,id);
     }
 }

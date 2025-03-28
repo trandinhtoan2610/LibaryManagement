@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.URL;
 
-public class ButtonDetails extends JLabel {
+public class ButtonImportExcel extends JLabel {
     // Màu sắc chuyên nghiệp
     private Color TEXT_DEFAULT = new Color(51, 51, 51);    // #333333
     private Color TEXT_HOVER = new Color(26, 115, 232);   // #1A73E8
@@ -24,10 +24,10 @@ public class ButtonDetails extends JLabel {
     private int VERTICAL_PADDING = 12;
     private int BORDER_RADIUS = 8;
 
-    public ButtonDetails() {
+    public ButtonImportExcel() {
         try {
             // Tải icon SVG
-            URL url = getClass().getResource("/icons/detail.svg");
+            URL url = getClass().getResource("/icons/import-excel.svg");
             if (url == null) throw new RuntimeException("Icon not found");
 
             SVGIcon icon = new SVGIcon();
@@ -36,7 +36,7 @@ public class ButtonDetails extends JLabel {
 
             // Cấu hình giao diện
             setIcon(icon);
-            setText("Chi Tiết");
+            setText("Nhập Excel");
             setFont(new Font("Verdana", Font.PLAIN, 25));
             setOpaque(true);
             setBackground(BG_DEFAULT);

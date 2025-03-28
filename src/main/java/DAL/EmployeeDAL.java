@@ -1,30 +1,32 @@
 package DAL;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import DAL.Interface.IEmployeeDAL;
 import DAL.Interface.RowMapper;
 import DTO.Employee;
 import DTO.Enum.Gender;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 public class EmployeeDAL implements IEmployeeDAL {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<Employee> employeeRowMapper = this::mapRowToEmployee;
 
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
+        Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
+        System.out.println(gender);
         return new Employee(
                 rs.getLong("id"),
-                rs.getLong("roleId"),
-                rs.getString("name"),
-                Gender.valueOf(rs.getString("gender").toString()),
+                rs.getString("firstName"),
+                rs.getString("lastName"),
+                gender,
                 rs.getString("username"),
                 rs.getString("password"),
+                rs.getLong("roleId"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
+                rs.getFloat("salary")
         );
     }
 
@@ -44,28 +46,34 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public List<Employee> findAll() {
-        String sql = "SELECT * FROM employee";
-        return genericDAL.queryForList(sql, employeeRowMapper);
+        try {
+            String sql = "SELECT * FROM employee";
+            return genericDAL.queryForList(sql, employeeRowMapper);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch all employees", e);
+        }
     }
 
     @Override
     public Long create(Employee employee) {
-        String sql = "INSERT INTO employee (roleId, name, gender, username, password, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employee (roleId, firstName, lastName, gender, username, password, phone, address, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return genericDAL.insert(sql,
-                employee.getRoleId(),
-                employee.getName(),
-                employee.getGender(),
+                employee.getRoleID(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getGender().name(),
                 employee.getUsername(),
                 employee.getPassword(),
                 employee.getPhone(),
-                employee.getAddress()
+                employee.getAddress(),
+                employee.getSalary()
         );
     }
 
     @Override
     public boolean update(Employee employee) {
-        String sql = "UPDATE employee SET name = ?, gender = ? username = ?, password = ?, phone = ?, address = ? WHERE id = ?";
-        return genericDAL.update(sql, employee.getName(), employee.getGender(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getId());
+        String sql = "UPDATE employee SET firstName = ?, lastName = ?, gender = ? username = ?, password = ?, phone = ?, address = ?, salary = ? WHERE id = ?";
+        return genericDAL.update(sql, employee.getFirstName(), employee.getLastName(), employee.getGender().name(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getSalary(), employee.getId());
     }
 
     @Override
@@ -73,4 +81,9 @@ public class EmployeeDAL implements IEmployeeDAL {
         String sql = "DELETE FROM employee WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
+    public List<Employee> findByGender(Gender gender) {
+        String sql = "SELECT * FROM employee WHERE gender = ?";
+        return genericDAL.queryForList(sql, employeeRowMapper, gender.name());
+    }
+
 }

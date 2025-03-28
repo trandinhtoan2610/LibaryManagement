@@ -9,6 +9,7 @@ import java.awt.*;
 public class TaskBarPanel extends JPanel {
     ItemSideBarLabel itemSideBarLabel;
     AccountNameLabel accountNameLabel;
+
     public TaskBarPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setPreferredSize(new Dimension(252, 800));

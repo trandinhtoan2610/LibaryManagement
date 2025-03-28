@@ -2,18 +2,20 @@
     <!-- Gradient definition -->
     <defs>
         <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#81C784;stop-opacity:1" />
+            <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#81C784;stop-opacity:1"/>
         </linearGradient>
         <linearGradient id="packageGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#FF6F61;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FF8A65;stop-opacity:1" />
+            <stop offset="0%" style="stop-color:#FF6F61;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#FF8A65;stop-opacity:1"/>
         </linearGradient>
     </defs>
     <!-- Person (supplier) with gradient -->
-    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="url(#personGradient)"/>
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+          fill="url(#personGradient)"/>
     <!-- Package (goods) with gradient -->
-    <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z" fill="url(#packageGradient)"/>
+    <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"
+          fill="url(#packageGradient)"/>
     <!-- Package details (stripes) -->
     <path d="M20 8v2h-4V8h4zM8 8v2H4V8h4z" fill="#FFD166"/>
 </svg>

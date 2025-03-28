@@ -3,7 +3,7 @@ package DTO.Abstract;
 import DTO.Enum.Gender;
 import DTO.Interface.IGPABase;
 
-public class EntityAuditGPABase<T> extends EntityAuditNameBase<T> implements IGPABase {
+public class EntityAuditGPABase<T> extends EntityBase<T> implements IGPABase {
     protected String firstName;
     protected String lastName;
     protected Gender gender;
