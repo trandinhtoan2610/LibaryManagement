@@ -3,8 +3,10 @@ package GUI;
 
 import DTO.Book;
 import DTO.Employee;
+import raven.datetime.DatePicker;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 public class Main extends Thread {
@@ -22,8 +24,14 @@ public class Main extends Thread {
                  UnsupportedLookAndFeelException _) {
         }
         new LoginForm();
+        DatePicker datePicker = new DatePicker();
+        datePicker.setAnimationEnabled(true);
+        datePicker.setEditor(new JFormattedTextField());
+        datePicker.setColor(Color.WHITE);
+        datePicker.setBorder(null);
+        datePicker.setBackground(new Color(0, 0, 0, 0));
+        datePicker.setCloseAfterSelected(true); 
     }
-
     public static void Sleep(long j) {
         try {
             Thread.sleep(j);

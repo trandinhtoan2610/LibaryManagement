@@ -137,7 +137,7 @@ public class AddEmployeeDialog extends JDialog {
         label.setBackground(Color.WHITE);
         return label;
     }
-
+//
 //    public static void main(String[] args) {
 //        JFrame frame = new JFrame();
 //        frame.setSize(1920, 1080);
