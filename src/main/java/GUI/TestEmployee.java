@@ -32,6 +32,6 @@ public class TestEmployee extends JFrame {
         employeeTable.setEmployees(employees);
     }
     public static void main(String[] args) {
-            new TestEmployee().setVisible(true);
+        new TestEmployee().setVisible(true);
     }
 }

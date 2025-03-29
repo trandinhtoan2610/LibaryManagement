@@ -4,11 +4,11 @@ import GUI.Component.Button.ButtonAction;
 import javax.swing.*;
 import java.awt.*;
 
-public class DeleteEmployeeDialog extends JDialog {
+public class LogOutDialog extends JDialog {
     private boolean confirmed = false;
 
-    public DeleteEmployeeDialog(JFrame parent) {
-        super(parent, "Xóa nhân viên", true);
+    public LogOutDialog(JFrame parent) {
+        super(parent, "Đăng Xuất", true);
         initComponents();
         pack();
         setLocationRelativeTo(parent);
@@ -22,7 +22,7 @@ public class DeleteEmployeeDialog extends JDialog {
         // Panel tiêu đề
         JPanel titlePanel = new JPanel();
         titlePanel.setBackground(new Color(0, 120, 215));
-        JLabel titleLabel = new JLabel("XÁC NHẬN XÓA");
+        JLabel titleLabel = new JLabel("ĐĂNG XUẤT");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel);
@@ -32,7 +32,7 @@ public class DeleteEmployeeDialog extends JDialog {
         JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
-        JLabel messageLabel = new JLabel("Bạn có chắc chắn muốn xóa nhân viên này?");
+        JLabel messageLabel = new JLabel("Bạn có chắc chắn muốn đăng xuất không?");
         messageLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         contentPanel.add(messageLabel, BorderLayout.CENTER);

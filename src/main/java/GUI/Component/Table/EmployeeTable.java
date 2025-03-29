@@ -40,30 +40,7 @@ public class EmployeeTable extends JTableCustom {
         getColumnModel().getColumn(8).setPreferredWidth(180);
         getColumnModel().getColumn(9).setPreferredWidth(150);
         setAutoCreateRowSorter(true);
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    Employee selectedEmployee = getSelectedEmployee();
-                    if (selectedEmployee != null) {
-                        openEmployeeDetails(selectedEmployee);
-                    }
-                }
-            }
-        });
     }
-
-    private void openEmployeeDetails(Employee employee) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Chi tiết nhân viên:\n" +
-                        "ID: " + employee.getId() + "\n" +
-                        "Tên: " + employee.getFirstName() + " " + employee.getLastName(),
-                "Thông tin nhân viên",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
     public void setEmployees(List<Employee> employees) {
         this.employees = employees != null ? new ArrayList<>(employees) : new ArrayList<>();
         refreshTable();
