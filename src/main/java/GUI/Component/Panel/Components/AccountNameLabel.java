@@ -17,7 +17,7 @@ public class AccountNameLabel extends JPanel {
             BorderFactory.createLineBorder(Color.black, 1)
         );
         this.setBorder(compoundBorder);
-        this.setPreferredSize(new Dimension(252, 90)); // Adjusted size
+        this.setPreferredSize(new Dimension(252, 100)); // Adjusted size
 
         JSVGCanvas svgCanvas = createIcon();
         JPanel textPanel = createTextPanel(FullName, Role);

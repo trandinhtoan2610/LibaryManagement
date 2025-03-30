@@ -32,7 +32,7 @@ public class ItemSideBarLabel extends JPanel {
     public ItemSideBarLabel(JFrame parentFrame) {
         this.parentFrame = parentFrame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        this.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
         this.setBackground(new Color(240, 240, 240));
         this.setPreferredSize(new Dimension(250, 680));
         for (String item[] : st) {
@@ -49,7 +49,7 @@ public class ItemSideBarLabel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
                 new RoundBorder(10, Color.BLACK), // Border bo tròn
-                BorderFactory.createEmptyBorder(5, 15, 5, 15)  // Padding
+                BorderFactory.createEmptyBorder(5, 15, 2, 15)  // Padding
         ));
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -71,8 +71,11 @@ public class ItemSideBarLabel extends JPanel {
                     break;
                     case "Sách":{}
                     break;
-                    case "Độc giả":{}
-                    break;
+                    case "Độc giả":{
+
+
+                        break;
+                    }
                     case "Tác giả": {}
                     break;
                     case "Nhà xuất bản": {}

@@ -28,7 +28,6 @@ public class EmployeeTable extends JTableCustom {
         this.employees = new ArrayList<>();
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 14), new Color(70, 130, 180));
         setCustomGrid(new Color(220, 220, 220), 30);
-        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         getColumnModel().getColumn(0).setPreferredWidth(35);
         getColumnModel().getColumn(1).setPreferredWidth(175);
         getColumnModel().getColumn(2).setPreferredWidth(90);
@@ -66,7 +65,6 @@ public class EmployeeTable extends JTableCustom {
         }
         return null;
     }
-
     private String formatVND(double amount) {
         if (amount >= 1_000_000_000) {
             return String.format("%,.2f tỷ đ", amount / 1_000_000_000);
