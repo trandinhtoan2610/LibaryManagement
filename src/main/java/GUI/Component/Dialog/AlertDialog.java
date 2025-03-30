@@ -14,6 +14,15 @@ public class AlertDialog extends JDialog {
         pack();
         setLocationRelativeTo(parent);
     }
+    
+     public AlertDialog(Window parent, String title) {
+        super(parent, "Thông báo", ModalityType.APPLICATION_MODAL);
+        initComponents(title);
+        pack();
+        setLocationRelativeTo(parent);
+    }
+
+    
     public AlertDialog(JFrame parent, String title) {
         super(parent, "Thông báo", true);
         initComponents(title);
