@@ -8,9 +8,9 @@ package GUI.Controller;
 
 
 public class Controller {
-    private static final String nameRegex = "^[A-Za-zÀ-Ỹà-ỹ]+( [A-Za-zÀ-Ỹà-ỹ]+)+$"; // Họ + 1 dấu cách + tên 
-    private static final String phoneRegex = "^0[0-9]{9,10}$";
-    
+    private static final String nameRegex = "^[A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?(?: [A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?)*$";
+    private static final String phoneRegex = "^0\\d{9}$";
+
     
     public static boolean checkValidName(String name){
         return name.matches(nameRegex);

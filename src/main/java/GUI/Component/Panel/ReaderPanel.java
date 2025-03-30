@@ -4,6 +4,7 @@ import BUS.ReaderBUS;
 import DTO.ReaderDTO;
 import GUI.Component.Dialog.AddnUpdateReaderDialog;
 import GUI.Component.Dialog.AlertDialog;
+import GUI.Component.Dialog.DeleteReaderDialog;
 import GUI.Component.Table.JTableCustom;
 import GUI.Component.Table.ReaderTable;
 import java.awt.Color;
@@ -26,21 +27,14 @@ public class ReaderPanel extends javax.swing.JPanel {
     Window parent = SwingUtilities.getWindowAncestor(this);
     private final AlertDialog fixReaderAlert = new AlertDialog(parent,"Vui lòng chọn độc giả cần sửa !");
     private final AlertDialog deleteReaderAlert = new AlertDialog(parent, "Vui lòng chọn độc giả cần xóa !");
-    private final AlertDialog successDeleteAlert = new AlertDialog(parent, "Xóa độc giả thành công !");
     
-    
-    
-   
-    
+
        
     public ReaderPanel() {
     try {
         System.out.println("Khởi tạo ReaderPanel...");
-        initComponents(); // Chỉ gọi 1 lần
-
+        initComponents(); 
         readerBUS = new ReaderBUS();
-        
-
         if (ReaderBUS.readerList == null) {
             System.err.println("Lỗi: readerList là null, khởi tạo danh sách rỗng.");
             
@@ -50,14 +44,14 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         reloadReaderTable();
     } catch (Exception e) {
-        e.printStackTrace(); // In lỗi ra console
+        e.printStackTrace(); 
     }
 }
 
 
     public void reloadReaderTable() {  
         tblReader.resetTable();
-}
+    }
     
    
         
@@ -124,14 +118,13 @@ public class ReaderPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_buttonAddMouseClicked
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDeleteMouseClicked
-        if(tblReader.getSelectedReader() == null ){
+        ReaderDTO r = tblReader.getSelectedReader();
+        if(r == null ){
             deleteReaderAlert.setVisible(true);
         }
         else {
-            readerBUS.deleteReader(tblReader.getSelectedReader());
-            
-            reloadReaderTable();
-            successDeleteAlert.setVisible(true);
+            DeleteReaderDialog confirmDeleteDialog = new DeleteReaderDialog(null, true, r, this);
+            confirmDeleteDialog.setVisible(true);
         }
     }//GEN-LAST:event_buttonDeleteMouseClicked
 
