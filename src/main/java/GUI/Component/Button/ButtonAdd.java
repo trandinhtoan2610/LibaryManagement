@@ -20,13 +20,13 @@ public class ButtonAdd extends JLabel {
 
     // Kích thước và padding
     private int ICON_SIZE = 36;
-    private int HORIZONTAL_PADDING = 20;
-    private int VERTICAL_PADDING = 12;
+    private int HORIZONTAL_PADDING = 10;
+    private int VERTICAL_PADDING = 6;
     private int BORDER_RADIUS = 8;
 
     public ButtonAdd() {
         try {
-            setPreferredSize(new Dimension(168,100));
+            setPreferredSize(new Dimension(142,100));
             URL url = getClass().getResource("/icons/add.svg");
             if (url == null) throw new RuntimeException("Icon not found");
             SVGIcon icon = new SVGIcon();
@@ -35,7 +35,7 @@ public class ButtonAdd extends JLabel {
 
             setIcon(icon);
             setText("Thêm");
-            setFont(new Font("Verdana", Font.PLAIN, 20));
+            setFont(new Font("Verdana", Font.PLAIN, 16));
             setOpaque(true);
             setBackground(BG_DEFAULT);
             setForeground(TEXT_DEFAULT);

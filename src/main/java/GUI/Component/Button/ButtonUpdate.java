@@ -20,13 +20,13 @@ public class ButtonUpdate extends JLabel {
 
     // Kích thước và padding
     private int ICON_SIZE = 36;
-    private int HORIZONTAL_PADDING = 20;
-    private int VERTICAL_PADDING = 12;
+    private int HORIZONTAL_PADDING = 10;
+    private int VERTICAL_PADDING = 6;
     private int BORDER_RADIUS = 8;
 
     public ButtonUpdate() {
         try {
-            setPreferredSize(new Dimension(168,100));
+            setPreferredSize(new Dimension(142,100));
 
             // Tải icon SVG
             URL url = getClass().getResource("/icons/edit.svg");
@@ -39,7 +39,7 @@ public class ButtonUpdate extends JLabel {
             // Cấu hình giao diện
             setIcon(icon);
             setText("Cập Nhật");
-            setFont(new Font("Verdana", Font.PLAIN, 20));
+            setFont(new Font("Verdana", Font.PLAIN, 16));
             setOpaque(true);
             setBackground(BG_DEFAULT);
             setForeground(TEXT_DEFAULT);
