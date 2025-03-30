@@ -29,9 +29,7 @@ CREATE TABLE `Author` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `gender` ENUM ('MALE', 'FAMALE') NOT NULL DEFAULT 'MALE',
-  `phone` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL
+  `quanlity` int NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Category` (

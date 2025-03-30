@@ -1,6 +1,8 @@
 package GUI.Component.Panel.Components;
 
 import GUI.Component.Dialog.LogOutDialog;
+import GUI.Component.Panel.EmployeeRightPanel;
+import GUI.Component.Panel.ReaderPanel;
 import GUI.Component.TextField.CustomTextField;
 import GUI.LoginForm;
 import org.apache.batik.swing.JSVGCanvas;
@@ -14,7 +16,10 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class ItemSideBarLabel extends JPanel {
+    private JLayeredPane layeredPane;
     private JFrame parentFrame;
+    private ReaderPanel readerPanel;
+    private EmployeeRightPanel employeeRightPanel;
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
@@ -65,6 +70,7 @@ public class ItemSideBarLabel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                panel.setBackground(new Color(239, 88, 88));
                 System.out.println("Clicked: " + text);
                 switch (text){
                     case "Trang chủ":{}
@@ -72,15 +78,21 @@ public class ItemSideBarLabel extends JPanel {
                     case "Sách":{}
                     break;
                     case "Độc giả":{
-
+                        readerPanel = new ReaderPanel();
+                        readerPanel.setVisible(true);
 
                         break;
                     }
-                    case "Tác giả": {}
-                    break;
+                    case "Tác giả": {
+                        break;
+                    }
+
                     case "Nhà xuất bản": {}
                     break;
-                    case "Nhân viên":{}
+                    case "Nhân viên":{
+                         employeeRightPanel = new EmployeeRightPanel(parentFrame);
+                         employeeRightPanel.setVisible(true);
+                    }
                     break;
                     case "Phiếu mượn":{}
                     break;
