@@ -8,11 +8,12 @@ import java.util.List;
 
 public class ReaderBUS {
     ReaderDAL readerDAL;
-    List<ReaderDTO> readerList;
+    public static List<ReaderDTO> readerList;
 
     public ReaderBUS(){
         readerDAL = new ReaderDAL();
         readerList = new ArrayList<>();
+        readerList = getReaderList();
 
     }
 
@@ -42,5 +43,9 @@ public class ReaderBUS {
 
     public ReaderDTO findReaderByID(ReaderDTO reader){
         return readerDAL.findById(reader.getId());
+    }
+    
+    public long getCurrentID(){
+        return readerDAL.getCurrentID();
     }
 }
