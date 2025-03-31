@@ -15,7 +15,7 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
         Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
-        System.out.println(gender);
+//        System.out.println(gender);
         return new Employee(
                 rs.getLong("id"),
                 rs.getString("firstName"),

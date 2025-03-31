@@ -83,4 +83,15 @@ public class GenericDAL {
             stmt.setObject(i + 1, params[i]);
         }
     }
+    
+    public long getMaxID(String sql) {
+    try (Connection conn = dbConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {      
+            return rs.next() ? rs.getLong(1) : 0;
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Lỗi lấy ID từ cơ sở dữ liệu", e);
+        }
+    }
 }

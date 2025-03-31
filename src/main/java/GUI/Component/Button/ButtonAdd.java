@@ -20,24 +20,22 @@ public class ButtonAdd extends JLabel {
 
     // Kích thước và padding
     private int ICON_SIZE = 36;
-    private int HORIZONTAL_PADDING = 20;
-    private int VERTICAL_PADDING = 12;
+    private int HORIZONTAL_PADDING = 10;
+    private int VERTICAL_PADDING = 6;
     private int BORDER_RADIUS = 8;
 
     public ButtonAdd() {
         try {
-            // Tải icon SVG
+            setPreferredSize(new Dimension(142,100));
             URL url = getClass().getResource("/icons/add.svg");
             if (url == null) throw new RuntimeException("Icon not found");
-
             SVGIcon icon = new SVGIcon();
             icon.setSvgURI(URI.create(url.toString()));
             icon.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
 
-            // Cấu hình giao diện
             setIcon(icon);
             setText("Thêm");
-            setFont(new Font("Verdana", Font.PLAIN, 25));
+            setFont(new Font("Verdana", Font.PLAIN, 16));
             setOpaque(true);
             setBackground(BG_DEFAULT);
             setForeground(TEXT_DEFAULT);
@@ -108,4 +106,20 @@ public class ButtonAdd extends JLabel {
             return new Insets(radius, radius, radius, radius);
         }
     }
+
+//    public static void main(String[] args) {
+//
+//        Frame frame = new Frame("ButtonAdd");
+//        frame.setSize(800, 600);
+//        frame.setLayout(new FlowLayout());
+//        frame.add(new ButtonAdd());
+//        frame.add(new ButtonUpdate());
+//        frame.add(new ButtonDelete());
+//        frame.add(new ButtonDetails());
+//        frame.add(new ButtonExportExcel());
+//        frame.add(new ButtonImportExcel());
+//        frame.setLocationRelativeTo(null);
+//        frame.setVisible(true);
+//
+//    }
 }

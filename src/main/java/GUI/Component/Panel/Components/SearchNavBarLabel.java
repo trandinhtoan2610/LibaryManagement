@@ -4,6 +4,7 @@ import GUI.Component.TextField.RoundedTextField;
 import com.kitfox.svg.app.beans.SVGIcon;
 
 import javax.swing.*;
+import javax.xml.transform.stream.StreamSource;
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
@@ -34,7 +35,7 @@ public class SearchNavBarLabel extends JPanel {
         ));
         panel.add(searchtype);
 
-        RoundedTextField searchfield = new RoundedTextField(20, 15, 15);
+        RoundedTextField searchfield = new RoundedTextField(12, 15, 15);
         searchfield.setPlaceholder("Từ khóa tìm kiếm....");
         searchfield.setBackground(new Color(245, 245, 245));
         searchfield.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -50,10 +51,10 @@ public class SearchNavBarLabel extends JPanel {
         refreshIcon.setSvgURI(URI.create(refreshurl.toString()));
         refreshIcon.setPreferredSize(new Dimension(20, 30));
         JButton refreshButton = new JButton("Làm mới", refreshIcon);
-        refreshButton.setPreferredSize(new Dimension(130, 40));
+        refreshButton.setPreferredSize(new Dimension(120, 40));
         refreshButton.setBackground(new Color(211, 163, 131));
         refreshButton.setForeground(Color.WHITE);
-        refreshButton.setFont(new Font("Verdana", Font.PLAIN, 18));
+        refreshButton.setFont(new Font("Verdana", Font.PLAIN, 16));
         refreshButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         refreshButton.setFocusPainted(false);
         refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
