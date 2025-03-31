@@ -7,7 +7,7 @@ CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `gender` ENUM ('MALE', 'FAMALE') NOT NULL DEFAULT 'MALE',
+  `gender` ENUM ('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
   `username` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE `Reader` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `gender` ENUM ('MALE', 'FAMALE') NOT NULL DEFAULT 'MALE',
+  `gender` ENUM ('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
   `phone` varchar(10) NOT NULL,
   `address` varchar(255) NOT NULL
 );
@@ -110,7 +110,7 @@ CREATE TABLE `Penalty` (
 CREATE TABLE `PenaltyDetails` (
   `penaltyId` bigint NOT NULL,
   `punish` varchar(255) NOT NULL,
-  `subamount` decimal(10,2) NOT NULL
+  `subAmount` decimal(10,2) NOT NULL
 );
 
 ALTER TABLE `Employee` ADD FOREIGN KEY (`roleId`) REFERENCES `Role` (`id`);
@@ -146,3 +146,4 @@ INSERT INTO `role`(`name`) VALUES ('Staff');
 INSERT INTO `role`(`name`) VALUES ('Employee');
 
 INSERT INTO `employee`(`firstName`, `lastName`, `gender`, `username`, `password`, `roleId`, `phone`, `address`, `salary`) VALUES ('Hoàng Lê Nhất Thống','Chí',1,'admin','admin',1,'0329997881','142 Phan Xích Long',0);
+INSERT INTO `employee`(`firstName`, `lastName`, `gender`, `username`, `password`, `roleId`, `phone`, `address`, `salary`) VALUES ('Nguyễn Thị Mai','Chi',2,'hello','world',3,'0974486668','170 Lê Duẩn','0')

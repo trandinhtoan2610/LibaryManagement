@@ -20,6 +20,7 @@ public class ItemSideBarLabel extends JPanel {
     private JFrame parentFrame;
     private ReaderPanel readerPanel;
     private EmployeeRightPanel employeeRightPanel;
+    private boolean isActive;
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
@@ -60,21 +61,32 @@ public class ItemSideBarLabel extends JPanel {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(225, 240, 255));
+                if(!isActive) {
+                    panel.setBackground(new Color(225, 240, 255));
+                }
                 panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panel.setBackground(Color.WHITE);
+                if(!isActive) {
+                    panel.setBackground(Color.WHITE);
+                }
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                panel.setBackground(new Color(64, 158, 255));
                 if(listener != null) {
+                    isActive = true;
+                    panel.setBackground(new Color(64, 158, 255));
                     listener.sideBarItemClicked(text);
+                }else {
+                    panel.setBackground(Color.WHITE);
                 }
+            }
+            public void resetColorPanel(){
+                isActive = false;
+                panel.setBackground(Color.WHITE);
             }
         });
         URL url = getClass().getResource(iconPath);
@@ -97,9 +109,6 @@ public class ItemSideBarLabel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return panel;
-    }
-    private void handleClicked(String text){
-
     }
     private static class RoundBorder extends AbstractBorder {
         private int radius;
