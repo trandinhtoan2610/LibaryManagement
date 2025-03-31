@@ -14,7 +14,7 @@ public class ReaderDAL implements IRepositoryBase<ReaderDTO> {
         Long id = rs.getLong("id");
         String firstName = rs.getString("firstName");
         String lastName = rs.getString("lastName");
-        Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
+        Gender gender = Gender.valueOf(rs.getString("gender").toString());
         String phone = rs.getString("phone");
         String address = rs.getString("address");
         return new ReaderDTO(id,firstName,lastName,gender,phone,address);

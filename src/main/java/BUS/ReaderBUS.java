@@ -14,13 +14,13 @@ public class ReaderBUS {
         readerDAL = new ReaderDAL();
         readerList = new ArrayList<>();
         if(readerList.size() == 0)
-            readerList = getReaderList();
+            getReaderList();
 
     }
 
-    public List<ReaderDTO> getReaderList(){
-        List<ReaderDTO> list = readerDAL.findAll();
-        return list;
+    public void getReaderList(){
+        readerList = readerDAL.findAll();
+        
     }
 
     public void addReader(ReaderDTO reader){

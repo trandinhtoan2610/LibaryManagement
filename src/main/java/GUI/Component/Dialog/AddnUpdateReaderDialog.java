@@ -27,7 +27,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     private ReaderPanel readerPanel;
     private ReaderDTO readerUpdate;
     
-    
+    // Dialog thêm hoặc cập nhật độc giả : 
     public AddnUpdateReaderDialog(java.awt.Frame parent, boolean modal,String mode, ReaderPanel rp, ReaderDTO readerUpdate) {
         super(parent, modal);
         this.mode = mode;
@@ -65,7 +65,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     }
     }
     
-    //Set các field theo dialog thêm :
+    //Dialog thêm độc giả :
     private void addReaderDialog(){
         lblAddReaderHeader.setText("THÊM ĐỘC GIẢ MỚI");  
         setCurrentID();
@@ -76,13 +76,14 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         txtReaderPhone.setText("");
         txtReaderAddress.setText("");
         btnGroupGender.clearSelection();
-
+       
         btnAdd.setVisible(true);
         btnUpdate.setVisible(false);
+        btnFemale.requestFocus();
     }
     
     
-    
+    // Dialog cập nhật độc giả :
     private void updateReaderDialog(){
         
         
@@ -100,6 +101,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         txtReaderAddress.setText(readerUpdate.getAddress());
         btnUpdate.setVisible(true);
         btnAdd.setVisible(false);
+        txtReaderFullName.requestFocus();
     }
     
     
@@ -430,8 +432,8 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             
             readerBUS.addReader(r);
             
-            JOptionPane.showMessageDialog(this, "Thêm độc giả thành công !");
-               
+            AlertDialog addReaderSuccess = new AlertDialog(this, "Thêm độc giả thành công !");
+            addReaderSuccess.setVisible(true);
             readerPanel.reloadReaderTable();
                
             addReaderDialog();
@@ -443,7 +445,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             String fullName = Controller.formatFullName(txtReaderFullName.getText());
             int firstSpace = fullName.indexOf(" ");
             String lastName = fullName.substring(0, firstSpace);        // Lấy họ
-            String firstName = fullName.substring(firstSpace + 1); // Lấy phần còn lại
+            String firstName = fullName.substring(firstSpace + 1);      // Lấy phần còn lại
             
             ReaderDTO r = new ReaderDTO( 
                     Long.parseLong(txtReaderID.getText()),
@@ -456,7 +458,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             
             readerBUS.updateReader(r);
             readerPanel.reloadReaderTable();
-            JOptionPane.showMessageDialog(this, "Cập nhật độc giả thành công !");  
+            AlertDialog updateSuccess = new AlertDialog(this,"Cập nhật độc giả thành công !");
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
 

@@ -7,7 +7,7 @@ CREATE TABLE `Employee` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `gender` ENUM ('MALE', 'FAMALE') NOT NULL DEFAULT 'MALE',
+  `gender` ENUM ('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
   `username` varchar(255) UNIQUE NOT NULL,
   `password` varchar(255) NOT NULL,
   `roleId` bigint NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE `Reader` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `gender` ENUM ('MALE', 'FAMALE') NOT NULL DEFAULT 'MALE',
+  `gender` ENUM ('MALE', 'FEMALE') NOT NULL DEFAULT 'MALE',
   `phone` varchar(10) NOT NULL,
   `address` varchar(255) NOT NULL
 );
@@ -45,7 +45,7 @@ CREATE TABLE `Book` (
   `publisherId` bigint NOT NULL,
   `quantity` int NOT NULL,
   `unitprice` bigint NOT NULL,
-  `yeayearOfpublication` year
+  `yearOfpublication` year
 );
 
 CREATE TABLE `Publisher` (
