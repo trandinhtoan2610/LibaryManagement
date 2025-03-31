@@ -5,6 +5,7 @@ import DTO.ReaderDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -18,6 +19,8 @@ public class ReaderTable extends JTableCustom {
     public ReaderTable(){
         super(new DefaultTableModel(readerTableHeader, 0));
         this.tblModel= (DefaultTableModel)getModel();
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        setCellAlignment(); // Thiết lập căn chỉnh văn bản
         
     }
     
@@ -61,4 +64,12 @@ public class ReaderTable extends JTableCustom {
         }
     }
     
+    private void setCellAlignment() {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+             
+        for (int i = 0 ; i < 5 ; i++){
+            getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
 }

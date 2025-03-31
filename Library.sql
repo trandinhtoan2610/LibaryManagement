@@ -45,7 +45,7 @@ CREATE TABLE `Book` (
   `publisherId` bigint NOT NULL,
   `quantity` int NOT NULL,
   `unitprice` bigint NOT NULL,
-  `yeayearOfpublication` year
+  `yearOfpublication` year
 );
 
 CREATE TABLE `Publisher` (

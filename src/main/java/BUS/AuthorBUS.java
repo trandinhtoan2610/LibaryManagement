@@ -8,16 +8,18 @@ import java.util.List;
 
 public class AuthorBUS {
     AuthorDAL authorDAL;
-    List<AuthorDTO> authorDTOList;
+    public static List<AuthorDTO> authorDTOList;
 
     public AuthorBUS(){
         authorDAL = new AuthorDAL();
         authorDTOList = new ArrayList<>();
+        if (authorDTOList.size() == 0){
+            getAuthorList();
+        }
     }
 
-    public List<AuthorDTO> getAuthorList(){
-        authorDTOList = authorDAL.findAll();
-        return authorDTOList;
+    public void getAuthorList(){
+        authorDTOList = authorDAL.findAll();    
     }
 
     public void addAuthor(AuthorDTO author){
