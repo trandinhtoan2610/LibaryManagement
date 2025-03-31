@@ -10,8 +10,9 @@ package GUI.Controller;
 public class Controller {
     private static final String nameRegex = "^[A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?(?: [A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?)*$";
     private static final String phoneRegex = "^0\\d{9}$";
+    private static final String salaryRegex = "^[1-9]\\d*(\\.\\d+)?$";
 
-    
+    public static boolean checkSalary(String salary) { return salary.matches(salaryRegex); }
     public static boolean checkValidName(String name){
         return name.matches(nameRegex);
     }
@@ -32,5 +33,4 @@ public class Controller {
         }
         return result.toString().trim();
     }
-    
 }

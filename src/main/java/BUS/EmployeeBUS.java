@@ -1,14 +1,13 @@
 package BUS;
 
 import DAL.EmployeeDAL;
-import DAL.Interface.IEmployeeDAL;
 import DTO.Employee;
 
 import java.util.List;
 
 
 public class EmployeeBUS {
-    private final IEmployeeDAL employeeDAL = new EmployeeDAL();
+    private final EmployeeDAL employeeDAL = new EmployeeDAL();
 
     public Employee login(String username, String password) {
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
@@ -34,5 +33,8 @@ public class EmployeeBUS {
             return employeeDAL.findById(id);
         }
         return null;
+    }
+    public long getCurrentID(){
+        return employeeDAL.getCurrentID();
     }
 }

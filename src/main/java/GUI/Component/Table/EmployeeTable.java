@@ -20,7 +20,7 @@ public class EmployeeTable extends JTableCustom {
     };
 
     private DefaultTableModel tableModel;
-    private List<Employee> employees;
+    public static List<Employee> employees;
 
     public EmployeeTable() {
         super(new DefaultTableModel(HEADER, 0));
@@ -75,7 +75,8 @@ public class EmployeeTable extends JTableCustom {
         }
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
+
         tableModel.setRowCount(0);
         for (Employee emp : employees) {
             Object[] rowData = {

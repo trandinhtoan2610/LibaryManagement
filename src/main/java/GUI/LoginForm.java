@@ -98,7 +98,7 @@ public class LoginForm extends JFrame {
 
             loading load = new loading();
             load.setVisible(true);
-            Sleep(2000);
+            Sleep(0);
             load.setVisible(false);
             load.dispose();
             if (user != null) {
