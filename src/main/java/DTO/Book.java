@@ -1,6 +1,6 @@
 package DTO;
 
-import DTO.Abstract.EntityAuditNameBase;
+import DTO.Abstract.EntityBase;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +8,10 @@ import java.time.Year;
 
 @Getter
 @Setter
-public class Book extends EntityAuditNameBase<Long> {
-    private Long categoryId, authorId, bookshelfId, publisherId;
+public class Book extends EntityBase<Long> {
+    private String name;
+    private Long categoryId, authorId, publisherId;
     private int quantity;
+    private Long unitPrice;
     private Year yearOfPublication;
 }
