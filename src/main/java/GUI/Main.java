@@ -24,13 +24,6 @@ public class Main extends Thread {
                  UnsupportedLookAndFeelException _) {
         }
         new LoginForm();
-        DatePicker datePicker = new DatePicker();
-        datePicker.setAnimationEnabled(true);
-        datePicker.setEditor(new JFormattedTextField());
-        datePicker.setColor(Color.WHITE);
-        datePicker.setBorder(null);
-        datePicker.setBackground(new Color(0, 0, 0, 0));
-        datePicker.setCloseAfterSelected(true); 
     }
     public static void Sleep(long j) {
         try {

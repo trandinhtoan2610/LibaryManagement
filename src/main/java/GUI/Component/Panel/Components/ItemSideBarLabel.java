@@ -16,10 +16,11 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class ItemSideBarLabel extends JPanel {
-    private JLayeredPane layeredPane;
+    private SidebarListener listener;
     private JFrame parentFrame;
     private ReaderPanel readerPanel;
     private EmployeeRightPanel employeeRightPanel;
+    private boolean isActive;
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
@@ -34,7 +35,8 @@ public class ItemSideBarLabel extends JPanel {
             {"Đăng xuất", "/icons/signout.svg"}
     };
 
-    public ItemSideBarLabel(JFrame parentFrame) {
+    public ItemSideBarLabel(JFrame parentFrame, SidebarListener listener) {
+        this.listener = listener;
         this.parentFrame = parentFrame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
@@ -59,63 +61,32 @@ public class ItemSideBarLabel extends JPanel {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(225, 240, 255));
+                if(!isActive) {
+                    panel.setBackground(new Color(225, 240, 255));
+                }
                 panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panel.setBackground(Color.WHITE);
+                if(!isActive) {
+                    panel.setBackground(Color.WHITE);
+                }
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                panel.setBackground(new Color(239, 88, 88));
-                System.out.println("Clicked: " + text);
-                switch (text){
-                    case "Trang chủ":{}
-                    break;
-                    case "Sách":{}
-                    break;
-                    case "Độc giả":{
-                        readerPanel = new ReaderPanel();
-                        readerPanel.setVisible(true);
-
-                        break;
-                    }
-                    case "Tác giả": {
-                        break;
-                    }
-
-                    case "Nhà xuất bản": {}
-                    break;
-                    case "Nhân viên":{
-                         employeeRightPanel = new EmployeeRightPanel(parentFrame);
-                         employeeRightPanel.setVisible(true);
-                    }
-                    break;
-                    case "Phiếu mượn":{}
-                    break;
-                    case "Phiếu nhập":{}
-                    break;
-                    case "Nhà cung cấp":{}
-                    break;
-                    case "Thống kê":{}
-                    break;
-                    case "Đăng xuất":{
-                        LogOutDialog logOutDialog = new LogOutDialog(parentFrame);
-                        logOutDialog.setVisible(true);
-
-                        if(logOutDialog.isConfirmed()){
-                            parentFrame.setVisible(false);
-                            new LoginForm();
-                        }else{
-                            logOutDialog.dispose();
-                        }
-                        break;
-                    }
-
+                if(listener != null) {
+                    isActive = true;
+                    panel.setBackground(new Color(64, 158, 255));
+                    listener.sideBarItemClicked(text);
+                }else {
+                    panel.setBackground(Color.WHITE);
                 }
+            }
+            public void resetColorPanel(){
+                isActive = false;
+                panel.setBackground(Color.WHITE);
             }
         });
         URL url = getClass().getResource(iconPath);

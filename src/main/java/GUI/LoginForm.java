@@ -92,23 +92,24 @@ public class LoginForm extends JFrame {
         add(form);
         setVisible(true);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String password = new String(passwordField.getPassword());
-                Employee user = employeeBUS.login(usernameField.getText(), password);
+        loginButton.addActionListener(e -> {
+            String password = new String(passwordField.getPassword());
+            Employee user = employeeBUS.login(usernameField.getText(), password);
 
-                loading load = new loading();
-                load.setVisible(true);
-                Sleep(2000);
-                load.setVisible(false);
-                load.dispose();
-                if (user != null) {
-                    username = user.getUsername();
-                    setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
+            loading load = new loading();
+            load.setVisible(true);
+            Sleep(2000);
+            load.setVisible(false);
+            load.dispose();
+            if (user != null) {
+                username = user.getUsername();
+                setVisible(false);
+                SwingUtilities.invokeLater(() -> {
+                    MainFrame frame = new MainFrame();
+                    frame.setVisible(true);
+                });
+            } else {
+                JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
         loginButton.addKeyListener(new KeyAdapter() {
