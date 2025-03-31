@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class ItemSideBarLabel extends JPanel {
-    private JLayeredPane layeredPane;
+    private SidebarListener listener;
     private JFrame parentFrame;
     private ReaderPanel readerPanel;
     private EmployeeRightPanel employeeRightPanel;
@@ -34,7 +34,8 @@ public class ItemSideBarLabel extends JPanel {
             {"Đăng xuất", "/icons/signout.svg"}
     };
 
-    public ItemSideBarLabel(JFrame parentFrame) {
+    public ItemSideBarLabel(JFrame parentFrame, SidebarListener listener) {
+        this.listener = listener;
         this.parentFrame = parentFrame;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
@@ -70,51 +71,9 @@ public class ItemSideBarLabel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                panel.setBackground(new Color(239, 88, 88));
-                System.out.println("Clicked: " + text);
-                switch (text){
-                    case "Trang chủ":{}
-                    break;
-                    case "Sách":{}
-                    break;
-                    case "Độc giả":{
-                        readerPanel = new ReaderPanel();
-                        readerPanel.setVisible(true);
-
-                        break;
-                    }
-                    case "Tác giả": {
-                        break;
-                    }
-
-                    case "Nhà xuất bản": {}
-                    break;
-                    case "Nhân viên":{
-                         employeeRightPanel = new EmployeeRightPanel(parentFrame);
-                         employeeRightPanel.setVisible(true);
-                    }
-                    break;
-                    case "Phiếu mượn":{}
-                    break;
-                    case "Phiếu nhập":{}
-                    break;
-                    case "Nhà cung cấp":{}
-                    break;
-                    case "Thống kê":{}
-                    break;
-                    case "Đăng xuất":{
-                        LogOutDialog logOutDialog = new LogOutDialog(parentFrame);
-                        logOutDialog.setVisible(true);
-
-                        if(logOutDialog.isConfirmed()){
-                            parentFrame.setVisible(false);
-                            new LoginForm();
-                        }else{
-                            logOutDialog.dispose();
-                        }
-                        break;
-                    }
-
+                panel.setBackground(new Color(64, 158, 255));
+                if(listener != null) {
+                    listener.sideBarItemClicked(text);
                 }
             }
         });
@@ -138,6 +97,9 @@ public class ItemSideBarLabel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return panel;
+    }
+    private void handleClicked(String text){
+
     }
     private static class RoundBorder extends AbstractBorder {
         private int radius;
