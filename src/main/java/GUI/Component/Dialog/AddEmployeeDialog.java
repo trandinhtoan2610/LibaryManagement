@@ -29,6 +29,7 @@
         private JRadioButton male;
         private JRadioButton female;
 
+
         private EmployeeBUS employeeBUS;
         private EmployeeRightPanel employeeRightPanel;
         public AddEmployeeDialog(JFrame parent, EmployeeRightPanel employeeRightPanel) {
@@ -191,7 +192,7 @@
                         currentID,
                         fName,
                         lName,
-                        gendercbb.getSelectedItem() == "MALE" ? Gender.MALE: Gender.FEMALE,
+                        gendercbb.getSelectedItem() == "Nam" ? Gender.MALE: Gender.FEMALE,
                         username,
                         password,
                         roleIDDD,
@@ -200,10 +201,8 @@
                         salary
                 );
                 employeeBUS.addEmployee(nv);
-                EmployeeTable.employees.add(nv);
+                employeeRightPanel.addEmployee(nv);
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công !");
-
-                employeeRightPanel.refreshData();
                 dispose();
             }
         }
@@ -231,6 +230,7 @@
             panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             ButtonBack buttonBack = new ButtonBack();
+            buttonBack.addActionListener(e -> dispose());
             buttonBack.setAlignmentX(Component.LEFT_ALIGNMENT);
             panel.add(buttonBack);
             panel.add(Box.createVerticalGlue());
@@ -271,9 +271,9 @@
             radioPanel.add(female);
 
             gendercbb = new CustomComboBox();
-            gendercbb.setModel(new DefaultComboBoxModel(new String[]{"Male", "Female"}));
+            gendercbb.setModel(new DefaultComboBoxModel(new String[]{"Nam", "Nữ"}));
             rolecbb = new CustomComboBox();
-            rolecbb.setModel(new DefaultComboBoxModel(new String[]{"admin", "employee", "staff"}));
+            rolecbb.setModel(new DefaultComboBoxModel(new String[]{"admin", "staff", "employee"}));
 
             panel.add(nametxt);
             panel.add(name);
@@ -303,12 +303,4 @@
             label.setBackground(Color.WHITE);
             return label;
         }
-    //
-    //    public static void main(String[] args) {
-    //        JFrame frame = new JFrame();
-    //        frame.setSize(1920, 1080);
-    //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //        AddEmployeeDialog dialog = new AddEmployeeDialog(frame);
-    //        dialog.setVisible(true);
-    //    }
     }

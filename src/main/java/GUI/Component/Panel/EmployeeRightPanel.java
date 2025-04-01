@@ -4,6 +4,8 @@ import BUS.EmployeeBUS;
 import DTO.Employee;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddEmployeeDialog;
+import GUI.Component.Dialog.DeleteEmployeeDialog;
+import GUI.Component.Dialog.UpdateEmployeeDialog;
 import GUI.Component.Panel.Components.SearchNavBarLabel;
 import GUI.Component.Table.EmployeeTable;
 
@@ -45,11 +47,25 @@ public class EmployeeRightPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 AddEmployeeDialog addEmployeeDialog = new AddEmployeeDialog(parentFrame, EmployeeRightPanel.this);
                 addEmployeeDialog.setVisible(true);
-                employeeTable.refreshTable();
             }
         });
         buttonUpdate = new ButtonUpdate();
+        buttonUpdate.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Employee employee = employeeTable.getSelectedEmployee();
+                System.out.println(employee.toString());
+                UpdateEmployeeDialog updateEmployeeDialog = new UpdateEmployeeDialog(parentFrame, EmployeeRightPanel.this, employee);
+                updateEmployeeDialog.setVisible(true);
+            }
+        });
         buttonDelete = new ButtonDelete();
+        buttonDelete.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Employee employee = employeeTable.getSelectedEmployee();
+                DeleteEmployeeDialog deleteEmployeeDialog = new DeleteEmployeeDialog(parentFrame, EmployeeRightPanel.this, employee);
+                deleteEmployeeDialog.setVisible(true);
+            }
+        });
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         searchNavBarLabel = new SearchNavBarLabel();
@@ -72,5 +88,17 @@ public class EmployeeRightPanel extends JPanel {
     }
     public void refreshData() {
         employeeTable.refreshTable();
+    }
+    public void addEmployee(Employee employee) {
+        employeeTable.addEmployee(employee);
+    }
+    public void removeEmployee(Employee employee) {
+        employeeTable.removeEmployee(employee);
+    }
+    public void updateEmployee(Employee employee) {
+        employeeTable.updateEmployee(employee);
+    }
+    public Employee getSelectedEmployee() {
+       return employeeTable.getSelectedEmployee();
     }
 }

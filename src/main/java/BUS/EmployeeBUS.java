@@ -21,18 +21,22 @@ public class EmployeeBUS {
     public long addEmployee(Employee employee) {
         return employeeDAL.create(employee);
     }
-    public long updateEmployee(Employee employee) {
-        return employeeDAL.create(employee);
+
+    public boolean updateEmployee(Employee employee) {
+        try {
+            return employeeDAL.update(employee);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
     public boolean deleteEmployee(long id) {
-        return employeeDAL.delete(id);
-    }
-    public Employee create(Employee employee) {
-        Long id = employeeDAL.create(employee);
-        if (id != null) {
-            return employeeDAL.findById(id);
+        try {
+            return employeeDAL.delete(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
-        return null;
     }
     public long getCurrentID(){
         return employeeDAL.getCurrentID();
