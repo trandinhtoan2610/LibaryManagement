@@ -43,8 +43,9 @@ public class EmployeeRightPanel extends JPanel {
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                AddEmployeeDialog addEmployeeDialog = new AddEmployeeDialog(parentFrame);
+                AddEmployeeDialog addEmployeeDialog = new AddEmployeeDialog(parentFrame, EmployeeRightPanel.this);
                 addEmployeeDialog.setVisible(true);
+                employeeTable.refreshTable();
             }
         });
         buttonUpdate = new ButtonUpdate();
@@ -68,5 +69,8 @@ public class EmployeeRightPanel extends JPanel {
         }else{
             System.out.println("Không có dữ liệu nhân viên");
         }
+    }
+    public void refreshData() {
+        employeeTable.refreshTable();
     }
 }

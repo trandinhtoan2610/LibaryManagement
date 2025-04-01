@@ -67,6 +67,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         buttonDelete = new GUI.Component.Button.ButtonDelete();
         buttonUpdate = new GUI.Component.Button.ButtonUpdate();
         buttonExportExcel = new GUI.Component.Button.ButtonExportExcel();
+        RightNavbarReader = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReader = new GUI.Component.Table.ReaderTable();
 
@@ -104,6 +105,9 @@ public class ReaderPanel extends javax.swing.JPanel {
         LeftNavbarReader.add(buttonExportExcel);
 
         NavbarReaderPanel.add(LeftNavbarReader, java.awt.BorderLayout.LINE_START);
+
+        RightNavbarReader.setBackground(new java.awt.Color(255, 255, 255));
+        NavbarReaderPanel.add(RightNavbarReader, java.awt.BorderLayout.CENTER);
 
         add(NavbarReaderPanel, java.awt.BorderLayout.PAGE_START);
 
@@ -143,6 +147,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LeftNavbarReader;
     private javax.swing.JPanel NavbarReaderPanel;
+    private javax.swing.JPanel RightNavbarReader;
     private GUI.Component.Button.ButtonAdd buttonAdd;
     private GUI.Component.Button.ButtonDelete buttonDelete;
     private GUI.Component.Button.ButtonExportExcel buttonExportExcel;

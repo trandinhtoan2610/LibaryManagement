@@ -56,14 +56,14 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public Long create(Employee employee) {
-        String sql = "INSERT INTO employee (roleId, firstName, lastName, gender, username, password, phone, address, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employee (firstName, lastName, gender, username, password, roleId , phone, address, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return genericDAL.insert(sql,
-                employee.getRoleID(),
                 employee.getFirstName(),
                 employee.getLastName(),
                 employee.getGender().name(),
                 employee.getUsername(),
                 employee.getPassword(),
+                employee.getRoleID(),
                 employee.getPhone(),
                 employee.getAddress(),
                 employee.getSalary()
@@ -85,5 +85,8 @@ public class EmployeeDAL implements IEmployeeDAL {
         String sql = "SELECT * FROM employee WHERE gender = ?";
         return genericDAL.queryForList(sql, employeeRowMapper, gender.name());
     }
-
+    public long getCurrentID(){
+        String sql = "SELECT MAX(id) FROM employee";
+        return genericDAL.getMaxID(sql);
+    }
 }
