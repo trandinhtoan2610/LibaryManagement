@@ -15,7 +15,6 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
         Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
-//        System.out.println(gender);
         return new Employee(
                 rs.getLong("id"),
                 rs.getString("firstName"),
@@ -72,8 +71,8 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public boolean update(Employee employee) {
-        String sql = "UPDATE employee SET firstName = ?, lastName = ?, gender = ? username = ?, password = ?, phone = ?, address = ?, salary = ? WHERE id = ?";
-        return genericDAL.update(sql, employee.getFirstName(), employee.getLastName(), employee.getGender().name(), employee.getUsername(), employee.getPassword(), employee.getPhone(), employee.getAddress(), employee.getSalary(), employee.getId());
+        String sql = "UPDATE employee SET firstName = ?, lastName = ?, gender = ?, username = ?, password = ? ,roleId = ?, phone = ?, address = ?, salary = ? WHERE id = ?";
+        return genericDAL.update(sql, employee.getFirstName(), employee.getLastName(), employee.getGender().name(), employee.getUsername(), employee.getPassword(),employee.getRoleID(), employee.getPhone(), employee.getAddress(), employee.getSalary(), employee.getId());
     }
 
     @Override
