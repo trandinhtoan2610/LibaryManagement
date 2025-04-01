@@ -1,11 +1,8 @@
 package GUI;
 
 import GUI.Component.Dialog.LogOutDialog;
-import GUI.Component.Panel.AuthorPanel;
+import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
-import GUI.Component.Panel.EmployeeRightPanel;
-import GUI.Component.Panel.ReaderPanel;
-import GUI.Component.Panel.TaskBarPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +10,7 @@ import java.awt.*;
 public class MainFrame extends JFrame implements SidebarListener {
     private TaskBarPanel taskBarPanel;
     private EmployeeRightPanel employeeRightPanel;
+    private BookPanel bookPanel;
     private ReaderPanel readerPanel;
     private AuthorPanel authorPanel;
     private JPanel mainContentPanel;
@@ -41,7 +39,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.setLayout(cardLayout);
 
         mainContentPanel.add(new JPanel(), "Trang chủ");
-        mainContentPanel.add(new JPanel(), "Sách");
+        mainContentPanel.add(bookPanel, "Sách");
         mainContentPanel.add(readerPanel, "Độc giả");
         mainContentPanel.add(authorPanel, "Tác giả");
         mainContentPanel.add(new JPanel(), "Nhà xuất bản");
@@ -58,6 +56,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         readerPanel = new ReaderPanel();
         employeeRightPanel = new EmployeeRightPanel(this);
         authorPanel = new AuthorPanel();
+        bookPanel = new BookPanel(this);
     }
 
     @Override
