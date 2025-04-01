@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class JTableCustom extends JTable {
     public JTableCustom() {
@@ -40,6 +40,55 @@ public class JTableCustom extends JTable {
 
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Lấy vị trí click
+                Point p = e.getPoint();
+                int row = rowAtPoint(p);
+                int col = columnAtPoint(p);
+
+                // Chỉ xử lý nếu click vào ô hợp lệ
+                if (row >= 0 && col >= 0) {
+                    // Giữ nguyên selection
+                } else {
+                    clearSelection();
+                }
+            }
+        });
+        addHierarchyListener(new HierarchyListener() {
+            @Override
+            public void hierarchyChanged(HierarchyEvent e) {
+                if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+                    Window window = SwingUtilities.getWindowAncestor(JTableCustom.this);
+                    if (window != null) {
+                        window.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mousePressed(MouseEvent e) {
+                                if (!isClickInTable(e)) {
+                                    clearSelection();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+    private boolean isClickInTable(MouseEvent e) {
+        // Chuyển tọa độ click sang hệ tọa độ của JTable
+        Point tablePoint = SwingUtilities.convertPoint(
+                e.getComponent(), e.getPoint(), this);
+
+        // Kiểm tra click có nằm trong biên của JTable không
+        if (!getVisibleRect().contains(tablePoint)) {
+            return false;
+        }
+
+        // Kiểm tra có click vào ô hợp lệ không
+        int row = rowAtPoint(tablePoint);
+        int col = columnAtPoint(tablePoint);
+        return row >= 0 && col >= 0;
     }
 
     // Ngăn không cho chỉnh sửa ô trong bảng
