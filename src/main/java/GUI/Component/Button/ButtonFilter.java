@@ -79,18 +79,18 @@ public class ButtonFilter extends JButton {
         g2.dispose();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Test Button");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(new FlowLayout());
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> {
+    //         JFrame frame = new JFrame("Test Button");
+    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //         frame.setLayout(new FlowLayout());
 
-            ButtonFilter btn = new ButtonFilter();
-            frame.add(btn);
+    //         ButtonFilter btn = new ButtonFilter();
+    //         frame.add(btn);
 
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
+    //         frame.pack();
+    //         frame.setLocationRelativeTo(null);
+    //         frame.setVisible(true);
+    //     });
+    // }
 }
