@@ -2,9 +2,9 @@
 package GUI.Component.Panel;
 
 import BUS.AuthorBUS;
-import BUS.BookBUS;
+import BUS.AuthorBookBUS;
 import DTO.AuthorDTO;
-import DTO.BookDTO;
+import DTO.AuthorBookDTO;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.UpdateAuthorDialog;
 import java.awt.Window;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AuthorPanel extends javax.swing.JPanel {
     AuthorBUS authorBUS;
-    BookBUS bookBUS;
+    AuthorBookBUS bookBUS;
     Window parent = SwingUtilities.getWindowAncestor(this);
     AlertDialog updateAlertDialog = new AlertDialog(parent,"Vui lòng chọn tác giả cần sửa");
     
@@ -25,7 +25,7 @@ public class AuthorPanel extends javax.swing.JPanel {
             System.out.println("Khởi tạo Author Panel...");
             initComponents();
             authorBUS = new AuthorBUS();
-            bookBUS = new BookBUS();
+            bookBUS = new AuthorBookBUS();
             if(AuthorBUS.authorDTOList == null )
                 System.out.println("Danh sách đang rỗng, chưa được khởi tạo !!");
             else
@@ -170,7 +170,7 @@ public class AuthorPanel extends javax.swing.JPanel {
            String fullName =  Controller.formatFullName(a.getLastName() + ' ' + a.getFirstName());
            lblAuthorName.setText(fullName);
            lblSubTitle.setText("có trong thư viện");
-           List<BookDTO> bookList = bookBUS.getBookByAuthorID(authorID);         
+           List<AuthorBookDTO> bookList = bookBUS.getBookByAuthorID(authorID);
            authorProductsTable1.resetTable(bookList);
            
         }
