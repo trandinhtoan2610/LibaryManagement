@@ -22,10 +22,11 @@ public class ButtonFilter extends JButton {
                 icon.setSvgURI(URI.create(iconUrl.toString()));
                 icon.setPreferredSize(new Dimension(30, 30));
                 this.setIcon(icon);
+                this.setText("Lọc"); // Fallback text
             }
         } catch (Exception e) {
             e.printStackTrace();
-            this.setText("Filter"); // Fallback text
+           
         }
 
         // Basic setup

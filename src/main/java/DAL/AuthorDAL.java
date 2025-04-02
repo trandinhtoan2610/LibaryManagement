@@ -13,8 +13,8 @@ public class AuthorDAL implements IRepositoryBase<AuthorDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<AuthorDTO> authorDTORowMapper = (ResultSet rs)-> new AuthorDTO(
             rs.getLong("id"),
-            rs.getString("firstName"),
             rs.getString("lastName"),
+            rs.getString("firstName"),
             rs.getLong("quantity")
     );
 

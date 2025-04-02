@@ -459,6 +459,8 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             readerBUS.updateReader(r);
             readerPanel.reloadReaderTable();
             AlertDialog updateSuccess = new AlertDialog(this,"Cập nhật độc giả thành công !");
+            updateSuccess.setVisible(true);
+            this.dispose();
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
 

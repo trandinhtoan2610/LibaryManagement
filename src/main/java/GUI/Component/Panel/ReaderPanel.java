@@ -18,6 +18,8 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -31,43 +33,95 @@ public class ReaderPanel extends javax.swing.JPanel {
 
        
     public ReaderPanel() {
-    try {
-        System.out.println("Khởi tạo ReaderPanel...");
-        initComponents(); 
-        readerBUS = new ReaderBUS();
-        if (ReaderBUS.readerList == null) {
-            System.err.println("Lỗi: readerList là null, khởi tạo danh sách rỗng.");
-            
-        } else {
-            System.out.println("Số lượng độc giả: " + ReaderBUS.readerList.size());
-        }
 
-        reloadReaderTable();
-    } catch (Exception e) {
-        e.printStackTrace(); 
+        try {
+            System.out.println("Khởi tạo ReaderPanel...");
+            initComponents(); 
+            btnGenderAll.setSelected(true);
+            readerBUS = new ReaderBUS();
+            if (ReaderBUS.readerList == null) {
+                System.err.println("Lỗi: readerList là null, khởi tạo danh sách rỗng.");
+
+            } else {
+                System.out.println("Số lượng độc giả: " + ReaderBUS.readerList.size());
+            }
+
+            reloadReaderTable();
+            txtSearchName.getDocument().addDocumentListener(new DocumentListener(){
+                
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }
     }
-}
 
 
     public void reloadReaderTable() {  
         tblReader.resetTable();
     }
     
-   
-        
-   
+    public String getGender(){
+        if(btnGenderAll.isSelected())
+            return "";
+        else
+            return btnMale.isSelected() ? "Nam" : "Nữ";    
+    }
+    
+    public void loadTableFilter(){
+        String txt = txtSearchName.getText();
+        if(txt == "")
+            tblReader.filterTable("", getGender(), "", "");
+        else{
+            if(cbSearchList.getSelectedIndex()==0)
+                tblReader.filterTable(txt,getGender(),"","");
+            else if(cbSearchList.getSelectedIndex()==1)
+                tblReader.filterTable("",getGender(),txt,"");
+            else
+                tblReader.filterTable("",getGender(),"",txt);
+        }
+    }
+    
+ 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonExportExcel1 = new GUI.Component.Button.ButtonExportExcel();
+        btnGroupGender = new javax.swing.ButtonGroup();
         NavbarReaderPanel = new javax.swing.JPanel();
         LeftNavbarReader = new javax.swing.JPanel();
         buttonAdd = new GUI.Component.Button.ButtonAdd();
         buttonDelete = new GUI.Component.Button.ButtonDelete();
         buttonUpdate = new GUI.Component.Button.ButtonUpdate();
         buttonExportExcel = new GUI.Component.Button.ButtonExportExcel();
+        buttonImportExcel1 = new GUI.Component.Button.ButtonImportExcel();
         RightNavbarReader = new javax.swing.JPanel();
+        searchFooterPanel = new javax.swing.JPanel();
+        lblGender = new javax.swing.JLabel();
+        btnGenderAll = new javax.swing.JRadioButton();
+        btnMale = new javax.swing.JRadioButton();
+        btnFemale = new javax.swing.JRadioButton();
+        searchHeaderPanel = new javax.swing.JPanel();
+        lblSearchTitle = new javax.swing.JLabel();
+        searchBodyPanel = new javax.swing.JPanel();
+        cbSearchList = new javax.swing.JComboBox<>();
+        txtSearchName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReader = new GUI.Component.Table.ReaderTable();
 
@@ -103,10 +157,103 @@ public class ReaderPanel extends javax.swing.JPanel {
         });
         LeftNavbarReader.add(buttonUpdate);
         LeftNavbarReader.add(buttonExportExcel);
+        LeftNavbarReader.add(buttonImportExcel1);
 
         NavbarReaderPanel.add(LeftNavbarReader, java.awt.BorderLayout.LINE_START);
 
         RightNavbarReader.setBackground(new java.awt.Color(255, 255, 255));
+        RightNavbarReader.setLayout(new java.awt.BorderLayout());
+
+        searchFooterPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchFooterPanel.setPreferredSize(new java.awt.Dimension(578, 30));
+        searchFooterPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 25, 5));
+
+        lblGender.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblGender.setText("Giới tính :");
+        searchFooterPanel.add(lblGender);
+
+        btnGroupGender.add(btnGenderAll);
+        btnGenderAll.setText("Tất cả");
+        btnGenderAll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGenderAllMouseClicked(evt);
+            }
+        });
+        btnGenderAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenderAllActionPerformed(evt);
+            }
+        });
+        searchFooterPanel.add(btnGenderAll);
+
+        btnGroupGender.add(btnMale);
+        btnMale.setText("Nam");
+        btnMale.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMaleMouseClicked(evt);
+            }
+        });
+        btnMale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMaleActionPerformed(evt);
+            }
+        });
+        searchFooterPanel.add(btnMale);
+
+        btnGroupGender.add(btnFemale);
+        btnFemale.setText("Nữ");
+        btnFemale.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFemaleMouseClicked(evt);
+            }
+        });
+        btnFemale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFemaleActionPerformed(evt);
+            }
+        });
+        searchFooterPanel.add(btnFemale);
+
+        RightNavbarReader.add(searchFooterPanel, java.awt.BorderLayout.PAGE_END);
+
+        searchHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchHeaderPanel.setPreferredSize(new java.awt.Dimension(578, 30));
+        searchHeaderPanel.setLayout(new java.awt.BorderLayout());
+
+        lblSearchTitle.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        lblSearchTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSearchTitle.setText("Tìm kiếm");
+        searchHeaderPanel.add(lblSearchTitle, java.awt.BorderLayout.PAGE_END);
+
+        RightNavbarReader.add(searchHeaderPanel, java.awt.BorderLayout.PAGE_START);
+
+        searchBodyPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchBodyPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
+
+        cbSearchList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Họ và tên", "Số điện thoại", "Địa chỉ", " " }));
+        cbSearchList.setPreferredSize(new java.awt.Dimension(102, 30));
+        cbSearchList.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbSearchListItemStateChanged(evt);
+            }
+        });
+        cbSearchList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSearchListActionPerformed(evt);
+            }
+        });
+        searchBodyPanel.add(cbSearchList);
+
+        txtSearchName.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtSearchName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchNameActionPerformed(evt);
+            }
+        });
+        searchBodyPanel.add(txtSearchName);
+
+        RightNavbarReader.add(searchBodyPanel, java.awt.BorderLayout.CENTER);
+
         NavbarReaderPanel.add(RightNavbarReader, java.awt.BorderLayout.CENTER);
 
         add(NavbarReaderPanel, java.awt.BorderLayout.PAGE_START);
@@ -143,17 +290,64 @@ public class ReaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_buttonUpdateMouseClicked
 
+    private void txtSearchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchNameActionPerformed
+
+    private void cbSearchListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbSearchListActionPerformed
+
+    private void btnMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaleActionPerformed
+
+    }//GEN-LAST:event_btnMaleActionPerformed
+
+    private void btnFemaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFemaleActionPerformed
+
+    }//GEN-LAST:event_btnFemaleActionPerformed
+
+    private void btnMaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMaleMouseClicked
+        loadTableFilter();
+    }//GEN-LAST:event_btnMaleMouseClicked
+
+    private void btnGenderAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenderAllActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGenderAllActionPerformed
+
+    private void cbSearchListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchListItemStateChanged
+        txtSearchName.setText("");
+    }//GEN-LAST:event_cbSearchListItemStateChanged
+
+    private void btnGenderAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenderAllMouseClicked
+        loadTableFilter();
+    }//GEN-LAST:event_btnGenderAllMouseClicked
+
+    private void btnFemaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFemaleMouseClicked
+        loadTableFilter();
+    }//GEN-LAST:event_btnFemaleMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LeftNavbarReader;
     private javax.swing.JPanel NavbarReaderPanel;
     private javax.swing.JPanel RightNavbarReader;
+    private javax.swing.JRadioButton btnFemale;
+    private javax.swing.JRadioButton btnGenderAll;
+    private javax.swing.ButtonGroup btnGroupGender;
+    private javax.swing.JRadioButton btnMale;
     private GUI.Component.Button.ButtonAdd buttonAdd;
     private GUI.Component.Button.ButtonDelete buttonDelete;
     private GUI.Component.Button.ButtonExportExcel buttonExportExcel;
-    private GUI.Component.Button.ButtonExportExcel buttonExportExcel1;
+    private GUI.Component.Button.ButtonImportExcel buttonImportExcel1;
     private GUI.Component.Button.ButtonUpdate buttonUpdate;
+    private javax.swing.JComboBox<String> cbSearchList;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblGender;
+    private javax.swing.JLabel lblSearchTitle;
+    private javax.swing.JPanel searchBodyPanel;
+    private javax.swing.JPanel searchFooterPanel;
+    private javax.swing.JPanel searchHeaderPanel;
     private GUI.Component.Table.ReaderTable tblReader;
+    private javax.swing.JTextField txtSearchName;
     // End of variables declaration//GEN-END:variables
 }
