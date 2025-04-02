@@ -57,7 +57,7 @@ CREATE TABLE `Publisher` (
 );
 
 CREATE TABLE `Borrow_in_Sheet` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `id` varchar(8) PRIMARY KEY,
   `employeeId` bigint NOT NULL,
   `readerId` bigint NOT NULL,
   `status` ENUM ('BORROWED', 'RETURNED', 'OVERDUE') NOT NULL DEFAULT 'BORROWED',
@@ -67,7 +67,7 @@ CREATE TABLE `Borrow_in_Sheet` (
 );
 
 CREATE TABLE `BorrowDetails` (
-  `borrowId` bigint NOT NULL,
+  `borrowId` varchar(8) NOT NULL,
   `bookId` bigint NOT NULL,
   `quantity` int NOT NULL DEFAULT 1,
   `substatus` ENUM ('NOT_RETURNED', 'RETURNED') NOT NULL DEFAULT 'NOT_RETURNED',
@@ -100,15 +100,15 @@ CREATE TABLE `PurchaseOrderDetails` (
 );
 
 CREATE TABLE `Penalty` (
-  `penaltyId` bigint PRIMARY KEY NOT NULL,
+  `penaltyId` varchar(8) PRIMARY KEY NOT NULL,
+  `borrowId` varchar(8) NOT NULL,
   `penaltyDate` datetime NOT NULL,
-  `borrowId` bigint NOT NULL,
   `status` ENUM ('PAID', 'NOT_PAID') NOT NULL DEFAULT 'NOT_PAID',
   `totalamount` decimal(10,2) NOT NULL
 );
 
 CREATE TABLE `PenaltyDetails` (
-  `penaltyId` bigint NOT NULL,
+  `penaltyId` varchar(8) NOT NULL,
   `punish` varchar(255) NOT NULL,
   `subAmount` decimal(10,2) NOT NULL
 );

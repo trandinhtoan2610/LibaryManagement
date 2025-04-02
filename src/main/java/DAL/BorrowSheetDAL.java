@@ -2,18 +2,18 @@ package DAL;
 
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.Borrow;
+import DTO.BorrowDTO;
 import DTO.Enum.Status;
 
 import java.util.List;
 
-public class BorrowSheetDAL implements IRepositoryBase<Borrow> {
+public class BorrowSheetDAL implements IRepositoryBase<BorrowDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<Borrow> borrowRowMapper = this::mapRowToBorrow;
+    private final RowMapper<BorrowDTO> borrowRowMapper = this::mapRowToBorrow;
 
-    private Borrow mapRowToBorrow(java.sql.ResultSet rs) throws java.sql.SQLException {
-        return new Borrow(
-                rs.getLong("id"),
+    private BorrowDTO mapRowToBorrow(java.sql.ResultSet rs) throws java.sql.SQLException {
+        return new BorrowDTO(
+                rs.getString("id"),
                 rs.getLong("employeeId"),
                 rs.getLong("customerId"),
                 Status.valueOf(rs.getString("status").toString()),
@@ -24,37 +24,41 @@ public class BorrowSheetDAL implements IRepositoryBase<Borrow> {
     }
 
     @Override
-    public Borrow findById(Long id) {
+    public BorrowDTO findById(Long id) {
         String sql = "SELECT * FROM borrow WHERE id = ?";
         return genericDAL.queryForObject(sql, borrowRowMapper, id);
     }
 
     @Override
-    public List<Borrow> findAll() {
+    public List<BorrowDTO> findAll() {
         String sql = "SELECT * FROM borrow";
         return genericDAL.queryForList(sql, borrowRowMapper);
     }
 
     @Override
-    public Long create(Borrow borrow) {
-        String sql = "INSERT INTO borrow (employeeid, customerid, status, duedate) VALUES (?, ?, ?, ?)";
+    public Long create(BorrowDTO borrowDTO) {
+        String sql = "INSERT INTO borrow (employeeId, readerId, status, borrowedDate, duedate, actualReturnDate) VALUES (?, ?, ?, ?, ?, ?)";
         return genericDAL.insert(sql,
-                borrow.getEmployeeId(),
-                borrow.getCustomerId(),
-                borrow.getStatus(),
-                borrow.getDuedate()
+                borrowDTO.getEmployeeId(),
+                borrowDTO.getReaderId(),
+                borrowDTO.getStatus(),
+                borrowDTO.getBorrowedDate(),
+                borrowDTO.getDuedate(),
+                borrowDTO.getActualReturnDate()
         );
     }
 
     @Override
-    public boolean update(Borrow borrow) {
-        String sql = "UPDATE borrow SET employeeId = ?, SET customerId = ? SET status = ?, SET duedate = ? WHERE id = ?";
+    public boolean update(BorrowDTO borrowDTO) {
+        String sql = "UPDATE borrow SET employeeId = ?, SET readerId = ?, SET status = ?,SET borrowedDate = ?, SET duedate = ?, SET actualReturnDate = ? WHERE id = ?";
         return genericDAL.update(sql,
-                borrow.getEmployeeId(),
-                borrow.getCustomerId(),
-                borrow.getStatus(),
-                borrow.getDuedate(),
-                borrow.getId()
+                borrowDTO.getEmployeeId(),
+                borrowDTO.getReaderId(),
+                borrowDTO.getStatus(),
+                borrowDTO.getBorrowedDate(),
+                borrowDTO.getDuedate(),
+                borrowDTO.getActualReturnDate(),
+                borrowDTO.getId()
         );
     }
 

@@ -66,7 +66,6 @@ public class GenericDAL {
             throw new RuntimeException("Lỗi thêm mới dữ liệu", e);
         }
     }
-
     public Boolean delete(String sql, Object... params) {
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
