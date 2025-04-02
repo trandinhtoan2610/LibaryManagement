@@ -10,6 +10,8 @@ import java.awt.*;
 public class MainFrame extends JFrame implements SidebarListener {
     private TaskBarPanel taskBarPanel;
     private EmployeeRightPanel employeeRightPanel;
+    private BorrowPanel borrowPanel;
+    private PenaltyPanel penaltyPanel;
     private BookPanel bookPanel;
     private ReaderPanel readerPanel;
     private AuthorPanel authorPanel;
@@ -44,10 +46,10 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.add(authorPanel, "Tác giả");
         mainContentPanel.add(new JPanel(), "Nhà xuất bản");
         mainContentPanel.add(employeeRightPanel, "Nhân viên");
-        mainContentPanel.add(new JPanel(), "Phiếu mượn");
+        mainContentPanel.add(borrowPanel, "Phiếu mượn");
         mainContentPanel.add(new JPanel(), "Phiếu nhập");
         mainContentPanel.add(new JPanel(), "Nhà cung cấp");
-        mainContentPanel.add(new JPanel(), "Thống kê");
+        mainContentPanel.add(penaltyPanel, "Thống kê");
 
         add(mainContentPanel, BorderLayout.CENTER);
     }
@@ -57,6 +59,8 @@ public class MainFrame extends JFrame implements SidebarListener {
         employeeRightPanel = new EmployeeRightPanel(this);
         authorPanel = new AuthorPanel();
         bookPanel = new BookPanel(this);
+        penaltyPanel = new PenaltyPanel(this);
+        borrowPanel = new BorrowPanel(this);
     }
 
     @Override
@@ -105,10 +109,4 @@ public class MainFrame extends JFrame implements SidebarListener {
                 break;
         }
     }
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            MainFrame frame = new MainFrame();
-//            frame.setVisible(true);
-//        });
-//    }
 }

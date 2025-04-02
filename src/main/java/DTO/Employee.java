@@ -8,7 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Employee extends EmployeeAuditBase {
-
+    public Employee(Long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
     public Employee(Long id, String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
         this.id = id;
         this.firstName = firstName;
