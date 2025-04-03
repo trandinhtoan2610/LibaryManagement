@@ -4,7 +4,7 @@ package GUI.Component.Panel;
 import BUS.AuthorBUS;
 import BUS.BookBUS;
 import DTO.AuthorDTO;
-import DTO.BookDTO;
+import DTO.Book;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.UpdateAuthorDialog;
 import java.awt.Window;
@@ -170,7 +170,7 @@ public class AuthorPanel extends javax.swing.JPanel {
            String fullName =  Controller.formatFullName(a.getLastName() + ' ' + a.getFirstName());
            lblAuthorName.setText(fullName);
            lblSubTitle.setText("có trong thư viện");
-           List<BookDTO> bookList = bookBUS.getBookByAuthorID(authorID);         
+           List<Book> bookList = bookBUS.getBookByAuthorID(authorID);
            authorProductsTable1.resetTable(bookList);
            
         }
