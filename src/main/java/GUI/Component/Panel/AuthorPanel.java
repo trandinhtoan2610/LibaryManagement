@@ -2,20 +2,22 @@
 package GUI.Component.Panel;
 
 import BUS.AuthorBUS;
-import BUS.BookBUS;
+import BUS.AuthorBookBUS;
 import DTO.AuthorDTO;
-import DTO.Book;
+import DTO.AuthorBookDTO;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.UpdateAuthorDialog;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
 import GUI.Controller.Controller;
 import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 public class AuthorPanel extends javax.swing.JPanel {
     AuthorBUS authorBUS;
-    BookBUS bookBUS;
+    AuthorBookBUS bookBUS;
     Window parent = SwingUtilities.getWindowAncestor(this);
     AlertDialog updateAlertDialog = new AlertDialog(parent,"Vui lòng chọn tác giả cần sửa");
     
@@ -25,7 +27,7 @@ public class AuthorPanel extends javax.swing.JPanel {
             System.out.println("Khởi tạo Author Panel...");
             initComponents();
             authorBUS = new AuthorBUS();
-            bookBUS = new BookBUS();
+            bookBUS = new AuthorBookBUS();
             if(AuthorBUS.authorDTOList == null )
                 System.out.println("Danh sách đang rỗng, chưa được khởi tạo !!");
             else
@@ -35,15 +37,44 @@ public class AuthorPanel extends javax.swing.JPanel {
             authorProductsTable1.resetTable(null);
             lblAuthorName.setText("");
             lblSubTitle.setText("");
+            //documentListener -> load lại table mỗi khi có thay đổi trên textfield
+            txtSearchAuthorName.getDocument().addDocumentListener(new DocumentListener(){
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+                
+            });
         }catch (Exception e){
             e.printStackTrace();
         }
     }
     
+    //Cập nhật lại bảng sau khi thêm, sửa, xóa :
     public void reloadTable(){
         tblAuthor.resetTable();
     }
     
+    //Cập nhật lại bảng sau khi lọc theo tìm kiếm : 
+    public void loadTableFilter(){
+        String searchedName = txtSearchAuthorName.getText();
+        tblAuthor.filterTable(searchedName);
+        tblAuthor.clearSelection();
+        authorProductsTable1.resetTable(null);
+        lblAuthorName.setText("");
+        lblSubTitle.setText("");
+           
+    }
     
 
    
@@ -57,6 +88,13 @@ public class AuthorPanel extends javax.swing.JPanel {
         btnUpdate = new GUI.Component.Button.ButtonUpdate();
         btnExportExcel = new GUI.Component.Button.ButtonExportExcel();
         buttonImportExcel1 = new GUI.Component.Button.ButtonImportExcel();
+        rightNavbarAuthorPanel = new javax.swing.JPanel();
+        headerSearchPanel = new javax.swing.JPanel();
+        lblSearchTitle = new javax.swing.JLabel();
+        bodySearchPanel = new javax.swing.JPanel();
+        lblSearchByName = new javax.swing.JLabel();
+        txtSearchAuthorName = new javax.swing.JTextField();
+        footerSearchPanel = new javax.swing.JPanel();
         footerAuthorPannel = new javax.swing.JPanel();
         tblProductsPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -91,6 +129,36 @@ public class AuthorPanel extends javax.swing.JPanel {
 
         navbarAuthorPanel.add(leftNavbarAuthorPanel, java.awt.BorderLayout.LINE_START);
 
+        rightNavbarAuthorPanel.setBackground(new java.awt.Color(255, 255, 255));
+        rightNavbarAuthorPanel.setLayout(new java.awt.GridLayout(3, 0));
+
+        headerSearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        headerSearchPanel.setLayout(new java.awt.BorderLayout());
+
+        lblSearchTitle.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        lblSearchTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSearchTitle.setText("Tìm kiếm ");
+        headerSearchPanel.add(lblSearchTitle, java.awt.BorderLayout.CENTER);
+
+        rightNavbarAuthorPanel.add(headerSearchPanel);
+
+        bodySearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblSearchByName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblSearchByName.setText("Tìm theo tên :");
+        lblSearchByName.setPreferredSize(new java.awt.Dimension(100, 30));
+        bodySearchPanel.add(lblSearchByName);
+
+        txtSearchAuthorName.setPreferredSize(new java.awt.Dimension(300, 30));
+        bodySearchPanel.add(txtSearchAuthorName);
+
+        rightNavbarAuthorPanel.add(bodySearchPanel);
+
+        footerSearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        rightNavbarAuthorPanel.add(footerSearchPanel);
+
+        navbarAuthorPanel.add(rightNavbarAuthorPanel, java.awt.BorderLayout.CENTER);
+
         add(navbarAuthorPanel, java.awt.BorderLayout.PAGE_START);
 
         footerAuthorPannel.setBackground(new java.awt.Color(255, 255, 255));
@@ -121,7 +189,7 @@ public class AuthorPanel extends javax.swing.JPanel {
         lblAuthorName.setForeground(new java.awt.Color(255, 0, 51));
         lblAuthorName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAuthorName.setText("<<Tác giả>>");
-        lblAuthorName.setPreferredSize(new java.awt.Dimension(120, 20));
+        lblAuthorName.setPreferredSize(new java.awt.Dimension(150, 20));
         jPanel1.add(lblAuthorName);
 
         lblSubTitle.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
@@ -150,6 +218,7 @@ public class AuthorPanel extends javax.swing.JPanel {
         add(tblAuthorPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Nút cập nhật -> Dialog cập nhật :
     private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
         AuthorDTO a = tblAuthor.getSelectedAuthor();
         if(a == null)
@@ -159,18 +228,18 @@ public class AuthorPanel extends javax.swing.JPanel {
             updateDialog.setVisible(true);
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
-
+    
+    //Chọn 1 dòng trong bảng tác giả -> hiển thị các tác phẩm của tác giả ở bảng dưới : 
     private void tblAuthorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAuthorMouseClicked
 
         int selectedRow = tblAuthor.getSelectedRow();
-        if(selectedRow >= 0 ){
-            
+        if(selectedRow >= 0 ){        
            AuthorDTO a = tblAuthor.getSelectedAuthor();
            Long authorID = a.getId();
            String fullName =  Controller.formatFullName(a.getLastName() + ' ' + a.getFirstName());
            lblAuthorName.setText(fullName);
            lblSubTitle.setText("có trong thư viện");
-           List<Book> bookList = bookBUS.getBookByAuthorID(authorID);
+           List<AuthorBookDTO> bookList = bookBUS.getBookByAuthorID(authorID);
            authorProductsTable1.resetTable(bookList);
            
         }
@@ -179,21 +248,28 @@ public class AuthorPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private GUI.Component.Table.AuthorProductsTable authorProductsTable1;
+    private javax.swing.JPanel bodySearchPanel;
     private GUI.Component.Button.ButtonExportExcel btnExportExcel;
     private GUI.Component.Button.ButtonUpdate btnUpdate;
     private GUI.Component.Button.ButtonImportExcel buttonImportExcel1;
     private javax.swing.JPanel footerAuthorPannel;
+    private javax.swing.JPanel footerSearchPanel;
+    private javax.swing.JPanel headerSearchPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAuthorName;
     private javax.swing.JLabel lblFootAuthor;
+    private javax.swing.JLabel lblSearchByName;
+    private javax.swing.JLabel lblSearchTitle;
     private javax.swing.JLabel lblSubTitle;
     private javax.swing.JPanel leftNavbarAuthorPanel;
     private javax.swing.JPanel navbarAuthorPanel;
+    private javax.swing.JPanel rightNavbarAuthorPanel;
     private GUI.Component.Table.AuthorTable tblAuthor;
     private javax.swing.JPanel tblAuthorPanel;
     private javax.swing.JPanel tblProductsPanel;
+    private javax.swing.JTextField txtSearchAuthorName;
     // End of variables declaration//GEN-END:variables
 }

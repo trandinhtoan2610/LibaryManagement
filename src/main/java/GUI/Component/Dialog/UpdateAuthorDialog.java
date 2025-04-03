@@ -122,6 +122,9 @@ public class UpdateAuthorDialog extends java.awt.Dialog {
         btnCancle.setText("Hủy bỏ");
         btnCancle.setPreferredSize(new java.awt.Dimension(90, 35));
         btnCancle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancleMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnCancleMouseEntered(evt);
             }
@@ -213,6 +216,10 @@ public class UpdateAuthorDialog extends java.awt.Dialog {
             updateSuccess.setVisible(true);
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
+
+    private void btnCancleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancleMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_btnCancleMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

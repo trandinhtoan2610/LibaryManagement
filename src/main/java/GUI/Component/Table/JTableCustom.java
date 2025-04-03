@@ -43,6 +43,7 @@ public class JTableCustom extends JTable {
 
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
+        setCellAlignment();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -164,17 +165,18 @@ public class JTableCustom extends JTable {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
     }
 
+    //Hàm căn giữa các cột trong bảng :
     private void setCellAlignment() {
-    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-    centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-    // Áp dụng cho tất cả các cột của bảng
-    for (int i = 0; i < getColumnCount(); i++) {
-        getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        // Áp dụng cho tất cả các cột của bảng
+        for (int i = 0; i < getColumnCount(); i++) {
+            getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Cập nhật lại bảng nếu cần thiết
+        revalidate();
+        repaint();
     }
-
-    // Cập nhật lại bảng nếu cần thiết
-    revalidate();
-    repaint();
-}
 }
