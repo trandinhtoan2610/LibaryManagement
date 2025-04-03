@@ -7,15 +7,19 @@ import BUS.AuthorBUS;
 import DTO.AuthorDTO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class AuthorTable extends JTableCustom {
     private static final String[] columnsName = {"Mã tác giả", "Họ và tên", "Số lượng tác phẩm"};
     private DefaultTableModel tblModel;
+    private TableRowSorter<DefaultTableModel> rowSorter;
     
     public AuthorTable(){
         super(new DefaultTableModel(columnsName ,0));
         this.tblModel= (DefaultTableModel)getModel();
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        rowSorter = new TableRowSorter<>(tblModel);
+        this.setRowSorter(rowSorter);
     }
     
     public void resetTable(){
@@ -32,6 +36,7 @@ public class AuthorTable extends JTableCustom {
         }
     }
     
+    //Hàm lấy ra 1 đối tượng khi click vào 1 dòng trên bảng :
     public AuthorDTO getSelectedAuthor(){
         int selectedRow = getSelectedRow();
         if (selectedRow >= 0) {
@@ -39,5 +44,13 @@ public class AuthorTable extends JTableCustom {
             return AuthorBUS.authorDTOList.get(modelRow);
         } 
         return null;
+    }
+    
+    //Hàm lọc bảng theo tên
+    public void filterTable(String authorName){
+        if(authorName.isEmpty())
+            rowSorter.setRowFilter(null);
+        else
+            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + authorName, 1));
     }
 }

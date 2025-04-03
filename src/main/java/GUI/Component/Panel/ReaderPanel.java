@@ -47,6 +47,7 @@ public class ReaderPanel extends javax.swing.JPanel {
             }
 
             reloadReaderTable();
+            //documentListener -> cập nhật table mỗi khi có thay đổi trên textfield 
             txtSearchName.getDocument().addDocumentListener(new DocumentListener(){
                 
                 @Override
@@ -77,6 +78,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         tblReader.resetTable();
     }
     
+    //Lấy ra chuỗi giới tính để tìm kiếm :
     public String getGender(){
         if(btnGenderAll.isSelected())
             return "";
@@ -84,18 +86,21 @@ public class ReaderPanel extends javax.swing.JPanel {
             return btnMale.isSelected() ? "Nam" : "Nữ";    
     }
     
+    //Hàm thay đổi bảng khi tìm kiếm kết hợp 2 yếu tố :
     public void loadTableFilter(){
+        
         String txt = txtSearchName.getText();
-        if(txt == "")
+        if(txt == "") //Chỉ tìm theo giới tính
             tblReader.filterTable("", getGender(), "", "");
         else{
-            if(cbSearchList.getSelectedIndex()==0)
+            if(cbSearchList.getSelectedIndex()==0) //combobox ở index 0 -> Tìm theo tên và giới tính
                 tblReader.filterTable(txt,getGender(),"","");
-            else if(cbSearchList.getSelectedIndex()==1)
+            else if(cbSearchList.getSelectedIndex()==1) // combobox ở index 1 -> Tìm theo số điện thoại và giới tính
                 tblReader.filterTable("",getGender(),txt,"");
-            else
+            else //Lựa chọn còn lại -> Tìm theo địa chỉ và giới tính
                 tblReader.filterTable("",getGender(),"",txt);
         }
+        tblReader.clearSelection();
     }
     
  
@@ -262,12 +267,14 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //Nút thêm -> Hiện dialog thêm
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonAddMouseClicked
         AddnUpdateReaderDialog addDialog = new AddnUpdateReaderDialog(null,true,"add",this,null);
         addDialog.setVisible(true);
     }//GEN-LAST:event_buttonAddMouseClicked
 
+    //Nút xóa -> Hiện dialog xóa
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDeleteMouseClicked
         ReaderDTO r = tblReader.getSelectedReader();
         if(r == null ){
@@ -279,6 +286,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_buttonDeleteMouseClicked
 
+    //Nút cập nhật -> Hiện dialog cập nhật
     private void buttonUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonUpdateMouseClicked
         if(tblReader.getSelectedReader() == null ){
             fixReaderAlert.setVisible(true);
@@ -313,7 +321,8 @@ public class ReaderPanel extends javax.swing.JPanel {
     private void btnGenderAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenderAllActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenderAllActionPerformed
-
+    
+    //reset textfield mỗi khi có thay đổi lựa chọn combobox :
     private void cbSearchListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchListItemStateChanged
         txtSearchName.setText("");
     }//GEN-LAST:event_cbSearchListItemStateChanged

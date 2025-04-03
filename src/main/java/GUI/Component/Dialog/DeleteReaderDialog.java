@@ -134,11 +134,12 @@ public class DeleteReaderDialog extends java.awt.Dialog {
         
         
     }//GEN-LAST:event_btnConfirmDeleteMouseClicked
-
+    
+    //Nút hủy bỏ -> tắt dialog
     private void btnCancleDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancleDeleteMouseClicked
         this.dispose();
     }//GEN-LAST:event_btnCancleDeleteMouseClicked
-
+    //Nút xác nhận xóa độc giả
     private void btnConfirmDeleteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmDeleteMouseEntered
         btnConfirmDelete.setBackground(new Color(139, 0, 0));
     }//GEN-LAST:event_btnConfirmDeleteMouseEntered
