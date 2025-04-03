@@ -16,7 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class EmployeeRightPanel extends JPanel {
+public class EmployeePanel extends JPanel {
     private final EmployeeBUS employeeBUS = new EmployeeBUS();
     private final EmployeeTable employeeTable = new EmployeeTable();
     private ButtonAdd buttonAdd;
@@ -27,7 +27,7 @@ public class EmployeeRightPanel extends JPanel {
     private SearchNavBarLabel searchNavBarLabel;
 
     private JFrame parentFrame;
-    public EmployeeRightPanel(JFrame parentFrame) {
+    public EmployeePanel(JFrame parentFrame) {
         this.parentFrame = parentFrame;
         setLayout(new BorderLayout());
         this.add(buttonPanel(parentFrame), BorderLayout.NORTH);
@@ -47,7 +47,7 @@ public class EmployeeRightPanel extends JPanel {
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                AddEmployeeDialog addEmployeeDialog = new AddEmployeeDialog(parentFrame, EmployeeRightPanel.this);
+                AddEmployeeDialog addEmployeeDialog = new AddEmployeeDialog(parentFrame, EmployeePanel.this);
                 addEmployeeDialog.setVisible(true);
             }
         });
@@ -59,7 +59,7 @@ public class EmployeeRightPanel extends JPanel {
                     AlertDialog updateAlert = new AlertDialog(parentFrame, "Vui lòng chọn nhân viên cần sửa");
                     updateAlert.setVisible(true);
                 }else{
-                    UpdateEmployeeDialog updateEmployeeDialog = new UpdateEmployeeDialog(parentFrame, EmployeeRightPanel.this, employee);
+                    UpdateEmployeeDialog updateEmployeeDialog = new UpdateEmployeeDialog(parentFrame, EmployeePanel.this, employee);
                     updateEmployeeDialog.setVisible(true);
                 }
             }
@@ -72,7 +72,7 @@ public class EmployeeRightPanel extends JPanel {
                     AlertDialog deleteAlert = new AlertDialog(parentFrame, "Vui lòng chọn nhân viên cần xóa");
                     deleteAlert.setVisible(true);
                 }else{
-                    DeleteEmployeeDialog deleteEmployeeDialog = new DeleteEmployeeDialog(parentFrame, EmployeeRightPanel.this, employee);
+                    DeleteEmployeeDialog deleteEmployeeDialog = new DeleteEmployeeDialog(parentFrame, EmployeePanel.this, employee);
                     deleteEmployeeDialog.setVisible(true);
                 }
             }

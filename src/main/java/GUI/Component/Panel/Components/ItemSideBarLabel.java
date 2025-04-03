@@ -1,10 +1,7 @@
 package GUI.Component.Panel.Components;
 
-import GUI.Component.Dialog.LogOutDialog;
-import GUI.Component.Panel.EmployeeRightPanel;
+import GUI.Component.Panel.EmployeePanel;
 import GUI.Component.Panel.ReaderPanel;
-import GUI.Component.TextField.CustomTextField;
-import GUI.LoginForm;
 import org.apache.batik.swing.JSVGCanvas;
 
 import javax.swing.*;
@@ -19,7 +16,7 @@ public class ItemSideBarLabel extends JPanel {
     private SidebarListener listener;
     private JFrame parentFrame;
     private ReaderPanel readerPanel;
-    private EmployeeRightPanel employeeRightPanel;
+    private EmployeePanel employeePanel;
     private boolean isActive;
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},

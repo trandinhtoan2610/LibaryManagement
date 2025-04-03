@@ -50,8 +50,7 @@ CREATE TABLE `Book` (
 
 CREATE TABLE `Publisher` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `firstName` varchar(255) NOT NULL,
-  `lastName` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `phone` varchar(10) NOT NULL,
   `address` varchar(255) NOT NULL
 );

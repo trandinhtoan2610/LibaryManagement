@@ -1,28 +1,27 @@
 package GUI.Component.Dialog;
 
-import BUS.EmployeeBUS;
-import DTO.Employee;
+import BUS.PublisherBUS;
+import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonAction;
-import GUI.Component.Panel.EmployeePanel;
+import GUI.Component.Panel.PublisherPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class DeleteEmployeeDialog extends JDialog {
+public class DeletePublisherDialog extends JDialog {
     private boolean confirmed = false;
-    private EmployeePanel employeePanel;
-    private Employee employeeToDelete;
-    private EmployeeBUS employeeBUS;
-    public DeleteEmployeeDialog(JFrame parent, EmployeePanel employeePanel, Employee employeeToDelete) {
-        super(parent, "Xóa nhân viên", true);
-        this.employeePanel = employeePanel;
-        employeeBUS = new EmployeeBUS();
-        this.employeeToDelete = employeeToDelete;
+    private PublisherPanel publisherPanel;
+    private PublisherDTO publisherToDelete;
+    private PublisherBUS publisherBUS;
+    public DeletePublisherDialog(JFrame parent, PublisherPanel publisherPanel, PublisherDTO publisherToDelete) {
+        super(parent, "Xóa nhà xuất bản", true);
+        this.publisherPanel = publisherPanel;
+        this.publisherBUS = new PublisherBUS();
+        this.publisherToDelete = publisherToDelete;
         initComponents();
         pack();
         setLocationRelativeTo(parent);
     }
-
     private void initComponents() {
         setLayout(new BorderLayout(20, 10));
         setSize(400, 200);
@@ -57,8 +56,8 @@ public class DeleteEmployeeDialog extends JDialog {
                 5);
         yesButton.addActionListener(e -> {
             confirmed = true;
-            employeePanel.removeEmployee(employeeToDelete);
-            employeeBUS.deleteEmployee(employeeToDelete.getId());
+            publisherPanel.deletePublisher(publisherToDelete);
+            publisherBUS.deletePublisher(publisherToDelete.getId());
             dispose();
         });
 
@@ -77,20 +76,8 @@ public class DeleteEmployeeDialog extends JDialog {
 
         add(contentPanel, BorderLayout.CENTER);
     }
-
     public boolean isConfirmed() {
         return confirmed;
     }
 
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame();
-//        DeleteEmployeeDialog dialog = new DeleteEmployeeDialog(frame);
-//        dialog.setVisible(true);
-//
-//        if (dialog.isConfirmed()) {
-//            System.out.println("Người dùng đã đồng ý xóa");
-//        } else {
-//            System.out.println("Người dùng đã hủy bỏ");
-//        }
-//    }
 }
