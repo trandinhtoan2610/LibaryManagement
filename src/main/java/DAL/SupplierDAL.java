@@ -2,54 +2,53 @@ package DAL;
 
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.Supplier;
+import DTO.SupplierDTO;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-public class SupplierDAL implements IRepositoryBase<Supplier> {
+public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<Supplier> SupplierRowMapper = this::mapRowToSupplier;
+    private final RowMapper<SupplierDTO> supplierRowMapper = (ResultSet rs) -> {
+        Long id = rs.getLong("id");
+        String name = rs.getString("name"); 
+        String phone = rs.getString("phone");
+        String address = rs.getString("address");
+        return new SupplierDTO(id, name, phone, address);
+    };
 
-    private Supplier mapRowToSupplier(ResultSet rs) throws SQLException {
-        return new Supplier(
-                rs.getLong("id"),
-                rs.getString("name"),
-                rs.getString("phone"),
-                rs.getString("address"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
-        );
+    @Override
+    public SupplierDTO findById(Long id) {
+        String sql = "SELECT * FROM Supplier WHERE id = ?";
+        return genericDAL.queryForObject(sql, supplierRowMapper, id);
     }
 
     @Override
-    public Supplier findById(Long id) {
-        String sql = "SELECT * FROM supplier WHERE id = ?";
-        return genericDAL.queryForObject(sql, SupplierRowMapper, id);
+    public List<SupplierDTO> findAll() {
+        String sql = "SELECT * FROM Supplier";
+        return genericDAL.queryForList(sql, supplierRowMapper);
     }
 
     @Override
-    public List<Supplier> findAll() {
-        String sql = "SELECT * FROM supplier";
-        return genericDAL.queryForList(sql, SupplierRowMapper);
+    public Long create(SupplierDTO supplierDTO) {
+        String sql = "INSERT INTO Supplier (name, phone, address) VALUES (?, ?, ?)"; 
+        return genericDAL.insert(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress());
     }
 
     @Override
-    public Long create(Supplier supplier) {
-        String sql = "INSERT INTO supplier (name, phone, address) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, supplier.getName(), supplier.getPhone(), supplier.getAddress());
-    }
-
-    @Override
-    public boolean update(Supplier supplier) {
-        String sql = "UPDATE supplier SET name = ?, SET phone = ?, SET address = ? WHERE id = ?";
-        return genericDAL.update(sql, supplier.getName(), supplier.getPhone(), supplier.getAddress(), supplier.getId());
+    public boolean update(SupplierDTO supplierDTO) {
+        String sql = "UPDATE Supplier SET name = ?, phone = ?, address = ? WHERE id = ?"; 
+        return genericDAL.update(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress(), supplierDTO.getId());
     }
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM supplier WHERE id = ?";
+        String sql = "DELETE FROM Supplier WHERE id = ?";
         return genericDAL.delete(sql, id);
+    }
+
+    public long getCurrentID() {
+        String sql = "SELECT MAX(id) FROM Supplier";
+        return genericDAL.getMaxID(sql);
     }
 }
