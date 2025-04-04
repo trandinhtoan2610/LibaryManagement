@@ -56,7 +56,7 @@ public class UpdateAuthorDialog extends java.awt.Dialog {
     }
 
     private void setField(){
-        String id = authorUpdate.getId().toString();
+        String id = String.valueOf(authorUpdate.getId());
         txtAuthorID.setText(id);
         String fullName = Controller.formatFullName(authorUpdate.getLastName()+ ' ' + authorUpdate.getFirstName());
         txtFullName.setText(fullName);        

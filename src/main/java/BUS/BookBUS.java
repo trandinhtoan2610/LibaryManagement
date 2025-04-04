@@ -3,18 +3,76 @@ package BUS;
 import DAL.BookDAL;
 import DAL.Interface.IRepositoryBase;
 import DTO.Book;
+import DTO.BookViewModel;
+
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookBUS {
     private final IRepositoryBase<Book> bookRepository;
+    private final CategoryBUS categoryBUS;
+    private final AuthorBUS authorBUS;
+    private final PublisherBUS publisherBUS;
 
     public BookBUS() {
         this.bookRepository = new BookDAL();
+        this.categoryBUS = new CategoryBUS();
+        this.authorBUS = new AuthorBUS();
+        this.publisherBUS = new PublisherBUS();
     }
 
-    // Lấy danh sách tất cả sách
+    // Lấy danh sách tất cả sách dưới dạng BookViewModel
+    public List<BookViewModel> getAllBooksForDisplay() {
+        List<BookViewModel> bookViewModels = new ArrayList<>();
+        try {
+            List<Book> books = bookRepository.findAll();
+            for (Book book : books) {
+                BookViewModel viewModel = new BookViewModel();
+                viewModel.setId(book.getId());
+                viewModel.setName(book.getName());
+                viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
+                viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
+                viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
+                viewModel.setQuantity(book.getQuantity());
+                viewModel.setUnitPrice(book.getUnitPrice());
+                viewModel.setYearOfPublication(book.getYearOfPublication());
+                bookViewModels.add(viewModel);
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi lấy danh sách tất cả sách: " + e.getMessage());
+            throw new RuntimeException("Không thể lấy danh sách tất cả sách", e);
+        }
+        return bookViewModels;
+    }
+
+    // Lấy sách theo ID (dạng BookViewModel)
+    public BookViewModel getBookByIdForDisplay(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID sách không hợp lệ");
+        }
+        try {
+            Book book = bookRepository.findById(id);
+            if (book == null) {
+                throw new RuntimeException("Không tìm thấy sách với ID " + id);
+            }
+            BookViewModel viewModel = new BookViewModel();
+            viewModel.setId(book.getId());
+            viewModel.setName(book.getName());
+            viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
+            viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
+            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
+            viewModel.setQuantity(book.getQuantity());
+            viewModel.setUnitPrice(book.getUnitPrice());
+            viewModel.setYearOfPublication(book.getYearOfPublication());
+            return viewModel;
+        } catch (Exception e) {
+            System.err.println("Lỗi khi lấy thông tin sách với ID " + id + ": " + e.getMessage());
+            throw new RuntimeException("Không thể lấy thông tin sách với ID " + id, e);
+        }
+    }
+
+    // Lấy danh sách tất cả sách (dạng Book)
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
         try {
@@ -26,7 +84,7 @@ public class BookBUS {
         return books;
     }
 
-    // Lấy sách theo ID
+    // Lấy sách theo ID (dạng Book)
     public Book getBookById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
@@ -43,7 +101,7 @@ public class BookBUS {
         }
     }
 
-    // Thêm sách mới và trả về ID của sách vừa thêm
+    // Thêm sách mới
     public Long addBook(Book book) {
         validateBook(book);
         try {

@@ -23,8 +23,8 @@ import java.util.List;
 
 public class BookTable extends JTableCustom {
     private static final String[] HEADER = {
-        "ID", "Tên sách", "Thể loại (ID)", "Tác giả (ID)", 
-        "Nhà xuất bản (ID)", "Kệ sách (ID)", "Số lượng", "Năm XB"
+        "ID", "Tên sách", "Thể loại", "Tác giả",
+        "Nhà xuất bản", "Kệ sách", "Số lượng", "Năm XB"
     };
 
     private final DefaultTableModel tableModel;

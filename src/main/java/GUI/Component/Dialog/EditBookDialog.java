@@ -1,21 +1,32 @@
 package GUI.Component.Dialog;
 
 import BUS.BookBUS;
+import BUS.CategoryBUS;
+import BUS.AuthorBUS;
+import BUS.PublisherBUS;
 import DTO.Book;
+import DTO.Category;
+import DTO.AuthorDTO;
+import DTO.Publisher;
 import GUI.Component.Button.ButtonBack;
+import GUI.Component.Combobox.CustomComboBox;
 import GUI.Component.TextField.CustomTextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.Year;
+import java.util.List;
 
 public class EditBookDialog extends JDialog {
     private final BookBUS bookBUS;
-    private final Book book;
+    private final CategoryBUS categoryBUS;
+    private final AuthorBUS authorBUS;
+    private final PublisherBUS publisherBUS;
+    private final Book book; // Sách cần chỉnh sửa
     private CustomTextField nameField;
-    private CustomTextField categoryIdField;
-    private CustomTextField authorIdField;
-    private CustomTextField publisherIdField;
+    private CustomComboBox categoryComboBox;
+    private CustomComboBox authorComboBox;
+    private CustomComboBox publisherComboBox;
     private CustomTextField quantityField;
     private CustomTextField unitPriceField;
     private CustomTextField yearOfPublicationField;
@@ -23,6 +34,9 @@ public class EditBookDialog extends JDialog {
     public EditBookDialog(JFrame parent, Book book) {
         super(parent, "Chỉnh Sửa Sách", true);
         this.bookBUS = new BookBUS();
+        this.categoryBUS = new CategoryBUS();
+        this.authorBUS = new AuthorBUS();
+        this.publisherBUS = new PublisherBUS();
         this.book = book;
         initComponent();
         pack();
@@ -85,21 +99,18 @@ public class EditBookDialog extends JDialog {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
 
         JLabel nameLabel = setJLabel("Tên Sách");
-        JLabel categoryIdLabel = setJLabel("ID Danh Mục");
-        JLabel authorIdLabel = setJLabel("ID Tác Giả");
-        JLabel publisherIdLabel = setJLabel("ID Nhà Xuất Bản");
+        JLabel categoryLabel = setJLabel("Danh Mục");
+        JLabel authorLabel = setJLabel("Tác Giả");
+        JLabel publisherLabel = setJLabel("Nhà Xuất Bản");
         JLabel quantityLabel = setJLabel("Số Lượng");
         JLabel unitPriceLabel = setJLabel("Đơn Giá");
         JLabel yearOfPublicationLabel = setJLabel("Năm Xuất Bản");
 
         nameField = new CustomTextField();
         nameField.setText(book.getName());
-        categoryIdField = new CustomTextField();
-        categoryIdField.setText(String.valueOf(book.getCategoryId()));
-        authorIdField = new CustomTextField();
-        authorIdField.setText(String.valueOf(book.getAuthorId()));
-        publisherIdField = new CustomTextField();
-        publisherIdField.setText(String.valueOf(book.getPublisherId()));
+        categoryComboBox = new CustomComboBox();
+        authorComboBox = new CustomComboBox();
+        publisherComboBox = new CustomComboBox();
         quantityField = new CustomTextField();
         quantityField.setText(String.valueOf(book.getQuantity()));
         unitPriceField = new CustomTextField();
@@ -107,14 +118,56 @@ public class EditBookDialog extends JDialog {
         yearOfPublicationField = new CustomTextField();
         yearOfPublicationField.setText(book.getYearOfPublication() != null ? String.valueOf(book.getYearOfPublication().getValue()) : "");
 
+        // Load danh sách danh mục và chọn danh mục hiện tại
+        List<Category> categories = categoryBUS.getAllCategories();
+        int selectedCategoryIndex = -1;
+        for (int i = 0; i < categories.size(); i++) {
+            Category category = categories.get(i);
+            categoryComboBox.addItem(category.getName());
+            if (category.getId().equals(book.getCategoryId())) {
+                selectedCategoryIndex = i;
+            }
+        }
+        if (selectedCategoryIndex != -1) {
+            categoryComboBox.setSelectedIndex(selectedCategoryIndex);
+        }
+
+        // Load danh sách tác giả và chọn tác giả hiện tại
+        List<AuthorDTO> authors = authorBUS.getAllAuthors();
+        int selectedAuthorIndex = -1;
+        for (int i = 0; i < authors.size(); i++) {
+            AuthorDTO author = authors.get(i);
+            authorComboBox.addItem(author.getName());
+            if (author.getId() == book.getAuthorId()) {
+                selectedAuthorIndex = i;
+            }
+        }
+        if (selectedAuthorIndex != -1) {
+            authorComboBox.setSelectedIndex(selectedAuthorIndex);
+        }
+
+        // Load danh sách nhà xuất bản và chọn nhà xuất bản hiện tại
+        List<Publisher> publishers = publisherBUS.getAllPublishers();
+        int selectedPublisherIndex = -1;
+        for (int i = 0; i < publishers.size(); i++) {
+            Publisher publisher = publishers.get(i);
+            publisherComboBox.addItem(publisher.getName());
+            if (publisher.getId().equals(book.getPublisherId())) {
+                selectedPublisherIndex = i;
+            }
+        }
+        if (selectedPublisherIndex != -1) {
+            publisherComboBox.setSelectedIndex(selectedPublisherIndex);
+        }
+
         panel.add(nameLabel);
         panel.add(nameField);
-        panel.add(categoryIdLabel);
-        panel.add(categoryIdField);
-        panel.add(authorIdLabel);
-        panel.add(authorIdField);
-        panel.add(publisherIdLabel);
-        panel.add(publisherIdField);
+        panel.add(categoryLabel);
+        panel.add(categoryComboBox);
+        panel.add(authorLabel);
+        panel.add(authorComboBox);
+        panel.add(publisherLabel);
+        panel.add(publisherComboBox);
         panel.add(quantityLabel);
         panel.add(quantityField);
         panel.add(unitPriceLabel);
@@ -159,10 +212,11 @@ public class EditBookDialog extends JDialog {
 
     private void updateBook() {
         try {
+            // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
-            String categoryIdStr = categoryIdField.getText().trim();
-            String authorIdStr = authorIdField.getText().trim();
-            String publisherIdStr = publisherIdField.getText().trim();
+            int categoryIndex = categoryComboBox.getSelectedIndex();
+            int authorIndex = authorComboBox.getSelectedIndex();
+            int publisherIndex = publisherComboBox.getSelectedIndex();
             String quantityStr = quantityField.getText().trim();
             String unitPriceStr = unitPriceField.getText().trim();
             String yearOfPublicationStr = yearOfPublicationField.getText().trim();
@@ -172,19 +226,22 @@ public class EditBookDialog extends JDialog {
                 throw new IllegalArgumentException("Tên sách không được để trống");
             }
 
-            Long categoryId = Long.parseLong(categoryIdStr);
+            List<Category> categories = categoryBUS.getAllCategories();
+            Long categoryId = categories.get(categoryIndex).getId();
             if (categoryId <= 0) {
-                throw new IllegalArgumentException("ID danh mục không hợp lệ");
+                throw new IllegalArgumentException("Danh mục không hợp lệ");
             }
 
-            Long authorId = Long.parseLong(authorIdStr);
+            List<AuthorDTO> authors = authorBUS.getAllAuthors();
+            Long authorId = authors.get(authorIndex).getId();
             if (authorId <= 0) {
-                throw new IllegalArgumentException("ID tác giả không hợp lệ");
+                throw new IllegalArgumentException("Tác giả không hợp lệ");
             }
 
-            Long publisherId = Long.parseLong(publisherIdStr);
+            List<Publisher> publishers = publisherBUS.getAllPublishers();
+            Long publisherId = publishers.get(publisherIndex).getId();
             if (publisherId <= 0) {
-                throw new IllegalArgumentException("ID nhà xuất bản không hợp lệ");
+                throw new IllegalArgumentException("Nhà xuất bản không hợp lệ");
             }
 
             int quantity = Integer.parseInt(quantityStr);
@@ -223,7 +280,7 @@ public class EditBookDialog extends JDialog {
             successDialog.setVisible(true);
             dispose(); // Đóng hộp thoại sau khi cập nhật thành công
         } catch (NumberFormatException e) {
-            AlertDialog errorDialog = new AlertDialog(this, "Vui lòng nhập số hợp lệ cho các trường ID, số lượng, đơn giá, năm xuất bản");
+            AlertDialog errorDialog = new AlertDialog(this, "Vui lòng nhập số hợp lệ cho các trường số lượng, đơn giá, năm xuất bản");
             errorDialog.setVisible(true);
         } catch (IllegalArgumentException e) {
             AlertDialog errorDialog = new AlertDialog(this, e.getMessage());
@@ -232,14 +289,5 @@ public class EditBookDialog extends JDialog {
             AlertDialog errorDialog = new AlertDialog(this, "Lỗi khi cập nhật sách: " + e.getMessage());
             errorDialog.setVisible(true);
         }
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        Book book1 = new Book();
-        frame.setSize(1920, 1080);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        EditBookDialog dialog = new EditBookDialog(frame,book1);
-        dialog.setVisible(true);
     }
 }

@@ -1,11 +1,9 @@
 package GUI;
 
+import DTO.Book;
 import GUI.Component.Dialog.LogOutDialog;
-import GUI.Component.Panel.AuthorPanel;
+import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
-import GUI.Component.Panel.EmployeeRightPanel;
-import GUI.Component.Panel.ReaderPanel;
-import GUI.Component.Panel.TaskBarPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +15,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private AuthorPanel authorPanel;
     private JPanel mainContentPanel;
     private CardLayout cardLayout;
+    private BookPanel bookPanel;
 
     public MainFrame() {
         setupUI();
@@ -41,7 +40,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.setLayout(cardLayout);
 
         mainContentPanel.add(new JPanel(), "Trang chủ");
-        mainContentPanel.add(new JPanel(), "Sách");
+        mainContentPanel.add(bookPanel, "Sách");
         mainContentPanel.add(readerPanel, "Độc giả");
         mainContentPanel.add(authorPanel, "Tác giả");
         mainContentPanel.add(new JPanel(), "Nhà xuất bản");
@@ -58,6 +57,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         readerPanel = new ReaderPanel();
         employeeRightPanel = new EmployeeRightPanel(this);
         authorPanel = new AuthorPanel();
+        bookPanel = new BookPanel(this);
     }
 
     @Override
@@ -106,10 +106,10 @@ public class MainFrame extends JFrame implements SidebarListener {
                 break;
         }
     }
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            MainFrame frame = new MainFrame();
-//            frame.setVisible(true);
-//        });
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
+    }
 }
