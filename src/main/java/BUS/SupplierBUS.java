@@ -8,13 +8,18 @@ import java.util.List;
 
 public class SupplierBUS {
     SupplierDAL supplierDAL;
-    public static List<SupplierDTO> supplierList;
+    public List<SupplierDTO> supplierList; 
 
     public SupplierBUS() {
         supplierDAL = new SupplierDAL();
         supplierList = new ArrayList<>();
-        if (supplierList.size() == 0) {
-            getSupplierList();
+        loadSupplierList();
+    }
+
+    private void loadSupplierList() {
+        List<SupplierDTO> loadedList = supplierDAL.findAll();
+        if (loadedList != null) {
+            supplierList.addAll(loadedList);
         }
     }
 
@@ -28,9 +33,9 @@ public class SupplierBUS {
     }
 
     public void deleteSupplier(SupplierDTO supplier) {
-        boolean success = supplierDAL.delete(supplier.getId()); // Xóa khỏi DB
+        boolean success = supplierDAL.delete(supplier.getId());
         if (success) {
-            supplierList.removeIf(s -> s.getId().equals(supplier.getId())); // Xóa khỏi danh sách
+            supplierList.removeIf(s -> s.getId().equals(supplier.getId()));
         }
     }
 

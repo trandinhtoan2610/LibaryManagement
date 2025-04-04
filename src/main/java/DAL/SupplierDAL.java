@@ -38,7 +38,7 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
     @Override
     public boolean update(SupplierDTO supplierDTO) {
         String sql = "UPDATE Supplier SET name = ?, phone = ?, address = ? WHERE id = ?"; 
-        return genericDAL.update(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress(), supplierDTO.getId());
+        return genericDAL.update(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress());
     }
 
     @Override

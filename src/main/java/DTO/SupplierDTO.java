@@ -2,12 +2,14 @@ package DTO;
 
 import DTO.Abstract.EntityAuditNameBase;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class SupplierDTO extends EntityAuditNameBase<Long> {
     private String phone, address;
 
@@ -19,23 +21,6 @@ public class SupplierDTO extends EntityAuditNameBase<Long> {
         
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -44,12 +29,12 @@ public class SupplierDTO extends EntityAuditNameBase<Long> {
         this.address = address;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getAddress() {
+        return address;
     }
     
 }
