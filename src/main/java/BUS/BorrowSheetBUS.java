@@ -1,12 +1,12 @@
 package BUS;
 
-import DAL.BorrowSheetDAL;
+import DAL.BorrowDAL;
 import DTO.BorrowDTO;
 
 import java.util.List;
 
 public class BorrowSheetBUS {
-    private final BorrowSheetDAL borrowSheetDAL = new BorrowSheetDAL();
+    private final BorrowDAL borrowSheetDAL = new BorrowDAL();
 
     public List<BorrowDTO> getAllBorrowSheet() {
         return borrowSheetDAL.findAll();
