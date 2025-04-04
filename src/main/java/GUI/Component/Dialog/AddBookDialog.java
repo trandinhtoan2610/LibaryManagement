@@ -7,7 +7,7 @@ import BUS.PublisherBUS;
 import DTO.Book;
 import DTO.Category;
 import DTO.AuthorDTO;
-import DTO.Publisher;
+import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
 import GUI.Component.TextField.CustomTextField;
@@ -125,8 +125,8 @@ public class AddBookDialog extends JDialog {
         }
 
         // Load danh sách nhà xuất bản
-        List<Publisher> publishers = publisherBUS.getAllPublishers();
-        for (Publisher publisher : publishers) {
+        List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
+        for (PublisherDTO publisher : publishers) {
             publisherComboBox.addItem(publisher.getName());
         }
 
@@ -208,7 +208,7 @@ public class AddBookDialog extends JDialog {
                 throw new IllegalArgumentException("Tác giả không hợp lệ");
             }
 
-            List<Publisher> publishers = publisherBUS.getAllPublishers();
+            List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
             Long publisherId = publishers.get(publisherIndex).getId();
             if (publisherId <= 0) {
                 throw new IllegalArgumentException("Nhà xuất bản không hợp lệ");

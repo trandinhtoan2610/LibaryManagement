@@ -11,6 +11,9 @@ public class PublisherBUS {
     public List<PublisherDTO> getAllPublishers() {
         return publisherDAL.findAll();
     }
+    public PublisherDTO getPublisherById(long id) {
+        return publisherDAL.findById(id);
+    }
     public long addPublisher(PublisherDTO publisherDTO) {
         return publisherDAL.create(publisherDTO);
     }

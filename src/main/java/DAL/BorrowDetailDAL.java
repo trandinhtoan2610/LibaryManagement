@@ -18,9 +18,8 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
     private BorrowDetailDTO mapRowToBorrowDetails(ResultSet rs) throws Exception {
         SubStatus subStatus = SubStatus.valueOf(rs.getString("subStatus"));
         return new BorrowDetailDTO(
-                rs.getLong("id"),
                 rs.getLong("bookId"),
-                rs.getString("borrowSheetId"),
+                rs.getLong("borrowSheetId"),
                 rs.getInt("quantity"),
                 subStatus
         );
@@ -44,11 +43,12 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public boolean update(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "UPDATE borrowDetails SET quantity = ?, status = ? WHERE id = ?";
+        String sql = "UPDATE borrowDetails SET quantity = ?, status = ? WHERE bookid = ? AND borrowSheetId = ?";
         return genericDAL.update(sql,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name(),
-                borrowDetailDTO.getId()
+                borrowDetailDTO.getBookId(),
+                borrowDetailDTO.getBorrowSheetId()
         );
     }
     @Override

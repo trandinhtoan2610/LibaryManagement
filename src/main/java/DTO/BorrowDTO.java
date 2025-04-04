@@ -11,12 +11,11 @@ import java.util.Date;
 @Setter
 public class BorrowDTO
 {
-    private String id;
-    private Long employeeId, readerId;
+    private Long employeeId, readerId, id;
     private Status status;
     private Date duedate, borrowedDate, actualReturnDate;
 
-    public BorrowDTO(String id, Long employeeId, Long readerId, Status status, Date borrowedDate, Date duedate, Date actualReturnDate) {
+    public BorrowDTO(Long id, Long employeeId, Long readerId, Status status, Date borrowedDate, Date duedate, Date actualReturnDate) {
         this.id = id;
         this.employeeId = employeeId;
         this.readerId = readerId;
@@ -24,6 +23,9 @@ public class BorrowDTO
         this.borrowedDate = borrowedDate;
         this.duedate = duedate;
         this.actualReturnDate = actualReturnDate;
+    }
+    public String getId(){
+        return "HD" + String.format("%04d", this.id);
     }
 }
 

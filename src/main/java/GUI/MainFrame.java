@@ -1,12 +1,17 @@
 package GUI;
 
 import DTO.Book;
+import DTO.BorrowDTO;
+import DTO.BorrowDetailDTO;
+import DTO.Enum.Status;
+import DTO.Enum.SubStatus;
 import GUI.Component.Dialog.LogOutDialog;
 import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
 
 public class MainFrame extends JFrame implements SidebarListener {
     private TaskBarPanel taskBarPanel;
@@ -19,7 +24,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private AuthorPanel authorPanel;
     private JPanel mainContentPanel;
     private CardLayout cardLayout;
-    private BookPanel bookPanel;
+    private HomePagePanel homePagePanel;
 
     public MainFrame() {
         setupUI();
@@ -43,7 +48,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         cardLayout = new CardLayout();
         mainContentPanel.setLayout(cardLayout);
 
-        mainContentPanel.add(new JPanel(), "Trang chủ");
+        mainContentPanel.add(homePagePanel, "Trang chủ");
         mainContentPanel.add(bookPanel, "Sách");
         mainContentPanel.add(readerPanel, "Độc giả");
         mainContentPanel.add(authorPanel, "Tác giả");
@@ -65,6 +70,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         penaltyPanel = new PenaltyPanel(this);
         borrowPanel = new BorrowPanel(this);
         publisherPanel = new PublisherPanel(this);
+        homePagePanel = new HomePagePanel();
     }
 
     @Override
@@ -115,6 +121,11 @@ public class MainFrame extends JFrame implements SidebarListener {
     }
 
     public static void main(String[] args) {
+        BorrowDetailDTO borrowDetailDTO = new BorrowDetailDTO(1L, 1L, 1, SubStatus.Đang_Mượn );
+        System.out.println(borrowDetailDTO.getBorrowSheetId());
+        BorrowDTO borrowDTO = new BorrowDTO(1L, 1L,1L, Status.Đã_Mượn, new Date(), new Date(), new Date());
+        System.out.println(borrowDTO.getId());
+
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true);

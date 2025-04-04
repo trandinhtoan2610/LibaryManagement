@@ -7,16 +7,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BorrowDetailDTO extends EntityBase<Long> {
-    private String borrowSheetId;
-    private Long bookId;
+public class BorrowDetailDTO {
+    private Long bookId, borrowSheetId;
     private int quantity;
     private SubStatus status;
-    public BorrowDetailDTO(Long id, Long bookId, String borrowSheetId, int quantity, SubStatus status) {
-        this.id = id;
+    public BorrowDetailDTO(Long bookId, Long borrowSheetId, int quantity, SubStatus status) {
         this.bookId = bookId;
         this.borrowSheetId = borrowSheetId;
         this.quantity = quantity;
         this.status = status;
+    }
+    public String getBorrowSheetId(){
+        return "HD" + String.format("%04d", this.borrowSheetId);
     }
 }

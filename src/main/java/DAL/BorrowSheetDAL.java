@@ -15,7 +15,7 @@ public class BorrowSheetDAL implements IRepositoryStringID<BorrowDTO> {
 
     private BorrowDTO mapRowToBorrow(java.sql.ResultSet rs) throws java.sql.SQLException {
         return new BorrowDTO(
-                rs.getString("id"),
+                rs.getLong("id"),
                 rs.getLong("employeeId"),
                 rs.getLong("customerId"),
                 Status.valueOf(rs.getString("status").toString()),
