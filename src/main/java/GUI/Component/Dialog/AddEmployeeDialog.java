@@ -186,7 +186,6 @@ public class AddEmployeeDialog extends JDialog {
             }else roleIDDD = Long.parseLong("3");
 
             Employee nv = new Employee(
-                    currentID,
                     fName,
                     lName,
                     male.isSelected() ? Gender.Nam : Gender.Nữ,
@@ -197,7 +196,13 @@ public class AddEmployeeDialog extends JDialog {
                     address,
                     salary
             );
-            employeeBUS.addEmployee(nv);
+            Long uuid = employeeBUS.addEmployee(nv);
+            if (uuid == null) {
+                AlertDialog alert = new AlertDialog(this, "Thêm nhân viên thất bại !");
+                alert.setVisible(true);
+                return;
+            }
+            nv.setId(uuid);
             employeePanel.addEmployee(nv);
             JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công !");
             dispose();

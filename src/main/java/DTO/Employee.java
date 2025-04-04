@@ -13,6 +13,17 @@ public class Employee extends EmployeeAuditBase {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    public Employee(String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.username = username;
+        this.password = password;
+        this.roleId = roleId;
+        this.phone = phone;
+        this.address = address;
+        this.salary = salary;
+    }
     public Employee(Long id, String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
         this.id = id;
         this.firstName = firstName;
