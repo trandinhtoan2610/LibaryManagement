@@ -10,7 +10,11 @@ import java.awt.*;
 
 public class MainFrame extends JFrame implements SidebarListener {
     private TaskBarPanel taskBarPanel;
-    private EmployeeRightPanel employeeRightPanel;
+    private PublisherPanel publisherPanel;
+    private EmployeePanel employeePanel;
+    private BorrowPanel borrowPanel;
+    private PenaltyPanel penaltyPanel;
+    private BookPanel bookPanel;
     private ReaderPanel readerPanel;
     private AuthorPanel authorPanel;
     private JPanel mainContentPanel;
@@ -43,21 +47,24 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.add(bookPanel, "Sách");
         mainContentPanel.add(readerPanel, "Độc giả");
         mainContentPanel.add(authorPanel, "Tác giả");
-        mainContentPanel.add(new JPanel(), "Nhà xuất bản");
-        mainContentPanel.add(employeeRightPanel, "Nhân viên");
-        mainContentPanel.add(new JPanel(), "Phiếu mượn");
+        mainContentPanel.add(publisherPanel, "Nhà xuất bản");
+        mainContentPanel.add(employeePanel, "Nhân viên");
+        mainContentPanel.add(borrowPanel, "Phiếu mượn");
         mainContentPanel.add(new JPanel(), "Phiếu nhập");
         mainContentPanel.add(new JPanel(), "Nhà cung cấp");
-        mainContentPanel.add(new JPanel(), "Thống kê");
+        mainContentPanel.add(penaltyPanel, "Thống kê");
 
         add(mainContentPanel, BorderLayout.CENTER);
     }
 
     private void initPanels() {
         readerPanel = new ReaderPanel();
-        employeeRightPanel = new EmployeeRightPanel(this);
+        employeePanel = new EmployeePanel(this);
         authorPanel = new AuthorPanel();
         bookPanel = new BookPanel(this);
+        penaltyPanel = new PenaltyPanel(this);
+        borrowPanel = new BorrowPanel(this);
+        publisherPanel = new PublisherPanel(this);
     }
 
     @Override
@@ -105,11 +112,5 @@ public class MainFrame extends JFrame implements SidebarListener {
                 }
                 break;
         }
-    }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame();
-            frame.setVisible(true);
-        });
     }
 }

@@ -5,14 +5,12 @@ import DTO.Employee;
 import DTO.Enum.Gender;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
-import GUI.Component.Panel.EmployeeRightPanel;
+import GUI.Component.Panel.EmployeePanel;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class UpdateEmployeeDialog extends JDialog {
     private Long currentID;
@@ -30,11 +28,11 @@ public class UpdateEmployeeDialog extends JDialog {
 
 
     private EmployeeBUS employeeBUS;
-    private EmployeeRightPanel employeeRightPanel;
+    private EmployeePanel employeePanel;
 
-    public UpdateEmployeeDialog(JFrame parent, EmployeeRightPanel employeeRightPanel, Employee employeeToUpdate) {
+    public UpdateEmployeeDialog(JFrame parent, EmployeePanel employeePanel, Employee employeeToUpdate) {
         super(parent, "Cập Nhật Nhân Viên", true);
-        this.employeeRightPanel = employeeRightPanel;
+        this.employeePanel = employeePanel;
         this.employeeBUS = new EmployeeBUS();
         this.employeeToUpdate = employeeToUpdate;
         initComponents();
@@ -243,7 +241,7 @@ public class UpdateEmployeeDialog extends JDialog {
             );
             boolean success = employeeBUS.updateEmployee(updatedEmployee);
             if (success) {
-                employeeRightPanel.updateEmployee(updatedEmployee);
+                employeePanel.updateEmployee(updatedEmployee);
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
                 dispose();
             } else {

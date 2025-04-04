@@ -75,45 +75,4 @@ public class BookTable extends JTableCustom {
             tableModel.addRow(rowData);
         }
     }
-
-    public static void main(String[] args) {
-        // Tạo dữ liệu mẫu
-        List<Book> sampleBooks = new ArrayList<>();
-        
-        // Thêm sách 1
-        Book book1 = new Book();
-        book1.setId(1L);
-        book1.setName("Đắc Nhân Tâm");
-        book1.setCategoryId(3L);
-        book1.setAuthorId(10L);
-        book1.setPublisherId(5L);
-        book1.setUnitPrice(2L);
-        book1.setQuantity(50);
-        book1.setYearOfPublication(Year.of(2023));
-        sampleBooks.add(book1);
-
-        // Thêm sách 2
-        Book book2 = new Book();
-        book2.setId(2L);
-        book2.setName("Nhà Giả Kim");
-        book2.setCategoryId(3L);
-        book2.setAuthorId(15L);
-        book2.setPublisherId(7L);
-        book2.setUnitPrice(1L);
-        book2.setQuantity(30);
-        book2.setYearOfPublication(Year.of(2020));
-        sampleBooks.add(book2);
-
-        // Hiển thị bảng
-        JFrame frame = new JFrame("Quản lý Sách");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 300);
-
-        BookTable table = new BookTable();
-        table.setBooks(sampleBooks);
-
-        frame.add(new JScrollPane(table));
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
 }

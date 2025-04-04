@@ -2,54 +2,56 @@ package DAL;
 
 import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.Publisher;
+import DTO.PublisherDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PublisherDAL implements IRepositoryBase<Publisher> {
+public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<Publisher> publisherRowMapper = this::mapRowToPublisher;
+    private final RowMapper<PublisherDTO> publisherRowMapper = this::mapRowToPublisher;
 
-    public Publisher mapRowToPublisher(ResultSet rs) throws SQLException {
-        return new Publisher(
+    public PublisherDTO mapRowToPublisher(ResultSet rs) throws SQLException {
+        return new PublisherDTO(
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("phone"),
-                rs.getString("address"),
-                rs.getDate("createdAt"),
-                rs.getDate("updatedAt")
+                rs.getString("address")
         );
     }
 
     @Override
-    public Publisher findById(Long id) {
+    public PublisherDTO findById(Long id) {
         String sql = "SELECT * FROM publisher WHERE id = ?";
         return genericDAL.queryForObject(sql, publisherRowMapper, id);
     }
 
     @Override
-    public List<Publisher> findAll() {
+    public List<PublisherDTO> findAll() {
         String sql = "SELECT * FROM publisher";
         return genericDAL.queryForList(sql, publisherRowMapper);
     }
 
     @Override
-    public Long create(Publisher publisher) {
+    public Long create(PublisherDTO publisherDTO) {
         String sql = "INSERT INTO publisher (name, phone, address) VALUES (?, ?, ?)";
-        return genericDAL.insert(sql, publisher.getName(), publisher.getPhone(), publisher.getAddress());
+        return genericDAL.insert(sql, publisherDTO.getName(), publisherDTO.getPhone(), publisherDTO.getAddress());
     }
 
     @Override
-    public boolean update(Publisher publisher) {
-        String sql = "UPDATE publisher SET name = ?,SET phone = ? address = ? WHERE id = ?";
-        return genericDAL.update(sql, publisher.getName(), publisher.getPhone(), publisher.getAddress(), publisher.getId());
+    public boolean update(PublisherDTO publisherDTO) {
+        String sql = "UPDATE publisher SET name = ?, phone = ?, address = ? WHERE id = ?";
+        return genericDAL.update(sql, publisherDTO.getName(), publisherDTO.getPhone(), publisherDTO.getAddress(), publisherDTO.getId());
     }
 
     @Override
     public boolean delete(Long id) {
         String sql = "DELETE FROM publisher WHERE id = ?";
         return genericDAL.delete(sql, id);
+    }
+    public long getCurrentID() {
+        String sql = "SELECT MAX(id) FROM publisher";
+        return genericDAL.getMaxID(sql);
     }
 }

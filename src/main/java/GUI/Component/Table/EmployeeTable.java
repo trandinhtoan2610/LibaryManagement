@@ -20,7 +20,7 @@ public class EmployeeTable extends JTableCustom {
     };
 
     private DefaultTableModel tableModel;
-    public static List<Employee> employees;
+    private static List<Employee> employees;
 
     public EmployeeTable() {
         super(new DefaultTableModel(HEADER, 0));

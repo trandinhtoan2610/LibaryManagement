@@ -43,15 +43,15 @@ public class SearchNavBarLabel extends JPanel {
         searchfield.setFocusBorderColor(new Color(0, 120, 215));
         panel.add(searchfield);
 
-        URL refreshurl = getClass().getResource("/icons/refresh.svg");
+        URL refreshurl = getClass().getResource("/icons/filter.svg");
         if (refreshurl == null) {
             throw new RuntimeException("Refresh Icon Not Found");
         }
         SVGIcon refreshIcon = new SVGIcon();
         refreshIcon.setSvgURI(URI.create(refreshurl.toString()));
         refreshIcon.setPreferredSize(new Dimension(20, 30));
-        JButton refreshButton = new JButton("Làm mới", refreshIcon);
-        refreshButton.setPreferredSize(new Dimension(120, 40));
+        JButton refreshButton = new JButton(refreshIcon);
+        refreshButton.setPreferredSize(new Dimension(60, 40));
         refreshButton.setBackground(new Color(211, 163, 131));
         refreshButton.setForeground(Color.WHITE);
         refreshButton.setFont(new Font("Verdana", Font.PLAIN, 16));

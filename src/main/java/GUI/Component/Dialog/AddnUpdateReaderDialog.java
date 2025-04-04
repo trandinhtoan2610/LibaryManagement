@@ -30,19 +30,19 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     // Dialog thêm hoặc cập nhật độc giả : 
     public AddnUpdateReaderDialog(java.awt.Frame parent, boolean modal,String mode, ReaderPanel rp, ReaderDTO readerUpdate) {
         super(parent, modal);
-        this.mode = mode;
+        this.mode = mode; //mode để xác định dialog này là  thêm hay cập nhật độc giả.
         this.readerPanel = rp;
-        this.readerUpdate = readerUpdate;
+        this.readerUpdate = readerUpdate; // null nếu như mode là thêm.
         setDialogTitle();
         
          
         readerBUS = new ReaderBUS();
         
         initComponents();
-        if(this.mode.equals("add")) 
+        if(this.mode.equals("add")) //GUI thêm độc giả
             addReaderDialog();
         else
-            updateReaderDialog();
+            updateReaderDialog();  //GUI cập nhật độc giả
         
         setMinimumSize(new Dimension(728, 438)); 
         setMaximumSize(new Dimension(728, 438)); 
@@ -54,18 +54,18 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         if(this.mode.equals("add"))
             this.setTitle("Thêm độc giả");
         else
-            this.setTitle("Sửa độc giả");
+            this.setTitle("Cập nhật độc giả");
     }
     
     private void setCurrentID(){
         try {
-        currentID = readerBUS.getCurrentID() + 1;
+        currentID = readerBUS.getCurrentID() + 1; //Lấy ID hiện tại
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Lỗi khi lấy ID độc giả: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE); 
     }
     }
     
-    //Dialog thêm độc giả :
+    //GUI thêm độc giả :
     private void addReaderDialog(){
         lblAddReaderHeader.setText("THÊM ĐỘC GIẢ MỚI");  
         setCurrentID();
@@ -83,12 +83,14 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     }
     
     
-    // Dialog cập nhật độc giả :
+    // GUI cập nhật độc giả :
     private void updateReaderDialog(){
         
         
         lblAddReaderHeader.setText("CẬP NHẬT THÔNG TIN ĐỘC GIẢ");
         addReaderHeaderPanel.setBackground(fixHeaderColor);
+        
+        //Lấy ra thông tin độc giả muốn sửa :
         txtReaderID.setText(readerUpdate.getId().toString());
         txtReaderFullName.setText(readerUpdate.getLastName() + ' ' +readerUpdate.getFirstName() );
         String gender = readerUpdate.getGender() == Gender.MALE ? "Nam" : "Nữ";
@@ -111,6 +113,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         b.setBackground(g);
     }
     
+    //Hàm kiểm tra ràng buộc :
     private boolean fieldController(){
         if(btnGroupGender.getSelection()== null){
             AlertDialog GenderAlert = new AlertDialog(this,"Vui lòng chọn giới tính ! ");
@@ -380,7 +383,6 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         setVisible(false);
         dispose();
@@ -414,6 +416,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         btnUpdate.setBackground(new Color(255,215,47));
     }//GEN-LAST:event_btnUpdateMouseExited
 
+    //Nút xác nhận thêm độc giả :
     private void btnAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddMouseClicked
         if(fieldController()){
             String fullName = Controller.formatFullName(txtReaderFullName.getText());
@@ -440,6 +443,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             } 
     }//GEN-LAST:event_btnAddMouseClicked
 
+    //Nút xác nhận cập nhật thông tin độc giả
     private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
         if(fieldController()){
             String fullName = Controller.formatFullName(txtReaderFullName.getText());
@@ -459,9 +463,12 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             readerBUS.updateReader(r);
             readerPanel.reloadReaderTable();
             AlertDialog updateSuccess = new AlertDialog(this,"Cập nhật độc giả thành công !");
+            updateSuccess.setVisible(true);
+            this.dispose();
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
 
+    //Nút tắt dialog
     private void btnRejectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRejectMouseClicked
         this.dispose(); 
     }//GEN-LAST:event_btnRejectMouseClicked

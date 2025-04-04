@@ -5,7 +5,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JTableCustom extends JTable {
     public JTableCustom() {
@@ -40,6 +43,7 @@ public class JTableCustom extends JTable {
 
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
+        setCellAlignment();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -159,5 +163,20 @@ public class JTableCustom extends JTable {
     @Override
     public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
+    }
+
+    //Hàm căn giữa các cột trong bảng :
+    private void setCellAlignment() {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        // Áp dụng cho tất cả các cột của bảng
+        for (int i = 0; i < getColumnCount(); i++) {
+            getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Cập nhật lại bảng nếu cần thiết
+        revalidate();
+        repaint();
     }
 }

@@ -1,20 +1,16 @@
     package GUI.Component.Dialog;
 
     import BUS.EmployeeBUS;
-    import BUS.ReaderBUS;
     import DTO.Employee;
     import DTO.Enum.Gender;
     import GUI.Component.Button.ButtonBack;
     import GUI.Component.Combobox.CustomComboBox;
-    import GUI.Component.Panel.EmployeeRightPanel;
-    import GUI.Component.Panel.ReaderPanel;
-    import GUI.Component.Table.EmployeeTable;
+    import GUI.Component.Panel.EmployeePanel;
     import GUI.Component.TextField.CustomTextField;
     import GUI.Controller.Controller;
 
     import javax.swing.*;
     import java.awt.*;
-    import java.util.ArrayList;
 
     public class AddEmployeeDialog extends JDialog {
         private Long currentID;
@@ -31,11 +27,11 @@
 
 
         private EmployeeBUS employeeBUS;
-        private EmployeeRightPanel employeeRightPanel;
-        public AddEmployeeDialog(JFrame parent, EmployeeRightPanel employeeRightPanel) {
+        private EmployeePanel employeePanel;
+        public AddEmployeeDialog(JFrame parent, EmployeePanel employeePanel) {
             super(parent, "Thêm Nhân Viên", true);
             this.employeeBUS = new EmployeeBUS();
-            this.employeeRightPanel = employeeRightPanel;
+            this.employeePanel = employeePanel;
             initComponents();
             pack();
             setLocationRelativeTo(parent);
@@ -201,7 +197,7 @@
                         salary
                 );
                 employeeBUS.addEmployee(nv);
-                employeeRightPanel.addEmployee(nv);
+                employeePanel.addEmployee(nv);
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công !");
                 dispose();
             }

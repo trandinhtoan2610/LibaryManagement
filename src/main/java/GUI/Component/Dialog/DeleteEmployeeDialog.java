@@ -3,19 +3,19 @@ package GUI.Component.Dialog;
 import BUS.EmployeeBUS;
 import DTO.Employee;
 import GUI.Component.Button.ButtonAction;
-import GUI.Component.Panel.EmployeeRightPanel;
+import GUI.Component.Panel.EmployeePanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DeleteEmployeeDialog extends JDialog {
     private boolean confirmed = false;
-    private EmployeeRightPanel employeeRightPanel;
+    private EmployeePanel employeePanel;
     private Employee employeeToDelete;
     private EmployeeBUS employeeBUS;
-    public DeleteEmployeeDialog(JFrame parent, EmployeeRightPanel employeeRightPanel, Employee employeeToDelete) {
+    public DeleteEmployeeDialog(JFrame parent, EmployeePanel employeePanel, Employee employeeToDelete) {
         super(parent, "Xóa nhân viên", true);
-        this.employeeRightPanel = employeeRightPanel;
+        this.employeePanel = employeePanel;
         employeeBUS = new EmployeeBUS();
         this.employeeToDelete = employeeToDelete;
         initComponents();
@@ -57,7 +57,7 @@ public class DeleteEmployeeDialog extends JDialog {
                 5);
         yesButton.addActionListener(e -> {
             confirmed = true;
-            employeeRightPanel.removeEmployee(employeeToDelete);
+            employeePanel.removeEmployee(employeeToDelete);
             employeeBUS.deleteEmployee(employeeToDelete.getId());
             dispose();
         });
