@@ -1,13 +1,15 @@
 package DAL;
 
 import DAL.Interface.IRepositoryBase;
+import DAL.Interface.IRepositoryStringID;
 import DAL.Interface.RowMapper;
 import DTO.BorrowDTO;
 import DTO.Enum.Status;
+import DTO.Enum.SubStatus;
 
 import java.util.List;
 
-public class BorrowSheetDAL implements IRepositoryBase<BorrowDTO> {
+public class BorrowSheetDAL implements IRepositoryStringID<BorrowDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<BorrowDTO> borrowRowMapper = this::mapRowToBorrow;
 
@@ -24,7 +26,7 @@ public class BorrowSheetDAL implements IRepositoryBase<BorrowDTO> {
     }
 
     @Override
-    public BorrowDTO findById(Long id) {
+    public BorrowDTO findById(String id) {
         String sql = "SELECT * FROM borrow WHERE id = ?";
         return genericDAL.queryForObject(sql, borrowRowMapper, id);
     }
@@ -63,7 +65,7 @@ public class BorrowSheetDAL implements IRepositoryBase<BorrowDTO> {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(String id) {
         String sql = "DELETE FROM borrow WHERE id = ?";
         return genericDAL.delete(sql, id);
     }

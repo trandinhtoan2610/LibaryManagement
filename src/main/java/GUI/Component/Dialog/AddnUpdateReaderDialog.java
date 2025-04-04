@@ -93,7 +93,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         //Lấy ra thông tin độc giả muốn sửa :
         txtReaderID.setText(readerUpdate.getId().toString());
         txtReaderFullName.setText(readerUpdate.getLastName() + ' ' +readerUpdate.getFirstName() );
-        String gender = readerUpdate.getGender() == Gender.MALE ? "Nam" : "Nữ";
+        String gender = readerUpdate.getGender() == Gender.Nam ? "Nam" : "Nữ";
         if(gender.equals("Nam"))
             btnMale.setSelected(true);
         else
@@ -428,7 +428,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     Long.parseLong(txtReaderID.getText()),
                     firstName,
                     lastName,
-                    btnFemale.isSelected() ? Gender.FEMALE : Gender.MALE,
+                    btnFemale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
                     txtReaderAddress.getText()
             );
@@ -455,7 +455,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     Long.parseLong(txtReaderID.getText()),
                     firstName,
                     lastName,
-                    btnFemale.isSelected() ? Gender.FEMALE : Gender.MALE,
+                    btnFemale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
                     txtReaderAddress.getText()
             );

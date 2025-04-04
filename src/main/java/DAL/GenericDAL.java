@@ -21,7 +21,7 @@ public class GenericDAL {
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next() ? rowMapper.mapRow(rs) : null;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Lỗi truy vấn dữ liệu", e);
         }
     }
@@ -35,6 +35,8 @@ public class GenericDAL {
                 while (rs.next()) {
                     results.add(rowMapper.mapRow(rs));
                 }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi truy vấn danh sách", e);

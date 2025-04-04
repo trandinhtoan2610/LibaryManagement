@@ -14,7 +14,7 @@ public class EmployeeDAL implements IEmployeeDAL {
     private final RowMapper<Employee> employeeRowMapper = this::mapRowToEmployee;
 
     private Employee mapRowToEmployee(ResultSet rs) throws SQLException {
-        Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
+        Gender gender = Gender.valueOf(rs.getString("gender"));
         return new Employee(
                 rs.getLong("id"),
                 rs.getString("firstName"),

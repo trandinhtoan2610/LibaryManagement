@@ -25,17 +25,6 @@ public class Employee extends EmployeeAuditBase {
         this.address = address;
         this.salary = salary;
     }
-    public Employee(String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.username = username;
-        this.password = password;
-        this.roleId = roleId;
-        this.phone = phone;
-        this.address = address;
-        this.salary = salary;
-    }
     public Employee(Long roleId, String firstName, String lastName, Gender gender, String username, String password, String phone, String address) {
         this.roleId = roleId;
         this.firstName = firstName;

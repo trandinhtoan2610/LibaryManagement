@@ -2,8 +2,11 @@ package GUI.Component.Table;
 
 import DTO.PublisherDTO;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublisherTable extends JTableCustom {
@@ -13,6 +16,8 @@ public class PublisherTable extends JTableCustom {
 
     private DefaultTableModel tableModel;
     private static List<PublisherDTO> publisherDTOS;
+    private TableRowSorter<DefaultTableModel> rowSorter;
+
 
     public PublisherTable() {
         super(new DefaultTableModel(HEADER, 0));
@@ -24,6 +29,8 @@ public class PublisherTable extends JTableCustom {
         getColumnModel().getColumn(2).setPreferredWidth(100);
         getColumnModel().getColumn(3).setPreferredWidth(100);
         setAutoCreateRowSorter(true);
+        rowSorter = new TableRowSorter<>(tableModel);
+        this.setRowSorter(rowSorter);
     }
 
     public void setPublisherList(List<PublisherDTO> publisherDTOS) {
@@ -85,6 +92,28 @@ public class PublisherTable extends JTableCustom {
                     publisherDTO.getAddress()
             };
             tableModel.addRow(rowData);
+        }
+    }
+    public void filterTable(String name, String phone, String address) {
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+        // Nếu có giá trị name, thêm vào bộ lọc cột 1 (Tên Độc Giả)
+        if (!name.isEmpty()) {
+            filters.add(RowFilter.regexFilter("(?i)" + name, 1));
+        }
+        if(!phone.isEmpty()){
+            filters.add(RowFilter.regexFilter("(?i)" + phone , 2));
+        }
+
+        if(!address.isEmpty()){
+            filters.add(RowFilter.regexFilter("(?i)" + address, 3));
+        }
+
+        // Áp dụng bộ lọc
+        if (filters.isEmpty()) {
+            rowSorter.setRowFilter(null); // Nếu không có gì để lọc, reset bảng
+        } else {
+            rowSorter.setRowFilter(RowFilter.andFilter(filters)); // Chỉ hiện nếu THỎA CẢ HAI điều kiện
         }
     }
 }

@@ -1,7 +1,7 @@
 package DTO.Enum;
 
 public enum Status {
-    Borrow,
-    Returned,
-    Overdue
+    Đã_Mượn,
+    Đã_Trả,
+    Quá_Ngày
 }

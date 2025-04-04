@@ -1,6 +1,6 @@
 package DTO.Enum;
 
 public enum Pay {
-    PAID,
-    UNPAID
+    Đã_Thanh_Toán,
+    Chưa_Thanh_Toán
 }

@@ -49,7 +49,7 @@ public class BorrowPanel extends JPanel {
 
         // Panel thông tin (nhân viên + độc giả)
         JPanel infoPanel = employeeNreaderPanel(new Employee(1L, "Hoàng", "Quý"),
-                new ReaderDTO(1L, "Nguyễn", "Thành", Gender.MALE, "0987654321", "Hà Nội"));
+                new ReaderDTO(1L, "Nguyễn", "Thành", Gender.Nam, "0987654321", "Hà Nội"));
         infoPanel.setPreferredSize(new Dimension(400, 150)); // Tăng chiều rộng
 
         // Bảng chi tiết

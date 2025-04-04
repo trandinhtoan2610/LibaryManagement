@@ -8,11 +8,10 @@ import lombok.Setter;
 @Setter
 public class PurchaseOrder extends EntityAuditBase<Long> {
     enum Status {
-        PENDING,
-        COMPLETED,
-        REJECTED
+        Đang_Chờ,
+        Hoàn_Thành,
+        Đã_Hủy
     }
-
     private long supplierId, employeeId;
     private Status status;
     private Long totalAmount;

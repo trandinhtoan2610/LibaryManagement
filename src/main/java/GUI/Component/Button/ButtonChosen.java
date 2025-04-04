@@ -9,13 +9,13 @@ import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.net.URL;
 
-public class ButtonFilter extends JButton {
+public class ButtonChosen extends JButton {
     private Color hoverBackground = new Color(240, 240, 240);
     private Color pressedBackground = new Color(220, 220, 220);
 
-    public ButtonFilter() {
+    public ButtonChosen() {
         try {
-            URL iconUrl = getClass().getResource("/icons/filter.svg");
+            URL iconUrl = getClass().getResource("/icons/dot.svg");
             if (iconUrl != null) {
                 SVGIcon icon = new SVGIcon();
                 icon.setSvgURI(URI.create(iconUrl.toString()));
@@ -24,7 +24,7 @@ public class ButtonFilter extends JButton {
             }
         } catch (Exception e) {
             e.printStackTrace();
-           
+
         }
 
         // Basic setup

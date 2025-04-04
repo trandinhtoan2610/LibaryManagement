@@ -9,7 +9,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class BorrowDTO extends EntityAuditBase<String> {
+public class BorrowDTO
+{
+    private String id;
     private Long employeeId, readerId;
     private Status status;
     private Date duedate, borrowedDate, actualReturnDate;

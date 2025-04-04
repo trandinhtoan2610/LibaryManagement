@@ -20,7 +20,6 @@ public class UpdateEmployeeDialog extends JDialog {
     private CustomTextField phone;
     private CustomTextField address;
     private CustomTextField salary;
-    private CustomComboBox gendercbb;
     private CustomComboBox rolecbb;
     private JRadioButton male;
     private JRadioButton female;
@@ -51,7 +50,12 @@ public class UpdateEmployeeDialog extends JDialog {
             phone.setText(employeeToUpdate.getPhone());
             address.setText(employeeToUpdate.getAddress());
             salary.setText(String.valueOf(employeeToUpdate.getSalary()));
-            gendercbb.setSelectedItem(employeeToUpdate.getGender() == Gender.MALE ? "Nam" : "Nữ");
+            if (employeeToUpdate.getGender() == Gender.Nam) {
+                male.setSelected(true);
+            } else {
+                female.setSelected(true);
+            }
+
             switch (employeeToUpdate.getRoleID().intValue()) {
                 case 1:
                     rolecbb.setSelectedIndex(0);
@@ -101,10 +105,10 @@ public class UpdateEmployeeDialog extends JDialog {
     }
 
     private boolean fieldController() {
-        if (gendercbb.getSelectedItem() == null) {
+        if (!male.isSelected() && !female.isSelected()) {
             AlertDialog GenderAlert = new AlertDialog(this, "Vui lòng chọn giới tính ! ");
             GenderAlert.setVisible(true);
-            gendercbb.requestFocus();
+            male.requestFocus();
             return false;
         }
         if (username.getText().isEmpty()) {
@@ -137,7 +141,7 @@ public class UpdateEmployeeDialog extends JDialog {
             salary.requestFocus();
             return false;
         }
-        if (!Controller.checkSalary(salary.getText())) {
+        if (!Controller.checkSalary(Float.parseFloat(salary.getText()))) {
             AlertDialog invalidNameAlert = new AlertDialog(this, "Vui lòng nhập lương hợp lệ ! ");
             invalidNameAlert.setVisible(true);
             salary.requestFocus();
@@ -200,7 +204,7 @@ public class UpdateEmployeeDialog extends JDialog {
         String oldPhone = this.phone.getText();
         String oldAddress = this.address.getText();
         String oldSalary = this.salary.getText();
-        Object oldGender = gendercbb.getSelectedItem();
+        Object oldGender = male.isSelected() ? Gender.Nam : Gender.Nữ;
         Object oldRole = rolecbb.getSelectedItem();
         setCurrentID();
         if (fieldController()) {
@@ -226,12 +230,11 @@ public class UpdateEmployeeDialog extends JDialog {
                 roleID = Long.parseLong("2");
             }else roleID = Long.parseLong("3");
             System.out.println(roleID);
-            Gender gender = gendercbb.getSelectedItem() == "Nam" ? Gender.MALE : Gender.FEMALE;
             Employee updatedEmployee = new Employee(
                     currentID,
                     fname,
                     lname,
-                    gender,
+                    male.isSelected() ? Gender.Nam : Gender.Nữ,
                     username,
                     password,
                     roleID,
@@ -251,7 +254,11 @@ public class UpdateEmployeeDialog extends JDialog {
                 this.phone.setText(oldPhone);
                 this.address.setText(oldAddress);
                 this.salary.setText(oldSalary);
-                gendercbb.setSelectedItem(oldGender);
+                if (oldGender == Gender.Nam) {
+                    male.setSelected(true);
+                }else{
+                    female.setSelected(true);
+                }
                 rolecbb.setSelectedItem(oldRole);
                 JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -311,15 +318,53 @@ public class UpdateEmployeeDialog extends JDialog {
         address = new CustomTextField();
         salary = new CustomTextField();
 
-        gendercbb = new CustomComboBox();
-        gendercbb.setModel(new DefaultComboBoxModel(new String[]{"Nam", "Nữ"}));
         rolecbb = new CustomComboBox();
         rolecbb.setModel(new DefaultComboBoxModel(new String[]{"admin", "staff", "employee"}));
+
+        ButtonGroup bg = new ButtonGroup();
+        male = new JRadioButton("Nam");
+        female = new JRadioButton("Nữ");
+
+// Thiết lập font đẹp hơn
+        Font radioFont = new Font("Segoe UI", Font.PLAIN, 14);
+        male.setFont(radioFont);
+        female.setFont(radioFont);
+
+// Căn giữa nội dung trong radio button
+        male.setHorizontalAlignment(SwingConstants.CENTER);
+        female.setHorizontalAlignment(SwingConstants.CENTER);
+
+// Thêm margin để đẹp hơn
+        male.setMargin(new Insets(5, 15, 5, 15));  // top, left, bottom, right
+        female.setMargin(new Insets(5, 15, 5, 15));
+
+        bg.add(male);
+        bg.add(female);
+
+        JPanel radioPanel = new JPanel();
+        radioPanel.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để căn giữa dễ hơn
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Khoảng cách giữa các thành phần
+
+// Thêm male vào bên trái
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        radioPanel.add(male, gbc);
+
+// Thêm female vào bên phải
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        radioPanel.add(female, gbc);
+
+// Có thể thêm khoảng trống xung quanh panel
+        radioPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         panel.add(nametxt);
         panel.add(name);
         panel.add(gendertxt);
-        panel.add(gendercbb);
+        panel.add(radioPanel);
         panel.add(usernametxt);
         panel.add(username);
         panel.add(passwordtxt);
