@@ -1,5 +1,6 @@
 package GUI;
 
+import DTO.Book;
 import GUI.Component.Dialog.LogOutDialog;
 import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
@@ -18,6 +19,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private AuthorPanel authorPanel;
     private JPanel mainContentPanel;
     private CardLayout cardLayout;
+    private BookPanel bookPanel;
 
     public MainFrame() {
         setupUI();

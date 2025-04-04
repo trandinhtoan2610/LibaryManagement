@@ -1,20 +1,31 @@
 package GUI.Component.Dialog;
 
 import BUS.BookBUS;
+import BUS.CategoryBUS;
+import BUS.AuthorBUS;
+import BUS.PublisherBUS;
 import DTO.Book;
+import DTO.Category;
+import DTO.AuthorDTO;
+import DTO.Publisher;
 import GUI.Component.Button.ButtonBack;
+import GUI.Component.Combobox.CustomComboBox;
 import GUI.Component.TextField.CustomTextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.Year;
+import java.util.List;
 
 public class AddBookDialog extends JDialog {
     private final BookBUS bookBUS;
+    private final CategoryBUS categoryBUS;
+    private final AuthorBUS authorBUS;
+    private final PublisherBUS publisherBUS;
     private CustomTextField nameField;
-    private CustomTextField categoryIdField;
-    private CustomTextField authorIdField;
-    private CustomTextField publisherIdField;
+    private CustomComboBox categoryComboBox;
+    private CustomComboBox authorComboBox;
+    private CustomComboBox publisherComboBox;
     private CustomTextField quantityField;
     private CustomTextField unitPriceField;
     private CustomTextField yearOfPublicationField;
@@ -22,6 +33,9 @@ public class AddBookDialog extends JDialog {
     public AddBookDialog(JFrame parent) {
         super(parent, "Thêm Sách", true);
         this.bookBUS = new BookBUS();
+        this.categoryBUS = new CategoryBUS();
+        this.authorBUS = new AuthorBUS();
+        this.publisherBUS = new PublisherBUS();
         initComponent();
         pack();
         setLocationRelativeTo(parent);
@@ -46,6 +60,24 @@ public class AddBookDialog extends JDialog {
         setResizable(false);
     }
 
+    private JPanel settitle() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JLabel txt = new JLabel("Thêm Sách");
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 36));
+        txt.setHorizontalAlignment(SwingConstants.CENTER);
+        txt.setVerticalAlignment(SwingConstants.CENTER);
+        txt.setForeground(Color.WHITE);
+        panel.add(txt, BorderLayout.CENTER);
+        panel.setForeground(Color.WHITE);
+        panel.setBackground(new Color(0, 120, 215));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(2, 7, 2, 7),
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 2)
+        ));
+        return panel;
+    }
+
     private JPanel setbuttonPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -65,29 +97,47 @@ public class AddBookDialog extends JDialog {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
 
         JLabel nameLabel = setJLabel("Tên Sách");
-        JLabel categoryIdLabel = setJLabel("ID Danh Mục");
-        JLabel authorIdLabel = setJLabel("ID Tác Giả");
-        JLabel publisherIdLabel = setJLabel("ID Nhà Xuất Bản");
+        JLabel categoryLabel = setJLabel("Danh Mục");
+        JLabel authorLabel = setJLabel("Tác Giả");
+        JLabel publisherLabel = setJLabel("Nhà Xuất Bản");
         JLabel quantityLabel = setJLabel("Số Lượng");
         JLabel unitPriceLabel = setJLabel("Đơn Giá");
         JLabel yearOfPublicationLabel = setJLabel("Năm Xuất Bản");
 
         nameField = new CustomTextField();
-        categoryIdField = new CustomTextField();
-        authorIdField = new CustomTextField();
-        publisherIdField = new CustomTextField();
+        categoryComboBox = new CustomComboBox();
+        authorComboBox = new CustomComboBox();
+        publisherComboBox = new CustomComboBox();
         quantityField = new CustomTextField();
         unitPriceField = new CustomTextField();
         yearOfPublicationField = new CustomTextField();
 
+        // Load danh sách danh mục
+        List<Category> categories = categoryBUS.getAllCategories();
+        for (Category category : categories) {
+            categoryComboBox.addItem(category.getName());
+        }
+
+        // Load danh sách tác giả
+        List<AuthorDTO> authors = authorBUS.getAllAuthors();
+        for (AuthorDTO author : authors) {
+            authorComboBox.addItem(author.getName());
+        }
+
+        // Load danh sách nhà xuất bản
+        List<Publisher> publishers = publisherBUS.getAllPublishers();
+        for (Publisher publisher : publishers) {
+            publisherComboBox.addItem(publisher.getName());
+        }
+
         panel.add(nameLabel);
         panel.add(nameField);
-        panel.add(categoryIdLabel);
-        panel.add(categoryIdField);
-        panel.add(authorIdLabel);
-        panel.add(authorIdField);
-        panel.add(publisherIdLabel);
-        panel.add(publisherIdField);
+        panel.add(categoryLabel);
+        panel.add(categoryComboBox);
+        panel.add(authorLabel);
+        panel.add(authorComboBox);
+        panel.add(publisherLabel);
+        panel.add(publisherComboBox);
         panel.add(quantityLabel);
         panel.add(quantityField);
         panel.add(unitPriceLabel);
@@ -96,24 +146,6 @@ public class AddBookDialog extends JDialog {
         panel.add(yearOfPublicationField);
 
         return panel;
-    }
-
-    private JPanel settitle() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        JLabel txt = new JLabel("Thêm Sách");
-        txt.setFont(new Font("Segoe UI", Font.PLAIN, 36));
-        txt.setHorizontalAlignment(SwingConstants.CENTER);
-        txt.setVerticalAlignment(SwingConstants.CENTER);
-        txt.setForeground(Color.WHITE);
-        panel.add(txt, BorderLayout.CENTER);
-        panel.setForeground(Color.WHITE);
-        panel.setBackground(new Color(0, 120, 215));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(2, 7, 2, 7),
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 2)
-        ));
-        return  panel;
     }
 
     private JPanel setBottomPanel() {
@@ -148,36 +180,38 @@ public class AddBookDialog extends JDialog {
         return label;
     }
 
-    // HÀM THÊM SÁCH CÒN ĐANG SAI
-//    NHẬP ID HƠI KÌ LẠ(    là làm dấu 3 chấm cô yêu cầu)
-//     VIẾT DIALOG ĐỂ HIỆN THÔNG BÁO THÊM THÀNH CÔNG/ THẤT BẠI
     private void addBook() {
         try {
+            // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
-            String categoryIdStr = categoryIdField.getText().trim();
-            String authorIdStr = authorIdField.getText().trim();
-            String publisherIdStr = publisherIdField.getText().trim();
+            int categoryIndex = categoryComboBox.getSelectedIndex();
+            int authorIndex = authorComboBox.getSelectedIndex();
+            int publisherIndex = publisherComboBox.getSelectedIndex();
             String quantityStr = quantityField.getText().trim();
             String unitPriceStr = unitPriceField.getText().trim();
             String yearOfPublicationStr = yearOfPublicationField.getText().trim();
 
+            // Kiểm tra dữ liệu
             if (name.isEmpty()) {
                 throw new IllegalArgumentException("Tên sách không được để trống");
             }
 
-            Long categoryId = Long.parseLong(categoryIdStr);
+            List<Category> categories = categoryBUS.getAllCategories();
+            Long categoryId = categories.get(categoryIndex).getId();
             if (categoryId <= 0) {
-                throw new IllegalArgumentException("ID danh mục không hợp lệ");
+                throw new IllegalArgumentException("Danh mục không hợp lệ");
             }
 
-            Long authorId = Long.parseLong(authorIdStr);
+            List<AuthorDTO> authors = authorBUS.getAllAuthors();
+            Long authorId = authors.get(authorIndex).getId();
             if (authorId <= 0) {
-                throw new IllegalArgumentException("ID tác giả không hợp lệ");
+                throw new IllegalArgumentException("Tác giả không hợp lệ");
             }
 
-            Long publisherId = Long.parseLong(publisherIdStr);
+            List<Publisher> publishers = publisherBUS.getAllPublishers();
+            Long publisherId = publishers.get(publisherIndex).getId();
             if (publisherId <= 0) {
-                throw new IllegalArgumentException("ID nhà xuất bản không hợp lệ");
+                throw new IllegalArgumentException("Nhà xuất bản không hợp lệ");
             }
 
             int quantity = Integer.parseInt(quantityStr);
@@ -220,7 +254,7 @@ public class AddBookDialog extends JDialog {
                 throw new RuntimeException("Thêm sách thất bại");
             }
         } catch (NumberFormatException e) {
-            AlertDialog errorDialog = new AlertDialog(this, "Vui lòng nhập số hợp lệ cho các trường ID, số lượng, đơn giá, năm xuất bản");
+            AlertDialog errorDialog = new AlertDialog(this, "Vui lòng nhập số hợp lệ cho các trường số lượng, đơn giá, năm xuất bản");
             errorDialog.setVisible(true);
         } catch (IllegalArgumentException e) {
             AlertDialog errorDialog = new AlertDialog(this, e.getMessage());
@@ -230,12 +264,4 @@ public class AddBookDialog extends JDialog {
             errorDialog.setVisible(true);
         }
     }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setSize(1920, 1080);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        AddBookDialog dialog = new AddBookDialog(frame);
-        dialog.setVisible(true);
-    }
 }
-

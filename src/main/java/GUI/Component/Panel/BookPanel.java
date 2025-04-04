@@ -5,7 +5,11 @@ import BUS.EmployeeBUS;
 import DTO.Book;
 import DTO.Employee;
 import GUI.Component.Button.*;
+import GUI.Component.Dialog.AddBookDialog;
 import GUI.Component.Dialog.AddEmployeeDialog;
+import GUI.Component.Dialog.DeleteBookDialog;
+import GUI.Component.Dialog.EditBookDialog;
+import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Panel.Components.SearchNavBarLabel;
 import GUI.Component.Table.BookTable;
 import GUI.Component.Table.EmployeeTable;
@@ -19,13 +23,14 @@ import java.util.List;
 public class BookPanel extends JPanel {
     private final BookBUS bookBUS = new BookBUS();
     private final BookTable bookTable = new BookTable();
-    private ButtonAdd buttonAdd;
     private ButtonUpdate buttonUpdate;
     private ButtonDelete buttonDelete;
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
     private SearchNavBarLabel searchNavBarLabel;
+    private EmployeeBUS employeeBUS;
     private JFrame parentFrame;
+
     public BookPanel(JFrame parentFrame) {
         this.parentFrame = parentFrame;
         setLayout(new BorderLayout());
@@ -39,21 +44,66 @@ public class BookPanel extends JPanel {
         this.add(emptyPanel, BorderLayout.SOUTH);
         loadData();
     }
+
     public JPanel buttonPanel(JFrame parentFrame) {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         buttonPanel.setBackground(Color.WHITE);
-        buttonAdd = new ButtonAdd();
+
+        ButtonAdd buttonAdd = new ButtonAdd();
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                AddBookDialog addBookDialog = new AddBookDialog(parentFrame);
+                addBookDialog.setVisible(true);
+                loadData(); // Làm mới bảng sau khi thêm sách
             }
         });
-        buttonUpdate = new ButtonUpdate();
+
         buttonDelete = new ButtonDelete();
+        buttonDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                DeleteBookDialog deleteBookDialog = new DeleteBookDialog(parentFrame);
+                deleteBookDialog.setVisible(true);
+                loadData(); // Làm mới bảng sau khi xóa sách
+            }
+        });
+
+        buttonUpdate = new ButtonUpdate();
+        buttonUpdate.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Lấy hàng được chọn từ bảng
+                int selectedRow = bookTable.getSelectedRow();
+                if (selectedRow == -1) {
+                    // Nếu không có hàng nào được chọn, hiển thị thông báo
+                    AlertDialog alertDialog = new AlertDialog(parentFrame, "Vui lòng chọn một cuốn sách để chỉnh sửa");
+                    alertDialog.setVisible(true);
+                    return;
+                }
+
+                // Lấy ID của sách từ cột đầu tiên (cột ID)
+                Long bookId = (Long) bookTable.getValueAt(selectedRow, 0);
+
+                // Lấy đối tượng Book từ BookBUS
+                Book selectedBook = bookBUS.getBookById(bookId);
+                if (selectedBook == null) {
+                    AlertDialog alertDialog = new AlertDialog(parentFrame, "Không tìm thấy sách với ID: " + bookId);
+                    alertDialog.setVisible(true);
+                    return;
+                }
+
+                // Mở EditBookDialog với đối tượng Book đã chọn
+                EditBookDialog editBookDialog = new EditBookDialog(parentFrame, selectedBook);
+                editBookDialog.setVisible(true);
+                loadData(); // Làm mới bảng sau khi chỉnh sửa
+            }
+        });
+
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         searchNavBarLabel = new SearchNavBarLabel();
+
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
@@ -63,12 +113,27 @@ public class BookPanel extends JPanel {
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
+
     private void loadData() {
         List<Book> books = bookBUS.getAllBooks();
         if (books != null) {
             bookTable.setBooks(books);
-        }else{
+        } else {
             System.out.println("Không có dữ liệu");
         }
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Quản lý Sách");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1200, 800);
+        frame.setLocationRelativeTo(null); // Hiển thị giữa màn hình
+
+        // Tạo và thêm BookPanel vào frame
+        BookPanel bookPanel = new BookPanel(frame);
+        frame.add(bookPanel);
+
+        // Hiển thị frame
+        frame.setVisible(true);
     }
 }
