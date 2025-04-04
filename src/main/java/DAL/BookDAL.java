@@ -23,7 +23,7 @@ public class BookDAL implements IRepositoryBase<Book> {
         book.setPublisherId(rs.getLong("publisherId"));
         book.setQuantity(rs.getInt("quantity"));
         book.setUnitPrice(rs.getLong("unitprice"));
-        int year = rs.getInt("yeayearOfpublication");
+        int year = rs.getInt("yearOfpublication");
         book.setYearOfPublication(rs.wasNull() ? null : Year.of(year));
         return book;
     }
@@ -80,7 +80,7 @@ public class BookDAL implements IRepositoryBase<Book> {
 
     @Override
     public Long create(Book book) {
-        String query = "INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yeayearOfpublication) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yearOfpublication) VALUES (?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet generatedKeys = null;
@@ -114,7 +114,7 @@ public class BookDAL implements IRepositoryBase<Book> {
 
     @Override
     public boolean update(Book book) {
-        String query = "UPDATE Book SET name = ?, categoryId = ?, authorId = ?, publisherId = ?, quantity = ?, unitprice = ?, yeayearOfpublication = ? WHERE id = ?";
+        String query = "UPDATE Book SET name = ?, categoryId = ?, authorId = ?, publisherId = ?, quantity = ?, unitprice = ?, yearOfpublication = ? WHERE id = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         try {

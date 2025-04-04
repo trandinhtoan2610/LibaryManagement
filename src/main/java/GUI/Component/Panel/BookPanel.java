@@ -28,7 +28,6 @@ public class BookPanel extends JPanel {
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
     private SearchNavBarLabel searchNavBarLabel;
-    private EmployeeBUS employeeBUS;
     private JFrame parentFrame;
 
     public BookPanel(JFrame parentFrame) {

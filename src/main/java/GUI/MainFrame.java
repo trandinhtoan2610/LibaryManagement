@@ -25,6 +25,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private JPanel mainContentPanel;
     private CardLayout cardLayout;
     private HomePagePanel homePagePanel;
+    private SupplierPanel supplierPanel;
 
     public MainFrame() {
         setupUI();
@@ -56,7 +57,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.add(employeePanel, "Nhân viên");
         mainContentPanel.add(borrowPanel, "Phiếu mượn");
         mainContentPanel.add(new JPanel(), "Phiếu nhập");
-        mainContentPanel.add(new JPanel(), "Nhà cung cấp");
+        mainContentPanel.add(supplierPanel, "Nhà cung cấp");
         mainContentPanel.add(penaltyPanel, "Thống kê");
 
         add(mainContentPanel, BorderLayout.CENTER);
@@ -71,6 +72,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         borrowPanel = new BorrowPanel(this);
         publisherPanel = new PublisherPanel(this);
         homePagePanel = new HomePagePanel();
+        supplierPanel = new SupplierPanel();
     }
 
     @Override
@@ -121,11 +123,6 @@ public class MainFrame extends JFrame implements SidebarListener {
     }
 
     public static void main(String[] args) {
-        BorrowDetailDTO borrowDetailDTO = new BorrowDetailDTO(1L, 1L, 1, SubStatus.Đang_Mượn );
-        System.out.println(borrowDetailDTO.getBorrowSheetId());
-        BorrowDTO borrowDTO = new BorrowDTO(1L, 1L,1L, Status.Đã_Mượn, new Date(), new Date(), new Date());
-        System.out.println(borrowDTO.getId());
-
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true);
