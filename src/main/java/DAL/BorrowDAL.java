@@ -9,7 +9,7 @@ import DTO.Enum.SubStatus;
 
 import java.util.List;
 
-public class BorrowSheetDAL implements IRepositoryStringID<BorrowDTO> {
+public class BorrowDAL implements IRepositoryStringID<BorrowDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<BorrowDTO> borrowRowMapper = this::mapRowToBorrow;
 

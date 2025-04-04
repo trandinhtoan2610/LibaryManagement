@@ -24,9 +24,59 @@ public class BorrowDTO
         this.duedate = duedate;
         this.actualReturnDate = actualReturnDate;
     }
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public Long getReaderId() {
+        return readerId;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Date getBorrowedDate() {
+        return borrowedDate;
+    }
+
+    public Date getDuedate() {
+        return duedate;
+    }
+
+    public Date getActualReturnDate() {
+        return actualReturnDate;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setBorrowedDate(Date borrowedDate) {
+        this.borrowedDate = borrowedDate;
+    }
+
+    public void setDuedate(Date duedate) {
+        this.duedate = duedate;
+    }
+
+    public void setActualReturnDate(Date actualReturnDate) {
+        this.actualReturnDate = actualReturnDate;
+    }
     public String getId(){
         return "HD" + String.format("%04d", this.id);
     }
+    
+    
 }
 
 
