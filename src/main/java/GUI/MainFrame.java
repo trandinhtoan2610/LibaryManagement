@@ -26,6 +26,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private CardLayout cardLayout;
     private HomePagePanel homePagePanel;
     private SupplierPanel supplierPanel;
+    private PurchaseOrderPanel purchaseOrderPanel;
 
     public MainFrame() {
         setupUI();
@@ -56,10 +57,9 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.add(publisherPanel, "Nhà xuất bản");
         mainContentPanel.add(employeePanel, "Nhân viên");
         mainContentPanel.add(borrowPanel, "Phiếu mượn");
-        mainContentPanel.add(new JPanel(), "Phiếu nhập");
+        mainContentPanel.add(purchaseOrderPanel, "Phiếu nhập");
         mainContentPanel.add(supplierPanel, "Nhà cung cấp");
         mainContentPanel.add(penaltyPanel, "Thống kê");
-
         add(mainContentPanel, BorderLayout.CENTER);
     }
 
@@ -73,6 +73,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         publisherPanel = new PublisherPanel(this);
         homePagePanel = new HomePagePanel();
         supplierPanel = new SupplierPanel();
+        purchaseOrderPanel = new PurchaseOrderPanel(this);
     }
 
     @Override
