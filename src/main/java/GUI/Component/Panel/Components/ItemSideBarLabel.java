@@ -11,13 +11,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemSideBarLabel extends JPanel {
     private SidebarListener listener;
     private JFrame parentFrame;
     private ReaderPanel readerPanel;
     private EmployeePanel employeePanel;
-    private boolean isActive;
+    private JPanel currentlySelectedPanel = null;
+    private String currentlySelectedText = null;
+    private List<JPanel> sidebarItems = new ArrayList<>();
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
@@ -41,15 +45,23 @@ public class ItemSideBarLabel extends JPanel {
         this.setPreferredSize(new Dimension(250, 680));
         for (String item[] : st) {
             JPanel panel = createItem(item[0], item[1]);
+            sidebarItems.add(panel);
             panel.setBorder(new LineBorder(Color.BLACK));
             panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
             add(panel);
             add(Box.createRigidArea(new Dimension(0, 5)));
         }
+
     }
 
     private JPanel createItem(String text, String iconPath) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10));
+        if (text.equals(currentlySelectedText)) {
+            panel.setBackground(new Color(64, 158, 255));
+            currentlySelectedPanel = panel;
+        } else {
+            panel.setBackground(Color.WHITE);
+        }
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
                 new RoundBorder(10, Color.BLACK), // Border bo tròn
@@ -58,7 +70,9 @@ public class ItemSideBarLabel extends JPanel {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                if(!isActive) {
+                JPanel panel = (JPanel) e.getSource();
+                // Chỉ đổi màu nếu không phải item đang chọn
+                if (!panel.equals(currentlySelectedPanel)) {
                     panel.setBackground(new Color(225, 240, 255));
                 }
                 panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -66,24 +80,21 @@ public class ItemSideBarLabel extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if(!isActive) {
+                JPanel panel = (JPanel) e.getSource();
+                // Chỉ reset màu nếu không phải item đang chọn
+                if (!panel.equals(currentlySelectedPanel)) {
                     panel.setBackground(Color.WHITE);
                 }
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(listener != null) {
-                    isActive = true;
+                if (listener != null) {
+                    resetAllItems();
                     panel.setBackground(new Color(64, 158, 255));
+                    currentlySelectedPanel = panel;
                     listener.sideBarItemClicked(text);
-                }else {
-                    panel.setBackground(Color.WHITE);
                 }
-            }
-            public void resetColorPanel(){
-                isActive = false;
-                panel.setBackground(Color.WHITE);
             }
         });
         URL url = getClass().getResource(iconPath);
@@ -106,6 +117,31 @@ public class ItemSideBarLabel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         return panel;
+    }
+    public void setSelectedItem(String itemText) {
+        // Duyệt qua tất cả các panel
+        for (JPanel panel : sidebarItems) {
+            Component[] components = panel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof JLabel) {
+                    JLabel label = (JLabel) comp;
+                    if (label.getText().equals(itemText)) {
+                        resetAllItems();
+                        panel.setBackground(new Color(64, 158, 255));
+                        currentlySelectedPanel = panel;
+                        currentlySelectedText = itemText;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    private void resetAllItems() {
+        for (JPanel panel : sidebarItems) {
+            if (!panel.equals(currentlySelectedPanel)) {
+                panel.setBackground(Color.WHITE);
+            }
+        }
     }
     private static class RoundBorder extends AbstractBorder {
         private int radius;

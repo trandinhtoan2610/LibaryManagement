@@ -160,4 +160,12 @@ public class AddBorrowDetailDialog extends JDialog {
         String quantity = quantityField.getText();
         String status = borrowedRadioButton.isSelected() ? "Đã mượn" : "Đã trả";
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame parentFrame = new JFrame();
+            AddBorrowDetailDialog dialog = new AddBorrowDetailDialog(parentFrame);
+            dialog.setVisible(true);
+        });
+    }
 }
