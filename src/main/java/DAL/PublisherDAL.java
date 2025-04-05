@@ -13,17 +13,12 @@ public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
     private final RowMapper<PublisherDTO> publisherRowMapper = this::mapRowToPublisher;
 
     public PublisherDTO mapRowToPublisher(ResultSet rs) throws SQLException {
-        try {
-            return new PublisherDTO(
-                    rs.getLong("id"),
-                    rs.getString("firstName"), // Ánh xạ firstName
-                    rs.getString("lastName"),  // Ánh xạ lastName
-                    rs.getString("phone"),
-                    rs.getString("address")
-            );
-        } catch (SQLException e) {
-            throw new SQLException("Lỗi ánh xạ dữ liệu từ ResultSet sang PublisherDTO: " + e.getMessage(), e);
-        }
+        return new PublisherDTO(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("phone"),
+                rs.getString("address")
+        );
     }
 
     @Override
@@ -40,14 +35,14 @@ public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
 
     @Override
     public Long create(PublisherDTO publisherDTO) {
-        String sql = "INSERT INTO publisher (firstName, lastName, phone, address) VALUES (?, ?, ?, ?)";
-        return genericDAL.insert(sql, publisherDTO.getFirstName(), publisherDTO.getLastName(), publisherDTO.getPhone(), publisherDTO.getAddress());
+        String sql = "INSERT INTO publisher (name, phone, address) VALUES (?, ?, ?)";
+        return genericDAL.insert(sql, publisherDTO.getName(), publisherDTO.getPhone(), publisherDTO.getAddress());
     }
 
     @Override
     public boolean update(PublisherDTO publisherDTO) {
-        String sql = "UPDATE publisher SET firstName = ?, lastName = ?, phone = ?, address = ? WHERE id = ?";
-        return genericDAL.update(sql, publisherDTO.getFirstName(), publisherDTO.getLastName(), publisherDTO.getPhone(), publisherDTO.getAddress(), publisherDTO.getId());
+        String sql = "UPDATE publisher SET name = ?, phone = ?, address = ? WHERE id = ?";
+        return genericDAL.update(sql, publisherDTO.getName(), publisherDTO.getPhone(), publisherDTO.getAddress(), publisherDTO.getId());
     }
 
     @Override
@@ -55,7 +50,6 @@ public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
         String sql = "DELETE FROM publisher WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
-
     public long getCurrentID() {
         String sql = "SELECT MAX(id) FROM publisher";
         return genericDAL.getMaxID(sql);

@@ -23,7 +23,7 @@ public class BookDAL implements IRepositoryBase<Book> {
         book.setPublisherId(rs.getLong("publisherId"));
         book.setQuantity(rs.getInt("quantity"));
         book.setUnitPrice(rs.getLong("unitprice"));
-        int year = rs.getInt("yeayearOfpublication");
+        int year = rs.getInt("yearOfpublication");
         book.setYearOfPublication(rs.wasNull() ? null : Year.of(year));
         return book;
     }

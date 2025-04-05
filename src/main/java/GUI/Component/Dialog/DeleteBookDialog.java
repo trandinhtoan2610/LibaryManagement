@@ -1,39 +1,33 @@
 package GUI.Component.Dialog;
 
 import BUS.BookBUS;
-import GUI.Component.Dialog.AlertDialog;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DeleteBookDialog extends JDialog {
     private final BookBUS bookBUS;
-    private final Long bookId; // ID của sách cần xóa
-    private JFrame parent;
 
-    public DeleteBookDialog(JFrame parent, Long bookId) {
+    public DeleteBookDialog(JFrame parent) {
         super(parent, "Xóa Sách", true);
-        this.parent = parent;
         this.bookBUS = new BookBUS();
-        this.bookId = bookId;
         initComponent();
         pack();
         setLocationRelativeTo(parent);
     }
 
-    public void initComponent() {
+    public void initComponent(){
         getContentPane().setLayout(new BorderLayout(10, 10));
-        JPanel titlePanel = setTitle();
+        JPanel titlePanel = settitle();
         getContentPane().add(titlePanel, BorderLayout.NORTH);
 
         JPanel contentPanel = setContentPanel();
         getContentPane().add(contentPanel, BorderLayout.CENTER);
-
         JPanel bottomPanel = setBottomPanel();
         getContentPane().add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    private JPanel setTitle() {
+    private JPanel settitle() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JLabel txt = new JLabel("Xóa Sách");
@@ -53,13 +47,13 @@ public class DeleteBookDialog extends JDialog {
 
     private JPanel setContentPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+//        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));20, 5, 20;));
 
-        JLabel messageLabel = new JLabel("Bạn có chắc chắn muốn xóa cuốn sách với ID: " + bookId + "?");
+        JLabel messageLabel = new JLabel("Bạn có chắc chắn muôốn xóa cuốn sách này");
         messageLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(messageLabel, BorderLayout.CENTER);
+        panel.add(messageLabel,BorderLayout.CENTER);
         return panel;
     }
 
@@ -73,7 +67,7 @@ public class DeleteBookDialog extends JDialog {
         cancelButton.setPreferredSize(new Dimension(120, 40));
         cancelButton.addActionListener(e -> dispose());
 
-        JButton deleteButton = new JButton("Đồng ý");
+        JButton deleteButton = new JButton("Dồng ý");
         deleteButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         deleteButton.setPreferredSize(new Dimension(180, 40));
         deleteButton.setBackground(new Color(0, 120, 215));
@@ -84,27 +78,21 @@ public class DeleteBookDialog extends JDialog {
         bottomPanel.add(deleteButton);
         return bottomPanel;
     }
-
+//viết hàm để khi click vào row trong table thì trả vee id
     private void deleteBook() {
-        try {
-            if (bookId != null) {
-                bookBUS.deleteBook(bookId); // Gọi phương thức deleteBook với ID
-                dispose(); // Đóng dialog sau khi xóa thành công
-                AlertDialog successDialog = new AlertDialog(parent, "Xóa sách với ID: " + bookId + " thành công!");
-                successDialog.setVisible(true);
-            } else {
-                AlertDialog errorDialog = new AlertDialog(parent, "ID sách không hợp lệ!");
-                errorDialog.setVisible(true);
-            }
-        } catch (Exception e) {
-            AlertDialog errorDialog = new AlertDialog(parent, "Lỗi khi xóa sách: " + e.getMessage());
-            errorDialog.setVisible(true);
-        }
+//        bookBUS.deleteBook();
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        DeleteBookDialog dialog = new DeleteBookDialog(frame, 1L); // Sử dụng ID mẫu
+        DeleteBookDialog dialog = new DeleteBookDialog(frame);
         dialog.setVisible(true);
+
+//        if (dialog.isConfirmed()) {
+//            System.out.println("Người dùng đã đồng ý xóa");
+//        } else {
+//            System.out.println("Người dùng đã hủy bỏ");
+//        }
     }
+
 }
