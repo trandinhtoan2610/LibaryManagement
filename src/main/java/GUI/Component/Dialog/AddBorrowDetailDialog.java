@@ -21,8 +21,6 @@ public class AddBorrowDetailDialog extends JDialog {
 
     private ButtonGroup statusGroup;
 
-    private JButton addButton;
-    private JButton cancelButton;
     private ButtonChosen buttonChosenBook;
 
     public AddBorrowDetailDialog(JFrame parent) {
@@ -161,17 +159,5 @@ public class AddBorrowDetailDialog extends JDialog {
         String bookID = bookIDField.getText();
         String quantity = quantityField.getText();
         String status = borrowedRadioButton.isSelected() ? "Đã mượn" : "Đã trả";
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame parentFrame = new JFrame();
-            parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            parentFrame.setSize(800, 600);
-            parentFrame.setVisible(true);
-
-            AddBorrowDetailDialog dialog = new AddBorrowDetailDialog(parentFrame);
-            dialog.setVisible(true);
-        });
     }
 }

@@ -14,4 +14,8 @@ public class Book extends EntityBase<Long> {
     private int quantity;
     private Long unitPrice;
     private Year yearOfPublication;
+    private PublisherDTO publisherDTO;
+    private Category category;
+    private AuthorDTO author;
+
 }

@@ -38,7 +38,6 @@ public class BookTable extends JTableCustom {
         // Cấu hình cơ bản
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 14), new Color(70, 130, 180));
         setCustomGrid(new Color(220, 220, 220), 30);
-        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // Đặt độ rộng cột
         getColumnModel().getColumn(0).setPreferredWidth(50);   // ID
