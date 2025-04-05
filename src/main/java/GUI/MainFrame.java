@@ -124,6 +124,11 @@ public class MainFrame extends JFrame implements SidebarListener {
     }
 
     public static void main(String[] args) {
+        BorrowDetailDTO borrowDetaillDTO = new BorrowDetailDTO(1L, 1L, 1, SubStatus.Đang_Mượn );
+        System.out.println(borrowDetailDTO.getBorrowSheetId());
+        BorrowDTO borrowDTO = new BorrowDTO(1L, 1L,1L, Status.Đã_Mượn, new Date(), new Date(), new Date());
+        System.out.println(borrowDTO.getId());
+
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true);
