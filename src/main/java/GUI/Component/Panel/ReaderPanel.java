@@ -65,7 +65,6 @@ public class ReaderPanel extends javax.swing.JPanel {
                     loadTableFilter();
                 }
 
-
             });
 
         } catch (Exception e) {
