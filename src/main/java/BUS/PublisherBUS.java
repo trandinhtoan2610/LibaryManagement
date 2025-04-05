@@ -36,4 +36,9 @@ public class PublisherBUS {
     public long getCurrentID(){
         return publisherDAL.getCurrentID();
     }
+
+    public String getPublisherNameById(Long id) {
+        PublisherDTO publisher = getPublisherById(id);
+        return publisher.getName();
+    }
 }

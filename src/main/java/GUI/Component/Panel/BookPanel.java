@@ -3,6 +3,7 @@ package GUI.Component.Panel;
 import BUS.BookBUS;
 import BUS.EmployeeBUS;
 import DTO.Book;
+import DTO.BookViewModel;
 import DTO.Employee;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddBookDialog;
@@ -28,6 +29,7 @@ public class BookPanel extends JPanel {
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
     private SearchNavBarLabel searchNavBarLabel;
+    private EmployeeBUS employeeBUS;
     private JFrame parentFrame;
 
     public BookPanel(JFrame parentFrame) {
@@ -62,9 +64,22 @@ public class BookPanel extends JPanel {
         buttonDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                DeleteBookDialog deleteBookDialog = new DeleteBookDialog(parentFrame);
+                // Lấy hàng được chọn từ bảng
+                int selectedRow = bookTable.getSelectedRow();
+                if (selectedRow == -1) {
+                    // Nếu không có hàng nào được chọn, hiển thị thông báo
+                    AlertDialog alertDialog = new AlertDialog(parentFrame, "Vui lòng chọn một cuốn sách để xóa");
+                    alertDialog.setVisible(true);
+                    return;
+                }
+
+                // Lấy ID của sách từ cột đầu tiên (cột ID)
+                Long bookId = (Long) bookTable.getValueAt(selectedRow, 0);
+
+                // Mở DeleteBookDialog với ID đã chọn
+                DeleteBookDialog deleteBookDialog = new DeleteBookDialog(parentFrame, bookId);
                 deleteBookDialog.setVisible(true);
-                loadData(); // Làm mới bảng sau khi xóa sách
+                loadData(); // Làm mới bảng sau khi xóa
             }
         });
 
@@ -114,7 +129,7 @@ public class BookPanel extends JPanel {
     }
 
     private void loadData() {
-        List<Book> books = bookBUS.getAllBooks();
+        List<BookViewModel> books = bookBUS.getAllBooksForDisplay();
         if (books != null) {
             bookTable.setBooks(books);
         } else {
