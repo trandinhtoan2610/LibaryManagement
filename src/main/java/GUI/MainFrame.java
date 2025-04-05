@@ -3,7 +3,6 @@ package GUI;
 import DTO.Book;
 import DTO.BorrowDTO;
 import DTO.BorrowDetailDTO;
-import DTO.Employee;
 import DTO.Enum.Status;
 import DTO.Enum.SubStatus;
 import GUI.Component.Dialog.LogOutDialog;
@@ -28,14 +27,12 @@ public class MainFrame extends JFrame implements SidebarListener {
     private HomePagePanel homePagePanel;
     private SupplierPanel supplierPanel;
     private PurchaseOrderPanel purchaseOrderPanel;
-    private Employee currentEmployee;
 
-    public MainFrame(Employee currentEmployee) {
-        setupUI(currentEmployee);
+    public MainFrame() {
+        setupUI();
     }
 
-    private void setupUI(Employee currentEmployee) {
-        this.currentEmployee = currentEmployee;
+    private void setupUI() {
         setTitle("Quản lý thư viện");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1600, 800);
@@ -45,15 +42,13 @@ public class MainFrame extends JFrame implements SidebarListener {
 
         initPanels();
 
-        taskBarPanel = new TaskBarPanel(this, this, currentEmployee);
+        taskBarPanel = new TaskBarPanel(this, this);
         taskBarPanel.setPreferredSize(new Dimension(252, getHeight()));
         add(taskBarPanel, BorderLayout.WEST);
 
         mainContentPanel = new JPanel();
         cardLayout = new CardLayout();
         mainContentPanel.setLayout(cardLayout);
-
-        taskBarPanel.setSelectedItem("Trang chủ");
 
         mainContentPanel.add(homePagePanel, "Trang chủ");
         mainContentPanel.add(bookPanel, "Sách");
@@ -84,7 +79,6 @@ public class MainFrame extends JFrame implements SidebarListener {
     @Override
     public void sideBarItemClicked(String itemName) {
         System.out.println("Clicked " + itemName);
-        taskBarPanel.setSelectedItem(itemName);
 
         switch (itemName) {
             case "Trang chủ":
@@ -127,5 +121,12 @@ public class MainFrame extends JFrame implements SidebarListener {
                 }
                 break;
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame();
+            mainFrame.setVisible(true);
+        });
     }
 }

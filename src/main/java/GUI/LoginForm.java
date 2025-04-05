@@ -8,6 +8,8 @@ import GUI.Component.TextField.RoundedTextField;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
@@ -16,7 +18,6 @@ import static GUI.Main.Sleep;
 
 public class LoginForm extends JFrame {
     public static String username = "";
-    public static Employee currentUser = null;
     public EmployeeBUS employeeBUS = new EmployeeBUS();
 
     /**
@@ -102,10 +103,9 @@ public class LoginForm extends JFrame {
             load.dispose();
             if (user != null) {
                 username = user.getUsername();
-                currentUser = user;
                 setVisible(false);
                 SwingUtilities.invokeLater(() -> {
-                    MainFrame frame = new MainFrame(currentUser);
+                    MainFrame frame = new MainFrame();
                     frame.setVisible(true);
                 });
             } else {
@@ -118,7 +118,6 @@ public class LoginForm extends JFrame {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String password = new String(passwordField.getPassword());
                     Employee user = employeeBUS.login(usernameField.getText(), password);
-
                     loading load = new loading();
                     load.setVisible(true);
                     Sleep(2000);
@@ -126,12 +125,7 @@ public class LoginForm extends JFrame {
                     load.dispose();
                     if (user != null) {
                         username = user.getUsername();
-                        currentUser = user;
                         setVisible(false);
-                        SwingUtilities.invokeLater(() -> {
-                            MainFrame frame = new MainFrame(currentUser);
-                            frame.setVisible(true);
-                        });
                     } else {
                         JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }

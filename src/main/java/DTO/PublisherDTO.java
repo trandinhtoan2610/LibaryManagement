@@ -9,23 +9,13 @@ import java.util.Date;
 @Getter
 @Setter
 public class PublisherDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String address;
+    private long id;
+    private String name, phone, address;
 
-    public PublisherDTO() {
-    }
-
-    public PublisherDTO(Long id, String firstName, String lastName, String phone, String address) {
+    public PublisherDTO(Long id, String name, String phone, String address) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.phone = phone;
         this.address = address;
-    }
-    public String getName(){
-        return firstName+" "+lastName;
     }
 }
