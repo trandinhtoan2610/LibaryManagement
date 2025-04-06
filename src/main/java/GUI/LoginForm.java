@@ -1,6 +1,5 @@
 package GUI;
 
-
 import BUS.EmployeeBUS;
 import DTO.Employee;
 import GUI.Component.TextField.RoundedPasswordField;
@@ -8,8 +7,7 @@ import GUI.Component.TextField.RoundedTextField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 import static GUI.Main.Sleep;
@@ -19,9 +17,6 @@ public class LoginForm extends JFrame {
     public static Employee currentUser = null;
     public EmployeeBUS employeeBUS = new EmployeeBUS();
 
-    /**
-     * Create the frame.
-     */
     public LoginForm() {
         // Tạo cửa sổ JFrame
         setTitle("Đăng nhập");
@@ -29,7 +24,6 @@ public class LoginForm extends JFrame {
         setSize(960, 650);
         setLocationRelativeTo(null);
         setLayout(new GridLayout(1, 2));
-
 
         JPanel image = new JPanel() {
             @Override
@@ -47,11 +41,11 @@ public class LoginForm extends JFrame {
         usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         usernameField.setBorderColor(new Color(200, 200, 200));
         usernameField.setFocusBorderColor(new Color(0, 120, 215));
+
         RoundedPasswordField passwordField = new RoundedPasswordField(20, 15, 15);
         passwordField.setPlaceholder("Nhập mật khẩu");
         passwordField.setBackground(new Color(245, 245, 245));
         passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
 
         JButton loginButton = new JButton("ĐĂNG NHẬP");
         loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -70,12 +64,11 @@ public class LoginForm extends JFrame {
             }
         });
 
-
         JPanel form = new JPanel();
         form.setLayout(new GridBagLayout());
         form.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 10, 10); // Padding
+        gbc.insets = new Insets(5, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy = 0;
         form.add(createLabel("Tài khoản:"), gbc);
@@ -86,56 +79,50 @@ public class LoginForm extends JFrame {
         gbc.gridy = 3;
         form.add(passwordField, gbc);
         gbc.gridy = 4;
-        gbc.insets = new Insets(15, 10, 5, 10); // Tăng padding trên dưới cho nút
+        gbc.insets = new Insets(15, 10, 5, 10);
         form.add(loginButton, gbc);
         add(form);
         setVisible(true);
 
-        loginButton.addActionListener(e -> {
-            String password = new String(passwordField.getPassword());
-            Employee user = employeeBUS.login(usernameField.getText(), password);
+        getRootPane().setDefaultButton(loginButton);
 
-            loading load = new loading();
-            load.setVisible(true);
-            Sleep(0);
-            load.setVisible(false);
-            load.dispose();
-            if (user != null) {
-                username = user.getUsername();
-                currentUser = user;
-                setVisible(false);
-                SwingUtilities.invokeLater(() -> {
-                    MainFrame frame = new MainFrame(currentUser);
-                    frame.setVisible(true);
-                });
-            } else {
-                JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        loginButton.addKeyListener(new KeyAdapter() {
+        Action loginAction = new AbstractAction() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String password = new String(passwordField.getPassword());
-                    Employee user = employeeBUS.login(usernameField.getText(), password);
+            public void actionPerformed(ActionEvent e) {
+                String password = new String(passwordField.getPassword());
+                Employee user = employeeBUS.login(usernameField.getText(), password);
 
-                    loading load = new loading();
-                    load.setVisible(true);
-                    Sleep(2000);
-                    load.setVisible(false);
-                    load.dispose();
-                    if (user != null) {
-                        username = user.getUsername();
-                        currentUser = user;
-                        setVisible(false);
-                        SwingUtilities.invokeLater(() -> {
-                            MainFrame frame = new MainFrame(currentUser);
-                            frame.setVisible(true);
-                        });
-                    } else {
-                        JOptionPane.showMessageDialog(LoginForm.this, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    }
+                loading load = new loading();
+                load.setVisible(true);
+                Sleep(1);
+                load.setVisible(false);
+                load.dispose();
+
+                if (user != null) {
+                    username = user.getUsername();
+                    currentUser = user;
+                    setVisible(false);
+                    SwingUtilities.invokeLater(() -> {
+                        MainFrame frame = new MainFrame(currentUser);
+                        frame.setVisible(true);
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(LoginForm.this,
+                            "Sai tên đăng nhập hoặc mật khẩu!",
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        };
+
+        loginButton.addActionListener(loginAction);
+
+        passwordField.addActionListener(loginAction);
+
+        usernameField.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                passwordField.requestFocusInWindow();
             }
         });
     }
