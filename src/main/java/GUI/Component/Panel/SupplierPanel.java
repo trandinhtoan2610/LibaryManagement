@@ -1,6 +1,7 @@
 package GUI.Component.Panel;
 
 import DTO.SupplierDTO;
+import GUI.Component.Dialog.AddUpdateSupplier;
 import BUS.SupplierBUS;
 import DTO.SupplierDTO;
 import GUI.Component.Dialog.AlertDialog;
@@ -17,8 +18,6 @@ import GUI.Component.Button.ButtonDelete;
 import GUI.Component.Button.ButtonUpdate;
 import GUI.Component.Button.ButtonExportExcel;
 import GUI.Component.Button.ButtonImportExcel;
-import GUI.Component.Dialog.AddSupplierDialog;
-import GUI.Component.Dialog.UpdateSupplierDialog;
 import GUI.Component.Table.SupplierTable;import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -149,14 +148,10 @@ public class SupplierPanel extends javax.swing.JPanel {
         );
     }
 
-//    private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
-//        AddUpdateSupplier addDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "add", null);
-//        addDialog.setVisible(true);
-//    }
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
-        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true);
+        AddUpdateSupplier addDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "add", null);
         addDialog.setVisible(true);
-}
+    }
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {
         SupplierDTO s = supplierTable1.getSelectedSupplier();
@@ -172,11 +167,11 @@ public class SupplierPanel extends javax.swing.JPanel {
     }
 
     private void buttonUpdateMouseClicked(java.awt.event.MouseEvent evt) {
-        if (supplierTable1.getSelectedSupplier() == null) {
+        SupplierDTO supplier = supplierTable1.getSelectedSupplier();
+        if (supplier == null) {
             fixSupplierAlert.setVisible(true);
         } else {
-            SupplierDTO supplier = supplierTable1.getSelectedSupplier();
-            UpdateSupplierDialog updateDialog = new UpdateSupplierDialog(null, true, supplier);
+            AddUpdateSupplier updateDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "update", supplier);
             updateDialog.setVisible(true);
         }
     }
