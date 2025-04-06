@@ -25,7 +25,6 @@ public class BookTable extends JTableCustom {
         // Cấu hình cơ bản
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 14), new Color(70, 130, 180));
         setCustomGrid(new Color(220, 220, 220), 30);
-        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         // Đặt độ rộng cột
         getColumnModel().getColumn(0).setPreferredWidth(50);   // ID
@@ -61,46 +60,5 @@ public class BookTable extends JTableCustom {
             };
             tableModel.addRow(rowData);
         }
-    }
-
-    public static void main(String[] args) {
-        // Tạo dữ liệu mẫu
-        List<BookViewModel> sampleBooks = new ArrayList<>();
-
-        // Thêm sách 1
-        BookViewModel book1 = new BookViewModel();
-        book1.setId(1L);
-        book1.setName("Đắc Nhân Tâm");
-        book1.setCategoryName("Tâm lý");
-        book1.setAuthorName("Dale Carnegie");
-        book1.setPublisherName("NXB Trẻ");
-        book1.setQuantity(50);
-        book1.setUnitPrice(120000L);
-        book1.setYearOfPublication(Year.of(2023));
-        sampleBooks.add(book1);
-
-        // Thêm sách 2
-        BookViewModel book2 = new BookViewModel();
-        book2.setId(2L);
-        book2.setName("Nhà Giả Kim");
-        book2.setCategoryName("Tiểu thuyết");
-        book2.setAuthorName("Paulo Coelho");
-        book2.setPublisherName("NXB Văn Học");
-        book2.setQuantity(30);
-        book2.setUnitPrice(90000L);
-        book2.setYearOfPublication(Year.of(2020));
-        sampleBooks.add(book2);
-
-        // Hiển thị bảng
-        JFrame frame = new JFrame("Quản lý Sách");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 300);
-
-        BookTable table = new BookTable();
-        table.setBooks(sampleBooks);
-
-        frame.add(new JScrollPane(table));
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }

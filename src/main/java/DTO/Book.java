@@ -17,5 +17,4 @@ public class Book extends EntityBase<Long> {
     private PublisherDTO publisherDTO;
     private Category category;
     private AuthorDTO author;
-
 }

@@ -11,13 +11,16 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemSideBarLabel extends JPanel {
     private SidebarListener listener;
     private JFrame parentFrame;
-    private ReaderPanel readerPanel;
-    private EmployeePanel employeePanel;
-    private boolean isActive;
+    private List<JPanel> sidebarItems = new ArrayList<>();
+    private JPanel currentlySelectedPanel = null;
+    private String currentlySelectedText = null;
+
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
@@ -39,8 +42,14 @@ public class ItemSideBarLabel extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
         this.setBackground(new Color(240, 240, 240));
         this.setPreferredSize(new Dimension(250, 680));
+
+        initializeItems();
+    }
+
+    private void initializeItems() {
         for (String item[] : st) {
             JPanel panel = createItem(item[0], item[1]);
+            sidebarItems.add(panel); // Thêm panel vào danh sách
             panel.setBorder(new LineBorder(Color.BLACK));
             panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
             add(panel);
@@ -50,42 +59,15 @@ public class ItemSideBarLabel extends JPanel {
 
     private JPanel createItem(String text, String iconPath) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(text.equals(currentlySelectedText) ?
+                new Color(64, 158, 255) : Color.WHITE);
+
         panel.setBorder(BorderFactory.createCompoundBorder(
-                new RoundBorder(10, Color.BLACK), // Border bo tròn
-                BorderFactory.createEmptyBorder(5, 15, 2, 15)  // Padding
+                new RoundBorder(10, Color.BLACK),
+                BorderFactory.createEmptyBorder(5, 15, 2, 15)
         ));
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if(!isActive) {
-                    panel.setBackground(new Color(225, 240, 255));
-                }
-                panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if(!isActive) {
-                    panel.setBackground(Color.WHITE);
-                }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(listener != null) {
-                    isActive = true;
-                    panel.setBackground(new Color(64, 158, 255));
-                    listener.sideBarItemClicked(text);
-                }else {
-                    panel.setBackground(Color.WHITE);
-                }
-            }
-            public void resetColorPanel(){
-                isActive = false;
-                panel.setBackground(Color.WHITE);
-            }
-        });
+        // Thêm icon
         URL url = getClass().getResource(iconPath);
         if (url == null) {
             throw new RuntimeException("Icon not found: " + iconPath);
@@ -94,19 +76,70 @@ public class ItemSideBarLabel extends JPanel {
         JSVGCanvas svgCanvas = new JSVGCanvas();
         svgCanvas.setURI(url.toString());
         svgCanvas.setPreferredSize(new Dimension(30, 30));
-
         panel.add(svgCanvas);
 
+        // Thêm text
         JLabel label = new JLabel(text);
         label.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(label);
 
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(Color.BLACK),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        // Xử lý sự kiện chuột
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!panel.equals(currentlySelectedPanel)) {
+                    panel.setBackground(new Color(225, 240, 255));
+                }
+                panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!panel.equals(currentlySelectedPanel)) {
+                    panel.setBackground(text.equals(currentlySelectedText) ?
+                            new Color(64, 158, 255) : Color.WHITE);
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelectedItem(text);
+                if (listener != null) {
+                    listener.sideBarItemClicked(text);
+                }
+            }
+        });
+
         return panel;
     }
+
+    public void setSelectedItem(String itemText) {
+        for (JPanel panel : sidebarItems) {
+            for (Component comp : panel.getComponents()) {
+                if (comp instanceof JLabel) {
+                    JLabel label = (JLabel) comp;
+                    if (label.getText().equals(itemText)) {
+                        // Reset tất cả items
+                        resetAllItems();
+
+                        // Đặt item mới
+                        panel.setBackground(new Color(64, 158, 255));
+                        currentlySelectedPanel = panel;
+                        currentlySelectedText = itemText;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private void resetAllItems() {
+        for (JPanel panel : sidebarItems) {
+            panel.setBackground(panel.equals(currentlySelectedPanel) ?
+                    new Color(64, 158, 255) : Color.WHITE);
+        }
+    }
+
     private static class RoundBorder extends AbstractBorder {
         private int radius;
         private Color color;
