@@ -3,6 +3,7 @@ package GUI.Component.Table;
 
 import DTO.BorrowDetailDTO;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class BorrowDetailTable extends JTableCustom{
     public BorrowDetailTable() {
         super(new DefaultTableModel(HEADER, 0));
         this.tableModel = (DefaultTableModel) getModel();
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.borrowDetailDTOS = new ArrayList<>();
         setHeaderStyle(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14), new java.awt.Color(70, 130, 180));
         setCustomGrid(new java.awt.Color(220, 220, 220), 30);

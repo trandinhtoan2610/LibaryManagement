@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReaderDTO extends EntityAuditGPABase<Long> {
+    public ReaderDTO() {};
     public ReaderDTO(Long id, String firstName, String lastName, Gender gender, String phone, String address) {
         this.id = id;
         this.firstName = firstName;

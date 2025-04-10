@@ -14,7 +14,7 @@ public class PenaltyDetailsBUS {
     public long addPenaltyDetails(PenaltyDetailsDTO penaltyDetails) {
         return penaltyDetailsDAL.create(penaltyDetails);
     }
-    public boolean updatePenalty(PenaltyDetailsDTO penaltyDetails) {
+    public boolean updatePenaltyDetails(PenaltyDetailsDTO penaltyDetails) {
         try {
             return penaltyDetailsDAL.update(penaltyDetails);
         } catch (Exception e) {
@@ -22,5 +22,12 @@ public class PenaltyDetailsBUS {
             return false;
         }
     }
-
+    public boolean deletePenaltyDetails(PenaltyDetailsDTO penaltyDetails) {
+        try {
+            return penaltyDetailsDAL.delete(penaltyDetails);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

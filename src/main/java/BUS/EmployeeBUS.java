@@ -16,6 +16,12 @@ public class EmployeeBUS {
         }
         return employeeDAL.login(username, password);
     }
+    public Employee getEmployeeById(long id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID must be greater than 0");
+        }
+        return employeeDAL.findById(id);
+    }
     public List<Employee> getAllEmployees() {
         return employeeDAL.findAll();
     }

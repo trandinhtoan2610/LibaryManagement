@@ -33,7 +33,7 @@ public class CustomTextField extends JTextField {
     }
 
     private void setCustomStyle() {
-        setPreferredSize(new Dimension(250, 25));
+        setPreferredSize(new Dimension(250, 40));
         setFont(new Font("Segoe UI", Font.PLAIN, 16));
         setForeground(new Color(50, 50, 50)); // Màu chữ xám đậm
 

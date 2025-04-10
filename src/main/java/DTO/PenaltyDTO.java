@@ -9,12 +9,13 @@ import java.util.Date;
 @Getter
 @Setter
 public class PenaltyDTO {
-    private String penaltyId, borrowId;
+    private Long id, penaltyId, borrowId;
     private Pay pay;
     private Date payDate;
     private int totalAmount;
     public PenaltyDTO() {};
-    public PenaltyDTO(String penaltyId, String borrowId, Date payDate, int totalAmount, Pay pay) {
+    public PenaltyDTO(Long id, Long penaltyId, Long borrowId, Date payDate, int totalAmount, Pay pay) {
+        this.id = id;
         this.penaltyId = penaltyId;
         this.borrowId = borrowId;
         this.pay = pay;

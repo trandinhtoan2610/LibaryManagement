@@ -14,14 +14,14 @@ public class BorrowDTO
     private Status status;
     private Date duedate, borrowedDate, actualReturnDate;
 
-    public BorrowDTO(Long id, Long employeeId, Long readerId, Status status, Date borrowedDate, Date duedate, Date actualReturnDate) {
+    public BorrowDTO(Long id, Long employeeId, Long readerId, Date borrowedDate, Date duedate, Date actualReturnDate, Status status) {
         this.id = id;
         this.employeeId = employeeId;
         this.readerId = readerId;
-        this.status = status;
         this.borrowedDate = borrowedDate;
         this.duedate = duedate;
         this.actualReturnDate = actualReturnDate;
+        this.status = status;
     }
     public String getId(){
         return "HD" + String.format("%04d", this.id);

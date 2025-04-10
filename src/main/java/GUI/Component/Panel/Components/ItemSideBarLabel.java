@@ -24,11 +24,13 @@ public class ItemSideBarLabel extends JPanel {
     private String st[][] = {
             {"Trang chủ", "/icons/homepage.svg"},
             {"Sách", "/icons/book.svg"},
+            {"Thể loại", "/icons/category.svg"},
             {"Độc giả", "/icons/reader.svg"},
             {"Tác giả", "/icons/author.svg"},
             {"Nhà xuất bản", "/icons/publisher.svg"},
             {"Nhân viên", "/icons/employee.svg"},
             {"Phiếu mượn", "/icons/borrow.svg"},
+            {"Phiếu phạt", "/icons/money.svg"},
             {"Phiếu nhập", "/icons/enter.svg"},
             {"Nhà cung cấp", "/icons/supplier.svg"},
             {"Thống kê", "/icons/statistics.svg"},
@@ -49,22 +51,23 @@ public class ItemSideBarLabel extends JPanel {
     private void initializeItems() {
         for (String item[] : st) {
             JPanel panel = createItem(item[0], item[1]);
-            sidebarItems.add(panel); // Thêm panel vào danh sách
+            sidebarItems.add(panel);
             panel.setBorder(new LineBorder(Color.BLACK));
-            panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 55));
+            panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46)); // Giảm chiều cao tối đa
             add(panel);
-            add(Box.createRigidArea(new Dimension(0, 5)));
+            add(Box.createRigidArea(new Dimension(0, 3))); // Giảm khoảng cách giữa các item
         }
     }
 
     private JPanel createItem(String text, String iconPath) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5)); // Giảm vertical gap
+        panel.setPreferredSize(new Dimension(250, 46)); // Giảm chiều cao ưu tiên
         panel.setBackground(text.equals(currentlySelectedText) ?
                 new Color(64, 158, 255) : Color.WHITE);
 
         panel.setBorder(BorderFactory.createCompoundBorder(
-                new RoundBorder(10, Color.BLACK),
-                BorderFactory.createEmptyBorder(5, 15, 2, 15)
+                new RoundBorder(8, Color.BLACK), // Giảm bán kính viền
+                BorderFactory.createEmptyBorder(2, 10, 2, 10) // Giảm padding
         ));
 
         // Thêm icon
@@ -75,12 +78,12 @@ public class ItemSideBarLabel extends JPanel {
 
         JSVGCanvas svgCanvas = new JSVGCanvas();
         svgCanvas.setURI(url.toString());
-        svgCanvas.setPreferredSize(new Dimension(30, 30));
+        svgCanvas.setPreferredSize(new Dimension(30, 30)); // Giảm kích thước icon
         panel.add(svgCanvas);
 
         // Thêm text
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Verdana", Font.PLAIN, 20));
+        label.setFont(new Font("Verdana", Font.PLAIN, 17)); // Giảm kích thước font
         panel.add(label);
 
         // Xử lý sự kiện chuột

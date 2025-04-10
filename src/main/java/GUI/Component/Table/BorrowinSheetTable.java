@@ -2,7 +2,9 @@ package GUI.Component.Table;
 
 import DTO.BorrowDTO;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowinSheetTable extends JTableCustom {
@@ -17,23 +19,24 @@ public class BorrowinSheetTable extends JTableCustom {
         super(new DefaultTableModel(HEADER, 0));
         this.tableModel = (DefaultTableModel) getModel();
         this.borrowDTOS = new java.util.ArrayList<>();
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setHeaderStyle(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14), new java.awt.Color(70, 130, 180));
         setCustomGrid(new java.awt.Color(220, 220, 220), 30);
-        getColumnModel().getColumn(0).setPreferredWidth(35);
-        getColumnModel().getColumn(1).setPreferredWidth(175);
-        getColumnModel().getColumn(2).setPreferredWidth(90);
-        getColumnModel().getColumn(3).setPreferredWidth(90);
-        getColumnModel().getColumn(4).setPreferredWidth(90);
-        getColumnModel().getColumn(5).setPreferredWidth(55);
-        getColumnModel().getColumn(6).setPreferredWidth(120);
+        getColumnModel().getColumn(0).setPreferredWidth(100);
+        getColumnModel().getColumn(1).setPreferredWidth(100);
+        getColumnModel().getColumn(2).setPreferredWidth(100);
+        getColumnModel().getColumn(3).setPreferredWidth(120);
+        getColumnModel().getColumn(4).setPreferredWidth(120);
+        getColumnModel().getColumn(5).setPreferredWidth(120);
+        getColumnModel().getColumn(6).setPreferredWidth(80);
         setAutoCreateRowSorter(true);
     }
 
     public void setBorrows(List<BorrowDTO> borrowDTOS) {
         if (borrowDTOS != null) {
-            this.borrowDTOS = new java.util.ArrayList<>(borrowDTOS);
+            this.borrowDTOS = new ArrayList<>(borrowDTOS);
         } else {
-            this.borrowDTOS = new java.util.ArrayList<>();
+            this.borrowDTOS = new ArrayList<>();
         }
         refreshTable();
     }
@@ -90,3 +93,4 @@ public class BorrowinSheetTable extends JTableCustom {
         tableModel.setRowCount(0);
     }
 }
+
