@@ -25,7 +25,7 @@ public class EmployeeDAL implements IEmployeeDAL {
                 rs.getLong("roleId"),
                 rs.getString("phone"),
                 rs.getString("address"),
-                rs.getFloat("salary")
+                rs.getLong("salary")
         );
     }
 

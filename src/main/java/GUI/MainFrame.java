@@ -1,18 +1,13 @@
 package GUI;
 
-import DTO.Book;
-import DTO.BorrowDTO;
-import DTO.BorrowDetailDTO;
 import DTO.Employee;
-import DTO.Enum.Status;
-import DTO.Enum.SubStatus;
+import DTO.Enum.Gender;
 import GUI.Component.Dialog.LogOutDialog;
 import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Date;
 
 public class MainFrame extends JFrame implements SidebarListener {
     private TaskBarPanel taskBarPanel;
@@ -57,14 +52,16 @@ public class MainFrame extends JFrame implements SidebarListener {
 
         mainContentPanel.add(homePagePanel, "Trang chủ");
         mainContentPanel.add(bookPanel, "Sách");
+        mainContentPanel.add(new JPanel(), "Thể loại");
         mainContentPanel.add(readerPanel, "Độc giả");
         mainContentPanel.add(authorPanel, "Tác giả");
         mainContentPanel.add(publisherPanel, "Nhà xuất bản");
         mainContentPanel.add(employeePanel, "Nhân viên");
         mainContentPanel.add(borrowPanel, "Phiếu mượn");
+        mainContentPanel.add(penaltyPanel, "Phiếu phạt");
         mainContentPanel.add(purchaseOrderPanel, "Phiếu nhập");
         mainContentPanel.add(supplierPanel, "Nhà cung cấp");
-        mainContentPanel.add(penaltyPanel, "Thống kê");
+        mainContentPanel.add(new JPanel(), "Thống kê");
         add(mainContentPanel, BorderLayout.CENTER);
     }
 
@@ -93,6 +90,9 @@ public class MainFrame extends JFrame implements SidebarListener {
             case "Sách":
                 cardLayout.show(mainContentPanel, "Sách");
                 break;
+            case "Thể loại":
+                cardLayout.show(mainContentPanel, "Thể loại");
+                break;
             case "Độc giả":
                 cardLayout.show(mainContentPanel, "Độc giả");
                 break;
@@ -107,6 +107,9 @@ public class MainFrame extends JFrame implements SidebarListener {
                 break;
             case "Phiếu mượn":
                 cardLayout.show(mainContentPanel, "Phiếu mượn");
+                break;
+            case "Phiếu phạt":
+                cardLayout.show(mainContentPanel, "Phiếu phạt");
                 break;
             case "Phiếu nhập":
                 cardLayout.show(mainContentPanel, "Phiếu nhập");
@@ -127,5 +130,12 @@ public class MainFrame extends JFrame implements SidebarListener {
                 }
                 break;
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame(new Employee(1L, "Hoàng", "Quý", Gender.Nam, "admin", "admin", 1L, "0329997881", "90 36 35", 10L));
+            mainFrame.setVisible(true);
+        });
     }
 }

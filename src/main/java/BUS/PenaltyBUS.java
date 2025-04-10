@@ -25,9 +25,9 @@ public class PenaltyBUS {
         }
     }
 
-    public boolean deletePenalty(String id) {
+    public boolean deletePenalty(PenaltyDTO penaltyDTO) {
         try {
-            return penaltyDAL.delete(id);
+            return penaltyDAL.delete(penaltyDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

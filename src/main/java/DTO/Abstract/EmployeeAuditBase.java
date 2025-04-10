@@ -1,15 +1,16 @@
 package DTO.Abstract;
 
+
 public class EmployeeAuditBase extends EntityAuditGPABase<Long> {
-    protected float salary;
+    protected Long salary;
     protected Long roleId;
     protected String username, password;
 
-    public float getSalary() {
+    public Long getSalary() {
         return salary;
     }
 
-    public void setSalary(float salary) {
+    public void setSalary(Long salary) {
         this.salary = salary;
     }
 

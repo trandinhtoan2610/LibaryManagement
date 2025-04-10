@@ -21,9 +21,9 @@ public class BorrowDetailBUS {
             return false;
         }
     }
-    public boolean deleteBorrowDetail(Long bookId, String borrowSheetId) {
+    public boolean deleteBorrowDetail(BorrowDetailDTO  borrowDetailDTO) {
         try {
-            return borrowDetailDAL.delete(bookId, borrowSheetId);
+            return borrowDetailDAL.delete(borrowDetailDTO);
         } catch (Exception e) {
             System.out.println("Không xóa chi tiết phiếu mượn: " + e.getMessage());
             return false;

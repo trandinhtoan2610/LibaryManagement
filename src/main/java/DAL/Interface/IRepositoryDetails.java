@@ -2,7 +2,7 @@ package DAL.Interface;
 
 import java.util.List;
 
-public interface IRepositoryStringID<T> {
+public interface IRepositoryDetails<T> {
     T findById(String id);
 
     List<T> findAll();
@@ -11,5 +11,5 @@ public interface IRepositoryStringID<T> {
 
     boolean update(T t);
 
-    boolean delete(String id);
+    boolean delete(T t);
 }

@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class ReaderDTO extends EntityAuditGPABase<Long> {
     int complianceCount;
+
+    public ReaderDTO() {};
     public ReaderDTO(Long id, String firstName, String lastName, Gender gender, String phone, String address, int count) {
         this.id = id;
         this.firstName = firstName;
@@ -17,7 +19,7 @@ public class ReaderDTO extends EntityAuditGPABase<Long> {
         this.phone = phone;
         this.address = address;
         this.complianceCount = count;
-        
+
     }
 
     public boolean getStatus() {
@@ -35,12 +37,11 @@ public class ReaderDTO extends EntityAuditGPABase<Long> {
     public void setComplianceCount(int complianceCount) {
         this.complianceCount = complianceCount;
     }
-    
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
 }
-    

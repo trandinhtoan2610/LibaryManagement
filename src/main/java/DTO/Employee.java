@@ -5,15 +5,18 @@ import DTO.Enum.Gender;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class Employee extends EmployeeAuditBase {
+    public Employee() {};
     public Employee(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public Employee(String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
+    public Employee(String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Long salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -24,7 +27,7 @@ public class Employee extends EmployeeAuditBase {
         this.address = address;
         this.salary = salary;
     }
-    public Employee(Long id, String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Float salary) {
+    public Employee(Long id, String firstName, String lastName, Gender gender, String username, String password, Long roleId, String phone, String address, Long salary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

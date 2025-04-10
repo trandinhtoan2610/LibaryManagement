@@ -42,8 +42,8 @@ public class ReaderBUS {
         }
     }
 
-    public ReaderDTO findReaderByID(ReaderDTO reader){
-        return readerDAL.findById(reader.getId());
+    public ReaderDTO findReaderByID(Long id){
+        return readerDAL.findById(id);
     }
     
     public long getCurrentID(){

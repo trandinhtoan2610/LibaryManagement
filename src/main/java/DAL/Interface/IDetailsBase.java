@@ -9,5 +9,5 @@ public interface IDetailsBase<T> {
 
     boolean update(T t);
 
-    boolean delete(Long idparent, String idparent2);
+    boolean delete(T t);
 }

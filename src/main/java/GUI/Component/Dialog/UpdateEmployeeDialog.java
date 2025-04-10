@@ -222,7 +222,7 @@ public class UpdateEmployeeDialog extends JDialog {
             String password = this.password.getText();
             String phone = this.phone.getText();
             String address = this.address.getText();
-            float salary = Float.parseFloat(this.salary.getText());
+            Long salary = Long.parseLong(this.salary.getText());
             Long roleID;
             if(rolecbb.getSelectedItem() == "admin"){
                 roleID = Long.parseLong("1");
@@ -297,11 +297,17 @@ public class UpdateEmployeeDialog extends JDialog {
         return panel;
     }
 
-    public JPanel textFieldPanel(){
+    public JPanel textFieldPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(8, 2, -2, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
+        GroupLayout layout = new GroupLayout(panel);
+        panel.setLayout(layout);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Thiết lập GroupLayout
+        layout.setAutoCreateGaps(true); // Tự động tạo khoảng cách giữa các thành phần
+        layout.setAutoCreateContainerGaps(true); // Tự động tạo khoảng cách với container
+
+        // Các thành phần
         JLabel nametxt = setJlabel("Tên Nhân Viên");
         JLabel gendertxt = setJlabel("Giới Tính");
         JLabel usernametxt = setJlabel("Tên Đăng Nhập");
@@ -318,68 +324,87 @@ public class UpdateEmployeeDialog extends JDialog {
         address = new CustomTextField();
         salary = new CustomTextField();
 
-        rolecbb = new CustomComboBox();
-        rolecbb.setModel(new DefaultComboBoxModel(new String[]{"admin", "staff", "employee"}));
-
         ButtonGroup bg = new ButtonGroup();
         male = new JRadioButton("Nam");
         female = new JRadioButton("Nữ");
 
-// Thiết lập font đẹp hơn
+        // Thiết lập font đẹp hơn
         Font radioFont = new Font("Segoe UI", Font.PLAIN, 14);
         male.setFont(radioFont);
         female.setFont(radioFont);
-
-// Căn giữa nội dung trong radio button
-        male.setHorizontalAlignment(SwingConstants.CENTER);
-        female.setHorizontalAlignment(SwingConstants.CENTER);
-
-// Thêm margin để đẹp hơn
-        male.setMargin(new Insets(5, 15, 5, 15));  // top, left, bottom, right
-        female.setMargin(new Insets(5, 15, 5, 15));
 
         bg.add(male);
         bg.add(female);
 
         JPanel radioPanel = new JPanel();
-        radioPanel.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để căn giữa dễ hơn
+        radioPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0)); // Sắp xếp ngang
+        radioPanel.add(male);
+        radioPanel.add(female);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Khoảng cách giữa các thành phần
+        rolecbb = new CustomComboBox();
+        rolecbb.setModel(new DefaultComboBoxModel<>(new String[]{"admin", "staff", "employee"}));
 
-// Thêm male vào bên trái
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        radioPanel.add(male, gbc);
+        // Căn chỉnh các thành phần theo hàng ngang và cột dọc
+        layout.setHorizontalGroup(
+                layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(nametxt)
+                                .addComponent(gendertxt)
+                                .addComponent(usernametxt)
+                                .addComponent(passwordtxt)
+                                .addComponent(roleIDtxt)
+                                .addComponent(phonetxt)
+                                .addComponent(addresstxt)
+                                .addComponent(salarytxt))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(name)
+                                .addComponent(radioPanel)
+                                .addComponent(username)
+                                .addComponent(password)
+                                .addComponent(rolecbb)
+                                .addComponent(phone)
+                                .addComponent(address)
+                                .addComponent(salary))
+        );
 
-// Thêm female vào bên phải
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        radioPanel.add(female, gbc);
-
-// Có thể thêm khoảng trống xung quanh panel
-        radioPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        panel.add(nametxt);
-        panel.add(name);
-        panel.add(gendertxt);
-        panel.add(radioPanel);
-        panel.add(usernametxt);
-        panel.add(username);
-        panel.add(passwordtxt);
-        panel.add(password);
-        panel.add(roleIDtxt);
-        panel.add(rolecbb);
-        panel.add(phonetxt);
-        panel.add(phone);
-        panel.add(addresstxt);
-        panel.add(address);
-        panel.add(salarytxt);
-        panel.add(salary);
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(nametxt)
+                                .addComponent(name))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(gendertxt)
+                                .addComponent(radioPanel))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(usernametxt)
+                                .addComponent(username))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(passwordtxt)
+                                .addComponent(password))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(roleIDtxt)
+                                .addComponent(rolecbb))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(phonetxt)
+                                .addComponent(phone))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(addresstxt)
+                                .addComponent(address))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED) // Khoảng cách giữa hàng
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(salarytxt)
+                                .addComponent(salary))
+        );
 
         return panel;
     }
+
 
     public JLabel setJlabel(String text){
         JLabel label = new JLabel(text);

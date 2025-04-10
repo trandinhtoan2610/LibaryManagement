@@ -1,6 +1,6 @@
 package DAL;
 
-import DAL.Interface.IRepositoryStringID;
+import DAL.Interface.IRepositoryDetails;
 import DAL.Interface.RowMapper;
 import DTO.Enum.Pay;
 import DTO.PenaltyDTO;
@@ -9,16 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PenaltyDAL implements IRepositoryStringID<PenaltyDTO> {
+public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<PenaltyDTO> lawRowMapper = this::lawRowToLawDTO;
 
     public PenaltyDTO lawRowToLawDTO(ResultSet rs) throws SQLException {
-        Pay stringPay = Pay.valueOf(rs.getString("pay").toUpperCase());
+        Pay stringPay = Pay.valueOf(rs.getString("pay"));
 
         return new PenaltyDTO(
-                rs.getString("penaltyId"),
-                rs.getString("borrowId"),
+                rs.getLong("id"),
+                rs.getLong("penaltyId"),
+                rs.getLong("borrowId"),
                 rs.getDate("payDate"),
                 rs.getInt("totalAmount"),
                 stringPay
@@ -63,8 +64,8 @@ public class PenaltyDAL implements IRepositoryStringID<PenaltyDTO> {
     }
 
     @Override
-    public boolean delete(String id) {
+    public boolean delete(PenaltyDTO penaltyDTO) {
         String sql = "DELETE FROM penalty WHERE id = ?";
-        return genericDAL.delete(sql, id);
+        return genericDAL.delete(sql, penaltyDTO);
     }
 }

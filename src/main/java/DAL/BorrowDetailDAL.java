@@ -1,11 +1,8 @@
 package DAL;
 
 import DAL.Interface.IDetailsBase;
-import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
-import DTO.BorrowDTO;
 import DTO.BorrowDetailDTO;
-import DTO.Enum.Gender;
 import DTO.Enum.SubStatus;
 
 import java.sql.ResultSet;
@@ -26,13 +23,13 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
     }
     @Override
     public List<BorrowDetailDTO> findAll() {
-        String sql = "SELECT * FROM borrowDetails";
+        String sql = "SELECT * FROM borrowdetails";
         return genericDAL.queryForList(sql, borrowRowMapper);
     }
 
     @Override
     public Long create(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "INSERT INTO borrowDetails (bookId, borrowSheetId, quantity, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, status) VALUES (?, ?, ?, ?)";
         return genericDAL.insert(sql,
                 borrowDetailDTO.getBookId(),
                 borrowDetailDTO.getBorrowSheetId(),
@@ -43,7 +40,7 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public boolean update(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "UPDATE borrowDetails SET quantity = ?, status = ? WHERE bookid = ? AND borrowSheetId = ?";
+        String sql = "UPDATE borrowdetails SET quantity = ?, status = ? WHERE bookid = ? AND borrowSheetId = ?";
         return genericDAL.update(sql,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name(),
@@ -52,8 +49,12 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
         );
     }
     @Override
-    public boolean delete(Long bookid, String borrowSheetId) {
-        String sql = "DELETE FROM borrowDetails WHERE bookId = ? AND borrowSheetId = ?";
-        return genericDAL.update(sql, bookid, borrowSheetId);
+    public boolean delete(BorrowDetailDTO borrowDetailDTO) {
+        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND status = ?";
+        return genericDAL.update(sql, borrowDetailDTO.getBookId(),
+                borrowDetailDTO.getBorrowSheetId(),
+                borrowDetailDTO.getQuantity(),
+                borrowDetailDTO.getStatus().name()
+        );
     }
 }

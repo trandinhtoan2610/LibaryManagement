@@ -1,6 +1,8 @@
 package GUI.Component.Table;
 
 import DTO.BookViewModel;
+import DTO.Employee;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -44,7 +46,14 @@ public class BookTable extends JTableCustom {
         this.books = books != null ? new ArrayList<>(books) : new ArrayList<>();
         refreshTable();
     }
-
+    public BookViewModel getSelectedBook() {
+        int selectedRow = getSelectedRow();
+        if (selectedRow >= 0) {
+            int modelRow = convertRowIndexToModel(selectedRow);
+            return books.get(modelRow);
+        }
+        return null;
+    }
     private void refreshTable() {
         tableModel.setRowCount(0);
         for (BookViewModel book : books) {

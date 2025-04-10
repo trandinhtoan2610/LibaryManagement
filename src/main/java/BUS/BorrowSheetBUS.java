@@ -22,9 +22,9 @@ public class BorrowSheetBUS {
             return false;
         }
     }
-    public boolean deleteBorrowSheet(BorrowDTO dto) {
+    public boolean deleteBorrowSheet(Long id) {
         try {
-            return borrowSheetDAL.delete(dto.getId());
+            return borrowSheetDAL.delete(id);
         }catch (Exception e) {
             e.printStackTrace();
             return false;

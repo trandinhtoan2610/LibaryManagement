@@ -1,22 +1,18 @@
 package GUI.Component.Table;
 
-import BUS.EmployeeBUS;
 import DTO.Employee;
 import DTO.Enum.Gender;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeTable extends JTableCustom {
     private static final String[] HEADER = {
-            "ID", "First Name", "Last Name", "Gender",
-            "Username", "Password", "Vai Trò", "Phone",
-            "Address", "Salary"
+            "ID", "Họ Và Tên", "Giới Tính",
+            "Tài Khoản", "Mật Khẩu", "Chức Vụ", "Số Điện Thoại",
+            "Địa Chỉ", "Lương"
     };
 
     private DefaultTableModel tableModel;
@@ -34,10 +30,9 @@ public class EmployeeTable extends JTableCustom {
         getColumnModel().getColumn(3).setPreferredWidth(90);
         getColumnModel().getColumn(4).setPreferredWidth(90);
         getColumnModel().getColumn(5).setPreferredWidth(90);
-        getColumnModel().getColumn(6).setPreferredWidth(55);
+        getColumnModel().getColumn(6).setPreferredWidth(100);
         getColumnModel().getColumn(7).setPreferredWidth(120);
         getColumnModel().getColumn(8).setPreferredWidth(180);
-        getColumnModel().getColumn(9).setPreferredWidth(150);
         setAutoCreateRowSorter(true);
     }
     public void setEmployees(List<Employee> employees) {
@@ -80,16 +75,6 @@ public class EmployeeTable extends JTableCustom {
         }
         return null;
     }
-    private String formatVND(double amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("%,.2f tỷ đ", amount / 1_000_000_000);
-        } else if (amount >= 1_000_000) {
-            return String.format("%,.2f triệu đ", amount / 1_000_000);
-        } else {
-            return String.format("%,.2f đ", amount);
-        }
-    }
-
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (Employee emp : employees) {
@@ -98,21 +83,27 @@ public class EmployeeTable extends JTableCustom {
             if(tmp == 1L){
                 role = "Admin";
             }else if(tmp == 2L){
-                role = "Staff";
+                role = "Quản Lý";
             }else{
-                role = "Employee";
+                role = "Nhân Viên";
             }
+            String gender = "";
+            if (emp.getGender() == Gender.Nam) {
+                gender = "Nam";
+            } else {
+                gender = "Nữ";
+            }
+            String fullName = emp.getFirstName() + " " + emp.getLastName();
             Object[] rowData = {
                     emp.getId(),
-                    emp.getFirstName(),
-                    emp.getLastName(),
-                    emp.getGender(),
+                    fullName,
+                    gender,
                     emp.getUsername(),
                     "********",
                     role,
                     emp.getPhone(),
                     emp.getAddress(),
-                    formatVND(emp.getSalary()),
+                    emp.getSalary()
             };
             tableModel.addRow(rowData);
         }

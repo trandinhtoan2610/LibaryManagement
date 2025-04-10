@@ -101,10 +101,4 @@ public class DeleteBookDialog extends JDialog {
             errorDialog.setVisible(true);
         }
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        DeleteBookDialog dialog = new DeleteBookDialog(frame, 1L); // Sử dụng ID mẫu
-        dialog.setVisible(true);
-    }
 }
