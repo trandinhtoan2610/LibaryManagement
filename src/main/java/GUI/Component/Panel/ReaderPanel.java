@@ -15,6 +15,7 @@ import static java.awt.font.TextAttribute.FONT;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -37,7 +38,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         try {
             System.out.println("Khởi tạo ReaderPanel...");
             initComponents(); 
-            btnGenderAll.setSelected(true);
+            
             readerBUS = new ReaderBUS();
             if (ReaderBUS.readerList == null) {
                 System.err.println("Lỗi: readerList là null, khởi tạo danh sách rỗng.");
@@ -64,9 +65,42 @@ public class ReaderPanel extends javax.swing.JPanel {
                 public void changedUpdate(DocumentEvent e) {
                     loadTableFilter();
                 }
-
             });
+            
+            txtSearchPhone.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                   loadTableFilter();
+                }
 
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+            });
+            
+            txtSearchAddress.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                   loadTableFilter();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    loadTableFilter();
+                }
+            });
+            
         } catch (Exception e) {
             e.printStackTrace(); 
         }
@@ -77,30 +111,24 @@ public class ReaderPanel extends javax.swing.JPanel {
         tblReader.resetTable();
     }
     
-    //Lấy ra chuỗi giới tính để tìm kiếm :
-    public String getGender(){
-        if(btnGenderAll.isSelected())
-            return "";
-        else
-            return btnMale.isSelected() ? "Nam" : "Nữ";    
+    
+    
+    
+    //Hàm thay đổi bảng khi có tìm kiếm :
+    public void loadTableFilter(){
+       String name = txtSearchName.getText();
+       String phone = txtSearchPhone.getText();
+       String address = txtSearchAddress.getText();
+       String gender = cbSearchGender.getSelectedIndex() == 0 ? "" : cbSearchGender.getSelectedItem().toString();
+       int minPrestige = (int)spnMinPrestige.getValue();
+       int maxPrestige = (int)spnMaxPrestige.getValue();
+       tblReader.filterTable(name, phone, address, gender, minPrestige, maxPrestige);
+       
     }
     
+    
     //Hàm thay đổi bảng khi tìm kiếm kết hợp 2 yếu tố :
-    public void loadTableFilter(){
-        
-        String txt = txtSearchName.getText();
-        if(txt == "") //Chỉ tìm theo giới tính
-            tblReader.filterTable("", getGender(), "", "");
-        else{
-            if(cbSearchList.getSelectedIndex()==0) //combobox ở index 0 -> Tìm theo tên và giới tính
-                tblReader.filterTable(txt,getGender(),"","");
-            else if(cbSearchList.getSelectedIndex()==1) // combobox ở index 1 -> Tìm theo số điện thoại và giới tính
-                tblReader.filterTable("",getGender(),txt,"");
-            else //Lựa chọn còn lại -> Tìm theo địa chỉ và giới tính
-                tblReader.filterTable("",getGender(),"",txt);
-        }
-        tblReader.clearSelection();
-    }
+    
     
  
     @SuppressWarnings("unchecked")
@@ -117,15 +145,25 @@ public class ReaderPanel extends javax.swing.JPanel {
         buttonImportExcel1 = new GUI.Component.Button.ButtonImportExcel();
         RightNavbarReader = new javax.swing.JPanel();
         searchFooterPanel = new javax.swing.JPanel();
-        lblGender = new javax.swing.JLabel();
-        btnGenderAll = new javax.swing.JRadioButton();
-        btnMale = new javax.swing.JRadioButton();
-        btnFemale = new javax.swing.JRadioButton();
+        searchAddressPanel = new javax.swing.JPanel();
+        lblSearchAddress = new javax.swing.JLabel();
+        txtSearchAddress = new javax.swing.JTextField();
         searchHeaderPanel = new javax.swing.JPanel();
-        lblSearchTitle = new javax.swing.JLabel();
-        searchBodyPanel = new javax.swing.JPanel();
-        cbSearchList = new javax.swing.JComboBox<>();
+        searchNamePanel = new javax.swing.JPanel();
+        lblSearchName = new javax.swing.JLabel();
         txtSearchName = new javax.swing.JTextField();
+        searchGenderPanel = new javax.swing.JPanel();
+        lblSearchGender = new javax.swing.JLabel();
+        cbSearchGender = new javax.swing.JComboBox<>();
+        searchBodyPanel = new javax.swing.JPanel();
+        searchPhonePanel = new javax.swing.JPanel();
+        lblSearchPhone = new javax.swing.JLabel();
+        txtSearchPhone = new javax.swing.JTextField();
+        searchPrestigePanel = new javax.swing.JPanel();
+        lblSearchPrestige = new javax.swing.JLabel();
+        spnMinPrestige = new javax.swing.JSpinner();
+        lblPrestigeRange = new javax.swing.JLabel();
+        spnMaxPrestige = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReader = new GUI.Component.Table.ReaderTable();
 
@@ -169,92 +207,108 @@ public class ReaderPanel extends javax.swing.JPanel {
         RightNavbarReader.setLayout(new java.awt.BorderLayout());
 
         searchFooterPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchFooterPanel.setPreferredSize(new java.awt.Dimension(578, 30));
-        searchFooterPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 25, 5));
+        searchFooterPanel.setPreferredSize(new java.awt.Dimension(578, 35));
+        searchFooterPanel.setLayout(new java.awt.GridLayout());
 
-        lblGender.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblGender.setText("Giới tính :");
-        searchFooterPanel.add(lblGender);
+        searchAddressPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchAddressPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 5));
 
-        btnGroupGender.add(btnGenderAll);
-        btnGenderAll.setText("Tất cả");
-        btnGenderAll.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnGenderAllMouseClicked(evt);
-            }
-        });
-        btnGenderAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenderAllActionPerformed(evt);
-            }
-        });
-        searchFooterPanel.add(btnGenderAll);
+        lblSearchAddress.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblSearchAddress.setText("Địa chỉ :");
+        lblSearchAddress.setPreferredSize(new java.awt.Dimension(50, 25));
+        searchAddressPanel.add(lblSearchAddress);
 
-        btnGroupGender.add(btnMale);
-        btnMale.setText("Nam");
-        btnMale.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnMaleMouseClicked(evt);
-            }
-        });
-        btnMale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMaleActionPerformed(evt);
-            }
-        });
-        searchFooterPanel.add(btnMale);
+        txtSearchAddress.setPreferredSize(new java.awt.Dimension(370, 25));
+        searchAddressPanel.add(txtSearchAddress);
 
-        btnGroupGender.add(btnFemale);
-        btnFemale.setText("Nữ");
-        btnFemale.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnFemaleMouseClicked(evt);
-            }
-        });
-        btnFemale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFemaleActionPerformed(evt);
-            }
-        });
-        searchFooterPanel.add(btnFemale);
+        searchFooterPanel.add(searchAddressPanel);
 
         RightNavbarReader.add(searchFooterPanel, java.awt.BorderLayout.PAGE_END);
 
         searchHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchHeaderPanel.setPreferredSize(new java.awt.Dimension(578, 30));
-        searchHeaderPanel.setLayout(new java.awt.BorderLayout());
+        searchHeaderPanel.setPreferredSize(new java.awt.Dimension(578, 35));
+        searchHeaderPanel.setLayout(new java.awt.GridLayout(1, 2));
 
-        lblSearchTitle.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
-        lblSearchTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSearchTitle.setText("Tìm kiếm");
-        searchHeaderPanel.add(lblSearchTitle, java.awt.BorderLayout.PAGE_END);
+        searchNamePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchNamePanel.setPreferredSize(new java.awt.Dimension(300, 100));
+
+        lblSearchName.setText("Họ và tên :");
+        searchNamePanel.add(lblSearchName);
+
+        txtSearchName.setPreferredSize(new java.awt.Dimension(180, 25));
+        searchNamePanel.add(txtSearchName);
+
+        searchHeaderPanel.add(searchNamePanel);
+
+        searchGenderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchGenderPanel.setPreferredSize(new java.awt.Dimension(2000, 100));
+
+        lblSearchGender.setText("Giới tính :");
+        searchGenderPanel.add(lblSearchGender);
+
+        cbSearchGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Nam", "Nữ" }));
+        cbSearchGender.setPreferredSize(new java.awt.Dimension(102, 25));
+        cbSearchGender.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbSearchGenderItemStateChanged(evt);
+            }
+        });
+        searchGenderPanel.add(cbSearchGender);
+
+        searchHeaderPanel.add(searchGenderPanel);
 
         RightNavbarReader.add(searchHeaderPanel, java.awt.BorderLayout.PAGE_START);
 
         searchBodyPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchBodyPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
+        searchBodyPanel.setPreferredSize(new java.awt.Dimension(200, 20));
+        searchBodyPanel.setLayout(new java.awt.GridLayout(1, 2));
 
-        cbSearchList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Họ và tên", "Số điện thoại", "Địa chỉ", " " }));
-        cbSearchList.setPreferredSize(new java.awt.Dimension(102, 30));
-        cbSearchList.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbSearchListItemStateChanged(evt);
-            }
-        });
-        cbSearchList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSearchListActionPerformed(evt);
-            }
-        });
-        searchBodyPanel.add(cbSearchList);
+        searchPhonePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchPhonePanel.setName(""); // NOI18N
+        searchPhonePanel.setPreferredSize(new java.awt.Dimension(300, 100));
+        searchPhonePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 2));
 
-        txtSearchName.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtSearchName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearchNameActionPerformed(evt);
+        lblSearchPhone.setText(" Số ĐT :     ");
+        searchPhonePanel.add(lblSearchPhone);
+
+        txtSearchPhone.setPreferredSize(new java.awt.Dimension(180, 25));
+        searchPhonePanel.add(txtSearchPhone);
+
+        searchBodyPanel.add(searchPhonePanel);
+
+        searchPrestigePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchPrestigePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 2));
+
+        lblSearchPrestige.setText("Uy tín :");
+        searchPrestigePanel.add(lblSearchPrestige);
+
+        spnMinPrestige.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
+        spnMinPrestige.setPreferredSize(new java.awt.Dimension(50, 25));
+        spnMinPrestige.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnMinPrestigeStateChanged(evt);
             }
         });
-        searchBodyPanel.add(txtSearchName);
+        spnMinPrestige.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                spnMinPrestigeMouseClicked(evt);
+            }
+        });
+        searchPrestigePanel.add(spnMinPrestige);
+
+        lblPrestigeRange.setText("~");
+        searchPrestigePanel.add(lblPrestigeRange);
+
+        spnMaxPrestige.setModel(new javax.swing.SpinnerNumberModel(3, 0, 3, 1));
+        spnMaxPrestige.setPreferredSize(new java.awt.Dimension(50, 25));
+        spnMaxPrestige.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnMaxPrestigeStateChanged(evt);
+            }
+        });
+        searchPrestigePanel.add(spnMaxPrestige);
+
+        searchBodyPanel.add(searchPrestigePanel);
 
         RightNavbarReader.add(searchBodyPanel, java.awt.BorderLayout.CENTER);
 
@@ -297,65 +351,67 @@ public class ReaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_buttonUpdateMouseClicked
 
-    private void txtSearchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchNameActionPerformed
+    private void spnMinPrestigeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spnMinPrestigeMouseClicked
+       
+    }//GEN-LAST:event_spnMinPrestigeMouseClicked
 
-    private void cbSearchListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchListActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbSearchListActionPerformed
-
-    private void btnMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaleActionPerformed
-
-    }//GEN-LAST:event_btnMaleActionPerformed
-
-    private void btnFemaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFemaleActionPerformed
-
-    }//GEN-LAST:event_btnFemaleActionPerformed
-
-    private void btnMaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMaleMouseClicked
+    private void spnMinPrestigeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnMinPrestigeStateChanged
+        int min = (int)spnMinPrestige.getValue();
+        int max = (int)spnMaxPrestige.getValue();
+        
+        if(min>max){
+            spnMaxPrestige.setValue(min);
+        }
         loadTableFilter();
-    }//GEN-LAST:event_btnMaleMouseClicked
+    }//GEN-LAST:event_spnMinPrestigeStateChanged
 
-    private void btnGenderAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenderAllActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenderAllActionPerformed
+    private void spnMaxPrestigeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnMaxPrestigeStateChanged
+        int min = (int)spnMinPrestige.getValue();
+        int max = (int)spnMaxPrestige.getValue();
+        
+        if(max < min){
+            spnMinPrestige.setValue(max);
+        }
+        
+        loadTableFilter();
+    }//GEN-LAST:event_spnMaxPrestigeStateChanged
+
+    private void cbSearchGenderItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchGenderItemStateChanged
+        loadTableFilter();
+    }//GEN-LAST:event_cbSearchGenderItemStateChanged
     
-    //reset textfield mỗi khi có thay đổi lựa chọn combobox :
-    private void cbSearchListItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchListItemStateChanged
-        txtSearchName.setText("");
-    }//GEN-LAST:event_cbSearchListItemStateChanged
-
-    private void btnGenderAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenderAllMouseClicked
-        loadTableFilter();
-    }//GEN-LAST:event_btnGenderAllMouseClicked
-
-    private void btnFemaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFemaleMouseClicked
-        loadTableFilter();
-    }//GEN-LAST:event_btnFemaleMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LeftNavbarReader;
     private javax.swing.JPanel NavbarReaderPanel;
     private javax.swing.JPanel RightNavbarReader;
-    private javax.swing.JRadioButton btnFemale;
-    private javax.swing.JRadioButton btnGenderAll;
     private javax.swing.ButtonGroup btnGroupGender;
-    private javax.swing.JRadioButton btnMale;
     private GUI.Component.Button.ButtonAdd buttonAdd;
     private GUI.Component.Button.ButtonDelete buttonDelete;
     private GUI.Component.Button.ButtonExportExcel buttonExportExcel;
     private GUI.Component.Button.ButtonImportExcel buttonImportExcel1;
     private GUI.Component.Button.ButtonUpdate buttonUpdate;
-    private javax.swing.JComboBox<String> cbSearchList;
+    private javax.swing.JComboBox<String> cbSearchGender;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblGender;
-    private javax.swing.JLabel lblSearchTitle;
+    private javax.swing.JLabel lblPrestigeRange;
+    private javax.swing.JLabel lblSearchAddress;
+    private javax.swing.JLabel lblSearchGender;
+    private javax.swing.JLabel lblSearchName;
+    private javax.swing.JLabel lblSearchPhone;
+    private javax.swing.JLabel lblSearchPrestige;
+    private javax.swing.JPanel searchAddressPanel;
     private javax.swing.JPanel searchBodyPanel;
     private javax.swing.JPanel searchFooterPanel;
+    private javax.swing.JPanel searchGenderPanel;
     private javax.swing.JPanel searchHeaderPanel;
+    private javax.swing.JPanel searchNamePanel;
+    private javax.swing.JPanel searchPhonePanel;
+    private javax.swing.JPanel searchPrestigePanel;
+    private javax.swing.JSpinner spnMaxPrestige;
+    private javax.swing.JSpinner spnMinPrestige;
     private GUI.Component.Table.ReaderTable tblReader;
+    private javax.swing.JTextField txtSearchAddress;
     private javax.swing.JTextField txtSearchName;
+    private javax.swing.JTextField txtSearchPhone;
     // End of variables declaration//GEN-END:variables
 }

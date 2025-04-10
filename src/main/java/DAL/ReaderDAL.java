@@ -17,7 +17,8 @@ public class ReaderDAL implements IRepositoryBase<ReaderDTO> {
         Gender gender = Gender.valueOf(rs.getString("gender").toString());
         String phone = rs.getString("phone");
         String address = rs.getString("address");
-        return new ReaderDTO(id,firstName,lastName,gender,phone,address);
+        int count = rs.getInt("complianceCount");
+        return new ReaderDTO(id,firstName,lastName,gender,phone,address,count);
     };
 
     @Override
@@ -34,10 +35,10 @@ public class ReaderDAL implements IRepositoryBase<ReaderDTO> {
 
     @Override
     public Long create(ReaderDTO readerDTO) {
-        String sql = "INSERT INTO Reader ( firstName, lastName, gender, phone, address) " +
-                "Values(?,?,?,?,?)";
+        String sql = "INSERT INTO Reader ( firstName, lastName, gender, phone, address, complianceCount) " +
+                "Values(?,?,?,?,?,?)";
         return genericDAL.insert(sql, readerDTO.getFirstName(), readerDTO.getLastName(),
-                readerDTO.getGender().toString(), readerDTO.getPhone(), readerDTO.getAddress());
+                readerDTO.getGender().toString(), readerDTO.getPhone(), readerDTO.getAddress(), 3);
     }
 
     @Override

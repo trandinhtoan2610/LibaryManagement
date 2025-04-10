@@ -20,6 +20,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     private final Color darkGreen = new Color(0,100,0);
     private final Color darkYellow = new Color(204, 153, 0);
     private final Color fixHeaderColor = new Color(218, 165, 32);
+    private final int newCount = 3;
     
     private String mode;
     private ReaderBUS readerBUS;
@@ -75,8 +76,10 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         txtReaderFullName.setText("");
         txtReaderPhone.setText("");
         txtReaderAddress.setText("");
+        lblReaderPrestige.setVisible(false);
+        txtReaderPrestige.setVisible(false);
         btnGroupGender.clearSelection();
-       
+        btnFemale.setSelected(true);
         btnAdd.setVisible(true);
         btnUpdate.setVisible(false);
         btnFemale.requestFocus();
@@ -93,6 +96,9 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         //Lấy ra thông tin độc giả muốn sửa :
         txtReaderID.setText(readerUpdate.getId().toString());
         txtReaderFullName.setText(readerUpdate.getLastName() + ' ' +readerUpdate.getFirstName() );
+        lblReaderPrestige.setVisible(true);
+        txtReaderPrestige.setVisible(true);
+        txtReaderPrestige.setText(Integer.toString(readerUpdate.getComplianceCount()));
         String gender = readerUpdate.getGender() == Gender.Nam ? "Nam" : "Nữ";
         if(gender.equals("Nam"))
             btnMale.setSelected(true);
@@ -191,6 +197,8 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         btnFemale = new javax.swing.JRadioButton();
         txtReaderAddress = new javax.swing.JTextField();
         txtReaderPhone = new javax.swing.JTextField();
+        lblReaderPrestige = new javax.swing.JLabel();
+        txtReaderPrestige = new javax.swing.JTextField();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(227, 105));
@@ -315,6 +323,16 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
             }
         });
 
+        lblReaderPrestige.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblReaderPrestige.setText("Uy tín ");
+
+        txtReaderPrestige.setEditable(false);
+        txtReaderPrestige.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtReaderPrestigeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout addReaderBodyPanelLayout = new javax.swing.GroupLayout(addReaderBodyPanel);
         addReaderBodyPanel.setLayout(addReaderBodyPanelLayout);
         addReaderBodyPanelLayout.setHorizontalGroup(
@@ -328,13 +346,17 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                                 .addComponent(lblReaderGender, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnMale, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnFemale))
                             .addGroup(addReaderBodyPanelLayout.createSequentialGroup()
                                 .addComponent(lblReaderID, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtReaderID, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(txtReaderID, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(78, 78, 78)
+                                .addComponent(lblReaderPrestige, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtReaderPrestige, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 267, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addReaderBodyPanelLayout.createSequentialGroup()
                         .addGroup(addReaderBodyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblReaderPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -353,7 +375,9 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                 .addGap(23, 23, 23)
                 .addGroup(addReaderBodyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblReaderID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtReaderID, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                    .addComponent(txtReaderID)
+                    .addComponent(lblReaderPrestige, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtReaderPrestige, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(addReaderBodyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblReaderGender, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -430,7 +454,8 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     lastName,
                     btnFemale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
-                    txtReaderAddress.getText()
+                    txtReaderAddress.getText(),
+                    newCount
             );
             
             readerBUS.addReader(r);
@@ -457,7 +482,8 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     lastName,
                     btnFemale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
-                    txtReaderAddress.getText()
+                    txtReaderAddress.getText(),
+                    readerUpdate.getComplianceCount()
             );
             
             readerBUS.updateReader(r);
@@ -472,6 +498,10 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     private void btnRejectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRejectMouseClicked
         this.dispose(); 
     }//GEN-LAST:event_btnRejectMouseClicked
+
+    private void txtReaderPrestigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReaderPrestigeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtReaderPrestigeActionPerformed
 
    
 
@@ -492,9 +522,11 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
     private javax.swing.JLabel lblReaderGender;
     private javax.swing.JLabel lblReaderID;
     private javax.swing.JLabel lblReaderPhone;
+    private javax.swing.JLabel lblReaderPrestige;
     private javax.swing.JTextField txtReaderAddress;
     private javax.swing.JTextField txtReaderFullName;
     private javax.swing.JTextField txtReaderID;
     private javax.swing.JTextField txtReaderPhone;
+    private javax.swing.JTextField txtReaderPrestige;
     // End of variables declaration//GEN-END:variables
 }

@@ -11,7 +11,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class ReaderTable extends JTableCustom {
-    private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ"};
+    private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ", "Uy tín"};
     private DefaultTableModel tblModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
     
@@ -37,9 +37,11 @@ public class ReaderTable extends JTableCustom {
             Object[] rowData = {
                 r.getId(),
                 r.getLastName() + ' ' + r.getFirstName(),
-                r.getGender().toString().toUpperCase().equals("MALE") ? "Nam" : "Nữ",
+                r.getGender().toString(),
                 r.getPhone(),
-                r.getAddress()
+                r.getAddress(),
+                r.getComplianceCount()
+                   
             };
             tblModel.addRow(rowData);
         }
@@ -77,33 +79,40 @@ public class ReaderTable extends JTableCustom {
         }
     }
     
-    public void filterTable(String name, String gender, String phone, String address) {
-        List<RowFilter<Object, Object>> filters = new ArrayList<>();
-        
-        // Nếu có giá trị name, thêm vào bộ lọc cột 1 (Tên Độc Giả)
-        if (!name.isEmpty()) {
-            filters.add(RowFilter.regexFilter("(?i)" + name, 1));
-        }
+    public void filterTable(String name, String phone, String address, String gender, int minPres, int maxPres) {
+    List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-        // Nếu có giá trị gender, thêm vào bộ lọc cột 2 (Giới tính)
-        if (!gender.isEmpty()) {
-            filters.add(RowFilter.regexFilter("(?i)" + gender, 2));
-        }
-        
-        if(!phone.isEmpty()){
-            filters.add(RowFilter.regexFilter("(?i)" + phone , 3));
-        }
-        
-        if(!address.isEmpty()){
-            filters.add(RowFilter.regexFilter("(?i)" + address, 4));
-        }
+    // Bộ lọc theo khoảng giá trị prestige
+    RowFilter<Object, Object> minFilter = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER, minPres - 1, 5);
+    RowFilter<Object, Object> maxFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, maxPres + 1, 5);
+    
+    filters.add(minFilter);
+    filters.add(maxFilter);
 
-        // Áp dụng bộ lọc
-        if (filters.isEmpty()) {
-            rowSorter.setRowFilter(null); // Nếu không có gì để lọc, reset bảng
-        } else {
-            rowSorter.setRowFilter(RowFilter.andFilter(filters)); // Chỉ hiện nếu THỎA CẢ HAI điều kiện
-        }
+    // Các bộ lọc khác
+    if (!name.isEmpty()) {
+        filters.add(RowFilter.regexFilter("(?i)" + name, 1));
     }
+
+    if (!phone.isEmpty()) {
+        filters.add(RowFilter.regexFilter("(?i)" + phone, 3));
+    }
+
+    if (!address.isEmpty()) {
+        filters.add(RowFilter.regexFilter("(?i)" + address, 4));
+    }
+
+    if (!gender.isEmpty()) {
+        filters.add(RowFilter.regexFilter("(?i)" + gender, 2));
+    }
+
+    // Áp dụng bộ lọc
+    if (filters.isEmpty()) {
+        rowSorter.setRowFilter(null);
+    } else {
+        rowSorter.setRowFilter(RowFilter.andFilter(filters));
+    }
+}
+
 
 }
