@@ -29,10 +29,10 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public Long create(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, subStatus) VALUES (?, ?, ?, ?)";
         return genericDAL.insert(sql,
                 borrowDetailDTO.getBookId(),
-                borrowDetailDTO.getBorrowSheetId(),
+                Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2)),
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name()
         );
@@ -40,7 +40,7 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public boolean update(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "UPDATE borrowdetails SET quantity = ?, status = ? WHERE bookid = ? AND borrowSheetId = ?";
+        String sql = "UPDATE borrowdetails SET quantity = ?, subStatus = ? WHERE bookid = ? AND borrowSheetId = ?";
         return genericDAL.update(sql,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name(),
@@ -50,11 +50,16 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
     }
     @Override
     public boolean delete(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND status = ?";
+        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND subStatus = ?";
         return genericDAL.update(sql, borrowDetailDTO.getBookId(),
                 borrowDetailDTO.getBorrowSheetId(),
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name()
         );
     }
+    public List<BorrowDetailDTO> findByBorrowSheetId(Long borrowSheetId) {
+        String sql = "SELECT * FROM borrowdetails WHERE borrowSheetId = ?";
+        return genericDAL.queryForList(sql, borrowRowMapper, borrowSheetId);
+    }
+
 }

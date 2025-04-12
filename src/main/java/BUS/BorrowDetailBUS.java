@@ -29,4 +29,8 @@ public class BorrowDetailBUS {
             return false;
         }
     }
+    public List<BorrowDetailDTO> getBorrowDetailsBySheetId(Long borrowSheetId) {
+        return borrowDetailDAL.findByBorrowSheetId(borrowSheetId);
+    }
+
 }

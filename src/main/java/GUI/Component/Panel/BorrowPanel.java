@@ -5,11 +5,16 @@ import BUS.BorrowSheetBUS;
 import BUS.EmployeeBUS;
 import BUS.ReaderBUS;
 import DTO.BorrowDTO;
+import DTO.BorrowDetailDTO;
 import DTO.Employee;
-import DTO.Enum.Gender;
 import DTO.ReaderDTO;
 import GUI.Component.Button.*;
+import GUI.Component.Dialog.AddBorrowDialog;
+import GUI.Component.Dialog.AlertDialog;
+import GUI.Component.Dialog.DeleteBorrowDialog;
+import GUI.Component.Dialog.UpdateBorrowDialog;
 import GUI.Component.Panel.Components.SearchNavBarLabel;
+import GUI.Component.Table.BookTable;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.Table.BorrowinSheetTable;
 
@@ -41,6 +46,7 @@ public class BorrowPanel extends JPanel {
     private Employee currentEmployee;
     private ReaderDTO currentReader;
 
+    private BookTable bookTable;
 
     private JFrame parentFrame;
 
@@ -49,6 +55,13 @@ public class BorrowPanel extends JPanel {
         setLayout(new BorderLayout(0, 5));
         this.add(buttonPanel(parentFrame), BorderLayout.NORTH);
         borrowinSheetTable = new BorrowinSheetTable();
+        borrowinSheetTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                updateEmployeeAndReaderInfo();
+                updateBorrowDetailInfo();
+            }
+        });
         JScrollPane scrollPane = new JScrollPane(borrowinSheetTable);
         add(scrollPane, BorderLayout.CENTER);
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 0)); // Thêm khoảng cách ngang 10px
@@ -79,7 +92,6 @@ public class BorrowPanel extends JPanel {
         columnModel.getColumn(0).setPreferredWidth(100);  // Cột 1
         columnModel.getColumn(1).setPreferredWidth(100); // Cột 2
         columnModel.getColumn(2).setPreferredWidth(100);// Cột 3
-        columnModel.getColumn(3).setPreferredWidth(100);
         borrowDetailTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         borrowDetailTable.setRowHeight(25);
         borrowDetailTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -94,16 +106,42 @@ public class BorrowPanel extends JPanel {
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                AddBorrowDialog addBorrowDialog = new AddBorrowDialog(parentFrame, BorrowPanel.this);
+                addBorrowDialog.setVisible(true);
+                refreshTable();
             }
         });
         buttonUpdate = new ButtonUpdate();
         buttonUpdate.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+                System.out.println(selectedBorrow);
+                if (selectedBorrow == null) {
+                    AlertDialog updateAlert = new AlertDialog(parentFrame, "Vui lòng chọn phiếu mượn cần sửa");
+                    updateAlert.setVisible(true);
+                } else {
+                    UpdateBorrowDialog updateBorrowDialog = new UpdateBorrowDialog(parentFrame, BorrowPanel.this, selectedBorrow);
+                    updateBorrowDialog.setVisible(true);
+                    updateBorrow(selectedBorrow);
+                    borrowSheetBUS.updateBorrowSheet(selectedBorrow);
+                    refreshTable();
+                }
             }
         });
         buttonDelete = new ButtonDelete();
         buttonDelete.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+                if (selectedBorrow == null) {
+                    AlertDialog deleteAlert = new AlertDialog(parentFrame, "Vui lòng chọn phiếu mượn cần xóa");
+                    deleteAlert.setVisible(true);
+                } else {
+                    DeleteBorrowDialog deleteBorrowDialog = new DeleteBorrowDialog(parentFrame, BorrowPanel.this, selectedBorrow);
+                    deleteBorrowDialog.setVisible(true);
+                    deleteBorrow(selectedBorrow);
+                    borrowSheetBUS.deleteBorrowSheet(Long.parseLong(selectedBorrow.getId().substring(2)));
+                    refreshTable();
+                }
             }
         });
         buttonExportExcel = new ButtonExportExcel();
@@ -131,7 +169,7 @@ public class BorrowPanel extends JPanel {
         employeePanel = new JPanel(new GridLayout(2, 1));
         employeePanel.setBorder(BorderFactory.createTitledBorder("Thông tin Nhân viên"));
         employeePanel.setBackground(Color.WHITE);
-        employeePanel.setPreferredSize(new Dimension(350, 80)); // Đảm bảo đủ không gian
+        employeePanel.setPreferredSize(new Dimension(350, 80));
         employeePanel.add(createStyledLabel("Mã NV: "));
         employeePanel.add(createStyledLabel("Họ tên: "));
         gbc.gridy = 0;
@@ -140,7 +178,7 @@ public class BorrowPanel extends JPanel {
         readerPanel = new JPanel(new GridLayout(5, 1));
         readerPanel.setBorder(BorderFactory.createTitledBorder("Thông tin Độc giả"));
         readerPanel.setBackground(Color.WHITE);
-        readerPanel.setPreferredSize(new Dimension(350, 120)); // Đủ không gian cho 5 dòng thông tin
+        readerPanel.setPreferredSize(new Dimension(350, 120));
         readerPanel.add(createStyledLabel("Mã DG: "));
         readerPanel.add(createStyledLabel("Họ tên: "));
         readerPanel.add(createStyledLabel("Giới tính: "));
@@ -165,8 +203,21 @@ public class BorrowPanel extends JPanel {
             System.out.println("Không có dữ liệu nhân viên");
         }
     }
-    private void refreshTable() {
+
+    public void refreshTable() {
         borrowinSheetTable.refreshTable();
+    }
+
+    public void addBorrow(BorrowDTO borrowDTO) {
+        borrowinSheetTable.addBorrow(borrowDTO);
+    }
+
+    public void updateBorrow(BorrowDTO borrowDTO) {
+        borrowinSheetTable.updateBorrow(borrowDTO);
+    }
+
+    public void deleteBorrow(BorrowDTO borrowDTO) {
+        borrowinSheetTable.removeBorrow(borrowDTO);
     }
     private void getEmployeeNReaderbyId() {
         int selectedRow = borrowinSheetTable.getSelectedRow();
@@ -174,6 +225,45 @@ public class BorrowPanel extends JPanel {
             BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
             currentEmployee = employeeBUS.getEmployeeById(selectedBorrow.getEmployeeId());
             currentReader = readerBUS.findReaderByID(selectedBorrow.getReaderId());
+        }
+    }
+
+    private void updateEmployeeAndReaderInfo() {
+        int selectedRow = borrowinSheetTable.getSelectedRow();
+        if (selectedRow != -1) {
+            BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+            currentEmployee = employeeBUS.getEmployeeById(selectedBorrow.getEmployeeId());
+            currentReader = readerBUS.findReaderByID(selectedBorrow.getReaderId());
+
+            employeePanel.removeAll();
+            employeePanel.setLayout(new GridLayout(2, 1));
+            employeePanel.add(createStyledLabel("Mã NV: " + currentEmployee.getId()));
+            employeePanel.add(createStyledLabel("Họ tên: " + currentEmployee.getFirstName() + " " + currentEmployee.getLastName()));
+            employeePanel.setBorder(BorderFactory.createTitledBorder("Thông tin Nhân viên"));
+
+            readerPanel.removeAll();
+            readerPanel.setLayout(new GridLayout(5, 1));
+            readerPanel.add(createStyledLabel("Mã DG: " + currentReader.getId()));
+            readerPanel.add(createStyledLabel("Họ tên: " + currentReader.getLastName() + " " + currentReader.getFirstName()));
+            readerPanel.add(createStyledLabel("Giới tính: " + currentReader.getGender().toString()));
+            readerPanel.add(createStyledLabel("Điện thoại: " + currentReader.getPhone()));
+            readerPanel.add(createStyledLabel("Địa chỉ: " + currentReader.getAddress()));
+            readerPanel.setBorder(BorderFactory.createTitledBorder("Thông tin Độc giả"));
+
+            employeePanel.revalidate();
+            employeePanel.repaint();
+            readerPanel.revalidate();
+            readerPanel.repaint();
+        }
+    }
+
+    private void updateBorrowDetailInfo() {
+        int selectedRow = borrowinSheetTable.getSelectedRow();
+        if (selectedRow != -1) {
+            BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+            System.out.println(selectedBorrow.getId());
+            List<BorrowDetailDTO> borrowDetails = borrowDetailBUS.getBorrowDetailsBySheetId(Long.parseLong(selectedBorrow.getId().substring(2)));
+            borrowDetailTable.setBorrowDetails(borrowDetails);
         }
     }
 }

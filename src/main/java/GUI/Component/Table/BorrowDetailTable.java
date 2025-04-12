@@ -1,6 +1,8 @@
 package GUI.Component.Table;
 
 
+import BUS.BookBUS;
+import DTO.BookViewModel;
 import DTO.BorrowDetailDTO;
 
 import javax.swing.*;
@@ -10,8 +12,9 @@ import java.util.List;
 
 public class BorrowDetailTable extends JTableCustom{
     private static final String[] HEADER = {
-            "Mã Phiếu Mượn", "Mã Sách", "Số Lượng", "Trạng Thái"
+            "Tên Sách", "Số Lượng", "Trạng Thái"
     };
+    private static final BookBUS bookBUS = new BookBUS();
     private DefaultTableModel tableModel;
     private static List<BorrowDetailDTO> borrowDetailDTOS;
     public BorrowDetailTable() {
@@ -23,8 +26,7 @@ public class BorrowDetailTable extends JTableCustom{
         setCustomGrid(new java.awt.Color(220, 220, 220), 30);
         getColumnModel().getColumn(0).setPreferredWidth(100);
         getColumnModel().getColumn(1).setPreferredWidth(100);
-        getColumnModel().getColumn(2).setPreferredWidth(25);
-        getColumnModel().getColumn(3).setPreferredWidth(50);
+        getColumnModel().getColumn(2).setPreferredWidth(100);
         setAutoCreateRowSorter(true);
     }
     public void setBorrowDetails(List<BorrowDetailDTO> borrowDetailDTOS) {
@@ -63,9 +65,9 @@ public class BorrowDetailTable extends JTableCustom{
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (BorrowDetailDTO borrowDetailDTO : borrowDetailDTOS) {
+            BookViewModel bookViewModel = bookBUS.getBookByIdForDisplay(borrowDetailDTO.getBookId());
             tableModel.addRow(new Object[]{
-                    borrowDetailDTO.getBorrowSheetId(),
-                    borrowDetailDTO.getBookId(),
+                    bookViewModel.getName(),
                     borrowDetailDTO.getQuantity(),
                     borrowDetailDTO.getStatus()
             });

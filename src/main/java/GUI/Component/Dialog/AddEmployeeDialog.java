@@ -155,7 +155,7 @@ public class AddEmployeeDialog extends JDialog {
         try {
             currentID = employeeBUS.getCurrentID() + 1;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi lấy ID độc giả: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi lấy ID nhân viên: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 

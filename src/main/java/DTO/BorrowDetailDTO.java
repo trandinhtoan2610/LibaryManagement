@@ -1,5 +1,6 @@
 package DTO;
 
+import BUS.BookBUS;
 import DTO.Abstract.EntityBase;
 import DTO.Enum.SubStatus;
 import lombok.Getter;
@@ -11,6 +12,7 @@ public class BorrowDetailDTO {
     private Long bookId, borrowSheetId;
     private int quantity;
     private SubStatus status;
+    private BookViewModel book;
     public BorrowDetailDTO(Long bookId, Long borrowSheetId, int quantity, SubStatus status) {
         this.bookId = bookId;
         this.borrowSheetId = borrowSheetId;

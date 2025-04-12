@@ -14,6 +14,16 @@ public class BorrowDTO
     private Status status;
     private Date duedate, borrowedDate, actualReturnDate;
 
+    public BorrowDTO() {
+    }
+    public BorrowDTO(Long id, Long employeeId, Long readerId, Date borrowedDate, Date duedate, Status status) {
+        this.id = id;
+        this.employeeId = employeeId;
+        this.readerId = readerId;
+        this.borrowedDate = borrowedDate;
+        this.duedate = duedate;
+        this.status = status;
+    }
     public BorrowDTO(Long id, Long employeeId, Long readerId, Date borrowedDate, Date duedate, Date actualReturnDate, Status status) {
         this.id = id;
         this.employeeId = employeeId;

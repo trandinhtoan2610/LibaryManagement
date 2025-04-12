@@ -4,7 +4,9 @@ import DTO.BorrowDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BorrowinSheetTable extends JTableCustom {
@@ -76,9 +78,9 @@ public class BorrowinSheetTable extends JTableCustom {
                     borrowDTO.getId(),
                     borrowDTO.getEmployeeId(),
                     borrowDTO.getReaderId(),
-                    borrowDTO.getBorrowedDate(),
-                    borrowDTO.getDuedate(),
-                    borrowDTO.getActualReturnDate(),
+                    formatDate(borrowDTO.getBorrowedDate()),
+                    formatDate(borrowDTO.getDuedate()),
+                    formatDate(borrowDTO.getActualReturnDate()),
                     borrowDTO.getStatus(),
             });
         }
@@ -88,9 +90,12 @@ public class BorrowinSheetTable extends JTableCustom {
         borrowDTOS.remove(borrowDTO);
         refreshTable();
     }
-
-    public void clearTable() {
-        tableModel.setRowCount(0);
+    private String formatDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(date);
     }
 }
 
