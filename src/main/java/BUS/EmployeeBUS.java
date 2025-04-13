@@ -3,7 +3,7 @@ package BUS;
 import DAL.EmployeeDAL;
 import DTO.Employee;
 
-import java.util.ArrayList;
+import javax.swing.*;
 import java.util.List;
 
 
@@ -25,6 +25,10 @@ public class EmployeeBUS {
     public List<Employee> getAllEmployees() {
         return employeeDAL.findAll();
     }
+
+    public void showmess(String s) {
+        JOptionPane.showMessageDialog(null, s);
+    }
     public long addEmployee(Employee employee) {
         return employeeDAL.create(employee);
     }
@@ -33,7 +37,7 @@ public class EmployeeBUS {
         try {
             return employeeDAL.update(employee);
         }catch (Exception e){
-            e.printStackTrace();
+            e.printStackTrace();    
             return false;
         }
     }

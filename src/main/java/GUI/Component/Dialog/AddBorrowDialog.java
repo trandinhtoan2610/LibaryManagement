@@ -286,7 +286,6 @@ public class AddBorrowDialog extends JDialog {
         int selectedRow = borrowDetailTable.getSelectedRow();
         BorrowDetailDTO selectedBorrowDetail = borrowDetailTable.getSelectedBorrowDetail();
         if (selectedBorrowDetail != null) {
-            System.out.println("Selected book: " + selectedBorrowDetail.getBookId());
             UpdateBorrowDetailDialog updateBorrowDetailDialog = new UpdateBorrowDetailDialog(this, getTempBorrowID(), selectedBorrowDetail);
             updateBorrowDetailDialog.setVisible(true);
             if (updateBorrowDetailDialog.getCurrentBorrowDetail() != null) {
@@ -416,7 +415,6 @@ public class AddBorrowDialog extends JDialog {
     private void setCurrentID() {
         try {
             currentBorrowID = borrowSheetBUS.getCurrentID() + 1;
-            System.out.println("Current Borrow ID: " + currentBorrowID);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Lỗi khi lấy ID phiếu mượn: " + e.getMessage(),
@@ -464,7 +462,6 @@ public class AddBorrowDialog extends JDialog {
                     statusValueLabel.getText().equals("Đã Trả") ? Status.Đã_Trả : Status.Đang_Mượn
             );
             Long uuid = borrowSheetBUS.addBorrowSheet(borrowDTO);
-            System.out.println("Borrow ID: " + uuid);
             for (BorrowDetailDTO detail : pendingBorrowDetails) {
                 detail.setBorrowSheetId(uuid);
                 borrowDetailBUS.addBorrowDetail(detail);

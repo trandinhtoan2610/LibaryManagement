@@ -36,6 +36,19 @@ public class BorrowDTO
     public String getId(){
         return "HD" + String.format("%04d", this.id);
     }
+
+    @Override
+    public String toString() {
+        return "BorrowDTO{" +
+                "employeeId=" + employeeId +
+                ", readerId=" + readerId +
+                ", id=" + id +
+                ", status=" + status +
+                ", duedate=" + duedate +
+                ", borrowedDate=" + borrowedDate +
+                ", actualReturnDate=" + actualReturnDate +
+                '}';
+    }
 }
 
 

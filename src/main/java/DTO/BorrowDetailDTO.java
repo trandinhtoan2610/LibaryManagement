@@ -12,7 +12,6 @@ public class BorrowDetailDTO {
     private Long bookId, borrowSheetId;
     private int quantity;
     private SubStatus status;
-    private BookViewModel book;
     public BorrowDetailDTO(Long bookId, Long borrowSheetId, int quantity, SubStatus status) {
         this.bookId = bookId;
         this.borrowSheetId = borrowSheetId;
@@ -21,5 +20,15 @@ public class BorrowDetailDTO {
     }
     public String getBorrowSheetId(){
         return "HD" + String.format("%04d", this.borrowSheetId);
+    }
+
+    @Override
+    public String toString() {
+        return "BorrowDetailDTO{" +
+                "bookId=" + bookId +
+                ", borrowSheetId=" + borrowSheetId +
+                ", quantity=" + quantity +
+                ", status=" + status +
+                '}';
     }
 }

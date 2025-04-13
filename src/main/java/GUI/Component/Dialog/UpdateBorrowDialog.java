@@ -80,7 +80,6 @@ public class UpdateBorrowDialog extends JDialog {
             return;
         }
 
-        System.out.println("Update: " + borrowToUpdate);
 
         try {
             this.pendingBorrowDetails = borrowDetailBUS.getBorrowDetailsBySheetId(Long.parseLong(borrowToUpdate.getId().substring(2)));
@@ -120,7 +119,7 @@ public class UpdateBorrowDialog extends JDialog {
         backButton.addActionListener(e -> dispose());
         panel.add(backButton, BorderLayout.WEST);
 
-        JLabel title = new JLabel("Thêm Phiếu Mượn");
+        JLabel title = new JLabel("Cập Nhật Phiếu Mượn");
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
         title.setForeground(Color.WHITE);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -317,7 +316,6 @@ public class UpdateBorrowDialog extends JDialog {
         int selectedRow = borrowDetailTable.getSelectedRow();
         BorrowDetailDTO selectedBorrowDetail = borrowDetailTable.getSelectedBorrowDetail();
         if (selectedBorrowDetail != null) {
-            System.out.println("Selected book: " + selectedBorrowDetail.getBookId());
             UpdateBorrowDetailDialog editBorrowDetailDialog = new UpdateBorrowDetailDialog(this, getTempBorrowID(), selectedBorrowDetail);
             editBorrowDetailDialog.setVisible(true);
             if (editBorrowDetailDialog.getCurrentBorrowDetail() != null) {
@@ -445,7 +443,6 @@ public class UpdateBorrowDialog extends JDialog {
     private void setCurrentID() {
         try {
             currentBorrowID = Long.parseLong(borrowToUpdate.getId().substring(2));
-            System.out.println("Current Borrow ID: " + currentBorrowID);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Lỗi khi lấy ID phiếu mượn: " + e.getMessage(),
@@ -478,6 +475,10 @@ public class UpdateBorrowDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "Vui lòng thêm chi tiết phiếu mượn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+        if (actualReturnDateChooser.getDate() != null && actualReturnDateChooser.getDate().before(borrowedDateChooser.getDate())) {
+            JOptionPane.showMessageDialog(this, "Ngày trả thực tế không được trước ngày mượn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         return true;
     }
 
@@ -489,7 +490,7 @@ public class UpdateBorrowDialog extends JDialog {
                 String status = statusValueLabel.getText();
                 Status statusImport;
 
-                if (status.equals("Đã trả")) {
+                if (status.equals("Đã Trả")) {
                     if (actualReturnDateChooser.getDate().before(dueDateChooser.getDate())
                             || actualReturnDateChooser.getDate().equals(dueDateChooser.getDate())) {
                         statusImport = Status.Đã_Trả;
@@ -509,7 +510,6 @@ public class UpdateBorrowDialog extends JDialog {
                         actualReturnDateChooser.getDate(),
                         statusImport
                 );
-
                 for (BorrowDetailDTO detail : pendingBorrowDetails) {
                     detail.setBorrowSheetId(borrowSheetId);
                     borrowDetailBUS.updateBorrowDetail(detail);

@@ -15,7 +15,6 @@ public class BorrowDetailBUS {
     public boolean updateBorrowDetail(BorrowDetailDTO borrowDetailDTO) {
         try {
             return borrowDetailDAL.update(borrowDetailDTO);
-
         }catch(Exception e) {
             System.out.println("Không cập nhật chi tiết phiếu mượn: " + e.getMessage());
             return false;
