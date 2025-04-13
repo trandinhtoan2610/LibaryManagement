@@ -1,7 +1,7 @@
 package DTO.Enum;
 
 public enum Status {
-    Đã_Mượn,
+    Đang_Mượn,
     Đã_Trả,
     Quá_Ngày
 }

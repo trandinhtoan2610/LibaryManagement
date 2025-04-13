@@ -13,7 +13,7 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
     private final RowMapper<BorrowDetailDTO> borrowRowMapper = this::mapRowToBorrowDetails;
 
     private BorrowDetailDTO mapRowToBorrowDetails(ResultSet rs) throws Exception {
-        SubStatus subStatus = SubStatus.valueOf(rs.getString("subStatus"));
+        SubStatus subStatus = SubStatus.valueOf(rs.getString("substatus"));
         return new BorrowDetailDTO(
                 rs.getLong("bookId"),
                 rs.getLong("borrowSheetId"),
@@ -29,10 +29,11 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public Long create(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, substatus) VALUES (?, ?, ?, ?)";
+        Long id = Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2));
         return genericDAL.insert(sql,
                 borrowDetailDTO.getBookId(),
-                borrowDetailDTO.getBorrowSheetId(),
+                id,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name()
         );
@@ -40,21 +41,27 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public boolean update(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "UPDATE borrowdetails SET quantity = ?, status = ? WHERE bookid = ? AND borrowSheetId = ?";
+        String sql = "UPDATE borrowdetails SET quantity = ?, substatus = ? WHERE bookid = ? AND borrowSheetId = ?";
+        Long id = Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2));
         return genericDAL.update(sql,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name(),
                 borrowDetailDTO.getBookId(),
-                borrowDetailDTO.getBorrowSheetId()
+                id
         );
     }
     @Override
     public boolean delete(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND status = ?";
+        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND substatus = ?";
         return genericDAL.update(sql, borrowDetailDTO.getBookId(),
                 borrowDetailDTO.getBorrowSheetId(),
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name()
         );
     }
+    public List<BorrowDetailDTO> findByBorrowSheetId(Long borrowSheetId) {
+        String sql = "SELECT * FROM borrowdetails WHERE borrowSheetId = ?";
+        return genericDAL.queryForList(sql, borrowRowMapper, borrowSheetId);
+    }
+
 }
