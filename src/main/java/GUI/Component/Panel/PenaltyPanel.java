@@ -48,7 +48,7 @@ public class PenaltyPanel extends JPanel {
 
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 0));
         JPanel infoPanel = employeeNreaderPanel(new Employee(1L, "Hoàng", "Quý"),
-                new ReaderDTO(1L, "Nguyễn", "Thành", Gender.Nam, "0987654321", "Hà Nội"));
+                new ReaderDTO(1L, "Nguyễn", "Thành", Gender.Nam, "0987654321", "Hà Nội", 0));
         infoPanel.setPreferredSize(new Dimension(400, 150));
 
         penaltyDetailsTable = new PenaltyDetailsTable();

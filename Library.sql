@@ -1,148 +1,147 @@
 CREATE TABLE `Role` (
-                        `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                        `name` varchar(255) UNIQUE NOT NULL
+                        `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        `name` VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE `Employee` (
-                            `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                            `firstName` varchar(255) NOT NULL,
-                            `lastName` varchar(255) NOT NULL,
+                            `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            `firstName` VARCHAR(255) NOT NULL,
+                            `lastName` VARCHAR(255) NOT NULL,
                             `gender` ENUM ('Nam', 'Nữ') NOT NULL DEFAULT 'Nam',
-                            `username` varchar(255) UNIQUE NOT NULL,
-                            `password` varchar(255) NOT NULL,
-                            `roleId` bigint NOT NULL,
-                            `phone` varchar(20) NOT NULL,
-                            `address` varchar(255) NOT NULL,
-                            `salary` bigint NOT NULL
+                            `username` VARCHAR(255) UNIQUE NOT NULL,
+                            `password` VARCHAR(255) NOT NULL,
+                            `roleId` BIGINT NOT NULL,
+                            `phone` VARCHAR(20) NOT NULL,
+                            `address` VARCHAR(255) NOT NULL,
+                            `salary` BIGINT NOT NULL
 );
 
 CREATE TABLE `Reader` (
-                          `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                          `firstName` varchar(255) NOT NULL,
-                          `lastName` varchar(255) NOT NULL,
+                          `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          `firstName` VARCHAR(255) NOT NULL,
+                          `lastName` VARCHAR(255) NOT NULL,
                           `gender` ENUM ('Nam', 'Nữ') NOT NULL DEFAULT 'Nam',
-                          `phone` varchar(10) NOT NULL,
-                          `address` varchar(255) NOT NULL
+                          `phone` VARCHAR(10) NOT NULL,
+                          `address` VARCHAR(255) NOT NULL,
+                          `complianceCount` int NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Author` (
-                          `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                          `firstName` varchar(255) NOT NULL,
-                          `lastName` varchar(255) NOT NULL,
-                          `quantity` int NOT NULL DEFAULT 0
+                          `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          `firstName` VARCHAR(255) NOT NULL,
+                          `lastName` VARCHAR(255) NOT NULL,
+                          `quantity` INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Category` (
-                            `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                            `name` varchar(255) NOT NULL
+                            `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            `name` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `Book` (
-                        `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                        `name` varchar(255) NOT NULL,
-                        `categoryId` bigint NOT NULL,
-                        `authorId` bigint NOT NULL,
-                        `publisherId` bigint NOT NULL,
-                        `quantity` int NOT NULL,
-                        `unitprice` bigint NOT NULL,
-                        `yearOfpublication` year
+                        `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        `name` VARCHAR(255) NOT NULL,
+                        `categoryId` BIGINT NOT NULL,
+                        `authorId` BIGINT NOT NULL,
+                        `publisherId` BIGINT NOT NULL,
+                        `quantity` INT NOT NULL,
+                        `unitprice` BIGINT NOT NULL,
+                        `yearOfpublication` YEAR
 );
 
 CREATE TABLE `Publisher` (
-                             `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                             `name` varchar(255) NOT NULL,
-                             `phone` varchar(10) NOT NULL,
-                             `address` varchar(255) NOT NULL
+                             `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                             `name` VARCHAR(255) NOT NULL,
+                             `phone` VARCHAR(10) NOT NULL,
+                             `address` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `Borrow_in_Sheet` (
-                                   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                                   `employeeId` bigint NOT NULL,
-                                   `readerId` bigint NOT NULL,
-                                   `borrowedDate` datetime NOT NULL DEFAULT (now()),
-                                   `duedate` datetime NOT NULL,
-                                   `actualReturnDate` datetime NOT NULL,
-                                   `status` ENUM ('Đã_Mượn', 'Đã_Trả', 'Quá_Ngày') NOT NULL DEFAULT 'Đã_Mượn'
+                                   `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                   `employeeId` BIGINT NOT NULL,
+                                   `readerId` BIGINT NOT NULL,
+                                   `borrowedDate` DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+                                   `duedate` DATETIME NOT NULL,
+                                   `actualReturnDate` DATETIME DEFAULT NULL,
+                                   `status` ENUM ('Đang_Mượn', 'Đã_Trả', 'Quá_Ngày') NOT NULL DEFAULT 'Đang_Mượn'
 );
 
 CREATE TABLE `BorrowDetails` (
-                                 `borrowId` bigint NOT NULL,
-                                 `bookId` bigint NOT NULL,
-                                 `quantity` int NOT NULL DEFAULT 1,
-                                 `substatus` ENUM ('Đã_Trả', 'Chưa_Trả') NOT NULL DEFAULT 'Chưa_Trả',
-                                 PRIMARY KEY (`borrowId`, `bookId`)
+                                 `bookId` BIGINT NOT NULL,
+                                 `borrowSheetId` BIGINT NOT NULL,
+                                 `quantity` INT NOT NULL DEFAULT 1,
+                                 `substatus` ENUM ('Đang_Mượn', 'Chưa_Trả') NOT NULL DEFAULT 'Đang_Mượn',
+                                 PRIMARY KEY (`bookId`, `borrowSheetId`)
 );
 
 CREATE TABLE `Supplier` (
-                            `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                            `name` varchar(255) NOT NULL,
-                            `phone` varchar(10) NOT NULL,
-                            `address` varchar(255) NOT NULL
+                            `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            `name` VARCHAR(255) NOT NULL,
+                            `phone` VARCHAR(10) NOT NULL,
+                            `address` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `PurchaseOrders` (
-                                  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-                                  `supplierId` bigint NOT NULL,
-                                  `employeeId` bigint NOT NULL,
-                                  `totalAmount` decimal(10,2) NOT NULL DEFAULT 0,
-                                  `buyDate` datetime NOT NULL DEFAULT (now()),
+                                  `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                  `supplierId` BIGINT NOT NULL,
+                                  `employeeId` BIGINT NOT NULL,
+                                  `totalAmount` DECIMAL(10,2) NOT NULL DEFAULT 0,
+                                  `buyDate` DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
                                   `status` ENUM ('Đang_Chờ', 'Hoàn_Thành', 'Đã_Hủy') NOT NULL DEFAULT 'Đang_Chờ'
 );
 
 CREATE TABLE `PurchaseOrderDetails` (
-                                        `purchaseOrderId` bigint NOT NULL,
-                                        `bookId` bigint NOT NULL,
-                                        `quantity` int NOT NULL DEFAULT 1,
-                                        `unitPrice` decimal(10,2) NOT NULL,
-                                        `SubTotal` decimal(10,2) NOT NULL,
+                                        `purchaseOrderId` BIGINT NOT NULL,
+                                        `bookId` BIGINT NOT NULL,
+                                        `quantity` INT NOT NULL DEFAULT 1,
+                                        `unitPrice` DECIMAL(10,2) NOT NULL,
+                                        `SubTotal` DECIMAL(10,2) NOT NULL,
                                         PRIMARY KEY (`purchaseOrderId`, `bookId`)
 );
 
 CREATE TABLE `Penalty` (
-                           `Id` bigint PRIMARY KEY NOT NULL,
-                           `penaltyDate` datetime NOT NULL,
-                           `totalamount` decimal(10,2) NOT NULL,
+                           `Id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           `penaltyDate` DATETIME NOT NULL,
+                           `totalamount` DECIMAL(10,2) NOT NULL,
                            `status` ENUM ('Đã_Thanh_Toán', 'Chưa_Thanh_Toán') NOT NULL DEFAULT 'Chưa_Thanh_Toán'
 );
 
 CREATE TABLE `PenaltyDetails` (
-                                  `penaltyId` bigint NOT NULL,
-                                  `borrowId` bigint NOT NULL,
-                                  `bookId` bigint NOT NULL,
-                                  `name` varchar(255),
-                                  `subamount` decimal(10,2) NOT NULL
+                                  `penaltyId` BIGINT NOT NULL,
+                                  `bookId` BIGINT NOT NULL,
+                                  `borrowId` BIGINT NOT NULL,
+                                  `name` VARCHAR(255),
+                                  `subamount` DECIMAL(10,2) NOT NULL,
+                                  PRIMARY KEY (`penaltyId`, `bookId`, `borrowId`)
 );
 
-ALTER TABLE `Employee` ADD FOREIGN KEY (`roleId`) REFERENCES `Role` (`id`);
+ALTER TABLE `Employee` ADD FOREIGN KEY (`roleId`) REFERENCES `Role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `Book` ADD FOREIGN KEY (`categoryId`) REFERENCES `Category` (`id`);
+ALTER TABLE `Book` ADD FOREIGN KEY (`categoryId`) REFERENCES `Category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `Book` ADD FOREIGN KEY (`authorId`) REFERENCES `Author` (`id`);
+ALTER TABLE `Book` ADD FOREIGN KEY (`authorId`) REFERENCES `Author` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `Book` ADD FOREIGN KEY (`publisherId`) REFERENCES `Publisher` (`id`);
+ALTER TABLE `Book` ADD FOREIGN KEY (`publisherId`) REFERENCES `Publisher` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `Borrow_in_Sheet` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee` (`id`);
+ALTER TABLE `Borrow_in_Sheet` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `Borrow_in_Sheet` ADD FOREIGN KEY (`readerId`) REFERENCES `Reader` (`id`);
+ALTER TABLE `Borrow_in_Sheet` ADD FOREIGN KEY (`readerId`) REFERENCES `Reader` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `BorrowDetails` ADD FOREIGN KEY (`borrowId`) REFERENCES `Borrow_in_Sheet` (`id`);
+ALTER TABLE `BorrowDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `BorrowDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`);
+ALTER TABLE `BorrowDetails` ADD FOREIGN KEY (`borrowSheetId`) REFERENCES `Borrow_in_Sheet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PurchaseOrders` ADD FOREIGN KEY (`supplierId`) REFERENCES `Supplier` (`id`);
+ALTER TABLE `PurchaseOrders` ADD FOREIGN KEY (`supplierId`) REFERENCES `Supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PurchaseOrders` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee` (`id`);
+ALTER TABLE `PurchaseOrders` ADD FOREIGN KEY (`employeeId`) REFERENCES `Employee` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`purchaseOrderId`) REFERENCES `PurchaseOrders` (`id`);
+ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`purchaseOrderId`) REFERENCES `PurchaseOrders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`);
+ALTER TABLE `PurchaseOrderDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `Book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`penaltyId`) REFERENCES `Penalty` (`Id`);
+ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`penaltyId`) REFERENCES `Penalty` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`borrowId`) REFERENCES `BorrowDetails` (`borrowId`);
-
-ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`bookId`) REFERENCES `BorrowDetails` (`bookId`);
-
+ALTER TABLE `PenaltyDetails` ADD FOREIGN KEY (`bookId`, `borrowId`) REFERENCES `BorrowDetails` (`bookId`, `borrowSheetId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO  `Role` (`name`) VALUES
 ('Admin'),
@@ -152,3 +151,72 @@ INSERT INTO  `Employee` (`firstName`, `lastName`, `gender`, `username`, `passwor
 ('Nguyễn', 'Thành', 1, 'admin', 'admin', 1, '0123456789', 'Hà Nội', 10000000),
 ('Trần', 'Thị', 2, 'staff', 'staff', 2, '0987654321', 'Hà Nội', 8000000),
 ('Lê', 'Văn', 1, 'employee', 'employee', 3, '0912345678', 'Hà Nội', 6000000);
+
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_insertBook
+AFTER INSERT ON book
+FOR EACH ROW
+BEGIN
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE book.authorID = NEW.authorID
+    )
+    WHERE author.id = NEW.authorID;
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_deleteBook
+AFTER DELETE ON book
+FOR EACH ROW
+BEGIN
+	UPDATE author
+	SET quantity = (
+		SELECT COUNT(*) FROM book
+		WHERE book.authorID = OLD.authorID
+	)
+	WHERE author.id = OLD.authorID;
+
+	DELETE FROM author
+	WHERE quantity = 0;
+END;
+//
+DELIMITER;
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_updateBook
+AFTER UPDATE ON book
+FOR EACH ROW
+BEGIN
+    -- Cập nhật quantity cho tác giả cũ
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE authorID = OLD.authorID
+    )
+    WHERE id = OLD.authorID;
+
+    -- Cập nhật quantity cho tác giả mới (nếu khác)
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE authorID = NEW.authorID
+    )
+    WHERE id = NEW.authorID;
+
+    -- Xoá tác giả cũ nếu không còn sách
+    DELETE FROM author
+    WHERE id = OLD.authorID AND quantity = 0;
+
+
+END;
+//
+
+DELIMITER ;

@@ -187,7 +187,7 @@ public class AuthorPanel extends javax.swing.JPanel {
 
         lblAuthorName.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         lblAuthorName.setForeground(new java.awt.Color(255, 0, 51));
-        lblAuthorName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAuthorName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAuthorName.setText("<<Tác giả>>");
         lblAuthorName.setPreferredSize(new java.awt.Dimension(150, 20));
         jPanel1.add(lblAuthorName);

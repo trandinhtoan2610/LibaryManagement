@@ -7,7 +7,10 @@ import java.util.List;
 
 public class BorrowSheetBUS {
     private final BorrowDAL borrowSheetDAL = new BorrowDAL();
-
+    public long createBorrowSheet(BorrowDTO dto) {
+        validateBorrowData(dto);
+        return borrowSheetDAL.create(dto);
+    }
     public List<BorrowDTO> getAllBorrowSheet() {
         return borrowSheetDAL.findAll();
     }
@@ -29,5 +32,14 @@ public class BorrowSheetBUS {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void validateBorrowData(BorrowDTO dto) throws IllegalArgumentException {
+        if (dto.getEmployeeId() == null || dto.getReaderId() == null) {
+            throw new IllegalArgumentException("Thiếu thông tin nhân viên hoặc độc giả");
+        }
+    }
+    public long getCurrentID(){
+        return borrowSheetDAL.getCurrentID();
     }
 }

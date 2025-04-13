@@ -51,4 +51,9 @@ public class AuthorDAL implements IRepositoryBase<AuthorDTO> {
         String sql = "DELETE FROM Author WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
+
+    public Long getMaxID(){
+        String sql = "SELECT MAX(id) FROM Author";
+        return genericDAL.getMaxID(sql);
+    }
 }

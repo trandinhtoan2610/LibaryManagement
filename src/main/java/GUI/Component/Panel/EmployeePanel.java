@@ -183,17 +183,17 @@ public class EmployeePanel extends JPanel {
         searchfield.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                performSearch(); // Gọi tìm kiếm khi có nội dung mới
+                performSearch();
             }
 
             @Override
             public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                performSearch(); // Gọi tìm kiếm khi xóa nội dung
+                performSearch();
             }
 
             @Override
             public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                performSearch(); // Gọi tìm kiếm khi thay đổi thuộc tính
+                performSearch();
             }
         });
 
@@ -303,17 +303,13 @@ public class EmployeePanel extends JPanel {
     }
     private void openDialogFilter(){
         EmployeeFilter dialog = new EmployeeFilter(parentFrame);
-        dialog.setEmployeeFilterListener(new EmployeeFilter.EmployeeFilterListener() {
-            @Override
-            public void onFilterApplied(String position, double minSalary, double maxSalary) {
-                salaryFilterActive = true;
-                currentMinSalary = minSalary;
-                currentMaxSalary = maxSalary;
-                currentPositionFilter = position;
-                performSearch();
-            }
+        dialog.setEmployeeFilterListener((position, minSalary, maxSalary) -> {
+            salaryFilterActive = true;
+            currentMinSalary = minSalary;
+            currentMaxSalary = maxSalary;
+            currentPositionFilter = position;
+            performSearch();
         });
         dialog.setVisible(true);
     }
-
 }

@@ -14,7 +14,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class AddBorrowDetailDialog extends JDialog {
+public class UpdateBorrowDetailDialog extends JDialog {
     private final BorrowDetailBUS borrowDetailBUS = new BorrowDetailBUS();
     private final BookBUS bookBUS = new BookBUS();
     private BookViewModel currentBook;
@@ -37,14 +37,30 @@ public class AddBorrowDetailDialog extends JDialog {
 
     private JDialog parentDialog;
 
-    public AddBorrowDetailDialog(JDialog parentDialog, long borrowSheetId) {
-        super(parentDialog, "Thêm Chi Tiết Mượn", true);
+    private BorrowDetailDTO borrowDetailToEdit;
+
+    public UpdateBorrowDetailDialog(JDialog parentDialog, long borrowSheetId, BorrowDetailDTO borrowDetailToEdit) {
+        super(parentDialog, "Cập Nhật Chi Tiết Mượn", true);
         this.borrowSheetId = borrowSheetId;
+        this.borrowDetailToEdit = borrowDetailToEdit;
         initComponents();
         setSize(600, 450);
         setLocationRelativeTo(parentDialog);
+        if (parentDialog != null) {
+            Point location = this.getLocation();
+            this.setLocation(location.x + 50, location.y + 90);
+        }
+        setFields();
     }
-
+    private void setFields() {
+        bookIDField.setText(borrowDetailToEdit.getBookId().toString());
+        quantityField.setText(String.valueOf(borrowDetailToEdit.getQuantity()));
+        if (borrowDetailToEdit.getStatus() == SubStatus.Đang_Mượn) {
+            borrowedRadioButton.setSelected(true);
+        } else {
+            returnedRadioButton.setSelected(true);
+        }
+    }
     private void initComponents() {
         setLayout(new BorderLayout(5, 5));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -64,7 +80,7 @@ public class AddBorrowDetailDialog extends JDialog {
         backButton.addActionListener(e -> dispose());
         panel.add(backButton, BorderLayout.WEST);
 
-        JLabel title = new JLabel("Thêm Sách");
+        JLabel title = new JLabel("Cập Nhật Sách");
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
         title.setForeground(Color.WHITE);
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -227,11 +243,11 @@ public class AddBorrowDetailDialog extends JDialog {
         cancelButton.setPreferredSize(new Dimension(120, 30));
         cancelButton.addActionListener(e -> dispose());
 
-        JButton addButton = new JButton("Thêm");
+        JButton addButton = new JButton("Cập Nhật");
         addButton.setPreferredSize(new Dimension(120, 30));
         addButton.setBackground(new Color(0, 120, 215));
         addButton.setForeground(Color.WHITE);
-        addButton.addActionListener(e -> addBorrowDetails());
+        addButton.addActionListener(e -> updateBorrowDetails());
 
         panel.add(cancelButton);
         panel.add(addButton);
@@ -269,7 +285,7 @@ public class AddBorrowDetailDialog extends JDialog {
     public BorrowDetailDTO getCurrentBorrowDetail() {
         return currentBorrowDetail;
     }
-    private void addBorrowDetails() {
+    private void updateBorrowDetails() {
         if (isValidInput()) {
             long bookID = Long.parseLong(bookIDField.getText());
             int quantity = Integer.parseInt(quantityField.getText());
@@ -277,7 +293,7 @@ public class AddBorrowDetailDialog extends JDialog {
             SubStatus subStatus = isBorrowed ? SubStatus.Đang_Mượn : SubStatus.Đã_Trả;
             currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus);
             if (borrowSheetId > 0) {
-                borrowDetailBUS.addBorrowDetail(currentBorrowDetail);
+                borrowDetailBUS.updateBorrowDetail(currentBorrowDetail);
             }
             dispose();
         }

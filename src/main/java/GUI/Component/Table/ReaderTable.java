@@ -14,9 +14,6 @@ public class ReaderTable extends JTableCustom {
     private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ", "Uy tín"};
     private DefaultTableModel tblModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
-    
-  
-    
     public ReaderTable(){
         super(new DefaultTableModel(readerTableHeader, 0));
         this.tblModel= (DefaultTableModel)getModel();
@@ -27,9 +24,6 @@ public class ReaderTable extends JTableCustom {
         this.setRowSorter(rowSorter);
         
     }
-    
-   
-    
     public void resetTable(){
         tblModel.setRowCount(0); // Xóa dữ liệu cũ
 

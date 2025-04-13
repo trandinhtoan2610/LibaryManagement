@@ -10,10 +10,16 @@ import DTO.AuthorDTO;
 import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
+import GUI.Component.Table.AuthorTable;
 import GUI.Component.TextField.CustomTextField;
+import GUI.Controller.Controller;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.Year;
 import java.util.List;
 
@@ -29,6 +35,9 @@ public class AddBookDialog extends JDialog {
     private CustomTextField quantityField;
     private CustomTextField unitPriceField;
     private CustomTextField yearOfPublicationField;
+    private AuthorTable authorTable;
+    private CustomTextField txtAuthor;
+
 
     public AddBookDialog(JFrame parent) {
         super(parent, "Thêm Sách", true);
@@ -39,10 +48,11 @@ public class AddBookDialog extends JDialog {
         initComponent();
         pack();
         setLocationRelativeTo(parent);
+        isResizable();
     }
 
     public void initComponent() {
-        getContentPane().setLayout(new BorderLayout(10, 10));
+        getContentPane().setLayout(new BorderLayout(5, 10));
         JPanel titlePanel = settitle();
         getContentPane().add(titlePanel, BorderLayout.NORTH);
 
@@ -75,6 +85,9 @@ public class AddBookDialog extends JDialog {
                 BorderFactory.createEmptyBorder(2, 7, 2, 7),
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 2)
         ));
+
+
+
         return panel;
     }
 
@@ -93,6 +106,7 @@ public class AddBookDialog extends JDialog {
 
     private JPanel setContentPanel() {
         JPanel panel = new JPanel();
+        JPanel subPanel = new JPanel();
         panel.setLayout(new GridLayout(7, 2, -2, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
 
@@ -112,6 +126,46 @@ public class AddBookDialog extends JDialog {
         unitPriceField = new CustomTextField();
         yearOfPublicationField = new CustomTextField();
 
+        //tác giả :
+        authorTable = new AuthorTable();
+        authorTable.removeColumn(authorTable.getColumnModel().getColumn(2));
+        txtAuthor = new CustomTextField();
+        subPanel.setLayout(new GridLayout(1, 2, 10, 0)); // spacing giữa 2 cột
+        JScrollPane scrollPane = new JScrollPane(authorTable);
+        scrollPane.setPreferredSize(new Dimension(200, 40));
+        subPanel.add(txtAuthor);
+        subPanel.add(scrollPane);
+
+        //Lọc table theo input trong txtfield :
+        txtAuthor.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+        });
+
+        //Chọn tác giả trong table :
+        authorTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                AuthorDTO a = authorTable.getSelectedAuthor();
+                if(a != null){
+                    txtAuthor.setText(Controller.formatFullName(a.getName()));
+                }
+            }
+        });
+
+
         // Load danh sách danh mục
         List<Category> categories = categoryBUS.getAllCategories();
         for (Category category : categories) {
@@ -119,10 +173,13 @@ public class AddBookDialog extends JDialog {
         }
 
         // Load danh sách tác giả
-        List<AuthorDTO> authors = authorBUS.getAllAuthors();
-        for (AuthorDTO author : authors) {
-            authorComboBox.addItem(author.getName());
-        }
+//        List<AuthorDTO> authors = authorBUS.getAllAuthors();
+//        for (AuthorDTO author : authors) {
+//            authorComboBox.addItem(author.getName());
+//        }
+
+
+
 
         // Load danh sách nhà xuất bản
         List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
@@ -135,7 +192,7 @@ public class AddBookDialog extends JDialog {
         panel.add(categoryLabel);
         panel.add(categoryComboBox);
         panel.add(authorLabel);
-        panel.add(authorComboBox);
+        panel.add(subPanel);
         panel.add(publisherLabel);
         panel.add(publisherComboBox);
         panel.add(quantityLabel);
@@ -182,10 +239,36 @@ public class AddBookDialog extends JDialog {
 
     private void addBook() {
         try {
+            //Xử lý tác giả :
+            Long authorID = null;
+
+            String authorName = Controller.formatFullName(txtAuthor.getText());
+            for (AuthorDTO a : AuthorBUS.authorDTOList){
+                String aName = a.getLastName() + " " + a.getFirstName();
+                //Nếu đã tồn tại tác giả trong database :
+                if(aName.equals(authorName)){
+
+                    authorID = a.getId();
+                    break;
+                }
+            }
+
+
+            //Nếu chưa tồn tại :
+            if(authorID == null ){
+                int firstSpace = authorName.indexOf(" ");
+                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
+                String firstName = authorName.substring(firstSpace + 1);
+                //Thêm mới tác giả
+                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,0);
+                authorBUS.addAuthor(a);
+                authorID = a.getId();
+
+            }
+
             // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
             int categoryIndex = categoryComboBox.getSelectedIndex();
-            int authorIndex = authorComboBox.getSelectedIndex();
             int publisherIndex = publisherComboBox.getSelectedIndex();
             String quantityStr = quantityField.getText().trim();
             String unitPriceStr = unitPriceField.getText().trim();
@@ -202,11 +285,10 @@ public class AddBookDialog extends JDialog {
                 throw new IllegalArgumentException("Danh mục không hợp lệ");
             }
 
-            List<AuthorDTO> authors = authorBUS.getAllAuthors();
-            Long authorId = authors.get(authorIndex).getId();
-            if (authorId <= 0) {
-                throw new IllegalArgumentException("Tác giả không hợp lệ");
-            }
+//            Long authorId = authorBUS.authorDTOList.get(authorIndex-1).getId();
+//            if (authorId <= 0) {
+//                throw new IllegalArgumentException("Tác giả không hợp lệ");
+//            }
 
             List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
             Long publisherId = publishers.get(publisherIndex).getId();
@@ -237,7 +319,7 @@ public class AddBookDialog extends JDialog {
             Book book = new Book();
             book.setName(name);
             book.setCategoryId(categoryId);
-            book.setAuthorId(authorId);
+            book.setAuthorId(authorID);
             book.setPublisherId(publisherId);
             book.setQuantity(quantity);
             book.setUnitPrice(unitPrice);

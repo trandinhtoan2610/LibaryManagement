@@ -20,6 +20,7 @@ public class AuthorTable extends JTableCustom {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         rowSorter = new TableRowSorter<>(tblModel);
         this.setRowSorter(rowSorter);
+        resetTable();
     }
     
     public void resetTable(){

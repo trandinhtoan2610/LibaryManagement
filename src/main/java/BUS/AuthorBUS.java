@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorBUS {
-    private final IRepositoryBase<AuthorDTO> authorRepository;
+    private final AuthorDAL authorRepository;
     public static List<AuthorDTO> authorDTOList;
 
     public AuthorBUS() {
@@ -17,6 +17,8 @@ public class AuthorBUS {
         if (authorDTOList.size() == 0) {
             getAuthorList();
         }
+
+
     }
 
     // Load danh sách tác giả từ DAL vào authorDTOList
@@ -122,6 +124,10 @@ public class AuthorBUS {
     public String getAuthorNameById(Long id) {
         AuthorDTO author = getAuthorById(id);
         return author.getName();
+    }
+
+    public Long getAuthorMaxID(){
+        return authorRepository.getMaxID();
     }
 
     // Kiểm tra tính hợp lệ của tác giả

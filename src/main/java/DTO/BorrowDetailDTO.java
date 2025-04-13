@@ -1,5 +1,6 @@
 package DTO;
 
+import BUS.BookBUS;
 import DTO.Abstract.EntityBase;
 import DTO.Enum.SubStatus;
 import lombok.Getter;
@@ -19,5 +20,15 @@ public class BorrowDetailDTO {
     }
     public String getBorrowSheetId(){
         return "HD" + String.format("%04d", this.borrowSheetId);
+    }
+
+    @Override
+    public String toString() {
+        return "BorrowDetailDTO{" +
+                "bookId=" + bookId +
+                ", borrowSheetId=" + borrowSheetId +
+                ", quantity=" + quantity +
+                ", status=" + status +
+                '}';
     }
 }
