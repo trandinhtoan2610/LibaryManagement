@@ -1,5 +1,6 @@
 package DTO;
 
+import BUS.AuthorBUS;
 import DTO.Abstract.EntityBase;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,12 @@ public class Book extends EntityBase<Long> {
     private PublisherDTO publisherDTO;
     private Category category;
     private AuthorDTO author;
+
+    public AuthorDTO getAuthor() {
+        for(DTO.AuthorDTO a : AuthorBUS.authorDTOList){
+            if(a.getId() == this.authorId)
+                return a;
+        }
+        return null;
+    }
 }

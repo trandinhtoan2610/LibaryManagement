@@ -10,10 +10,16 @@ import DTO.AuthorDTO;
 import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
+import GUI.Component.Table.AuthorTable;
 import GUI.Component.TextField.CustomTextField;
+import GUI.Controller.Controller;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.Year;
 import java.util.List;
 
@@ -30,6 +36,9 @@ public class EditBookDialog extends JDialog {
     private CustomTextField quantityField;
     private CustomTextField unitPriceField;
     private CustomTextField yearOfPublicationField;
+    private AuthorTable authorTable;
+    private CustomTextField txtAuthor;
+
 
     public EditBookDialog(JFrame parent, Book book) {
         super(parent, "Chỉnh Sửa Sách", true);
@@ -95,6 +104,7 @@ public class EditBookDialog extends JDialog {
 
     private JPanel setContentPanel() {
         JPanel panel = new JPanel();
+        JPanel subPanel = new JPanel(); //Panel for author input
         panel.setLayout(new GridLayout(7, 2, -2, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
 
@@ -109,7 +119,7 @@ public class EditBookDialog extends JDialog {
         nameField = new CustomTextField();
         nameField.setText(book.getName());
         categoryComboBox = new CustomComboBox();
-        authorComboBox = new CustomComboBox();
+//        authorComboBox = new CustomComboBox();
         publisherComboBox = new CustomComboBox();
         quantityField = new CustomTextField();
         quantityField.setText(String.valueOf(book.getQuantity()));
@@ -117,6 +127,48 @@ public class EditBookDialog extends JDialog {
         unitPriceField.setText(String.valueOf(book.getUnitPrice()));
         yearOfPublicationField = new CustomTextField();
         yearOfPublicationField.setText(book.getYearOfPublication() != null ? String.valueOf(book.getYearOfPublication().getValue()) : "");
+
+        //tác giả :
+        authorTable = new AuthorTable();
+        authorTable.removeColumn(authorTable.getColumnModel().getColumn(2));
+        txtAuthor = new CustomTextField();
+        String authorName = book.getAuthor().getLastName() + " " + book.getAuthor().getFirstName();
+        txtAuthor.setText(authorName);
+        authorTable.filterTable(authorName);
+        subPanel.setLayout(new GridLayout(1, 2, 10, 0));
+        JScrollPane scrollPane = new JScrollPane(authorTable);
+        scrollPane.setPreferredSize(new Dimension(200, 40));
+        subPanel.add(txtAuthor);
+        subPanel.add(scrollPane);
+
+        //Lọc table theo input trong txtfield :
+        txtAuthor.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                authorTable.filterTable(txtAuthor.getText());
+            }
+        });
+
+        //Chọn tác giả trong table :
+        authorTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                AuthorDTO a = authorTable.getSelectedAuthor();
+                if(a != null){
+                    txtAuthor.setText(Controller.formatFullName(a.getName()));
+                }
+            }
+        });
 
         // Load danh sách danh mục và chọn danh mục hiện tại
         List<Category> categories = categoryBUS.getAllCategories();
@@ -132,19 +184,19 @@ public class EditBookDialog extends JDialog {
             categoryComboBox.setSelectedIndex(selectedCategoryIndex);
         }
 
-        // Load danh sách tác giả và chọn tác giả hiện tại
-        List<AuthorDTO> authors = authorBUS.getAllAuthors();
-        int selectedAuthorIndex = -1;
-        for (int i = 0; i < authors.size(); i++) {
-            AuthorDTO author = authors.get(i);
-            authorComboBox.addItem(author.getName());
-            if (author.getId() == book.getAuthorId()) {
-                selectedAuthorIndex = i;
-            }
-        }
-        if (selectedAuthorIndex != -1) {
-            authorComboBox.setSelectedIndex(selectedAuthorIndex);
-        }
+//        // Load danh sách tác giả và chọn tác giả hiện tại
+//        List<AuthorDTO> authors = authorBUS.getAllAuthors();
+//        int selectedAuthorIndex = -1;
+//        for (int i = 0; i < authors.size(); i++) {
+//            AuthorDTO author = authors.get(i);
+//            authorComboBox.addItem(author.getName());
+//            if (author.getId() == book.getAuthorId()) {
+//                selectedAuthorIndex = i;
+//            }
+//        }
+//        if (selectedAuthorIndex != -1) {
+//            authorComboBox.setSelectedIndex(selectedAuthorIndex);
+//        }
 
         // Load danh sách nhà xuất bản và chọn nhà xuất bản hiện tại
         List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
@@ -165,7 +217,7 @@ public class EditBookDialog extends JDialog {
         panel.add(categoryLabel);
         panel.add(categoryComboBox);
         panel.add(authorLabel);
-        panel.add(authorComboBox);
+        panel.add(subPanel);
         panel.add(publisherLabel);
         panel.add(publisherComboBox);
         panel.add(quantityLabel);
@@ -212,10 +264,36 @@ public class EditBookDialog extends JDialog {
 
     private void updateBook() {
         try {
+            //Xử lý tác giả :
+            Long authorID = null;
+
+            String authorName = Controller.formatFullName(txtAuthor.getText());
+            for (AuthorDTO a : AuthorBUS.authorDTOList){
+                String aName = a.getLastName() + " " + a.getFirstName();
+                //Nếu đã tồn tại tác giả trong database :
+                if(aName.equals(authorName)){
+                    authorID = a.getId();
+                    break;
+                }
+            }
+
+
+            //Nếu chưa tồn tại :
+            if(authorID == null ){
+                int firstSpace = authorName.indexOf(" ");
+                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
+                String firstName = authorName.substring(firstSpace + 1);
+                //Thêm tác giả mới
+                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,0);
+                authorBUS.addAuthor(a);
+                authorID = a.getId();
+
+            }
+
             // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
             int categoryIndex = categoryComboBox.getSelectedIndex();
-            int authorIndex = authorComboBox.getSelectedIndex();
+
             int publisherIndex = publisherComboBox.getSelectedIndex();
             String quantityStr = quantityField.getText().trim();
             String unitPriceStr = unitPriceField.getText().trim();
@@ -232,11 +310,10 @@ public class EditBookDialog extends JDialog {
                 throw new IllegalArgumentException("Danh mục không hợp lệ");
             }
 
-            List<AuthorDTO> authors = authorBUS.getAllAuthors();
-            Long authorId = authors.get(authorIndex).getId();
-            if (authorId <= 0) {
-                throw new IllegalArgumentException("Tác giả không hợp lệ");
-            }
+//            Long authorId = authorBUS.authorDTOList.get(authorIndex-1).getId();
+//            if (authorId <= 0) {
+//                throw new IllegalArgumentException("Tác giả không hợp lệ");
+//            }
 
             List<PublisherDTO> publishers = publisherBUS.getAllPublishers();
             Long publisherId = publishers.get(publisherIndex).getId();
@@ -266,7 +343,7 @@ public class EditBookDialog extends JDialog {
             // Cập nhật thông tin sách
             book.setName(name);
             book.setCategoryId(categoryId);
-            book.setAuthorId(authorId);
+            book.setAuthorId(authorID);
             book.setPublisherId(publisherId);
             book.setQuantity(quantity);
             book.setUnitPrice(unitPrice);

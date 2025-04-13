@@ -152,3 +152,72 @@ INSERT INTO  `Employee` (`firstName`, `lastName`, `gender`, `username`, `passwor
 ('Nguyễn', 'Thành', 1, 'admin', 'admin', 1, '0123456789', 'Hà Nội', 10000000),
 ('Trần', 'Thị', 2, 'staff', 'staff', 2, '0987654321', 'Hà Nội', 8000000),
 ('Lê', 'Văn', 1, 'employee', 'employee', 3, '0912345678', 'Hà Nội', 6000000);
+
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_insertBook
+AFTER INSERT ON book
+FOR EACH ROW
+BEGIN
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE book.authorID = NEW.authorID
+    )
+    WHERE author.id = NEW.authorID;
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_deleteBook
+AFTER DELETE ON book
+FOR EACH ROW
+BEGIN
+	UPDATE author
+	SET quantity = (
+		SELECT COUNT(*) FROM book
+		WHERE book.authorID = OLD.authorID
+	)
+	WHERE author.id = OLD.authorID;
+
+	DELETE FROM author
+	WHERE quantity = 0;
+END;
+//
+DELIMITER;
+
+DELIMITER //
+
+CREATE TRIGGER updateAuthor_after_updateBook
+AFTER UPDATE ON book
+FOR EACH ROW
+BEGIN
+    -- Cập nhật quantity cho tác giả cũ
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE authorID = OLD.authorID
+    )
+    WHERE id = OLD.authorID;
+
+    -- Cập nhật quantity cho tác giả mới (nếu khác)
+    UPDATE author
+    SET quantity = (
+        SELECT COUNT(*) FROM book
+        WHERE authorID = NEW.authorID
+    )
+    WHERE id = NEW.authorID;
+
+    -- Xoá tác giả cũ nếu không còn sách
+    DELETE FROM author
+    WHERE id = OLD.authorID AND quantity = 0;
+
+
+END;
+//
+
+DELIMITER ;
