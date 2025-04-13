@@ -28,7 +28,12 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
         String sql = "SELECT * FROM Supplier";
         return genericDAL.queryForList(sql, supplierRowMapper);
     }
-
+    // timkiem
+    // public List<SupplierDTO> findByKeyword(String keyword) {
+    //     String lowerCaseKeyword = "%" + keyword.toLowerCase() + "%";
+    //     String sql = "SELECT * FROM Supplier WHERE LOWER(name) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(address) LIKE ?";
+    //     return genericDAL.queryForList(sql, supplierRowMapper, lowerCaseKeyword, lowerCaseKeyword, lowerCaseKeyword);
+    // }
     @Override
     public Long create(SupplierDTO supplierDTO) {
         String sql = "INSERT INTO Supplier (name, phone, address) VALUES (?, ?, ?)"; 

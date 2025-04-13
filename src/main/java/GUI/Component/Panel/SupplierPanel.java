@@ -1,16 +1,14 @@
 package GUI.Component.Panel;
 
-import DTO.SupplierDTO;
-import GUI.Component.Dialog.AddUpdateSupplier;
 import BUS.SupplierBUS;
 import DTO.SupplierDTO;
+import GUI.Component.Dialog.AddUpdateSupplier;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeleteSupplierDialog;
 import GUI.Component.Table.SupplierTable;
+import GUI.Component.TextField.RoundedTextField;
 import java.awt.Window;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import GUI.Component.Button.ButtonAdd;
@@ -18,16 +16,10 @@ import GUI.Component.Button.ButtonDelete;
 import GUI.Component.Button.ButtonUpdate;
 import GUI.Component.Button.ButtonExportExcel;
 import GUI.Component.Button.ButtonImportExcel;
-import GUI.Component.Table.SupplierTable;import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SupplierPanel extends javax.swing.JPanel {
 
@@ -35,7 +27,7 @@ public class SupplierPanel extends javax.swing.JPanel {
     Window parent = SwingUtilities.getWindowAncestor(this);
     private final AlertDialog fixSupplierAlert = new AlertDialog(parent, "Vui lòng chọn nhà cung cấp cần sửa!");
     private final AlertDialog deleteSupplierAlert = new AlertDialog(parent, "Vui lòng chọn nhà cung cấp cần xóa!");
-    private JTextField txtSearchName; // Khai báo txtSearchName
+    private JTextField txtSearchSupplierName; 
 
     public SupplierPanel() {
         try {
@@ -48,7 +40,7 @@ public class SupplierPanel extends javax.swing.JPanel {
             }
 
             reloadSupplierTable();
-            txtSearchName.getDocument().addDocumentListener(new DocumentListener() {
+            txtSearchSupplierName.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     loadTableFilter();
@@ -72,81 +64,81 @@ public class SupplierPanel extends javax.swing.JPanel {
 
     public void reloadSupplierTable() {
         supplierTable1.resetTable();
+        supplierTable1.loadData(supplierBUS.getAllSuppliers());
     }
 
     public void loadTableFilter() {
-        // Thêm logic lọc dữ liệu dựa trên txtSearchName.getText()
-        // và cập nhật supplierTable1
+        String searchText = txtSearchSupplierName.getText();
+        List<SupplierDTO> filteredList = supplierBUS.searchSuppliersByAll(searchText);
+        supplierTable1.loadData(filteredList);
     }
 
     private void initComponents() {
+        navbarSupplierPanel = new javax.swing.JPanel();
+        leftNavbarSupplierPanel = new javax.swing.JPanel();
         buttonAdd = new GUI.Component.Button.ButtonAdd();
         buttonDelete = new GUI.Component.Button.ButtonDelete();
         buttonUpdate = new GUI.Component.Button.ButtonUpdate();
         buttonExportExcel = new GUI.Component.Button.ButtonExportExcel();
         buttonImportExcel1 = new GUI.Component.Button.ButtonImportExcel();
+        rightNavbarSupplierPanel = new javax.swing.JPanel();
+        headerSearchPanel = new javax.swing.JPanel();
+        lblSearchTitle = new javax.swing.JLabel();
+        bodySearchPanel = new javax.swing.JPanel();
+        lblSearchByName = new javax.swing.JLabel();
+        txtSearchSupplierName = new JTextField(); // Khởi tạo txtSearchSupplierName
+        footerSearchPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         supplierTable1 = new GUI.Component.Table.SupplierTable();
-        txtSearchName = new JTextField(); // Khởi tạo txtSearchName
 
-        buttonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonAddMouseClicked(evt);
-            }
-        });
+        setLayout(new java.awt.BorderLayout());
 
-        buttonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonDeleteMouseClicked(evt);
-            }
-        });
+        navbarSupplierPanel.setBackground(new java.awt.Color(255, 255, 255));
+        navbarSupplierPanel.setLayout(new java.awt.BorderLayout(5, 5));
 
-        buttonUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonUpdateMouseClicked(evt);
-            }
-        });
+        leftNavbarSupplierPanel.setBackground(new java.awt.Color(255, 255, 255));
+        leftNavbarSupplierPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
+        leftNavbarSupplierPanel.add(buttonAdd);
+        leftNavbarSupplierPanel.add(buttonDelete);
+        leftNavbarSupplierPanel.add(buttonUpdate);
+        leftNavbarSupplierPanel.add(buttonExportExcel);
+        leftNavbarSupplierPanel.add(buttonImportExcel1);
+        navbarSupplierPanel.add(leftNavbarSupplierPanel, java.awt.BorderLayout.LINE_START);
+
+        rightNavbarSupplierPanel.setBackground(new java.awt.Color(255, 255, 255));
+        rightNavbarSupplierPanel.setLayout(new java.awt.GridLayout(3, 0));
+
+        headerSearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        headerSearchPanel.setLayout(new java.awt.BorderLayout());
+
+        lblSearchTitle.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        lblSearchTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSearchTitle.setText("Tìm kiếm ");
+        headerSearchPanel.add(lblSearchTitle, java.awt.BorderLayout.CENTER);
+        rightNavbarSupplierPanel.add(headerSearchPanel);
+
+        bodySearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        bodySearchPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+
+        lblSearchByName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblSearchByName.setText("Nhập thông tin tìm kiếm :"); // Cập nhật nhãn
+        lblSearchByName.setPreferredSize(new java.awt.Dimension(150, 30)); // Tăng kích thước nhãn
+        bodySearchPanel.add(lblSearchByName);
+
+        txtSearchSupplierName.setPreferredSize(new java.awt.Dimension(300, 30));
+        bodySearchPanel.add(txtSearchSupplierName);
+        rightNavbarSupplierPanel.add(bodySearchPanel);
+
+        footerSearchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        rightNavbarSupplierPanel.add(footerSearchPanel);
+
+        navbarSupplierPanel.add(rightNavbarSupplierPanel, java.awt.BorderLayout.LINE_END);
+
+        add(navbarSupplierPanel, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane1.setViewportView(supplierTable1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonExportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonImportExcel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 370, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(txtSearchName)) // Thêm txtSearchName
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonExportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonImportExcel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtSearchName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE) // Thêm txtSearchName
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-    }
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
         AddUpdateSupplier addDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "add", null);
@@ -181,6 +173,14 @@ public class SupplierPanel extends javax.swing.JPanel {
     private GUI.Component.Button.ButtonExportExcel buttonExportExcel;
     private GUI.Component.Button.ButtonImportExcel buttonImportExcel1;
     private GUI.Component.Button.ButtonUpdate buttonUpdate;
+    private javax.swing.JPanel bodySearchPanel;
+    private javax.swing.JPanel footerSearchPanel;
+    private javax.swing.JPanel headerSearchPanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSearchByName;
+    private javax.swing.JLabel lblSearchTitle;
+    private javax.swing.JPanel leftNavbarSupplierPanel;
+    private javax.swing.JPanel navbarSupplierPanel;
+    private javax.swing.JPanel rightNavbarSupplierPanel;
     private GUI.Component.Table.SupplierTable supplierTable1;
 }

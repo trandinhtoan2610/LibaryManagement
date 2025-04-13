@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 public class SupplierTable extends JTableCustom {
     private static final String[] supplierTableHeader = {"Mã nhà cung cấp", "Tên nhà cung cấp", "Số điện thoại", "Địa chỉ"};
     private DefaultTableModel tblModel;
-    private SupplierBUS supplierBUS; // Thêm SupplierBUS
+    private SupplierBUS supplierBUS; 
 
     public SupplierTable() {
         super(new DefaultTableModel(supplierTableHeader, 0));
@@ -24,15 +24,15 @@ public class SupplierTable extends JTableCustom {
 
     public void resetTable() {
         tblModel.setRowCount(0);
-        supplierBUS.getSupplierList();
-        List<SupplierDTO> suppliers = supplierBUS.supplierList; 
+        supplierBUS.reloadSupplierList(); 
+        List<SupplierDTO> suppliers = supplierBUS.supplierList;
         if (suppliers != null) {
             for (SupplierDTO s : suppliers) {
                 Object[] rowData = {
-                    s.getId(),
-                    s.getName(),
-                    s.getPhone(),
-                    s.getAddress()
+                        s.getId(),
+                        s.getName(),
+                        s.getPhone(),
+                        s.getAddress()
                 };
                 tblModel.addRow(rowData);
             }
@@ -41,7 +41,7 @@ public class SupplierTable extends JTableCustom {
 
     public void addSupplier(SupplierDTO s) {
         if (s != null) {
-            supplierBUS.addSupplier(s); // Add using BUS
+            supplierBUS.addSupplier(s); 
             resetTable();
         }
     }
@@ -70,6 +70,20 @@ public class SupplierTable extends JTableCustom {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < 4; i++) {
             getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+    public void loadData(List<SupplierDTO> data) {
+        tblModel.setRowCount(0); // Xóa dữ liệu cũ
+        if (data != null) {
+            for (SupplierDTO s : data) {
+                Object[] rowData = {
+                        s.getId(),
+                        s.getName(),
+                        s.getPhone(),
+                        s.getAddress()
+                };
+                tblModel.addRow(rowData);
+            }
         }
     }
 }

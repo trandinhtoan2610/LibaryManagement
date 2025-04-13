@@ -5,10 +5,11 @@ import DTO.SupplierDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SupplierBUS {
     SupplierDAL supplierDAL;
-    public List<SupplierDTO> supplierList; 
+    public List<SupplierDTO> supplierList;
 
     public SupplierBUS() {
         supplierDAL = new SupplierDAL();
@@ -23,8 +24,8 @@ public class SupplierBUS {
         }
     }
 
-    public void getSupplierList() {
-        supplierList = supplierDAL.findAll();
+    public List<SupplierDTO> getAllSuppliers() {
+        return supplierList;
     }
 
     public void addSupplier(SupplierDTO supplier) {
@@ -52,5 +53,39 @@ public class SupplierBUS {
 
     public long getCurrentID() {
         return supplierDAL.getCurrentID();
+    }
+    
+    public void reloadSupplierList() {
+        supplierList.clear();
+        List<SupplierDTO> loadedList = supplierDAL.findAll();
+        if (loadedList != null) {
+            supplierList.addAll(loadedList);
+        }
+    }
+
+    
+    // public List<SupplierDTO> searchSuppliersByName(String name) {
+    //     if (name == null || name.trim().isEmpty()) {
+    //         return supplierList;
+    //     }
+    //     String lowerCaseName = name.trim().toLowerCase();
+    //     return supplierList.stream()
+    //             .filter(supplier -> supplier.getName().toLowerCase().contains(lowerCaseName))
+    //             .collect(Collectors.toList());
+    // }
+
+   
+    public List<SupplierDTO> searchSuppliersByAll(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return supplierList;
+        }
+        String lowerCaseKeyword = keyword.trim().toLowerCase();
+        return supplierList.stream()
+                .filter(supplier ->
+                        supplier.getName().toLowerCase().contains(lowerCaseKeyword) ||
+                        supplier.getPhone().toLowerCase().contains(lowerCaseKeyword) ||
+                        supplier.getAddress().toLowerCase().contains(lowerCaseKeyword)
+                )
+                .collect(Collectors.toList());
     }
 }
