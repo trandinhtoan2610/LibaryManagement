@@ -17,6 +17,8 @@ import GUI.Component.Table.EmployeeTable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -117,13 +119,28 @@ public class BookPanel extends JPanel {
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         searchNavBarLabel = new SearchNavBarLabel();
-
+        // Thêm listener cho tìm kiếm
+        searchNavBarLabel.setSearchListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String type = searchNavBarLabel.getSearchType();
+                String keyword = searchNavBarLabel.getSearchKeyword();
+                try {
+                    List<BookViewModel> searchResults = bookBUS.searchBooks(type, keyword);
+                    bookTable.setBooks(searchResults);
+                } catch (Exception ex) {
+                    AlertDialog alertDialog = new AlertDialog(parentFrame, "Lỗi tìm kiếm: " + ex.getMessage());
+                    alertDialog.setVisible(true);
+                    loadData(); // Làm mới bảng nếu có lỗi
+                }
+            }
+        });
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
         buttonPanel.add(buttonExportExcel);
         buttonPanel.add(buttonImportExcel);
-        buttonPanel.add(Box.createRigidArea(new Dimension(60, 0)));
+        buttonPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
@@ -135,5 +152,18 @@ public class BookPanel extends JPanel {
         } else {
             System.out.println("Không có dữ liệu");
         }
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Quản lý sách");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1200, 700);
+            frame.setLocationRelativeTo(null); // căn giữa màn hình
+
+            BookPanel bookPanel = new BookPanel(frame);
+            frame.add(bookPanel);
+
+            frame.setVisible(true);
+        });
     }
 }

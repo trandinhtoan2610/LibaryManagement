@@ -8,6 +8,7 @@ import DTO.BookViewModel;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookBUS {
     private final IRepositoryBase<Book> bookRepository;
@@ -33,8 +34,7 @@ public class BookBUS {
                 viewModel.setName(book.getName());
                 viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
                 viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
-                viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
-                viewModel.setQuantity(book.getQuantity());
+                viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());                viewModel.setQuantity(book.getQuantity());
                 viewModel.setUnitPrice(book.getUnitPrice());
                 viewModel.setYearOfPublication(book.getYearOfPublication());
                 bookViewModels.add(viewModel);
@@ -44,6 +44,52 @@ public class BookBUS {
             throw new RuntimeException("Không thể lấy danh sách tất cả sách", e);
         }
         return bookViewModels;
+    }
+
+    // Tìm kiếm sách theo tiêu chí và từ khóa
+    public List<BookViewModel> searchBooks(String type, String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllBooksForDisplay(); // Nếu từ khóa rỗng, trả về toàn bộ danh sách
+        }
+
+        List<BookViewModel> allBooks = getAllBooksForDisplay();
+        List<BookViewModel> filteredBooks = new ArrayList<>();
+
+        try {
+            switch (type) {
+                case "Tên":
+                    filteredBooks = allBooks.stream()
+                            .filter(book -> book.getName().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList());
+                    break;
+                case "Thể Loại":
+                    filteredBooks = allBooks.stream()
+                            .filter(book -> book.getCategoryName().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList());
+                    break;
+                case "Tác Giả":
+                    filteredBooks = allBooks.stream()
+                            .filter(book -> book.getAuthorName().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList());
+                    break;
+                case "Năm":
+                    int year = Integer.parseInt(keyword); // Chuyển từ khóa thành số năm
+                    filteredBooks = allBooks.stream()
+                            .filter(book -> book.getYearOfPublication() != null && book.getYearOfPublication().getValue() == year)
+                            .collect(Collectors.toList());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Tiêu chí tìm kiếm không hợp lệ: " + type);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Lỗi khi chuyển đổi năm tìm kiếm: " + keyword + ". Vui lòng nhập một số hợp lệ.");
+            throw new IllegalArgumentException("Từ khóa tìm kiếm năm phải là một số hợp lệ", e);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tìm kiếm sách với tiêu chí " + type + " và từ khóa " + keyword + ": " + e.getMessage());
+            throw new RuntimeException("Không thể thực hiện tìm kiếm sách", e);
+        }
+
+        return filteredBooks;
     }
 
     // Lấy sách theo ID (dạng BookViewModel)
@@ -61,8 +107,7 @@ public class BookBUS {
             viewModel.setName(book.getName());
             viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
             viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
-            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
-            viewModel.setQuantity(book.getQuantity());
+            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());            viewModel.setQuantity(book.getQuantity());
             viewModel.setUnitPrice(book.getUnitPrice());
             viewModel.setYearOfPublication(book.getYearOfPublication());
             return viewModel;
