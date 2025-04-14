@@ -13,6 +13,7 @@ public class AuthorTable extends JTableCustom {
     private static final String[] columnsName = {"Mã tác giả", "Họ và tên", "Số lượng tác phẩm"};
     private DefaultTableModel tblModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
+
     
     public AuthorTable(){
         super(new DefaultTableModel(columnsName ,0));
@@ -20,12 +21,16 @@ public class AuthorTable extends JTableCustom {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         rowSorter = new TableRowSorter<>(tblModel);
         this.setRowSorter(rowSorter);
+        AuthorBUS authorBUS = new AuthorBUS();
         resetTable();
+
+
+
     }
     
     public void resetTable(){
         tblModel.setRowCount(0);
-        
+
         for (AuthorDTO a : AuthorBUS.authorDTOList){
             Object[] rowData = {
                 a.getId(),
