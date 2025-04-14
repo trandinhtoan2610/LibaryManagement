@@ -26,4 +26,12 @@ public class AuthorDTO {
     public String getName() {
         return (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
     }
+
+    public void setProductQuantity(long productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+    
+    
+    
+    
 }
