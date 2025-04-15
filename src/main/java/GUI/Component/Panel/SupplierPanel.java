@@ -2,13 +2,13 @@ package GUI.Component.Panel;
 
 import BUS.SupplierBUS;
 import DTO.SupplierDTO;
-import GUI.Component.Dialog.AddUpdateSupplier;
+import GUI.Component.Dialog.AddSupplierDialog;
+import GUI.Component.Dialog.UpdateSupplierDialog;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeleteSupplierDialog;
 import GUI.Component.Table.SupplierTable;
 import GUI.Component.TextField.RoundedTextField;
-import java.awt.Window;
-import javax.swing.SwingUtilities;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import GUI.Component.Button.ButtonAdd;
@@ -61,11 +61,13 @@ public class SupplierPanel extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-
-    public void reloadSupplierTable() {
+    public void reloadSupplierTable() {  
         supplierTable1.resetTable();
-        supplierTable1.loadData(supplierBUS.getAllSuppliers());
     }
+    // public void reloadSupplierTable() {
+    //     supplierTable1.resetTable();
+    //     supplierTable1.loadData(supplierBUS.getAllSuppliers());
+    // }
 
     public void loadTableFilter() {
         String searchText = txtSearchSupplierName.getText();
@@ -98,9 +100,27 @@ public class SupplierPanel extends javax.swing.JPanel {
 
         leftNavbarSupplierPanel.setBackground(new java.awt.Color(255, 255, 255));
         leftNavbarSupplierPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
+        buttonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonAddMouseClicked(evt);
+            }
+        });
         leftNavbarSupplierPanel.add(buttonAdd);
+
+        buttonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonDeleteMouseClicked(evt);
+            }
+        });
         leftNavbarSupplierPanel.add(buttonDelete);
+
+        buttonUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonUpdateMouseClicked(evt);
+            }
+        });
         leftNavbarSupplierPanel.add(buttonUpdate);
+
         leftNavbarSupplierPanel.add(buttonExportExcel);
         leftNavbarSupplierPanel.add(buttonImportExcel1);
         navbarSupplierPanel.add(leftNavbarSupplierPanel, java.awt.BorderLayout.LINE_START);
@@ -141,32 +161,31 @@ public class SupplierPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
-        AddUpdateSupplier addDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "add", null);
+        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, (this));
         addDialog.setVisible(true);
     }
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {
-        SupplierDTO s = supplierTable1.getSelectedSupplier();
-        if (s == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà cung cấp để xóa.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        SupplierDTO selectedSupplier = supplierTable1.getSelectedSupplier();
+        if (selectedSupplier != null) {
+            DeleteSupplierDialog deleteDialog = new DeleteSupplierDialog(
+                (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this),  true,  selectedSupplier,this );
+            deleteDialog.setVisible(true);
         } else {
-            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa nhà cung cấp này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                supplierTable1.deleteSupplier(s);
-                JOptionPane.showMessageDialog(this, "Xóa nhà cung cấp thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp để xóa.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void buttonUpdateMouseClicked(java.awt.event.MouseEvent evt) {
-        SupplierDTO supplier = supplierTable1.getSelectedSupplier();
-        if (supplier == null) {
-            fixSupplierAlert.setVisible(true);
+        SupplierDTO selectedSupplier = supplierTable1.getSelectedSupplier();
+        if (selectedSupplier == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } else {
-            AddUpdateSupplier updateDialog = new AddUpdateSupplier((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, "update", supplier);
+            UpdateSupplierDialog updateDialog = new UpdateSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), this,selectedSupplier );
             updateDialog.setVisible(true);
         }
     }
+    
 
     private GUI.Component.Button.ButtonAdd buttonAdd;
     private GUI.Component.Button.ButtonDelete buttonDelete;

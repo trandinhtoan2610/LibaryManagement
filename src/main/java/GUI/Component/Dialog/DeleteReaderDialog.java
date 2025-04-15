@@ -132,7 +132,6 @@ public class DeleteReaderDialog extends java.awt.Dialog {
         successDeleteAlert.setVisible(true);
         
         
-        
     }//GEN-LAST:event_btnConfirmDeleteMouseClicked
     
     //Nút hủy bỏ -> tắt dialog

@@ -33,18 +33,22 @@ public class SupplierBUS {
         supplierList.add(supplier);
     }
 
-    public void deleteSupplier(SupplierDTO supplier) {
+    public boolean deleteSupplier(SupplierDTO supplier) {
         boolean success = supplierDAL.delete(supplier.getId());
         if (success) {
             supplierList.removeIf(s -> s.getId().equals(supplier.getId()));
+            return true; 
+        } else {
+            return false; 
         }
     }
 
-    public void updateSupplier(SupplierDTO supplier) {
-        boolean success = supplierDAL.update(supplier);
+    public boolean updateSupplier(SupplierDTO supplier) {
+        boolean success = supplierDAL.update(supplier); 
         if (success) {
             supplierList.replaceAll(s -> s.getId().equals(supplier.getId()) ? supplier : s);
         }
+        return success; 
     }
 
     public SupplierDTO findSupplierByID(SupplierDTO supplier) {
