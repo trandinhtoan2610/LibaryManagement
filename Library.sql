@@ -23,7 +23,7 @@ CREATE TABLE `Reader` (
                           `gender` ENUM ('Nam', 'Nữ') NOT NULL DEFAULT 'Nam',
                           `phone` VARCHAR(10) NOT NULL,
                           `address` VARCHAR(255) NOT NULL,
-                          `complianceCount` int NOT NULL DEFAULT 0
+                          `complianceCount` int NOT NULL DEFAULT 3
 );
 
 CREATE TABLE `Author` (
@@ -153,70 +153,86 @@ INSERT INTO  `Employee` (`firstName`, `lastName`, `gender`, `username`, `passwor
 ('Lê', 'Văn', 1, 'employee', 'employee', 3, '0912345678', 'Hà Nội', 6000000);
 
 
-DELIMITER //
-
-CREATE TRIGGER updateAuthor_after_insertBook
-AFTER INSERT ON book
-FOR EACH ROW
-BEGIN
-    UPDATE author
-    SET quantity = (
-        SELECT COUNT(*) FROM book
-        WHERE book.authorID = NEW.authorID
-    )
-    WHERE author.id = NEW.authorID;
-END;
-//
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE TRIGGER updateAuthor_after_deleteBook
-AFTER DELETE ON book
-FOR EACH ROW
-BEGIN
-	UPDATE author
-	SET quantity = (
-		SELECT COUNT(*) FROM book
-		WHERE book.authorID = OLD.authorID
-	)
-	WHERE author.id = OLD.authorID;
-
-	DELETE FROM author
-	WHERE quantity = 0;
-END;
-//
-DELIMITER;
-
-DELIMITER //
-
-CREATE TRIGGER updateAuthor_after_updateBook
-AFTER UPDATE ON book
-FOR EACH ROW
-BEGIN
-    -- Cập nhật quantity cho tác giả cũ
-    UPDATE author
-    SET quantity = (
-        SELECT COUNT(*) FROM book
-        WHERE authorID = OLD.authorID
-    )
-    WHERE id = OLD.authorID;
-
-    -- Cập nhật quantity cho tác giả mới (nếu khác)
-    UPDATE author
-    SET quantity = (
-        SELECT COUNT(*) FROM book
-        WHERE authorID = NEW.authorID
-    )
-    WHERE id = NEW.authorID;
-
-    -- Xoá tác giả cũ nếu không còn sách
-    DELETE FROM author
-    WHERE id = OLD.authorID AND quantity = 0;
-
-
-END;
-//
-
-DELIMITER ;
+--INSERT INTO Reader (firstName, lastName, gender, phone, address)
+--VALUES
+--('Nguyễn', 'Minh', 'Nam', '0911111111', 'Hà Nội'),
+--('Trần', 'Lan', 'Nữ', '0922222222', 'TP.HCM'),
+--('Lê', 'Hùng', 'Nam', '0933333333', 'Đà Nẵng'),
+--('Phạm', 'Hòa', 'Nữ', '0944444444', 'Hải Phòng'),
+--('Hoàng', 'Khanh', 'Nam', '0955555555', 'Cần Thơ'),
+--('Đặng', 'Anh', 'Nữ', '0966666666', 'Huế'),
+--('Bùi', 'Tùng', 'Nam', '0977777777', 'Quảng Ninh');
+--
+--INSERT INTO Author (lastName, firstName)
+--VALUES
+--('Nguyễn', 'Nhật Ánh'),
+--('Tô', 'Hoài'),
+--('Nguyễn', 'Du'),
+--('Xuân', 'Diệu'),
+--('Hồ', 'Xuân Hương'),
+--('Lưu', 'Quang Vũ'),
+--('Nam', 'Cao');
+--
+--
+--INSERT INTO Category (name)
+--VALUES
+--('Tiểu thuyết'),
+--('Khoa học'),
+--('Thiếu nhi'),
+--('Tâm lý'),
+--('Kinh doanh'),
+--('Lịch sử'),
+--('Trinh thám');
+--
+--
+--INSERT INTO Publisher (name, phone, address)
+--VALUES
+--('NXB Trẻ', '0900000001', 'HCM'),
+--('NXB Kim Đồng', '0900000002', 'Hà Nội'),
+--('NXB Giáo Dục', '0900000003', 'Hà Nội'),
+--('NXB Văn Học', '0900000004', 'Đà Nẵng'),
+--('NXB Lao Động', '0900000005', 'HCM'),
+--('NXB Phụ Nữ', '0900000006', 'Hà Nội'),
+--('NXB Hội Nhà Văn', '0900000007', 'Hà Nội');
+--
+--INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yearOfpublication)
+--VALUES
+--('Tôi Thấy Hoa Vàng Trên Cỏ Xanh', 1, 1, 1, 10, 80000, 2015),
+--('Dế Mèn Phiêu Lưu Ký', 3, 2, 2, 12, 75000, 2012),
+--('Truyện Kiều', 1, 3, 4, 8, 90000, 2000),
+--('Thơ Tình', 4, 4, 3, 5, 60000, 1999),
+--('Bánh Trôi Nước', 4, 5, 5, 6, 50000, 2010),
+--('Tôi Và Chúng Ta', 2, 6, 1, 15, 70000, 2005),
+--('Chí Phèo', 1, 7, 6, 9, 85000, 1995);
+--
+--
+--INSERT INTO Supplier (name, phone, address)
+--VALUES
+--('Công ty Sách ABC', '0901000001', 'Hà Nội'),
+--('Công ty Sách XYZ', '0901000002', 'TP.HCM'),
+--('Công ty Sách Thiên Long', '0901000003', 'Cần Thơ'),
+--('Sách Thành Đô', '0901000004', 'Đà Nẵng'),
+--('Sách Hoa Sen', '0901000005', 'Huế'),
+--('Sách Tri Thức', '0901000006', 'HCM'),
+--('Sách Đông A', '0901000007', 'Hà Nội');
+--
+--INSERT INTO Borrow_in_Sheet (employeeId, readerId, borrowedDate, duedate, status)
+--VALUES
+--(1, 1, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY), 'Đang_Mượn'),
+--(2, 2, NOW(), DATE_ADD(NOW(), INTERVAL 10 DAY), 'Đã_Trả'),
+--(3, 3, NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'Quá_Ngày'),
+--(1, 4, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY), 'Đang_Mượn'),
+--(2, 5, NOW(), DATE_ADD(NOW(), INTERVAL 8 DAY), 'Đã_Trả'),
+--(3, 6, NOW(), DATE_ADD(NOW(), INTERVAL 6 DAY), 'Đang_Mượn'),
+--(1, 7, NOW(), DATE_ADD(NOW(), INTERVAL 9 DAY), 'Quá_Ngày');
+--
+--
+--INSERT INTO BorrowDetails (bookId, borrowSheetId, quantity, substatus)
+--VALUES
+--(1, 1, 1, 'Đang_Mượn'),
+--(2, 2, 2, 'Chưa_Trả'),
+--(3, 3, 1, 'Đang_Mượn'),
+--(4, 4, 1, 'Chưa_Trả'),
+--(5, 5, 2, 'Đang_Mượn'),
+--(6, 6, 1, 'Đang_Mượn'),
+--(7, 7, 1, 'Chưa_Trả');

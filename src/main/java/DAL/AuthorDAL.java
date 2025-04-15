@@ -41,9 +41,10 @@ public class AuthorDAL implements IRepositoryBase<AuthorDTO> {
     public boolean update(AuthorDTO authorDTO) {
         String sql = "UPDATE Author SET " +
                 "firstName = ?, " +
-                "lastName = ? " +            
+                "lastName = ?, " +
+                "quantity = ? " +
                 "WHERE id = ?";
-        return genericDAL.update(sql, authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getId() );
+        return genericDAL.update(sql, authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getProductQuantity(), authorDTO.getId() );
     }
 
     @Override

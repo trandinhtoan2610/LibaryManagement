@@ -3,7 +3,7 @@ package BUS;
 import DAL.AuthorDAL;
 import DAL.Interface.IRepositoryBase;
 import DTO.AuthorDTO;
-
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,24 +87,27 @@ public class AuthorBUS {
             System.err.println("Lỗi khi cập nhật tác giả với ID " + author.getId() + ": " + e.getMessage());
             throw new RuntimeException("Không thể cập nhật tác giả", e);
         }
+
     }
 
     // Xóa tác giả
-    public void deleteAuthor(AuthorDTO author) {
-        if (author.getId() <= 0) {
+    public void deleteAuthor(Long authorID) {
+        if (authorID <= 0) {
             throw new IllegalArgumentException("ID tác giả không hợp lệ");
         }
         try {
-            boolean success = authorRepository.delete(author.getId());
+            boolean success = authorRepository.delete(authorID);
             if (!success) {
                 throw new RuntimeException("Xóa tác giả thất bại");
             }
             // Xóa khỏi danh sách tĩnh
-            authorDTOList.removeIf(a -> a.getId() == author.getId());
+            authorDTOList.removeIf(a -> a.getId() == authorID);
         } catch (Exception e) {
-            System.err.println("Lỗi khi xóa tác giả với ID " + author.getId() + ": " + e.getMessage());
+            System.err.println("Lỗi khi xóa tác giả với ID " + authorID + ": " + e.getMessage());
             throw new RuntimeException("Không thể xóa tác giả", e);
         }
+
+
     }
 
     // Tìm tác giả theo ID
@@ -128,6 +131,18 @@ public class AuthorBUS {
 
     public Long getAuthorMaxID(){
         return authorRepository.getMaxID();
+    }
+
+
+    public void deleteUnusedAuthor() {
+        Iterator<AuthorDTO> iterator = authorDTOList.iterator();
+        while (iterator.hasNext()) {
+            AuthorDTO author = iterator.next();
+            if (author.getProductQuantity() == 0) {
+                iterator.remove(); // an toàn khi remove trong khi duyệt
+                authorRepository.delete(author.getId());
+            }
+        }
     }
 
     // Kiểm tra tính hợp lệ của tác giả

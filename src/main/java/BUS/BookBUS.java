@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookBUS {
-    private final IRepositoryBase<Book> bookRepository;
+    private final BookDAL bookRepository;
     private final CategoryBUS categoryBUS;
     private final AuthorBUS authorBUS;
     private final PublisherBUS publisherBUS;
@@ -193,6 +193,27 @@ public class BookBUS {
             throw new RuntimeException("Không thể xóa sách", e);
         }
     }
+
+    //Find books by authorID :
+    public List<BookViewModel> getBooksByAuthorID(Long authorID){
+        List<Book> bookList = bookRepository.findBooksByAuthorID(authorID);
+        List<BookViewModel> bookViewModelList = new ArrayList<>();
+        for(Book b : bookList){
+            BookViewModel bvm = new BookViewModel (
+                    b.getId(),
+                    b.getName(),
+                    categoryBUS.getCategoryById(b.getCategoryId()).getName(),
+                    authorBUS.getAuthorNameById(b.getAuthorId()),
+                    publisherBUS.getPublisherById(b.getPublisherId()).getName(),
+                    b.getQuantity(),
+                    b.getUnitPrice(),
+                    b.getYearOfPublication()
+            );
+            bookViewModelList.add(bvm);
+        }
+        return bookViewModelList;
+    }
+
 
     // Kiểm tra tính hợp lệ của sách
     private void validateBook(Book book) {

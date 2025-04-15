@@ -10,6 +10,7 @@ import DTO.AuthorDTO;
 import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
+import GUI.Component.Panel.AuthorPanel;
 import GUI.Component.Table.AuthorTable;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
@@ -237,35 +238,9 @@ public class AddBookDialog extends JDialog {
         return label;
     }
 
+
     private void addBook() {
         try {
-            //Xử lý tác giả :
-            Long authorID = null;
-
-            String authorName = Controller.formatFullName(txtAuthor.getText());
-            for (AuthorDTO a : AuthorBUS.authorDTOList){
-                String aName = a.getLastName() + " " + a.getFirstName();
-                //Nếu đã tồn tại tác giả trong database :
-                if(aName.equals(authorName)){
-
-                    authorID = a.getId();
-                    break;
-                }
-            }
-
-
-            //Nếu chưa tồn tại :
-            if(authorID == null ){
-                int firstSpace = authorName.indexOf(" ");
-                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
-                String firstName = authorName.substring(firstSpace + 1);
-                //Thêm mới tác giả
-                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,0);
-                authorBUS.addAuthor(a);
-                authorID = a.getId();
-
-            }
-
             // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
             int categoryIndex = categoryComboBox.getSelectedIndex();
@@ -315,6 +290,38 @@ public class AddBookDialog extends JDialog {
                 yearOfPublication = Year.of(year);
             }
 
+            //Xử lý tác giả :
+            Long authorID = null;
+            boolean isExist = false;
+
+            String authorName = Controller.formatFullName(txtAuthor.getText());
+            for (AuthorDTO a : AuthorBUS.authorDTOList){
+                String aName = a.getLastName() + " " + a.getFirstName();
+                //Nếu đã tồn tại tác giả trong database :
+                if(aName.equals(authorName)){
+                    authorID = a.getId();
+                    isExist = true;
+                    break;
+                }
+            }
+
+            if(isExist) {
+                AuthorDTO updateAuthor = authorBUS.getAuthorById(authorID);
+                updateAuthor.setProductQuantity(updateAuthor.getProductQuantity()+1); // increase quantity by 1
+                authorBUS.updateAuthor(updateAuthor);
+            }
+
+            //Nếu chưa tồn tại :
+            else{
+                int firstSpace = authorName.indexOf(" ");
+                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
+                String firstName = authorName.substring(firstSpace + 1);
+                //Thêm mới tác giả
+                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,1);
+                authorBUS.addAuthor(a);
+                authorID = a.getId();
+            }
+
             // Tạo đối tượng Book
             Book book = new Book();
             book.setName(name);
@@ -326,13 +333,27 @@ public class AddBookDialog extends JDialog {
             book.setYearOfPublication(yearOfPublication);
 
             // Gọi BookBUS để thêm sách
-            Long newBookId = bookBUS.addBook(book);
-            if (newBookId != null && newBookId > 0) {
-                // Hiển thị thông báo thành công
-                AlertDialog successDialog = new AlertDialog(this, "Thêm sách thành công với ID: " + newBookId);
-                successDialog.setVisible(true);
-                dispose(); // Đóng hộp thoại sau khi thêm thành công
-            } else {
+            try {
+                Long newBookId = bookBUS.addBook(book);
+
+                    //Update Author table for this panel and AuthorPanel :
+                    authorTable.resetTable();
+                    AuthorPanel.tblAuthor.resetTable();
+
+
+                    // Hiển thị thông báo thành công
+                    AlertDialog successDialog = new AlertDialog(this, "Thêm sách thành công với ID: " + newBookId);
+                    successDialog.setVisible(true);
+                    dispose(); // Đóng hộp thoại sau khi thêm thành công
+            }catch (Exception e ){
+                //ROLLBACK :
+                if (!isExist)
+                    authorBUS.deleteAuthor(authorID); //delete an author created before
+                else {
+                    AuthorDTO updateAuthor = authorBUS.getAuthorById(authorID);
+                    updateAuthor.setProductQuantity(updateAuthor.getProductQuantity()-1); // rollback author quantity if error.
+                    authorBUS.updateAuthor(updateAuthor);
+                }
                 throw new RuntimeException("Thêm sách thất bại");
             }
         } catch (NumberFormatException e) {
@@ -342,6 +363,7 @@ public class AddBookDialog extends JDialog {
             AlertDialog errorDialog = new AlertDialog(this, e.getMessage());
             errorDialog.setVisible(true);
         } catch (Exception e) {
+
             AlertDialog errorDialog = new AlertDialog(this, "Lỗi khi thêm sách: " + e.getMessage());
             errorDialog.setVisible(true);
         }

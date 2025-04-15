@@ -2,6 +2,7 @@ package GUI.Component.Table;
 
 
 import DTO.AuthorBookDTO;
+import DTO.BookViewModel;
 
 import java.util.List;
 import javax.swing.ListSelectionModel;
@@ -17,16 +18,16 @@ public class AuthorProductsTable extends JTableCustom{
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
-    public void resetTable(List<AuthorBookDTO> list){
+    public void resetTable(List<BookViewModel> list){
          tblModel.setRowCount(0);
          if(list == null){
              return;
          }
-         for (AuthorBookDTO book : list){
+         for (BookViewModel book : list){
              Object[] data = {
-                 book.getiD(),
+                 book.getId(),
                  book.getName(),
-                 book.getCategory(),
+                 book.getCategoryName()
              };
              
              tblModel.addRow(data);

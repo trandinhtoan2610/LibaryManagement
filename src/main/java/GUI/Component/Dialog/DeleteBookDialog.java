@@ -1,7 +1,11 @@
 package GUI.Component.Dialog;
 
+import BUS.AuthorBUS;
 import BUS.BookBUS;
+import DTO.AuthorDTO;
+import DTO.Book;
 import GUI.Component.Dialog.AlertDialog;
+import GUI.Component.Panel.AuthorPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +13,7 @@ import java.awt.*;
 public class DeleteBookDialog extends JDialog {
     private final BookBUS bookBUS;
     private final Long bookId; // ID của sách cần xóa
+    private AuthorBUS authorBUS;
     private JFrame parent;
 
     public DeleteBookDialog(JFrame parent, Long bookId) {
@@ -16,6 +21,7 @@ public class DeleteBookDialog extends JDialog {
         this.parent = parent;
         this.bookBUS = new BookBUS();
         this.bookId = bookId;
+        authorBUS = new AuthorBUS();
         initComponent();
         pack();
         setLocationRelativeTo(parent);
@@ -85,20 +91,53 @@ public class DeleteBookDialog extends JDialog {
         return bottomPanel;
     }
 
+
     private void deleteBook() {
+        Book bookDelete = bookBUS.getBookById(bookId);
+
+        if (bookId == null || bookDelete == null) {
+            new AlertDialog(parent, "ID sách không hợp lệ hoặc sách không tồn tại!").setVisible(true);
+            return;
+        }
+
+        boolean isSuccess = true;
+
         try {
-            if (bookId != null) {
-                bookBUS.deleteBook(bookId); // Gọi phương thức deleteBook với ID
-                dispose(); // Đóng dialog sau khi xóa thành công
-                AlertDialog successDialog = new AlertDialog(parent, "Xóa sách với ID: " + bookId + " thành công!");
-                successDialog.setVisible(true);
-            } else {
-                AlertDialog errorDialog = new AlertDialog(parent, "ID sách không hợp lệ!");
-                errorDialog.setVisible(true);
-            }
+            // Cập nhật lại số lượng tác phẩm của tác giả
+            AuthorDTO bookAuthor = authorBUS.getAuthorById(bookDelete.getAuthorId());
+            bookAuthor.setProductQuantity(bookAuthor.getProductQuantity() - 1);
+            authorBUS.updateAuthor(bookAuthor);
+            bookBUS.deleteBook(bookId);
+
+            dispose();
+            new AlertDialog(parent, "Xóa sách với ID: " + bookId + " thành công!").setVisible(true);
+
         } catch (Exception e) {
-            AlertDialog errorDialog = new AlertDialog(parent, "Lỗi khi xóa sách: " + e.getMessage());
-            errorDialog.setVisible(true);
+
+            isSuccess = false;
+
+            try {
+                // Rollback số lượng
+                AuthorDTO bookAuthor = authorBUS.getAuthorById(bookDelete.getAuthorId());
+                bookAuthor.setProductQuantity(bookAuthor.getProductQuantity() + 1);
+                authorBUS.updateAuthor(bookAuthor);
+
+                // Rollback sách
+                bookBUS.addBook(bookDelete);
+                AuthorPanel.tblAuthor.resetTable();
+
+            } catch (Exception rollbackEx) {
+                System.err.println("Rollback thất bại: " + rollbackEx.getMessage());
+            }
+
+            new AlertDialog(parent, "Lỗi khi xóa sách: " + e.getMessage()).setVisible(true);
+        }
+
+        if (isSuccess) {
+            authorBUS.deleteUnusedAuthor();
+            AuthorPanel.tblAuthor.resetTable();
         }
     }
+
+
 }

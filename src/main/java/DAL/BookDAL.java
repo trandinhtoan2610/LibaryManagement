@@ -178,4 +178,23 @@ public class BookDAL implements IRepositoryBase<Book> {
             System.err.println("Lỗi khi đóng Connection: " + e.getMessage());
         }
     }
+
+    public List<Book> findBooksByAuthorID(Long authorID){
+        String sql = "SELECT * FROM book WHERE authorID = ?";
+        List<Book> list = new ArrayList<Book>();
+        try (
+            Connection c = DatabaseConnection.getConnection();
+            PreparedStatement pst = c.prepareStatement(sql); )
+        {
+            pst.setLong(1,authorID);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                list.add(ResultSettoBook(rs));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("ERROR when query books by authour :D ");
+        }
+        return list;
+    }
 }

@@ -10,6 +10,7 @@ import DTO.AuthorDTO;
 import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
+import GUI.Component.Panel.AuthorPanel;
 import GUI.Component.Table.AuthorTable;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
@@ -263,33 +264,8 @@ public class EditBookDialog extends JDialog {
     }
 
     private void updateBook() {
+        boolean isSucces = true;
         try {
-            //Xử lý tác giả :
-            Long authorID = null;
-
-            String authorName = Controller.formatFullName(txtAuthor.getText());
-            for (AuthorDTO a : AuthorBUS.authorDTOList){
-                String aName = a.getLastName() + " " + a.getFirstName();
-                //Nếu đã tồn tại tác giả trong database :
-                if(aName.equals(authorName)){
-                    authorID = a.getId();
-                    break;
-                }
-            }
-
-
-            //Nếu chưa tồn tại :
-            if(authorID == null ){
-                int firstSpace = authorName.indexOf(" ");
-                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
-                String firstName = authorName.substring(firstSpace + 1);
-                //Thêm tác giả mới
-                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,0);
-                authorBUS.addAuthor(a);
-                authorID = a.getId();
-
-            }
-
             // Lấy dữ liệu từ các trường nhập liệu
             String name = nameField.getText().trim();
             int categoryIndex = categoryComboBox.getSelectedIndex();
@@ -340,22 +316,95 @@ public class EditBookDialog extends JDialog {
                 yearOfPublication = Year.of(year);
             }
 
-            // Cập nhật thông tin sách
-            book.setName(name);
-            book.setCategoryId(categoryId);
-            book.setAuthorId(authorID);
-            book.setPublisherId(publisherId);
-            book.setQuantity(quantity);
-            book.setUnitPrice(unitPrice);
-            book.setYearOfPublication(yearOfPublication);
+            //Xử lý tác giả :
+            Long authorID = null;
+            boolean isExist = false;
+            boolean isChange = false;
+            String authorName = Controller.formatFullName(txtAuthor.getText());
+
+            for (AuthorDTO a : AuthorBUS.authorDTOList){
+                String aName = a.getLastName() + " " + a.getFirstName();
+                //Nếu đã tồn tại tác giả trong database :
+                if(aName.equals(authorName)){
+                    authorID = a.getId();
+                    isExist = true;
+                    break;
+                }
+            }
+
+            //Nếu tác giả có trong database :
+            if(isExist){
+                isChange = authorID != book.getAuthorId() ? true : false;
+                if(isChange) { //Nếu tác giả bị thay đổi
+                    // -> Cập nhật lại sl tác phẩm cho tác giả mới
+                    AuthorDTO newAuthor = authorBUS.getAuthorById(authorID);
+                    newAuthor.setProductQuantity(newAuthor.getProductQuantity()+1);
+                    authorBUS.updateAuthor(newAuthor);
+                }
+            }
+
+            //Nếu chưa tồn tại :
+            else{
+                int firstSpace = authorName.indexOf(" ");
+                String lastName = authorName.substring(0, firstSpace);        // Lấy họ
+                String firstName = authorName.substring(firstSpace + 1);
+                //Thêm tác giả mới
+                AuthorDTO a = new AuthorDTO(authorBUS.getAuthorMaxID()+1,lastName,firstName,1);
+                authorBUS.addAuthor(a);
+                authorID = a.getId();
+            }
+
+            //Cập nhật lại sl tác phẩm cho tác giả cũ
+            if(isChange || !isExist) {
+                AuthorDTO oldAuthor = authorBUS.getAuthorById(book.getAuthorId());
+                oldAuthor.setProductQuantity(oldAuthor.getProductQuantity() - 1);
+                authorBUS.updateAuthor(oldAuthor);
+            }
+
+            Long prevID = book.getAuthorId(); // ID của tác giả cũ -> dùng cho rollback data nếu có sự cố
 
             // Gọi BookBUS để cập nhật sách
-            bookBUS.updateBook(book);
+            try {
+                // Cập nhật thông tin sách
+                book.setName(name);
+                book.setCategoryId(categoryId);
+                book.setAuthorId(authorID);
+                book.setPublisherId(publisherId);
+                book.setQuantity(quantity);
+                book.setUnitPrice(unitPrice);
+                book.setYearOfPublication(yearOfPublication);
+                bookBUS.updateBook(book);
 
-            // Hiển thị thông báo thành công
-            AlertDialog successDialog = new AlertDialog(this, "Cập nhật sách thành công với ID: " + book.getId());
-            successDialog.setVisible(true);
-            dispose(); // Đóng hộp thoại sau khi cập nhật thành công
+                // Hiển thị thông báo thành công
+                AlertDialog successDialog = new AlertDialog(this, "Cập nhật sách thành công với ID: " + book.getId());
+                successDialog.setVisible(true);
+                dispose(); // Đóng hộp thoại sau khi cập nhật thành công
+            }catch (Exception e){
+
+                AlertDialog updateFailAlert = new AlertDialog(this, "Có lỗi khi cập nhật sách !");
+                //ROLLBACK :
+                isSucces = false;
+                if(!isExist){
+                    authorBUS.deleteAuthor(authorID);  //xóa tác giả vừa thêm
+                }
+
+                if(isChange){  // Cập nhật lại sl tác phẩm của tác giả mới
+                    AuthorDTO newAuthor = authorBUS.getAuthorById(authorID);
+                    newAuthor.setProductQuantity(newAuthor.getProductQuantity()-1);
+                    authorBUS.updateAuthor(newAuthor);
+                }
+
+                //Cập nhật lại sl tác phẩm cho tác giả cũ
+                if(isChange || !isExist) {
+                    AuthorDTO oldAuthor = authorBUS.getAuthorById(prevID);
+                    oldAuthor.setProductQuantity(oldAuthor.getProductQuantity() + 1);
+                    authorBUS.updateAuthor(oldAuthor);
+                }
+                AuthorPanel.tblAuthor.resetTable();
+                authorTable.resetTable();
+                updateFailAlert.setVisible(true);
+            }
+
         } catch (NumberFormatException e) {
             AlertDialog errorDialog = new AlertDialog(this, "Vui lòng nhập số hợp lệ cho các trường số lượng, đơn giá, năm xuất bản");
             errorDialog.setVisible(true);
@@ -365,6 +414,12 @@ public class EditBookDialog extends JDialog {
         } catch (Exception e) {
             AlertDialog errorDialog = new AlertDialog(this, "Lỗi khi cập nhật sách: " + e.getMessage());
             errorDialog.setVisible(true);
+        }
+
+        if (isSucces) {
+            authorBUS.deleteUnusedAuthor();
+            AuthorPanel.tblAuthor.resetTable();
+            authorTable.resetTable();
         }
     }
 }

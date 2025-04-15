@@ -2,9 +2,10 @@
 package GUI.Component.Panel;
 
 import BUS.AuthorBUS;
-import BUS.AuthorBookBUS;
+import BUS.BookBUS;
 import DTO.AuthorDTO;
 import DTO.AuthorBookDTO;
+import DTO.BookViewModel;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.UpdateAuthorDialog;
 import java.awt.Window;
@@ -16,8 +17,8 @@ import javax.swing.event.DocumentListener;
 
 
 public class AuthorPanel extends javax.swing.JPanel {
-    AuthorBUS authorBUS;
-    AuthorBookBUS bookBUS;
+    private AuthorBUS authorBUS;
+    private BookBUS bookBUS;
     Window parent = SwingUtilities.getWindowAncestor(this);
     AlertDialog updateAlertDialog = new AlertDialog(parent,"Vui lòng chọn tác giả cần sửa");
     
@@ -27,7 +28,7 @@ public class AuthorPanel extends javax.swing.JPanel {
             System.out.println("Khởi tạo Author Panel...");
             initComponents();
             authorBUS = new AuthorBUS();
-            bookBUS = new AuthorBookBUS();
+            bookBUS = new BookBUS();
             if(AuthorBUS.authorDTOList == null )
                 System.out.println("Danh sách đang rỗng, chưa được khởi tạo !!");
             else
@@ -61,7 +62,7 @@ public class AuthorPanel extends javax.swing.JPanel {
     }
     
     //Cập nhật lại bảng sau khi thêm, sửa, xóa :
-    public void reloadTable(){
+    public static void reloadTable(){
         tblAuthor.resetTable();
     }
     
@@ -231,7 +232,8 @@ public class AuthorPanel extends javax.swing.JPanel {
     
     //Chọn 1 dòng trong bảng tác giả -> hiển thị các tác phẩm của tác giả ở bảng dưới : 
     private void tblAuthorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAuthorMouseClicked
-
+        AlertDialog add = new AlertDialog(parent,"ngu");
+        add.setVisible(true);
         int selectedRow = tblAuthor.getSelectedRow();
         if(selectedRow >= 0 ){        
            AuthorDTO a = tblAuthor.getSelectedAuthor();
@@ -239,7 +241,7 @@ public class AuthorPanel extends javax.swing.JPanel {
            String fullName =  Controller.formatFullName(a.getLastName() + ' ' + a.getFirstName());
            lblAuthorName.setText(fullName);
            lblSubTitle.setText("có trong thư viện");
-           List<AuthorBookDTO> bookList = bookBUS.getBookByAuthorID(authorID);
+           List<BookViewModel> bookList = bookBUS.getBooksByAuthorID(authorID);
            authorProductsTable1.resetTable(bookList);
            
         }
@@ -267,7 +269,7 @@ public class AuthorPanel extends javax.swing.JPanel {
     private javax.swing.JPanel leftNavbarAuthorPanel;
     private javax.swing.JPanel navbarAuthorPanel;
     private javax.swing.JPanel rightNavbarAuthorPanel;
-    private GUI.Component.Table.AuthorTable tblAuthor;
+    public static GUI.Component.Table.AuthorTable tblAuthor;
     private javax.swing.JPanel tblAuthorPanel;
     private javax.swing.JPanel tblProductsPanel;
     private javax.swing.JTextField txtSearchAuthorName;

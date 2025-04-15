@@ -16,4 +16,18 @@ public class BookViewModel {
     private int quantity;
     private Long unitPrice;
     private Year yearOfPublication;
+
+
+    public BookViewModel(){};
+
+    public BookViewModel(Long id, String name, String categoryName, String authorName, String publisherName, int quantity, Long unitPrice, Year yearOfPublication) {
+        this.id = id;
+        this.name = name;
+        this.categoryName = categoryName;
+        this.authorName = authorName;
+        this.publisherName = publisherName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.yearOfPublication = yearOfPublication;
+    }
 }
