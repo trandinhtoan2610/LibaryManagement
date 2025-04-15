@@ -44,6 +44,7 @@ public class BorrowPanel extends JPanel {
     private ButtonDelete buttonDelete;
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
+    private ButtonExportPDF buttonExportPDF;
     private JPanel searchNavBarLabel;
     private RoundedTextField searchfield;
     private JComboBox<String> searchOptionsComboBox;
@@ -165,12 +166,14 @@ public class BorrowPanel extends JPanel {
         });
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
+        buttonExportPDF = new ButtonExportPDF();
         searchNavBarLabel = getSearchNavBarLabel();
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
         buttonPanel.add(buttonExportExcel);
         buttonPanel.add(buttonImportExcel);
+        buttonPanel.add(buttonExportPDF);
         buttonPanel.add(Box.createRigidArea(new Dimension(30, 0)));
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
@@ -215,7 +218,7 @@ public class BorrowPanel extends JPanel {
         return label;
     }
     private void loadData() {
-        List<BorrowDTO> borrows = borrowSheetBUS.getAllBorrowSheet();
+        List<BorrowDTO> borrows = BorrowSheetBUS.borrowSheetList;
         if (borrows != null) {
             borrowinSheetTable.setBorrows(borrows);
         }else{
@@ -332,15 +335,11 @@ public class BorrowPanel extends JPanel {
             }
         });
 
-        filterButton = new ButtonFilter();
-        filterButton.addActionListener(e -> openDialogFilter());
-
         buttonRefresh = new ButtonRefresh();
         buttonRefresh.addActionListener(e -> refreshData());
 
         topPanel.add(searchOptionsComboBox);
         topPanel.add(searchfield);
-        topPanel.add(filterButton);
         topPanel.add(buttonRefresh);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
@@ -429,10 +428,6 @@ public class BorrowPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    private void openDialogFilter(){
-
-
     }
     public void refreshData() {
         borrowinSheetTable.refreshTable();

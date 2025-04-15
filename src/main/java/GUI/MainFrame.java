@@ -23,6 +23,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private HomePagePanel homePagePanel;
     private SupplierPanel supplierPanel;
     private PurchaseOrderPanel purchaseOrderPanel;
+    private StatisticsPanel statisticsPanel;
     private Employee currentEmployee;
 
     public MainFrame(Employee currentEmployee) {
@@ -61,7 +62,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         mainContentPanel.add(penaltyPanel, "Phiếu phạt");
         mainContentPanel.add(purchaseOrderPanel, "Phiếu nhập");
         mainContentPanel.add(supplierPanel, "Nhà cung cấp");
-        mainContentPanel.add(new JPanel(), "Thống kê");
+        mainContentPanel.add(statisticsPanel, "Thống kê");
         add(mainContentPanel, BorderLayout.CENTER);
     }
 
@@ -69,13 +70,14 @@ public class MainFrame extends JFrame implements SidebarListener {
         readerPanel = new ReaderPanel();
         employeePanel = new EmployeePanel(this);
         authorPanel = new AuthorPanel();
-        bookPanel = new BookPanel(this);
         penaltyPanel = new PenaltyPanel(this);
         borrowPanel = new BorrowPanel(this);
         publisherPanel = new PublisherPanel(this);
         homePagePanel = new HomePagePanel();
         supplierPanel = new SupplierPanel();
         purchaseOrderPanel = new PurchaseOrderPanel(this);
+        bookPanel = new BookPanel(this);
+        statisticsPanel = new StatisticsPanel();
     }
 
     @Override

@@ -153,17 +153,4 @@ public class BookPanel extends JPanel {
             System.out.println("Không có dữ liệu");
         }
     }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Quản lý sách");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1200, 700);
-            frame.setLocationRelativeTo(null); // căn giữa màn hình
-
-            BookPanel bookPanel = new BookPanel(frame);
-            frame.add(bookPanel);
-
-            frame.setVisible(true);
-        });
-    }
 }

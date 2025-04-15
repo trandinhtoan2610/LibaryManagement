@@ -107,7 +107,9 @@ public class BookBUS {
             viewModel.setName(book.getName());
             viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
             viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
-            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());            viewModel.setQuantity(book.getQuantity());
+            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
+            viewModel.setQuantity(book.getQuantity());
+            viewModel.setBorrowedQuantity(book.getBorrowedQuantity());
             viewModel.setUnitPrice(book.getUnitPrice());
             viewModel.setYearOfPublication(book.getYearOfPublication());
             return viewModel;

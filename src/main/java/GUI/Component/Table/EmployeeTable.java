@@ -1,5 +1,6 @@
 package GUI.Component.Table;
 
+import BUS.EmployeeBUS;
 import DTO.Employee;
 import DTO.Enum.Gender;
 
@@ -14,14 +15,12 @@ public class EmployeeTable extends JTableCustom {
             "Tài Khoản", "Mật Khẩu", "Chức Vụ", "Số Điện Thoại",
             "Địa Chỉ", "Lương"
     };
-
+    private List<Employee> employees;
     private DefaultTableModel tableModel;
-    private static List<Employee> employees;
 
     public EmployeeTable() {
         super(new DefaultTableModel(HEADER, 0));
         this.tableModel = (DefaultTableModel) getModel();
-        this.employees = new ArrayList<>();
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 14), new Color(70, 130, 180));
         setCustomGrid(new Color(220, 220, 220), 30);
         getColumnModel().getColumn(0).setPreferredWidth(35);

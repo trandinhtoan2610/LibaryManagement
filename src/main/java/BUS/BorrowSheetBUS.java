@@ -3,10 +3,17 @@ package BUS;
 import DAL.BorrowDAL;
 import DTO.BorrowDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowSheetBUS {
     private final BorrowDAL borrowSheetDAL = new BorrowDAL();
+    public static List<BorrowDTO> borrowSheetList = new ArrayList<>();
+    public BorrowSheetBUS() {
+        if (borrowSheetList.isEmpty()) {
+            borrowSheetList = borrowSheetDAL.findAll();
+        }
+    }
     public long createBorrowSheet(BorrowDTO dto) {
         validateBorrowData(dto);
         return borrowSheetDAL.create(dto);
