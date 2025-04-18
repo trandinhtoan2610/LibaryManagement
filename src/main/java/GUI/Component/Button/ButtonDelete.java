@@ -19,14 +19,14 @@ public class ButtonDelete extends JLabel {
     private Color BORDER_COLOR = new Color(224, 224, 224); // #E0E0E0
 
     // Kích thước và padding
-    private int ICON_SIZE = 36;
+    private int ICON_SIZE = 30;
     private int HORIZONTAL_PADDING = 10;
     private int VERTICAL_PADDING = 6;
     private int BORDER_RADIUS = 8;
 
     public ButtonDelete() {
         try {
-            setPreferredSize(new Dimension(142,100));
+            setPreferredSize(new Dimension(110,100));
 
             // Tải icon SVG
             URL url = getClass().getResource("/icons/delete.svg");

@@ -291,6 +291,10 @@ public class UpdateBorrowDetailDialog extends JDialog {
             int quantity = Integer.parseInt(quantityField.getText());
             boolean isBorrowed = borrowedRadioButton.isSelected();
             SubStatus subStatus = isBorrowed ? SubStatus.Đang_Mượn : SubStatus.Đã_Trả;
+            if (subStatus == SubStatus.Đã_Trả) {
+                borrowedRadioButton.disable();
+                quantity = -quantity;
+            }
             currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus);
             if (borrowSheetId > 0) {
                 borrowDetailBUS.updateBorrowDetail(currentBorrowDetail);

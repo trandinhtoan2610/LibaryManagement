@@ -11,15 +11,33 @@ import GUI.Component.Dialog.UpdateEmployeeDialog;
 import GUI.Component.Filter.EmployeeFilter;
 import GUI.Component.Table.EmployeeTable;
 import GUI.Component.TextField.RoundedTextField;
+import GUI.Excel.ExcelMaster;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.itextpdf.io.exceptions.IOException;
+import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.io.font.PdfEncodings;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +49,7 @@ public class EmployeePanel extends JPanel {
     private ButtonDelete buttonDelete;
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
+    private ButtonExportPDF buttonExportPDF;
     private JPanel searchNavBarLabel;
     private RoundedTextField searchfield;
     private ButtonFilter filterButton;
@@ -107,19 +126,36 @@ public class EmployeePanel extends JPanel {
             }
         });
         buttonExportExcel = new ButtonExportExcel();
+        buttonExportExcel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                exportExcelData();
+            }
+        });
         buttonImportExcel = new ButtonImportExcel();
+        buttonImportExcel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                importExcelData();
+            }
+        });
+        buttonExportPDF = new ButtonExportPDF();
+        buttonExportPDF.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                exportToPDF();
+            }
+        });
         searchNavBarLabel = getSearchNavBarLabel();
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
         buttonPanel.add(buttonExportExcel);
         buttonPanel.add(buttonImportExcel);
+        buttonPanel.add(buttonExportPDF);
         buttonPanel.add(Box.createRigidArea(new Dimension(50, 0)));
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
     private void loadData() {
-        List<Employee> employees = employeeBUS.getAllEmployees();
+        List<Employee> employees = EmployeeBUS.employeeList;
         if (employees != null) {
             employeeTable.setEmployees(employees);
         }else{
@@ -311,5 +347,210 @@ public class EmployeePanel extends JPanel {
             performSearch();
         });
         dialog.setVisible(true);
+    }
+
+    private void importExcelData() {
+        try {
+            // Thiết lập giao diện
+            FlatLightLaf.setup();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Chọn file Excel nhập dữ liệu");
+
+            // Thiết lập bộ lọc file
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Excel Files (*.xlsx)", "xlsx");
+            fileChooser.setFileFilter(filter);
+
+            // Hiển thị dialog chọn file
+            int fileChooserResult = fileChooser.showOpenDialog(parentFrame);
+
+            // Nếu người dùng không chọn file hoặc hủy
+            if (fileChooserResult != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            File selectedFile = fileChooser.getSelectedFile();
+            ExcelMaster excelMaster = new ExcelMaster();
+
+            // Đọc file Excel
+            excelMaster.setExcelFile(selectedFile.getAbsolutePath(), "Nhân viên");
+            List<Employee> employeesFromExcel = excelMaster.readEmployeesFromExcel();
+
+            // Kiểm tra dữ liệu
+            if (employeesFromExcel.isEmpty()) {
+                new AlertDialog(parentFrame, "File Excel không có dữ liệu nhân viên").setVisible(true);
+                return;
+            }
+
+            // Tạo custom dialog xác nhận
+            JPanel panel = new JPanel(new BorderLayout());
+            panel.add(new JLabel("<html><b>Bạn có chắc chắn muốn nhập " + employeesFromExcel.size() +
+                            " nhân viên từ file Excel?</b><br>File: " + selectedFile.getName() + "</html>"),
+                    BorderLayout.CENTER);
+
+            // Tùy chỉnh các nút
+            Object[] options = {"Đồng ý", "Hủy bỏ"};
+            int confirm = JOptionPane.showOptionDialog(
+                    parentFrame,
+                    panel,
+                    "Xác nhận nhập Excel",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]); // Mặc định chọn "Hủy bỏ"
+
+            // Xử lý kết quả
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Thực hiện import
+                int successCount = employeeBUS.addEmployeesFromExcel(employeesFromExcel);
+
+                // Cập nhật giao diện
+                employeeTable.setEmployees(EmployeeBUS.employeeList);
+
+                // Hiển thị kết quả
+                new AlertDialog(parentFrame,
+                        "Đã nhập thành công " + successCount + "/" + employeesFromExcel.size() + " nhân viên")
+                        .setVisible(true);
+            } else {
+                // Người dùng chọn hủy
+                new AlertDialog(parentFrame, "Đã hủy thao tác nhập Excel").setVisible(true);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            new AlertDialog(parentFrame,
+                    "Lỗi khi nhập file Excel: " + ex.getMessage())
+                    .setVisible(true);
+        }
+    }
+
+    private void exportExcelData() {
+        FlatLightLaf.setup();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+        fileChooser.setSelectedFile(new File("DanhSachNhanVien.xlsx"));
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Excel Files (*.xlsx)", "xlsx");
+        fileChooser.setFileFilter(filter);
+
+        int userSelection = fileChooser.showSaveDialog(parentFrame);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+
+            // Đảm bảo có đuôi .xlsx
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+
+            if (employeeBUS.exportToExcel(filePath)) {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thành công!\nFile: " + filePath,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thất bại",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void exportToPDF() {
+        FlatLightLaf.setup();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn vị trí lưu file PDF");
+        fileChooser.setSelectedFile(new File("DanhSachNhanVien.pdf"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf"));
+
+        if (fileChooser.showSaveDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
+            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".pdf")) {
+                filePath += ".pdf";
+            }
+
+            try {
+                // 1. Tạo PDF Writer
+                PdfWriter writer = new PdfWriter(filePath);
+
+                // 2. Tạo PDF Document
+                PdfDocument pdf = new PdfDocument(writer);
+
+                // 3. Tạo Document với font hỗ trợ Unicode
+                Document document = new Document(pdf);
+
+                // 4. Sử dụng font có sẵn hỗ trợ tiếng Việt
+                PdfFont font = PdfFontFactory.createFont(
+                        "C:/Windows/Fonts/Arial.ttf",  // Đường dẫn đến font Arial trên Windows
+                        PdfEncodings.IDENTITY_H,
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+                );
+                document.setFont(font);
+
+                // 5. Thêm tiêu đề
+                document.add(new Paragraph("DANH SÁCH NHÂN VIÊN")
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontSize(16)
+                        .setBold());
+
+                // 6. Tạo bảng (9 cột)
+                Table table = new Table(new float[]{1, 3, 2, 2, 2, 2, 3, 3, 3})
+                        .useAllAvailableWidth();
+
+                // 7. Thêm header
+                String[] headers = {"Mã NV", "Họ tên", "Giới tính", "Tài khoản", "Mật khẩu", "Chức vụ", "SĐT", "Địa chỉ", "Lương"};
+                for (String header : headers) {
+                    table.addCell(new Paragraph(header).setBold());
+                }
+
+                // 8. Thêm dữ liệu
+                for (Employee emp : EmployeeBUS.employeeList) {
+                    String role = switch (emp.getRoleID().intValue()) {
+                        case 1 -> "Admin";
+                        case 2 -> "Quản lý";
+                        case 3 -> "Nhân viên";
+                        default -> "Khác";
+                    };
+
+                    addCell(table, emp.getId() != null ? emp.getId().toString() : "");
+                    addCell(table, (emp.getFirstName() != null ? emp.getFirstName() : "") + " " +
+                            (emp.getLastName() != null ? emp.getLastName() : ""));
+                    addCell(table, emp.getGender() != null ? emp.getGender().toString() : "");
+                    addCell(table, emp.getUsername() != null ? emp.getUsername() : "");
+                    addCell(table, emp.getPassword() != null ? emp.getPassword() : "");
+                    addCell(table, role);
+                    addCell(table, emp.getPhone() != null ? emp.getPhone() : "");
+                    addCell(table, emp.getAddress() != null ? emp.getAddress() : "");
+                    addCell(table, emp.getSalary() != null ? emp.getSalary().toString() + " VND" : "0 VND");
+                }
+
+                document.add(table);
+                document.close();
+
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất PDF thành công!\nFile: " + filePath,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Lỗi khi xuất PDF: " + e.getMessage(),
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    // Helper method để thêm cell
+    private void addCell(Table table, String content) {
+        table.addCell(new Paragraph(content).setFontSize(10));
     }
 }

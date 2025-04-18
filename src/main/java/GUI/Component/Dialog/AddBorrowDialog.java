@@ -1,15 +1,9 @@
 package GUI.Component.Dialog;
 
-import BUS.BorrowDetailBUS;
-import BUS.BorrowSheetBUS;
-import BUS.EmployeeBUS;
-import BUS.ReaderBUS;
-import DTO.BorrowDTO;
-import DTO.BorrowDetailDTO;
-import DTO.Employee;
+import BUS.*;
+import DTO.*;
 import DTO.Enum.Status;
 import DTO.Enum.SubStatus;
-import DTO.ReaderDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
@@ -28,6 +22,7 @@ import java.util.List;
 public class AddBorrowDialog extends JDialog {
     private BorrowSheetBUS borrowSheetBUS = new BorrowSheetBUS();
     private BorrowDetailBUS borrowDetailBUS = new BorrowDetailBUS();
+    private BookBUS bookBUS = new BookBUS();
     private JLabel employeeLabel;
     private JLabel readerLabel;
     private CustomTextField employeeField;
@@ -255,7 +250,6 @@ public class AddBorrowDialog extends JDialog {
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
-
         JButton cancelButton = new JButton("Hủy bỏ");
         cancelButton.setBackground(new Color(255, 0, 0));
         cancelButton.setForeground(Color.WHITE);
@@ -264,7 +258,10 @@ public class AddBorrowDialog extends JDialog {
         cancelButton.setFocusPainted(false);
         cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cancelButton.setPreferredSize(new Dimension(120, 30));
-        cancelButton.addActionListener(e -> dispose());
+        cancelButton.addActionListener(e -> {
+            releaseReservedBooks();
+            dispose();
+        });
 
         JButton addButton = new JButton("Thêm");
         addButton.setPreferredSize(new Dimension(120, 30));
@@ -282,6 +279,57 @@ public class AddBorrowDialog extends JDialog {
         return panel;
     }
 
+    private void addBorrowDetail() {
+        long tempBorrowID = 0L;
+        AddBorrowDetailDialog addBorrowDetailDialog = new AddBorrowDetailDialog(this, getTempBorrowID());
+        addBorrowDetailDialog.setVisible(true);
+        if (addBorrowDetailDialog.getCurrentBorrowDetail() != null) {
+            BorrowDetailDTO newDetail = addBorrowDetailDialog.getCurrentBorrowDetail();
+            Book book = bookBUS.getBookById(newDetail.getBookId());
+            int availableQuantity = book.getQuantity() - book.getBorrowedQuantity();
+            if (availableQuantity < newDetail.getQuantity()) {
+                JOptionPane.showMessageDialog(this,
+                        "Số lượng mượn vượt quá tồn kho. Tồn kho hiện có: " + availableQuantity,
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            boolean found = false;
+            for (BorrowDetailDTO borrow : pendingBorrowDetails) {
+                if (borrow.getBookId() == newDetail.getBookId()) {
+                    int totalQuantity = borrow.getQuantity() + newDetail.getQuantity();
+                    if (availableQuantity < totalQuantity) {
+                        JOptionPane.showMessageDialog(this,
+                                "Số lượng mượn vượt quá tồn kho. Tồn kho hiện có: " + availableQuantity,
+                                "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    book.setBorrowedQuantity(book.getBorrowedQuantity() + newDetail.getQuantity());
+                    borrow.setQuantity(totalQuantity);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                book.setBorrowedQuantity(book.getBorrowedQuantity() + newDetail.getQuantity());
+                pendingBorrowDetails.add(newDetail);
+            }
+
+            bookBUS.updateBook(book);
+
+            borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
+            borrowDetailTable.refreshTable();
+            updateMainStatus();
+        }
+    }
+
+    private void releaseReservedBooks() {
+        for (BorrowDetailDTO detail : pendingBorrowDetails) {
+            Book book = bookBUS.getBookById(detail.getBookId());
+            book.setBorrowedQuantity(book.getBorrowedQuantity() - detail.getQuantity());
+            bookBUS.updateBook(book);
+        }
+        pendingBorrowDetails.clear();
+    }
     private void editBorrowDetails() {
         int selectedRow = borrowDetailTable.getSelectedRow();
         BorrowDetailDTO selectedBorrowDetail = borrowDetailTable.getSelectedBorrowDetail();
@@ -289,7 +337,38 @@ public class AddBorrowDialog extends JDialog {
             UpdateBorrowDetailDialog updateBorrowDetailDialog = new UpdateBorrowDetailDialog(this, getTempBorrowID(), selectedBorrowDetail);
             updateBorrowDetailDialog.setVisible(true);
             if (updateBorrowDetailDialog.getCurrentBorrowDetail() != null) {
-                pendingBorrowDetails.set(selectedRow, updateBorrowDetailDialog.getCurrentBorrowDetail());
+                BorrowDetailDTO newDetail = updateBorrowDetailDialog.getCurrentBorrowDetail();
+                Book book = bookBUS.getBookById(newDetail.getBookId());
+                int availableQuantity = book.getQuantity() - book.getBorrowedQuantity();
+                if (availableQuantity < newDetail.getQuantity()) {
+                    JOptionPane.showMessageDialog(this,
+                            "Số lượng mượn vượt quá tồn kho. Tồn kho hiện có: " + availableQuantity,
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                boolean found = false;
+                for (BorrowDetailDTO borrow : pendingBorrowDetails) {
+                    if (borrow.getBookId() == newDetail.getBookId()) {
+                        int totalQuantity = borrow.getQuantity() + newDetail.getQuantity();
+                        if (availableQuantity < totalQuantity) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Số lượng mượn vượt quá tồn kho. Tồn kho hiện có: " + availableQuantity,
+                                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        book.setBorrowedQuantity(book.getBorrowedQuantity() + newDetail.getQuantity());
+                        borrow.setQuantity(totalQuantity);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    book.setBorrowedQuantity(book.getBorrowedQuantity() + newDetail.getQuantity());
+                    pendingBorrowDetails.add(newDetail);
+                }
+
+                bookBUS.updateBook(book);
+
                 borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
                 borrowDetailTable.refreshTable();
                 updateMainStatus();
@@ -299,6 +378,23 @@ public class AddBorrowDialog extends JDialog {
         }
     }
 
+    private void deleteBorrowDetails() {
+        int selectedRow = borrowDetailTable.getSelectedRow();
+        if (selectedRow != -1) {
+            BorrowDetailDTO detail = pendingBorrowDetails.get(selectedRow);
+            Book book = bookBUS.getBookById(detail.getBookId());
+            book.setBorrowedQuantity(book.getBorrowedQuantity() - detail.getQuantity());
+            bookBUS.updateBook(book);
+
+            pendingBorrowDetails.remove(selectedRow);
+
+            borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
+            borrowDetailTable.refreshTable();
+            updateMainStatus();
+        }else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết phiếu mượn để xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
+    }
     private void updateMainStatus() {
         if (pendingBorrowDetails.isEmpty()) {
             statusValueLabel.setText("");
@@ -316,24 +412,6 @@ public class AddBorrowDialog extends JDialog {
             }
         }
     }
-
-    private void deleteBorrowDetails() {
-        int selectedRow = borrowDetailTable.getSelectedRow();
-        BorrowDetailDTO selectedBorrowDetail = borrowDetailTable.getSelectedBorrowDetail();
-        if (selectedRow != -1) {
-            DeleteBorrowDetailDialog deleteBorrowDetailDialog = new DeleteBorrowDetailDialog(this, getTempBorrowID(), selectedBorrowDetail);
-            deleteBorrowDetailDialog.setVisible(true);
-            if (deleteBorrowDetailDialog.isConfirmed()) {
-                pendingBorrowDetails.remove(selectedRow);
-                borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
-                borrowDetailTable.refreshTable();
-                updateMainStatus();
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết phiếu mượn để xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
     private void showEmployeeInfo() {
         String employeeId = employeeField.getText();
         if (employeeId.isEmpty()) {
@@ -394,19 +472,7 @@ public class AddBorrowDialog extends JDialog {
         }
     }
 
-    private void addBorrowDetail() {
-        //tam
-        long tempBorrowID = 0L;
 
-        AddBorrowDetailDialog addBorrowDetailDialog = new AddBorrowDetailDialog(this, getTempBorrowID());
-        addBorrowDetailDialog.setVisible(true);
-        if (addBorrowDetailDialog.getCurrentBorrowDetail() != null) {
-            pendingBorrowDetails.add(addBorrowDetailDialog.getCurrentBorrowDetail());
-            borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
-            borrowDetailTable.refreshTable();
-            updateMainStatus();
-        }
-    }
 
     private long getTempBorrowID() {
         return -1;

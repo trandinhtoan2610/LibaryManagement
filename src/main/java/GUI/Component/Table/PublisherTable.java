@@ -1,5 +1,6 @@
 package GUI.Component.Table;
 
+import BUS.PublisherBUS;
 import DTO.PublisherDTO;
 
 import javax.swing.*;

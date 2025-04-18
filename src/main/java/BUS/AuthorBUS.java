@@ -17,8 +17,6 @@ public class AuthorBUS {
         if (authorDTOList.size() == 0) {
             getAuthorList();
         }
-
-
     }
 
     // Load danh sách tác giả từ DAL vào authorDTOList

@@ -23,9 +23,6 @@ public class AuthorTable extends JTableCustom {
         this.setRowSorter(rowSorter);
         AuthorBUS authorBUS = new AuthorBUS();
         resetTable();
-
-
-
     }
     
     public void resetTable(){

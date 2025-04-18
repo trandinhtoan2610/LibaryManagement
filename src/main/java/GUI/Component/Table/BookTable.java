@@ -14,7 +14,7 @@ import java.util.List;
 public class BookTable extends JTableCustom {
     private static final String[] HEADER = {
             "ID", "Tên sách", "Thể loại", "Tác giả",
-            "Nhà xuất bản", "Số lượng", "Đơn giá", "Năm XB"
+            "Nhà xuất bản", "Số lượng","SL Đang Mượn", "Đơn giá", "Năm XB"
     };
 
     private DefaultTableModel tableModel;
@@ -37,6 +37,7 @@ public class BookTable extends JTableCustom {
         getColumnModel().getColumn(3).setPreferredWidth(100);  // Tác giả
         getColumnModel().getColumn(4).setPreferredWidth(120);  // NXB
         getColumnModel().getColumn(5).setPreferredWidth(80);   // Số lượng
+        getColumnModel().getColumn(6).setPreferredWidth(80);   // SL Đang Mượn
         getColumnModel().getColumn(6).setPreferredWidth(80);   // Đơn giá
         getColumnModel().getColumn(7).setPreferredWidth(80);   // Năm XB
         setAutoCreateRowSorter(true);
@@ -67,7 +68,7 @@ public class BookTable extends JTableCustom {
         }
         return null;
     }
-    private void refreshTable() {
+    public void refreshTable() {
         tableModel.setRowCount(0);
         for (BookViewModel book : books) {
             Object[] rowData = {
@@ -77,13 +78,14 @@ public class BookTable extends JTableCustom {
                     book.getAuthorName(),    // Hiển thị tên tác giả
                     book.getPublisherName(), // Hiển thị tên nhà xuất bản
                     book.getQuantity(),
+                    book.getBorrowedQuantity(),
                     book.getUnitPrice(),
                     book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
             };
             tableModel.addRow(rowData);
         }
     }
-    private void refreshTableCustom() {
+    public void refreshTableCustom() {
         tableModel.setRowCount(0);
         for (BookViewModel book : books) {
             Object[] rowData = {
@@ -91,7 +93,7 @@ public class BookTable extends JTableCustom {
                     book.getCategoryName(),  // Hiển thị tên danh mục
                     book.getAuthorName(),    // Hiển thị tên tác giả
                     book.getPublisherName(), // Hiển thị tên nhà xuất bản
-                    book.getQuantity(),
+                    book.getQuantity() - book.getBorrowedQuantity(),
                     book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
             };
             tableModel.addRow(rowData);

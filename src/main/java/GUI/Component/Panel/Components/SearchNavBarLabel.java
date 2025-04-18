@@ -4,6 +4,8 @@ import GUI.Component.TextField.RoundedTextField;
 import com.kitfox.svg.app.beans.SVGIcon;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,6 +54,22 @@ public class SearchNavBarLabel extends JPanel {
         searchField.setPreferredSize(new Dimension(200, 40));
         // Thêm sự kiện khi nhấn Enter để tìm kiếm
         searchField.addActionListener(e -> performSearch());
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                performSearch();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                performSearch();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                performSearch();
+            }
+        });
         panel.add(searchField);
 
         URL refreshUrl = getClass().getResource("/icons/filter.svg");

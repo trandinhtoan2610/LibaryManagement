@@ -22,6 +22,7 @@ public class BookDAL implements IRepositoryBase<Book> {
         book.setAuthorId(rs.getLong("authorId"));
         book.setPublisherId(rs.getLong("publisherId"));
         book.setQuantity(rs.getInt("quantity"));
+        book.setBorrowedQuantity(rs.getInt("borrowedQuantity"));
         book.setUnitPrice(rs.getLong("unitprice"));
         int year = rs.getInt("yearOfpublication");
         book.setYearOfPublication(rs.wasNull() ? null : Year.of(year));
@@ -80,7 +81,7 @@ public class BookDAL implements IRepositoryBase<Book> {
 
     @Override
     public Long create(Book book) {
-        String query = "INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yearOfpublication) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, borrowedQuantity, unitprice, yearOfpublication) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet generatedKeys = null;
@@ -92,8 +93,9 @@ public class BookDAL implements IRepositoryBase<Book> {
             stmt.setLong(3, book.getAuthorId());
             stmt.setLong(4, book.getPublisherId());
             stmt.setInt(5, book.getQuantity());
-            stmt.setLong(6, book.getUnitPrice());
-            stmt.setObject(7, book.getYearOfPublication() != null ? book.getYearOfPublication().getValue() : null);
+            stmt.setInt(6, book.getBorrowedQuantity());
+            stmt.setLong(7, book.getUnitPrice());
+            stmt.setObject(8, book.getYearOfPublication() != null ? book.getYearOfPublication().getValue() : null);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
                 throw new SQLException("Thêm sách thất bại, không có hàng nào được thêm");
@@ -114,7 +116,7 @@ public class BookDAL implements IRepositoryBase<Book> {
 
     @Override
     public boolean update(Book book) {
-        String query = "UPDATE Book SET name = ?, categoryId = ?, authorId = ?, publisherId = ?, quantity = ?, unitprice = ?, yearOfpublication = ? WHERE id = ?";
+        String query = "UPDATE Book SET name = ?, categoryId = ?, authorId = ?, publisherId = ?, quantity = ?,borrowedQuantity = ?, unitprice = ?, yearOfpublication = ? WHERE id = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -125,9 +127,10 @@ public class BookDAL implements IRepositoryBase<Book> {
             stmt.setLong(3, book.getAuthorId());
             stmt.setLong(4, book.getPublisherId());
             stmt.setInt(5, book.getQuantity());
-            stmt.setLong(6, book.getUnitPrice());
-            stmt.setObject(7, book.getYearOfPublication() != null ? book.getYearOfPublication().getValue() : null);
-            stmt.setLong(8, book.getId());
+            stmt.setInt(6, book.getBorrowedQuantity());
+            stmt.setLong(7, book.getUnitPrice());
+            stmt.setObject(8, book.getYearOfPublication() != null ? book.getYearOfPublication().getValue() : null);
+            stmt.setLong(9, book.getId());
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {

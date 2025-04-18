@@ -13,6 +13,7 @@ public class Book extends EntityBase<Long> {
     private String name;
     private Long categoryId, authorId, publisherId;
     private int quantity;
+    private int borrowedQuantity;
     private Long unitPrice;
     private Year yearOfPublication;
 

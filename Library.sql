@@ -45,6 +45,7 @@ CREATE TABLE `Book` (
                         `authorId` BIGINT NOT NULL,
                         `publisherId` BIGINT NOT NULL,
                         `quantity` INT NOT NULL,
+                        `borrowedQuantity` INT NOT NULL DEFAULT 0,
                         `unitprice` BIGINT NOT NULL,
                         `yearOfpublication` YEAR
 );

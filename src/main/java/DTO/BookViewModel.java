@@ -14,6 +14,7 @@ public class BookViewModel {
     private String authorName;
     private String publisherName;
     private int quantity;
+    private int borrowedQuantity;
     private Long unitPrice;
     private Year yearOfPublication;
 

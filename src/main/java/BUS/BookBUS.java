@@ -15,17 +15,24 @@ public class BookBUS {
     private final CategoryBUS categoryBUS;
     private final AuthorBUS authorBUS;
     private final PublisherBUS publisherBUS;
+    private List<BookViewModel> bookViewModels; // Danh sách nội bộ để lưu trữ
 
     public BookBUS() {
         this.bookRepository = new BookDAL();
         this.categoryBUS = new CategoryBUS();
         this.authorBUS = new AuthorBUS();
         this.publisherBUS = new PublisherBUS();
+        this.bookViewModels = new ArrayList<>();
+        
     }
 
-    // Lấy danh sách tất cả sách dưới dạng BookViewModel
-    public List<BookViewModel> getAllBooksForDisplay() {
-        List<BookViewModel> bookViewModels = new ArrayList<>();
+    // tải lại danh sách từ csdl
+    private void refreshBooks() {
+        if (!bookViewModels.isEmpty()) {
+            return; 
+        }
+
+        bookViewModels.clear();
         try {
             List<Book> books = bookRepository.findAll();
             for (Book book : books) {
@@ -34,47 +41,54 @@ public class BookBUS {
                 viewModel.setName(book.getName());
                 viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
                 viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
-                viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());                viewModel.setQuantity(book.getQuantity());
+                viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
+                viewModel.setQuantity(book.getQuantity());
+                viewModel.setBorrowedQuantity(book.getBorrowedQuantity());
                 viewModel.setUnitPrice(book.getUnitPrice());
                 viewModel.setYearOfPublication(book.getYearOfPublication());
                 bookViewModels.add(viewModel);
             }
         } catch (Exception e) {
-            System.err.println("Lỗi khi lấy danh sách tất cả sách: " + e.getMessage());
-            throw new RuntimeException("Không thể lấy danh sách tất cả sách", e);
+            System.err.println("Lỗi khi làm mới danh sách sách: " + e.getMessage());
+            throw new RuntimeException("Không thể làm mới danh sách sách", e);
         }
-        return bookViewModels;
     }
 
-    // Tìm kiếm sách theo tiêu chí và từ khóa
+    // Lấy danh sách tất cả sách dưới dạng BookViewModel từ danh sách nội bộ
+    public List<BookViewModel> getAllBooksForDisplay() {
+        refreshBooks(); 
+        return new ArrayList<>(bookViewModels); 
+    }
+
+    // Tìm kiếm sách theo tiêu chí và từ khóa trên danh sách nội bộ
     public List<BookViewModel> searchBooks(String type, String keyword) {
+        refreshBooks(); 
         if (keyword == null || keyword.trim().isEmpty()) {
-            return getAllBooksForDisplay(); // Nếu từ khóa rỗng, trả về toàn bộ danh sách
+            return getAllBooksForDisplay();
         }
 
-        List<BookViewModel> allBooks = getAllBooksForDisplay();
         List<BookViewModel> filteredBooks = new ArrayList<>();
 
         try {
             switch (type) {
                 case "Tên":
-                    filteredBooks = allBooks.stream()
+                    filteredBooks = bookViewModels.stream()
                             .filter(book -> book.getName().toLowerCase().contains(keyword.toLowerCase()))
                             .collect(Collectors.toList());
                     break;
                 case "Thể Loại":
-                    filteredBooks = allBooks.stream()
+                    filteredBooks = bookViewModels.stream()
                             .filter(book -> book.getCategoryName().toLowerCase().contains(keyword.toLowerCase()))
                             .collect(Collectors.toList());
                     break;
                 case "Tác Giả":
-                    filteredBooks = allBooks.stream()
+                    filteredBooks = bookViewModels.stream()
                             .filter(book -> book.getAuthorName().toLowerCase().contains(keyword.toLowerCase()))
                             .collect(Collectors.toList());
                     break;
                 case "Năm":
-                    int year = Integer.parseInt(keyword); // Chuyển từ khóa thành số năm
-                    filteredBooks = allBooks.stream()
+                    int year = Integer.parseInt(keyword); 
+                    filteredBooks = bookViewModels.stream()
                             .filter(book -> book.getYearOfPublication() != null && book.getYearOfPublication().getValue() == year)
                             .collect(Collectors.toList());
                     break;
@@ -92,32 +106,19 @@ public class BookBUS {
         return filteredBooks;
     }
 
-    // Lấy sách theo ID (dạng BookViewModel)
+    // Lấy sách theo ID (dạng BookViewModel) từ danh sách nội bộ
     public BookViewModel getBookByIdForDisplay(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
         }
-        try {
-            Book book = bookRepository.findById(id);
-            if (book == null) {
-                throw new RuntimeException("Không tìm thấy sách với ID " + id);
-            }
-            BookViewModel viewModel = new BookViewModel();
-            viewModel.setId(book.getId());
-            viewModel.setName(book.getName());
-            viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
-            viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
-            viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());            viewModel.setQuantity(book.getQuantity());
-            viewModel.setUnitPrice(book.getUnitPrice());
-            viewModel.setYearOfPublication(book.getYearOfPublication());
-            return viewModel;
-        } catch (Exception e) {
-            System.err.println("Lỗi khi lấy thông tin sách với ID " + id + ": " + e.getMessage());
-            throw new RuntimeException("Không thể lấy thông tin sách với ID " + id, e);
-        }
+        refreshBooks(); 
+        return bookViewModels.stream()
+                .filter(book -> book.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sách với ID " + id));
     }
 
-    // Lấy danh sách tất cả sách (dạng Book)
+    // Lấy danh sách tất cả sách dạng Book từ cơ sở dữ liệu
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
         try {
@@ -129,7 +130,7 @@ public class BookBUS {
         return books;
     }
 
-    // Lấy sách theo ID (dạng Book)
+    // Lấy sách theo ID (dạng Book) từ cơ sở dữ liệu
     public Book getBookById(Long id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
@@ -146,6 +147,21 @@ public class BookBUS {
         }
     }
 
+    // Chuyển Book thành BookViewModel để thêm hoặc cập nhật danh sách bookviewmodals
+    private BookViewModel convertToBookViewModel(Book book) {
+        BookViewModel viewModel = new BookViewModel();
+        viewModel.setId(book.getId());
+        viewModel.setName(book.getName());
+        viewModel.setCategoryName(categoryBUS.getCategoryById(book.getCategoryId()).getName());
+        viewModel.setAuthorName(authorBUS.getAuthorNameById(book.getAuthorId()));
+        viewModel.setPublisherName(publisherBUS.getPublisherById(book.getPublisherId()).getName());
+        viewModel.setQuantity(book.getQuantity());
+        viewModel.setBorrowedQuantity(book.getBorrowedQuantity());
+        viewModel.setUnitPrice(book.getUnitPrice());
+        viewModel.setYearOfPublication(book.getYearOfPublication());
+        return viewModel;
+    }
+
     // Thêm sách mới
     public Long addBook(Book book) {
         validateBook(book);
@@ -154,6 +170,11 @@ public class BookBUS {
             if (newBookId == null || newBookId <= 0) {
                 throw new RuntimeException("Thêm sách thất bại");
             }
+           
+            book.setId(newBookId);
+           
+            BookViewModel newBookViewModel = convertToBookViewModel(book);
+            bookViewModels.add(newBookViewModel);
             return newBookId;
         } catch (Exception e) {
             System.err.println("Lỗi khi thêm sách: " + e.getMessage());
@@ -172,6 +193,14 @@ public class BookBUS {
             if (!success) {
                 throw new RuntimeException("Cập nhật sách thất bại");
             }
+           
+            BookViewModel updatedBookViewModel = convertToBookViewModel(book);
+            for (int i = 0; i < bookViewModels.size(); i++) {
+                if (bookViewModels.get(i).getId().equals(book.getId())) {
+                    bookViewModels.set(i, updatedBookViewModel);
+                    break;
+                }
+            }
         } catch (Exception e) {
             System.err.println("Lỗi khi cập nhật sách với ID " + book.getId() + ": " + e.getMessage());
             throw new RuntimeException("Không thể cập nhật sách", e);
@@ -188,32 +217,27 @@ public class BookBUS {
             if (!success) {
                 throw new RuntimeException("Xóa sách thất bại");
             }
+           
+            bookViewModels.removeIf(book -> book.getId().equals(id));
         } catch (Exception e) {
             System.err.println("Lỗi khi xóa sách với ID " + id + ": " + e.getMessage());
             throw new RuntimeException("Không thể xóa sách", e);
         }
     }
 
-    //Find books by authorID :
-    public List<BookViewModel> getBooksByAuthorID(Long authorID){
-        List<Book> bookList = bookRepository.findBooksByAuthorID(authorID);
-        List<BookViewModel> bookViewModelList = new ArrayList<>();
-        for(Book b : bookList){
-            BookViewModel bvm = new BookViewModel (
-                    b.getId(),
-                    b.getName(),
-                    categoryBUS.getCategoryById(b.getCategoryId()).getName(),
-                    authorBUS.getAuthorNameById(b.getAuthorId()),
-                    publisherBUS.getPublisherById(b.getPublisherId()).getName(),
-                    b.getQuantity(),
-                    b.getUnitPrice(),
-                    b.getYearOfPublication()
-            );
-            bookViewModelList.add(bvm);
+    // Tìm sách theo AuthorID
+    public List<BookViewModel> getBooksByAuthorID(Long authorID) {
+        if (authorID == null || authorID <= 0) {
+            throw new IllegalArgumentException("ID tác giả không hợp lệ");
         }
-        return bookViewModelList;
+        refreshBooks();
+        return bookViewModels.stream()
+                .filter(book -> {
+                    Book b = bookRepository.findById(book.getId());
+                    return b != null && b.getAuthorId().equals(authorID);
+                })
+                .collect(Collectors.toList());
     }
-
 
     // Kiểm tra tính hợp lệ của sách
     private void validateBook(Book book) {
@@ -242,4 +266,6 @@ public class BookBUS {
             throw new IllegalArgumentException("ID nhà xuất bản không hợp lệ");
         }
     }
+
+    
 }
