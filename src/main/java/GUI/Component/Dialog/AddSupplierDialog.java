@@ -31,6 +31,20 @@ public class AddSupplierDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent); // Hiển thị dialog ở giữa cửa sổ cha
     }
     private boolean fieldController() {
+        if (txtSupplierID.getText().trim().isEmpty()) {
+            AlertDialog blankIDAlert = new AlertDialog(this, "Vui lòng nhập mã nhà cung cấp ! ");
+            blankIDAlert.setVisible(true);
+            txtSupplierID.requestFocus();
+            return false;
+        }
+        try {
+            Long.parseLong(txtSupplierID.getText().trim()); // Kiểm tra xem ID có phải là số không
+        } catch (NumberFormatException e) {
+            AlertDialog invalidIDAlert = new AlertDialog(this, "Mã nhà cung cấp phải là số !");
+            invalidIDAlert.setVisible(true);
+            txtSupplierID.requestFocus();
+            return false;
+        }
         if (txtSupplierName.getText().trim().isEmpty()) {
             AlertDialog blankNameAlert = new AlertDialog(this, "Vui lòng nhập tên nhà cung cấp ! ");
             blankNameAlert.setVisible(true);
@@ -193,27 +207,34 @@ public class AddSupplierDialog extends javax.swing.JDialog {
 
     private void btnAddSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSupplierActionPerformed
         if(fieldController()){
+            String supplierID = txtSupplierID.getText().trim(); // Lấy ID từ trường txtSupplierID
             String supplierName = txtSupplierName.getText().trim();
             String supplierPhone = txtSupplierPhone.getText().trim();
             String supplierAddress = txtSupplierAddress.getText().trim();
-    
-            SupplierDTO s = new SupplierDTO(
-                    null, 
+
+            try {
+                Long id = Long.parseLong(supplierID); // Chuyển ID sang kiểu Long
+                SupplierDTO s = new SupplierDTO(
+                    id, // Sử dụng ID đã chuyển đổi
                     supplierName,
                     supplierPhone,
                     supplierAddress
-            );
-    
-            supplierBUS.addSupplier(s);
-    
-            AlertDialog addSupplierSuccess = new AlertDialog(this, "Thêm nhà cung cấp thành công !");
-            addSupplierSuccess.setVisible(true);
-            supplierPanel.reloadSupplierTable();
-            this.dispose();
-    
-            // AddSupplierDialog();
+                );
+
+                supplierBUS.addSupplier(s);
+
+                AlertDialog addSupplierSuccess = new AlertDialog(this, "Thêm nhà cung cấp thành công !");
+                addSupplierSuccess.setVisible(true);
+                supplierPanel.reloadSupplierTable();
+                this.dispose();
+
+            } catch (NumberFormatException e) {
+                AlertDialog invalidIDAlert = new AlertDialog(this, "Mã nhà cung cấp phải là số !");
+                invalidIDAlert.setVisible(true);
+                txtSupplierID.requestFocus();
+            }
         }
-    }
+    }//GEN-LAST:event_btnAddSupplierActionPerformed
     private void btnCancelSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSupplierActionPerformed
         dispose(); // Đóng dialog khi nhấn nút Hủy bỏ
     }//GEN-LAST:event_btnCancelSupplierActionPerformed

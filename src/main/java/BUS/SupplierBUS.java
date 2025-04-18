@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JOptionPane;
+
 public class SupplierBUS {
     SupplierDAL supplierDAL;
     public List<SupplierDTO> supplierList;
@@ -28,9 +30,19 @@ public class SupplierBUS {
         return supplierList;
     }
 
-    public void addSupplier(SupplierDTO supplier) {
-        supplierDAL.create(supplier);
-        supplierList.add(supplier);
+    public boolean addSupplier(SupplierDTO supplier) {
+        if (supplierList.stream().anyMatch(s -> s.getId().equals(supplier.getId()))) {
+            JOptionPane.showMessageDialog(null, "ID nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false; 
+        }
+        Long result = supplierDAL.create(supplier);
+        if (result > 0) {
+            // Thêm vào list quản lý ở BUS nếu thêm vào database thành công
+            supplierList.add(supplier);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean deleteSupplier(SupplierDTO supplier) {
@@ -50,7 +62,7 @@ public class SupplierBUS {
         }
         return success; 
     }
-
+    
     public SupplierDTO findSupplierByID(SupplierDTO supplier) {
         return supplierDAL.findById(supplier.getId());
     }

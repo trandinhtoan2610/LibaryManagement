@@ -75,7 +75,7 @@ CREATE TABLE `BorrowDetails` (
 );
 
 CREATE TABLE `Supplier` (
-                            `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            `id` BIGINT PRIMARY KEY ,
                             `name` VARCHAR(255) NOT NULL,
                             `phone` VARCHAR(10) NOT NULL,
                             `address` VARCHAR(255) NOT NULL

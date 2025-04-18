@@ -11,7 +11,7 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<SupplierDTO> supplierRowMapper = (ResultSet rs) -> {
         Long id = rs.getLong("id");
-        String name = rs.getString("name"); 
+        String name = rs.getString("name");
         String phone = rs.getString("phone");
         String address = rs.getString("address");
         return new SupplierDTO(id, name, phone, address);
@@ -28,22 +28,17 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
         String sql = "SELECT * FROM Supplier";
         return genericDAL.queryForList(sql, supplierRowMapper);
     }
-    // timkiem
-    // public List<SupplierDTO> findByKeyword(String keyword) {
-    //     String lowerCaseKeyword = "%" + keyword.toLowerCase() + "%";
-    //     String sql = "SELECT * FROM Supplier WHERE LOWER(name) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(address) LIKE ?";
-    //     return genericDAL.queryForList(sql, supplierRowMapper, lowerCaseKeyword, lowerCaseKeyword, lowerCaseKeyword);
-    // }
+
     @Override
     public Long create(SupplierDTO supplierDTO) {
-        String sql = "INSERT INTO Supplier (name, phone, address) VALUES (?, ?, ?)"; 
-        return genericDAL.insert(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress());
+        String sql = "INSERT INTO Supplier (id, name, phone, address) VALUES (?, ?, ?, ?)"; // Thêm trường id vào câu lệnh INSERT
+        return genericDAL.insert(sql, supplierDTO.getId(), supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress()); // Thêm supplierDTO.getId() vào tham số
     }
 
     @Override
     public boolean update(SupplierDTO supplierDTO) {
-        String sql = "UPDATE Supplier SET name = ?, phone = ?, address = ? WHERE id = ?"; 
-        return genericDAL.update(sql, supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress());
+        String sql = "UPDATE Supplier SET id = ?, name = ?, phone = ?, address = ? WHERE id = ?";
+        return genericDAL.update(sql, supplierDTO.getId(), supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress(), supplierDTO.getId());
     }
 
     @Override
