@@ -159,6 +159,31 @@ public class AddBorrowDetailDialog extends JDialog {
 
         return panel;
     }
+    private String wrapString(String text, int maxLineLength) {
+        if (text == null || text.isEmpty()) return "<html></html>";
+
+        StringBuilder sb = new StringBuilder("<html>");
+        String[] words = text.split(" ");
+        int currentLineLength = 0;
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+
+            // Kiểm tra nếu thêm từ này vượt quá maxLineLength
+            if (currentLineLength + word.length() > maxLineLength) {
+                // Nếu là từ đơn lẻ (không phải cụm từ ghép), xuống dòng
+                if (!word.matches("[A-Za-zÀ-ỹ]+")) { // Regex kiểm tra từ có dấu/không dấu
+                    sb.append("<br>");
+                    currentLineLength = 0;
+                }
+            }
+
+            sb.append(word).append(" ");
+            currentLineLength += word.length() + 1;
+        }
+
+        return sb.append("</html>").toString();
+    }
 
     private void updateBookInfo() {
         String bookIDText = bookIDField.getText();
@@ -177,7 +202,7 @@ public class AddBorrowDetailDialog extends JDialog {
             long bookID = Long.parseLong(bookIDText);
             currentBook = bookBUS.getBookByIdForDisplay(bookID);
             if (currentBook != null) {
-                titleLabel.setText("Tên sách: " + currentBook.getName());
+                titleLabel.setText(wrapString("Tên sách: " + currentBook.getName(), 25));
                 authorLabel.setText("Tác giả: " + currentBook.getAuthorName());
                 categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
                 publisherLabel.setText("NXB: " + currentBook.getPublisherName());
@@ -202,7 +227,7 @@ public class AddBorrowDetailDialog extends JDialog {
         currentBook = dialog.getSelectedBook();
         if (currentBook != null) {
             bookIDField.setText(currentBook.getId().toString());
-            titleLabel.setText("Tên sách: " + currentBook.getName());
+            titleLabel.setText(wrapString("Tên sách: " + currentBook.getName(), 25));
             authorLabel.setText("Tác giả: " + currentBook.getAuthorName());
             categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
             publisherLabel.setText("NXB: " + currentBook.getPublisherName());
@@ -271,8 +296,7 @@ public class AddBorrowDetailDialog extends JDialog {
         if (isValidInput()) {
             long bookID = Long.parseLong(bookIDField.getText());
             int quantity = Integer.parseInt(quantityField.getText());
-            boolean isBorrowed = borrowedRadioButton.isSelected();
-            SubStatus subStatus = isBorrowed ? SubStatus.Đang_Mượn : SubStatus.Đã_Trả;
+            SubStatus subStatus = SubStatus.Đang_Mượn;
             currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus, null);
             if (borrowSheetId > 0) {
                 borrowDetailBUS.addBorrowDetail(currentBorrowDetail);

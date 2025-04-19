@@ -1,7 +1,5 @@
 package DTO;
 
-import BUS.BookBUS;
-import DTO.Abstract.EntityBase;
 import DTO.Enum.SubStatus;
 import lombok.Getter;
 import lombok.Setter;

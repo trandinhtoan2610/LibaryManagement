@@ -199,6 +199,7 @@ public class AddBorrowDialog extends JDialog {
         deleteDetailButton = new ButtonIcon("/icons/deleteDetails.svg");
         deleteDetailButton.addActionListener(e -> deleteBorrowDetails());
         editDetailButton = new ButtonIcon("/icons/editDetails.svg");
+        editDetailButton.setEnabled(false);
         editDetailButton.addActionListener(e -> editBorrowDetails());
 
         JPanel emptyPanel = new JPanel();
@@ -362,6 +363,7 @@ public class AddBorrowDialog extends JDialog {
             if (borrow.getBookId() == selectedBorrowDetail.getBookId()) {
                 borrow.setQuantity(newDetail.getQuantity());
                 borrow.setStatus(newDetail.getStatus());
+                borrow.setActualReturnDate(newDetail.getActualReturnDate());
                 break;
             }
         }

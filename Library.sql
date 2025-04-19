@@ -71,7 +71,8 @@ CREATE TABLE `BorrowDetails` (
                                  `bookId` BIGINT NOT NULL,
                                  `borrowSheetId` BIGINT NOT NULL,
                                  `quantity` INT NOT NULL DEFAULT 1,
-                                 `substatus` ENUM ('Đang_Mượn', 'Chưa_Trả', 'Mất_Sách', 'Hư_Sách', 'Quá_Hạn') NOT NULL DEFAULT 'Đang_Mượn',
+                                 `substatus` ENUM ('Đang_Mượn', 'Đã_Trả', 'Mất_Sách', 'Hư_Sách', 'Quá_Hạn') NOT NULL DEFAULT 'Đang_Mượn',
+                                `actualReturnDate` DATETIME DEFAULT NULL,
                                  PRIMARY KEY (`bookId`, `borrowSheetId`)
 );
 

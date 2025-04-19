@@ -49,7 +49,6 @@ public class GenericDAL {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             setParameters(stmt, params);
             int affectedRows = stmt.executeUpdate();
-
             return affectedRows > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi cập nhật dữ liệu", e);

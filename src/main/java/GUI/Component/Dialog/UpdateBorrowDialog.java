@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.Date;
 import java.util.List;
 
 import static GUI.Component.Panel.BookPanel.bookTable;
@@ -246,7 +247,6 @@ public class UpdateBorrowDialog extends JDialog {
         borrowedDateChooser.setDate(borrowToUpdate.getBorrowedDate());
         borrowedDateChooser.setDateFormatString("dd/MM/yyyy");
         borrowedDateChooser.setPreferredSize(new Dimension(150, 30));
-        borrowedDateChooser.setEnabled(false);
         dueDateLabel = new JLabel("Hạn trả:");
         dueDateChooser = new JDateChooser();
         dueDateChooser.setDate(borrowToUpdate.getDuedate());
@@ -257,6 +257,7 @@ public class UpdateBorrowDialog extends JDialog {
         actualReturnDateChooser = new JDateChooser();
         actualReturnDateChooser.setDateFormatString("dd/MM/yyyy");
         actualReturnDateChooser.setPreferredSize(new Dimension(150, 30));
+        actualReturnDateChooser.setEnabled(false);
         if (borrowToUpdate.getActualReturnDate() != null) {
             actualReturnDateChooser.setDate(borrowToUpdate.getActualReturnDate());
         }
@@ -338,13 +339,24 @@ public class UpdateBorrowDialog extends JDialog {
             if (borrow.getBookId() == selectedBorrowDetail.getBookId()) {
                 borrow.setQuantity(newDetail.getQuantity());
                 borrow.setStatus(newDetail.getStatus());
+                borrow.setActualReturnDate(newDetail.getActualReturnDate());
                 break;
             }
+        }
+        if (newDetail.getStatus() == SubStatus.Mất_Sách || newDetail.getStatus() == SubStatus.Hư_Sách){
+            book.setQuantity(book.getQuantity() - newDetail.getQuantity());
+            book.setBorrowedQuantity(book.getBorrowedQuantity() - newDetail.getQuantity());
+            bookBUS.updateBook(book);
         }
         if (newDetail.getStatus() == SubStatus.Đã_Trả) {
             book.setBorrowedQuantity(book.getBorrowedQuantity() - newDetail.getQuantity());
             bookBUS.updateBook(book);
         }
+        Date latestReturnDate = getLatestActualReturnDate();
+        if (latestReturnDate != null) {
+            actualReturnDateChooser.setDate(latestReturnDate);
+        }
+
         borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
         borrowDetailTable.refreshTable();
         updateMainStatus();
@@ -353,18 +365,36 @@ public class UpdateBorrowDialog extends JDialog {
     private void updateMainStatus() {
         if (pendingBorrowDetails.isEmpty()) {
             statusValueLabel.setText("");
-        } else {
-            boolean flag = true;
-            for (BorrowDetailDTO borrowDetail : pendingBorrowDetails) {
-                if (borrowDetail.getStatus() == SubStatus.Đang_Mượn) {
-                    flag = false;
-                    statusValueLabel.setText("Đang Mượn");
-                    return;
-                }
+            return;
+        }
+        boolean hasDangMuon = false;
+        boolean hasPhat = false;
+        boolean hasDaTra = true;
+
+        for (BorrowDetailDTO borrowDetail : pendingBorrowDetails) {
+            if (borrowDetail.getStatus() == SubStatus.Đang_Mượn) {
+                hasDangMuon = true;
+                break;
             }
-            if (flag) {
-                statusValueLabel.setText("Đã Trả");
+            if (borrowDetail.getStatus() == SubStatus.Mất_Sách || borrowDetail.getStatus() == SubStatus.Hư_Sách || borrowDetail.getStatus() == SubStatus.Quá_Hạn) {
+                hasPhat = true;
             }
+            if (borrowDetail.getStatus() != SubStatus.Đã_Trả) {
+                hasDaTra = false;
+            }
+        }
+
+        if (hasDangMuon) {
+            statusValueLabel.setText("Đang Mượn");
+        }
+        else if (hasPhat) {
+            statusValueLabel.setText("Phạt");
+        }
+        else if (hasDaTra) {
+            statusValueLabel.setText("Đã Trả");
+        }
+        else {
+            statusValueLabel.setText("");
         }
     }
 
@@ -377,6 +407,9 @@ public class UpdateBorrowDialog extends JDialog {
             bookBUS.updateBook(book);
 
             pendingBorrowDetails.remove(selectedRow);
+
+            Date latestReturnDate = getLatestActualReturnDate();
+            actualReturnDateChooser.setDate(latestReturnDate);
 
             borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
             borrowDetailTable.refreshTable();
@@ -534,6 +567,21 @@ public class UpdateBorrowDialog extends JDialog {
         return true;
     }
 
+    private Date getLatestActualReturnDate() {
+        if (pendingBorrowDetails == null || pendingBorrowDetails.isEmpty()) {
+            return null;
+        }
+
+        Date latestDate = null;
+        for (BorrowDetailDTO detail : pendingBorrowDetails) {
+            if (detail.getActualReturnDate() != null) {
+                if (latestDate == null || detail.getActualReturnDate().after(latestDate)) {
+                    latestDate = detail.getActualReturnDate();
+                }
+            }
+        }
+        return latestDate;
+    }
     private void updateBorrow() {
         try {
             setCurrentID();
@@ -542,15 +590,25 @@ public class UpdateBorrowDialog extends JDialog {
                 String status = statusValueLabel.getText();
                 Status statusImport;
 
-                if (status.equals("Đã Trả")) {
-                    if (!actualReturnDateChooser.getDate().after(dueDateChooser.getDate())) {
-                        statusImport = Status.Đã_Trả;
-                    } else {
+                switch (status) {
+                    case "Phạt" -> {
                         statusImport = Status.Phạt;
                     }
-                } else {
-                    statusImport = Status.Đang_Mượn;
+                    case "Đang Mượn" -> {
+                        statusImport = Status.Đang_Mượn;
+                    }
+                    case "Đã Trả" -> {
+                        statusImport = Status.Đã_Trả;
+                    }
+                    default -> {
+                        statusImport = Status.Đang_Mượn;
+                    }
                 }
+                Date actualReturnDate = getLatestActualReturnDate();
+                if (actualReturnDate != null) {
+                    actualReturnDateChooser.setDate(actualReturnDate);
+                }
+
 
                 BorrowDTO borrowDTO = new BorrowDTO(
                         borrowSheetId,
@@ -558,7 +616,7 @@ public class UpdateBorrowDialog extends JDialog {
                         Long.parseLong(readerField.getText()),
                         borrowedDateChooser.getDate(),
                         dueDateChooser.getDate(),
-                        actualReturnDateChooser.getDate(),
+                        actualReturnDate,
                         statusImport
                 );
                 for (BorrowDetailDTO detail : pendingBorrowDetails) {

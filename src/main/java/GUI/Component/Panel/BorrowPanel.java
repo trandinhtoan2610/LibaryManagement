@@ -355,7 +355,7 @@ public class BorrowPanel extends JPanel {
         allRadioButton = new JRadioButton("Tất cả");
         borrowedRadioButton = new JRadioButton("Đang Mượn");
         returnedRadioButton = new JRadioButton("Đã Trả");
-        overdueRadioButton = new JRadioButton("Quá Ngày");
+        overdueRadioButton = new JRadioButton("Phạt");
 
         allRadioButton.setBackground(Color.WHITE);
         borrowedRadioButton.setBackground(Color.WHITE);
@@ -402,6 +402,19 @@ public class BorrowPanel extends JPanel {
             List<RowFilter<Object, Object>> filters = new ArrayList<>();
             if(!searchText.isEmpty()){
                 filters.add(RowFilter.regexFilter("(?i)" + searchText, searchColumm));
+            }
+            if(!allRadioButton.isSelected()){
+                if(borrowedRadioButton.isSelected() || returnedRadioButton.isSelected() || overdueRadioButton.isSelected()) {
+                    Status statusFilter;
+                    if (borrowedRadioButton.isSelected()) {
+                        statusFilter = Status.Đang_Mượn;
+                    } else if (returnedRadioButton.isSelected()) {
+                        statusFilter = Status.Đã_Trả;
+                    } else {
+                        statusFilter = Status.Phạt;
+                    }
+                    filters.add(RowFilter.regexFilter(statusFilter.toString(), 6));
+                }
             }
             if(filters.isEmpty()) {
                 sorter.setRowFilter(null);

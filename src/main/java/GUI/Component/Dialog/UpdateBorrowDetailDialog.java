@@ -26,8 +26,6 @@ public class UpdateBorrowDetailDialog extends JDialog {
     private final CustomTextField bookIDField = new CustomTextField();
     private final CustomTextField quantityField = new CustomTextField();
     private final ButtonChosen buttonChosenBook = new ButtonChosen();
-    private final JRadioButton borrowedRadioButton = new JRadioButton("Đã mượn", true);
-    private final JRadioButton returnedRadioButton = new JRadioButton("Đã trả");
 
     private final JLabel actualDateLabel = new JLabel("Ngày thực trả:");
     private final JLabel titleLabel = new JLabel("Tên sách:             ");
@@ -50,7 +48,7 @@ public class UpdateBorrowDetailDialog extends JDialog {
         this.borrowSheetId = borrowSheetId;
         this.borrowDetailToEdit = borrowDetailToEdit;
         initComponents();
-        setSize(600, 450);
+        setSize(550, 530);
         setLocationRelativeTo(parentDialog);
         if (parentDialog != null) {
             Point location = this.getLocation();
@@ -61,11 +59,6 @@ public class UpdateBorrowDetailDialog extends JDialog {
     private void setFields() {
         bookIDField.setText(borrowDetailToEdit.getBookId().toString());
         quantityField.setText(String.valueOf(borrowDetailToEdit.getQuantity()));
-        if (borrowDetailToEdit.getStatus() == SubStatus.Đang_Mượn) {
-            borrowedRadioButton.setSelected(true);
-        } else {
-            returnedRadioButton.setSelected(true);
-        }
         bookIDField.setEnabled(false);
         buttonChosenBook.setEnabled(false);
         if (borrowDetailToEdit.getActualReturnDate() != null) {
@@ -111,19 +104,27 @@ public class UpdateBorrowDetailDialog extends JDialog {
     }
 
     private JPanel createContentPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new BorderLayout(0, 15));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
+        // Main content panel using GridBagLayout for consistent alignment
+        JPanel contentPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Book ID row
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(new JLabel("Mã sách:"), gbc);
+        // Row 0: Book ID
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        contentPanel.add(new JLabel("Mã sách:"), gbc);
 
-        bookIDField.setPreferredSize(new Dimension(120, 30));
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        bookIDField.setPreferredSize(new Dimension(150, 30));
         bookIDField.getDocument().addDocumentListener(new DocumentListener() {
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateBookInfo();
@@ -139,17 +140,21 @@ public class UpdateBorrowDetailDialog extends JDialog {
                 updateBookInfo();
             }
         });
-        gbc.gridx = 1;
-        panel.add(bookIDField, gbc);
-        buttonChosenBook.addActionListener(e -> chooseBook());
-        gbc.gridx = 2;
-        panel.add(buttonChosenBook, gbc);
+        contentPanel.add(bookIDField, gbc);
 
+        gbc.gridx = 2;
+        gbc.weightx = 0;
+        buttonChosenBook.setPreferredSize(new Dimension(30, 30));
+        contentPanel.add(buttonChosenBook, gbc);
+
+        // Row 1: Separator
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        panel.add(createSeparator(), gbc);
+        contentPanel.add(createSeparator(), gbc);
 
+        // Row 2: Book Info
+        gbc.gridy = 2;
         JPanel infoPanel = new JPanel(new GridLayout(3, 2, 25, 5));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
@@ -168,30 +173,86 @@ public class UpdateBorrowDetailDialog extends JDialog {
         infoPanel.add(yearLabel);
         infoPanel.add(quantityLabel);
 
-        gbc.gridy = 2;
-        panel.add(infoPanel, gbc);
+        contentPanel.add(infoPanel, gbc);
 
-        // Quantity row
+        // Row 3: Quantity
         gbc.gridy = 3;
         gbc.gridwidth = 1;
-        panel.add(new JLabel("Số lượng mượn:"), gbc);
+        gbc.weightx = 0;
+        contentPanel.add(new JLabel("Số lượng mượn:"), gbc);
 
-        quantityField.setPreferredSize(new Dimension(80, 30));
         gbc.gridx = 1;
-        panel.add(quantityField, gbc);
+        gbc.weightx = 1;
+        quantityField.setPreferredSize(new Dimension(80, 30));
+        contentPanel.add(quantityField, gbc);
 
-        // Status row
-        gbc.gridy = 4;
+        // Row 4: Status
         gbc.gridx = 0;
-        panel.add(new JLabel("Trạng thái:"), gbc);
+        gbc.gridy = 4;
+        gbc.weightx = 0;
+        contentPanel.add(new JLabel("Trạng thái:"), gbc);
 
-        ButtonGroup statusGroup = new ButtonGroup();
-        statusGroup.add(borrowedRadioButton);
-        statusGroup.add(returnedRadioButton);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1;
+        subStatusComboBox.setPreferredSize(new Dimension(200, 30));
+        contentPanel.add(subStatusComboBox, gbc);
 
+        // Row 5: Date Chooser (bottom panel)
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(15, 5, 5, 5); // Extra top margin
 
-        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        statusPanel.add(subStatusComboBox);
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        actualDateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        actualDateLabel.setForeground(new Color(70, 70, 70));
+        actualDateLabel.setVisible(false);
+        datePanel.add(actualDateLabel);
+
+        actualDateChooser.setDateFormatString("dd/MM/yyyy");
+        actualDateChooser.setPreferredSize(new Dimension(150, 25));
+        actualDateChooser.setVisible(false);
+        datePanel.add(actualDateChooser);
+
+        contentPanel.add(datePanel, gbc);
+
+        panel.add(contentPanel, BorderLayout.CENTER);
+
+        // Initialize component states
+        SubStatus subStatus = borrowDetailToEdit.getStatus();
+        if (subStatus == SubStatus.Đang_Mượn) {
+            subStatusComboBox.setSelectedIndex(0);
+        } else if (subStatus == SubStatus.Đã_Trả) {
+            subStatusComboBox.setSelectedIndex(1);
+            subStatusComboBox.setEnabled(false);
+            actualDateLabel.setVisible(true);
+            actualDateChooser.setVisible(true);
+            actualDateChooser.setEnabled(false);
+            actualDateChooser.setDate(borrowDetailToEdit.getActualReturnDate());
+            quantityField.setText(Integer.toString(borrowDetailToEdit.getQuantity()));
+            quantityField.setEditable(false);
+        } else if (subStatus == SubStatus.Mất_Sách) {
+            subStatusComboBox.setSelectedIndex(2);
+            subStatusComboBox.setEnabled(false);
+            actualDateLabel.setVisible(true);
+            actualDateChooser.setVisible(true);
+            actualDateChooser.setEnabled(false);
+            actualDateChooser.setDate(borrowDetailToEdit.getActualReturnDate());
+            quantityField.setText(Integer.toString(borrowDetailToEdit.getQuantity()));
+            quantityField.setEditable(false);
+        } else if (subStatus == SubStatus.Hư_Sách) {
+            subStatusComboBox.setSelectedIndex(3);
+            subStatusComboBox.setEnabled(false);
+            actualDateLabel.setVisible(true);
+            actualDateChooser.setVisible(true);
+            actualDateChooser.setEnabled(false);
+            actualDateChooser.setDate(borrowDetailToEdit.getActualReturnDate());
+            quantityField.setText(Integer.toString(borrowDetailToEdit.getQuantity()));
+            quantityField.setEditable(false);
+        }
+
+        // Keep all event listeners
         subStatusComboBox.addItemListener(e -> {
             String selectedStatus = (String) subStatusComboBox.getSelectedItem();
             boolean showDateChooser = !"Đang mượn".equals(selectedStatus);
@@ -199,50 +260,55 @@ public class UpdateBorrowDetailDialog extends JDialog {
             actualDateLabel.setVisible(showDateChooser);
             actualDateChooser.setVisible(showDateChooser);
 
-            // Cập nhật text label theo trạng thái
             if ("Đã trả".equals(selectedStatus)) {
                 actualDateLabel.setText("Ngày trả thực tế:");
             } else if ("Mất sách".equals(selectedStatus) || "Hư sách".equals(selectedStatus)) {
                 actualDateLabel.setText("Ngày xác nhận:");
             }
 
-            pack(); // Điều chỉnh kích thước dialog
+            if (showDateChooser && actualDateChooser.getDate() == null) {
+                actualDateChooser.setDate(new Date());
+            }
         });
-
-
-
-        JPanel chooserPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-
-        actualDateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        actualDateLabel.setForeground(new Color(70, 70, 70));
-        actualDateLabel.setVisible(false);
-        gbc.gridy = 5;
-        gbc.gridx = 0;
-        chooserPanel.add(actualDateLabel, gbc);
-
-        actualDateChooser.setDateFormatString("dd/MM/yyyy");
-        actualDateChooser.setPreferredSize(new Dimension(150, 30));
-        actualDateChooser.setVisible(false);
-        gbc.gridx = 1;
-        chooserPanel.add(actualDateChooser, gbc);
-
-        gbc.gridx = 1;
-        panel.add(statusPanel, gbc);
-        panel.add(chooserPanel, gbc);
 
         return panel;
     }
 
+    private String wrapString(String text, int maxLineLength) {
+        if (text == null || text.isEmpty()) return "<html></html>";
+
+        StringBuilder sb = new StringBuilder("<html>");
+        String[] words = text.split(" ");
+        int currentLineLength = 0;
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+
+            // Kiểm tra nếu thêm từ này vượt quá maxLineLength
+            if (currentLineLength + word.length() > maxLineLength) {
+                // Nếu là từ đơn lẻ (không phải cụm từ ghép), xuống dòng
+                if (!word.matches("[A-Za-zÀ-ỹ]+")) { // Regex kiểm tra từ có dấu/không dấu
+                    sb.append("<br>");
+                    currentLineLength = 0;
+                }
+            }
+
+            sb.append(word).append(" ");
+            currentLineLength += word.length() + 1;
+        }
+
+        return sb.append("</html>").toString();
+    }
     private void updateBookInfo() {
         String bookIDText = bookIDField.getText();
         if (bookIDText.isEmpty()) {
             currentBook = null;
-            titleLabel.setText("Tên sách: ");
-            authorLabel.setText("Tác giả: ");
-            categoryLabel.setText("Thể loại: ");
-            publisherLabel.setText("NXB: ");
-            yearLabel.setText("Năm: ");
-            quantityLabel.setText("Còn: ");
+            titleLabel.setText("Tên sách:             ");
+            authorLabel.setText("Tác giả:             ");
+            categoryLabel.setText("Thể loại:             ");
+            publisherLabel.setText("NXB:             ");
+            yearLabel.setText("Năm:             ");
+            quantityLabel.setText("Còn:             ");
             return;
         }
 
@@ -250,19 +316,19 @@ public class UpdateBorrowDetailDialog extends JDialog {
             long bookID = Long.parseLong(bookIDText);
             currentBook = bookBUS.getBookByIdForDisplay(bookID);
             if (currentBook != null) {
-                titleLabel.setText("Tên sách: " + currentBook.getName());
+                titleLabel.setText(wrapString("Tên sách: " + currentBook.getName(), 25));
                 authorLabel.setText("Tác giả: " + currentBook.getAuthorName());
                 categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
                 publisherLabel.setText("NXB: " + currentBook.getPublisherName());
                 yearLabel.setText("Năm: " + currentBook.getYearOfPublication());
                 quantityLabel.setText("Còn: " + (currentBook.getQuantity() - currentBook.getBorrowedQuantity()));
             } else {
-                titleLabel.setText("Tên sách: ");
-                authorLabel.setText("Tác giả: ");
-                categoryLabel.setText("Thể loại: ");
-                publisherLabel.setText("NXB: ");
-                yearLabel.setText("Năm: ");
-                quantityLabel.setText("Còn: ");
+                titleLabel.setText("Tên sách:              ");
+                authorLabel.setText("Tác giả:             ");
+                categoryLabel.setText("Thể loại:             ");
+                publisherLabel.setText("NXB:             ");
+                yearLabel.setText("Năm:             ");
+                quantityLabel.setText("Còn:             ");
             }
         } catch (NumberFormatException e) {
             // Handle invalid input
@@ -275,7 +341,7 @@ public class UpdateBorrowDetailDialog extends JDialog {
         currentBook = dialog.getSelectedBook();
         if (currentBook != null) {
             bookIDField.setText(currentBook.getId().toString());
-            titleLabel.setText("Tên sách: " + currentBook.getName());
+            titleLabel.setText(wrapString("Tên sách: " + currentBook.getName(), 25));
             authorLabel.setText("Tác giả: " + currentBook.getAuthorName());
             categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
             publisherLabel.setText("NXB: " + currentBook.getPublisherName());
@@ -341,45 +407,57 @@ public class UpdateBorrowDetailDialog extends JDialog {
         return currentBorrowDetail;
     }
     private void updateBorrowDetails() {
-        if (isValidInput()) {
-            long bookID = Long.parseLong(bookIDField.getText());
-            int quantity = Integer.parseInt(quantityField.getText());
-            String text = subStatusComboBox.getSelectedItem().toString();
-            Date actualReturnDate = actualDateChooser.getDate();
-            SubStatus subStatus = null;
-            switch (text){
-                case "Đang mượn" -> {
-                    subStatus = SubStatus.Đang_Mượn;
-                    subStatusComboBox.setSelectedIndex(0);
-                    subStatusComboBox.setEnabled(false);
-                }
-                case "Đã trả" -> {
-                    subStatus = SubStatus.Đã_Trả;
-                    subStatusComboBox.setSelectedIndex(1);
-                    subStatusComboBox.setEnabled(false);
-                }
-                case "Mất sách" -> {
-                    subStatus = SubStatus.Mất_Sách;
-                    subStatusComboBox.setSelectedIndex(2);
-                    subStatusComboBox.setEnabled(false);
-                }
-                case "Hư sách" -> {
-                    subStatus = SubStatus.Hư_Sách;
-                    subStatusComboBox.setSelectedIndex(3);
-                    subStatusComboBox.setEnabled(false);
-                }
-                default -> {
-                    subStatus = SubStatus.Đang_Mượn;
-                    subStatusComboBox.setSelectedIndex(0);
-                    subStatusComboBox.setEnabled(false);
-                }
-            }
-
-            currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus, actualReturnDate);
-            if (borrowSheetId > 0) {
-                borrowDetailBUS.updateBorrowDetail(currentBorrowDetail);
-            }
-            dispose();
+        if (!isValidInput()) {
+            return;
         }
+        String selectedStatus = (String) subStatusComboBox.getSelectedItem();
+        if (selectedStatus.equals("Đã trả") || selectedStatus.equals("Mất sách") || selectedStatus.equals("Hư sách")) {
+            if (actualDateChooser.getDate() == null) {
+                String message = selectedStatus.equals("Đã trả")
+                        ? "Vui lòng nhập ngày trả thực tế!"
+                        : "Vui lòng nhập ngày xác nhận!";
+                JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        long bookID = Long.parseLong(bookIDField.getText());
+        int quantity = Integer.parseInt(quantityField.getText());
+        Date actualReturnDate = actualDateChooser.getDate();
+        SubStatus subStatus = null;
+
+        switch (selectedStatus) {
+            case "Đang mượn" -> {
+                subStatus = SubStatus.Đang_Mượn;
+                subStatusComboBox.setSelectedIndex(0);
+            }
+            case "Đã trả" -> {
+                subStatus = SubStatus.Đã_Trả;
+                subStatusComboBox.setSelectedIndex(1);
+            }
+            case "Mất sách" -> {
+                subStatus = SubStatus.Mất_Sách;
+                subStatusComboBox.setSelectedIndex(2);
+            }
+            case "Hư sách" -> {
+                subStatus = SubStatus.Hư_Sách;
+                subStatusComboBox.setSelectedIndex(3);
+            }
+            default -> {
+                subStatus = SubStatus.Đang_Mượn;
+                subStatusComboBox.setSelectedIndex(0);
+            }
+        }
+
+        // Khóa combobox trạng thái sau khi cập nhật
+        if (subStatus != SubStatus.Đang_Mượn) {
+            subStatusComboBox.setEnabled(false);
+            actualDateChooser.setEnabled(false); // Khóa cả date chooser
+        }
+        currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus, actualReturnDate);
+        if (borrowSheetId > 0) {
+            borrowDetailBUS.updateBorrowDetail(currentBorrowDetail);
+        }
+        dispose();
     }
 }

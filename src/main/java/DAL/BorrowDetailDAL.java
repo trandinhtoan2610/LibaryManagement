@@ -30,7 +30,7 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public Long create(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, actualReturnDate) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, substatus, actualReturnDate) VALUES (?, ?, ?, ?, ?)";
         Long id = Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2));
         return genericDAL.insert(sql,
                 borrowDetailDTO.getBookId(),
