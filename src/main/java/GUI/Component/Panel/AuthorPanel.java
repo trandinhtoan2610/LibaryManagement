@@ -232,8 +232,6 @@ public class AuthorPanel extends javax.swing.JPanel {
     
     //Chọn 1 dòng trong bảng tác giả -> hiển thị các tác phẩm của tác giả ở bảng dưới : 
     private void tblAuthorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAuthorMouseClicked
-        AlertDialog add = new AlertDialog(parent,"ngu");
-        add.setVisible(true);
         int selectedRow = tblAuthor.getSelectedRow();
         if(selectedRow >= 0 ){        
            AuthorDTO a = tblAuthor.getSelectedAuthor();

@@ -10,22 +10,14 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 public class SupplierBUS {
-    SupplierDAL supplierDAL;
-    public List<SupplierDTO> supplierList;
+    private final SupplierDAL supplierDAL = new SupplierDAL();
+    public static List<SupplierDTO> supplierList = new ArrayList<>();
 
     public SupplierBUS() {
-        supplierDAL = new SupplierDAL();
-        supplierList = new ArrayList<>();
-        loadSupplierList();
-    }
-
-    private void loadSupplierList() {
-        List<SupplierDTO> loadedList = supplierDAL.findAll();
-        if (loadedList != null) {
-            supplierList.addAll(loadedList);
+        if (supplierList.isEmpty()) {
+            supplierList = supplierDAL.findAll();
         }
     }
-
     public List<SupplierDTO> getAllSuppliers() {
         return supplierList;
     }
@@ -34,10 +26,8 @@ public class SupplierBUS {
         if (supplierList.stream().anyMatch(s -> s.getId().equals(supplier.getId()))) {
             JOptionPane.showMessageDialog(null, "ID nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false; 
-        }
-        Long result = supplierDAL.create(supplier);
-        if (result > 0) {
-            // Thêm vào list quản lý ở BUS nếu thêm vào database thành công
+        }if (true) {
+            supplierDAL.create(supplier);
             supplierList.add(supplier);
             return true;
         } else {

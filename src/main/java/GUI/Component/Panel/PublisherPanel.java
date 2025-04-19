@@ -1,19 +1,15 @@
 package GUI.Component.Panel;
 
-import BUS.EmployeeBUS;
 import BUS.PublisherBUS;
-import DTO.Employee;
-import DTO.Enum.Gender;
 import DTO.PublisherDTO;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddPublisherDialog;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeletePublisherDialog;
 import GUI.Component.Dialog.UpdatePublisherDialog;
-import GUI.Component.Panel.Components.SearchNavBarLabel;
 import GUI.Component.Table.PublisherTable;
 import GUI.Component.TextField.RoundedTextField;
-import GUI.Excel.ExcelMaster;
+import GUI.ExcelxPDF.ExcelMaster;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.itextpdf.io.exceptions.IOException;
 import com.itextpdf.io.font.PdfEncodings;
@@ -32,7 +28,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -402,7 +397,7 @@ public class PublisherPanel extends JPanel {
                 document.add(new Paragraph("DANH SÁCH NHÀ XUẤT BẢN")
                         .setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(16)
-                        .setBold());
+                        );
 
                 // 6. Tạo bảng (9 cột)
                 Table table = new Table(new float[]{1, 3, 2, 2})
@@ -411,7 +406,7 @@ public class PublisherPanel extends JPanel {
                 // 7. Thêm header
                 String[] headers = {"Mã Nhà Xuất Bản", "Tên Nhà Xuất Bản", "Số Điện Thoại", "Địa Chỉ"};
                 for (String header : headers) {
-                    table.addCell(new Paragraph(header).setBold());
+                    table.addCell(new Paragraph(header));
                 }
 
                 // 8. Thêm dữ liệu

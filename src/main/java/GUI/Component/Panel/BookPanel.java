@@ -24,8 +24,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class BookPanel extends JPanel {
-    private final BookBUS bookBUS = new BookBUS();
-    private final BookTable bookTable = new BookTable();
+    private static final BookBUS bookBUS = new BookBUS();
+    public static BookTable bookTable = new BookTable();
     private ButtonUpdate buttonUpdate;
     private ButtonDelete buttonDelete;
     private ButtonExportExcel buttonExportExcel;
@@ -145,7 +145,7 @@ public class BookPanel extends JPanel {
         return buttonPanel;
     }
 
-    private void loadData() {
+    public static void loadData() {
         List<BookViewModel> books = bookBUS.getAllBooksForDisplay();
         if (books != null) {
             bookTable.setBooks(books);

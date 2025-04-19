@@ -27,7 +27,7 @@ public class AuthorTable extends JTableCustom {
     
     public void resetTable(){
         tblModel.setRowCount(0);
-
+        this.clearSelection();
         for (AuthorDTO a : AuthorBUS.authorDTOList){
             Object[] rowData = {
                 a.getId(),

@@ -16,7 +16,7 @@ public class DeleteBorrowDetailDialog extends JDialog {
     private EmployeeBUS employeeBUS;
     private BorrowDetailDTO borrowDetailToDelete;
     public DeleteBorrowDetailDialog(JDialog parent, long tempBorrowId , BorrowDetailDTO borrowDetailToDelete) {
-        super(parent, "Xóa nhân viên", true);
+        super(parent, "Xóa Chi Tiết Phiếu Mượn", true);
         this.employeePanel = employeePanel;
         employeeBUS = new EmployeeBUS();
         this.borrowDetailToDelete = borrowDetailToDelete;

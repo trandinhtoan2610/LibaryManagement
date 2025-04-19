@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UpdateSupplierDialog extends JDialog {
-    private Long currentID;
+    private String currentID;
     private CustomTextField id;
     private CustomTextField name;
     private CustomTextField phone;
@@ -149,10 +149,10 @@ public class UpdateSupplierDialog extends JDialog {
         String oldName = this.name.getText();
         String oldPhone = this.phone.getText();
         String oldAddress = this.address.getText();
-        Long oldID = currentID; // Lưu lại ID cũ để so sánh
+        String oldID = currentID; // Lưu lại ID cũ để so sánh
         if (fieldController()) {
             try {
-                currentID = Long.parseLong(id.getText()); // Lấy ID đã chỉnh sửa
+                currentID = id.getText(); // Lấy ID đã chỉnh sửa
                 String supplierName = this.name.getText();
                 String supplierPhone = this.phone.getText();
                 String supplierAddress = this.address.getText();

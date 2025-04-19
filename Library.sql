@@ -64,19 +64,19 @@ CREATE TABLE `Borrow_in_Sheet` (
                                    `borrowedDate` DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
                                    `duedate` DATETIME NOT NULL,
                                    `actualReturnDate` DATETIME DEFAULT NULL,
-                                   `status` ENUM ('Đang_Mượn', 'Đã_Trả', 'Quá_Ngày') NOT NULL DEFAULT 'Đang_Mượn'
+                                   `status` ENUM ('Đang_Mượn', 'Đã_Trả', 'Phạt') NOT NULL DEFAULT 'Đang_Mượn'
 );
 
 CREATE TABLE `BorrowDetails` (
                                  `bookId` BIGINT NOT NULL,
                                  `borrowSheetId` BIGINT NOT NULL,
                                  `quantity` INT NOT NULL DEFAULT 1,
-                                 `substatus` ENUM ('Đang_Mượn', 'Chưa_Trả') NOT NULL DEFAULT 'Đang_Mượn',
+                                 `substatus` ENUM ('Đang_Mượn', 'Chưa_Trả', 'Mất_Sách', 'Hư_Sách', 'Quá_Hạn') NOT NULL DEFAULT 'Đang_Mượn',
                                  PRIMARY KEY (`bookId`, `borrowSheetId`)
 );
 
 CREATE TABLE `Supplier` (
-                            `id` BIGINT PRIMARY KEY ,
+                            `id` varchar(10) NOT NULL PRIMARY KEY,
                             `name` VARCHAR(255) NOT NULL,
                             `phone` VARCHAR(10) NOT NULL,
                             `address` VARCHAR(255) NOT NULL
@@ -84,7 +84,7 @@ CREATE TABLE `Supplier` (
 
 CREATE TABLE `PurchaseOrders` (
                                   `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
-                                  `supplierId` BIGINT NOT NULL,
+                                  `supplierId` varchar(10) NOT NULL,
                                   `employeeId` BIGINT NOT NULL,
                                   `totalAmount` DECIMAL(10,2) NOT NULL DEFAULT 0,
                                   `buyDate` DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
@@ -154,59 +154,57 @@ INSERT INTO  `Employee` (`firstName`, `lastName`, `gender`, `username`, `passwor
 ('Lê', 'Văn', 1, 'employee', 'employee', 3, '0912345678', 'Hà Nội', 6000000);
 
 
---INSERT INTO Reader (firstName, lastName, gender, phone, address)
---VALUES
---('Nguyễn', 'Minh', 'Nam', '0911111111', 'Hà Nội'),
---('Trần', 'Lan', 'Nữ', '0922222222', 'TP.HCM'),
---('Lê', 'Hùng', 'Nam', '0933333333', 'Đà Nẵng'),
---('Phạm', 'Hòa', 'Nữ', '0944444444', 'Hải Phòng'),
---('Hoàng', 'Khanh', 'Nam', '0955555555', 'Cần Thơ'),
---('Đặng', 'Anh', 'Nữ', '0966666666', 'Huế'),
---('Bùi', 'Tùng', 'Nam', '0977777777', 'Quảng Ninh');
---
---INSERT INTO Author (lastName, firstName)
---VALUES
---('Nguyễn', 'Nhật Ánh'),
---('Tô', 'Hoài'),
---('Nguyễn', 'Du'),
---('Xuân', 'Diệu'),
---('Hồ', 'Xuân Hương'),
---('Lưu', 'Quang Vũ'),
---('Nam', 'Cao');
---
---
---INSERT INTO Category (name)
---VALUES
---('Tiểu thuyết'),
---('Khoa học'),
---('Thiếu nhi'),
---('Tâm lý'),
---('Kinh doanh'),
---('Lịch sử'),
---('Trinh thám');
---
---
---INSERT INTO Publisher (name, phone, address)
---VALUES
---('NXB Trẻ', '0900000001', 'HCM'),
---('NXB Kim Đồng', '0900000002', 'Hà Nội'),
---('NXB Giáo Dục', '0900000003', 'Hà Nội'),
---('NXB Văn Học', '0900000004', 'Đà Nẵng'),
---('NXB Lao Động', '0900000005', 'HCM'),
---('NXB Phụ Nữ', '0900000006', 'Hà Nội'),
---('NXB Hội Nhà Văn', '0900000007', 'Hà Nội');
---
---INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yearOfpublication)
---VALUES
---('Tôi Thấy Hoa Vàng Trên Cỏ Xanh', 1, 1, 1, 10, 80000, 2015),
---('Dế Mèn Phiêu Lưu Ký', 3, 2, 2, 12, 75000, 2012),
---('Truyện Kiều', 1, 3, 4, 8, 90000, 2000),
---('Thơ Tình', 4, 4, 3, 5, 60000, 1999),
---('Bánh Trôi Nước', 4, 5, 5, 6, 50000, 2010),
---('Tôi Và Chúng Ta', 2, 6, 1, 15, 70000, 2005),
---('Chí Phèo', 1, 7, 6, 9, 85000, 1995);
---
---
+INSERT INTO Reader (firstName, lastName, gender, phone, address)
+VALUES
+('Nguyễn', 'Minh', 'Nam', '0911111111', 'Hà Nội'),
+('Trần', 'Lan', 'Nữ', '0922222222', 'TP.HCM'),
+('Lê', 'Hùng', 'Nam', '0933333333', 'Đà Nẵng'),
+('Phạm', 'Hòa', 'Nữ', '0944444444', 'Hải Phòng'),
+('Hoàng', 'Khanh', 'Nam', '0955555555', 'Cần Thơ'),
+('Đặng', 'Anh', 'Nữ', '0966666666', 'Huế'),
+('Bùi', 'Tùng', 'Nam', '0977777777', 'Quảng Ninh');
+
+INSERT INTO Author (lastName, firstName)
+VALUES
+('Nguyễn', 'Nhật Ánh'),
+('Tô', 'Hoài'),
+('Nguyễn', 'Du'),
+('Xuân', 'Diệu'),
+('Hồ', 'Xuân Hương'),
+('Lưu', 'Quang Vũ'),
+('Nam', 'Cao');
+
+
+INSERT INTO Category (name)
+VALUES
+('Tiểu thuyết'),
+('Khoa học'),
+('Thiếu nhi'),
+('Tâm lý'),
+('Kinh doanh'),
+('Lịch sử'),
+('Trinh thám');
+
+
+INSERT INTO Publisher (name, phone, address)
+VALUES
+('NXB Trẻ', '0900000001', 'HCM'),
+('NXB Kim Đồng', '0900000002', 'Hà Nội'),
+('NXB Giáo Dục', '0900000003', 'Hà Nội'),
+('NXB Văn Học', '0900000004', 'Đà Nẵng'),
+('NXB Lao Động', '0900000005', 'HCM'),
+('NXB Phụ Nữ', '0900000006', 'Hà Nội'),
+('NXB Hội Nhà Văn', '0900000007', 'Hà Nội');
+
+INSERT INTO Book (name, categoryId, authorId, publisherId, quantity, unitprice, yearOfpublication)
+VALUES
+('Tôi Thấy Hoa Vàng Trên Cỏ Xanh', 1, 1, 1, 10, 80000, 2015),
+('Dế Mèn Phiêu Lưu Ký', 3, 2, 2, 12, 75000, 2012),
+('Truyện Kiều', 1, 3, 4, 8, 90000, 2000),
+('Thơ Tình', 4, 4, 3, 5, 60000, 1999),
+('Bánh Trôi Nước', 4, 5, 5, 6, 50000, 2010),
+('Tôi Và Chúng Ta', 2, 6, 1, 15, 70000, 2005),
+('Chí Phèo', 1, 7, 6, 9, 85000, 1995);
 --INSERT INTO Supplier (name, phone, address)
 --VALUES
 --('Công ty Sách ABC', '0901000001', 'Hà Nội'),

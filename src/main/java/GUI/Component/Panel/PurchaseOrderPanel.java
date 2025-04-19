@@ -23,7 +23,7 @@ public class PurchaseOrderPanel extends JPanel {
     private ButtonDelete buttonDelete;
     private ButtonExportExcel buttonExportExcel;
     private ButtonImportExcel buttonImportExcel;
-    private SearchNavBarLabel searchNavBarLabel;
+    private JPanel searchNavBarLabel;
 
     private JPanel supplierPanel;
     private JPanel employeePanel;
@@ -44,7 +44,7 @@ public class PurchaseOrderPanel extends JPanel {
 
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 0));
         JPanel infoPanel = employeeNsupplierPanel(new Employee(1L, "Hoàng", "Quý"),
-                new SupplierDTO(1L, "Thanh Hóa","0987654321", "Hà Nội"));
+                new SupplierDTO("NCC1", "Thanh Hóa","0987654321", "Hà Nội"));
         infoPanel.setPreferredSize(new Dimension(400, 150));
         purchaseOrderDetailsTable = new PurchaseOrderDetailsTable();
         customizeDetailTable();
@@ -98,7 +98,7 @@ public class PurchaseOrderPanel extends JPanel {
         });
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
-        searchNavBarLabel = new SearchNavBarLabel();
+        searchNavBarLabel = new JPanel();
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);

@@ -7,12 +7,14 @@ import DTO.BorrowDetailDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BorrowDetailTable extends JTableCustom{
     private static final String[] HEADER = {
-            "Tên Sách", "Số Lượng", "Trạng Thái"
+            "Tên Sách", "Số Lượng", "Trạng Thái", "Ngày Thực Trả"
     };
     private static final BookBUS bookBUS = new BookBUS();
     private DefaultTableModel tableModel;
@@ -69,8 +71,16 @@ public class BorrowDetailTable extends JTableCustom{
             tableModel.addRow(new Object[]{
                     bookViewModel.getName(),
                     borrowDetailDTO.getQuantity(),
-                    borrowDetailDTO.getStatus()
+                    borrowDetailDTO.getStatus(),
+                    formatDate(borrowDetailDTO.getActualReturnDate())
             });
         }
+    }
+    private String formatDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(date);
     }
 }

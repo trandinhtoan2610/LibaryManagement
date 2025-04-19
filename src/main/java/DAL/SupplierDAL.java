@@ -1,16 +1,17 @@
 package DAL;
 
 import DAL.Interface.IRepositoryBase;
+import DAL.Interface.IRepositoryStringID;
 import DAL.Interface.RowMapper;
 import DTO.SupplierDTO;
 
 import java.sql.ResultSet;
 import java.util.List;
 
-public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
+public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
     private final RowMapper<SupplierDTO> supplierRowMapper = (ResultSet rs) -> {
-        Long id = rs.getLong("id");
+        String id = rs.getString("id");
         String name = rs.getString("name");
         String phone = rs.getString("phone");
         String address = rs.getString("address");
@@ -18,11 +19,10 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
     };
 
     @Override
-    public SupplierDTO findById(Long id) {
+    public SupplierDTO findById(String id) {
         String sql = "SELECT * FROM Supplier WHERE id = ?";
         return genericDAL.queryForObject(sql, supplierRowMapper, id);
     }
-
     @Override
     public List<SupplierDTO> findAll() {
         String sql = "SELECT * FROM Supplier";
@@ -42,7 +42,7 @@ public class SupplierDAL implements IRepositoryBase<SupplierDTO> {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(String id) {
         String sql = "DELETE FROM Supplier WHERE id = ?";
         return genericDAL.delete(sql, id);
     }

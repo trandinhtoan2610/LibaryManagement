@@ -18,7 +18,8 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
                 rs.getLong("bookId"),
                 rs.getLong("borrowSheetId"),
                 rs.getInt("quantity"),
-                subStatus
+                subStatus,
+                rs.getDate("actualReturnDate")
         );
     }
     @Override
@@ -29,34 +30,38 @@ public class BorrowDetailDAL implements IDetailsBase<BorrowDetailDTO> {
 
     @Override
     public Long create(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, substatus) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowdetails (bookId, borrowSheetId, quantity, actualReturnDate) VALUES (?, ?, ?, ?, ?)";
         Long id = Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2));
         return genericDAL.insert(sql,
                 borrowDetailDTO.getBookId(),
                 id,
                 borrowDetailDTO.getQuantity(),
-                borrowDetailDTO.getStatus().name()
+                borrowDetailDTO.getStatus().name(),
+                borrowDetailDTO.getActualReturnDate()
         );
     }
 
     @Override
     public boolean update(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "UPDATE borrowdetails SET quantity = ?, substatus = ? WHERE bookid = ? AND borrowSheetId = ?";
+        String sql = "UPDATE borrowdetails SET quantity = ?, substatus = ?,actualReturnDate = ? WHERE bookid = ? AND borrowSheetId = ?";
         Long id = Long.parseLong(borrowDetailDTO.getBorrowSheetId().substring(2));
+        System.out.println(borrowDetailDTO.toString());
         return genericDAL.update(sql,
                 borrowDetailDTO.getQuantity(),
                 borrowDetailDTO.getStatus().name(),
+                borrowDetailDTO.getActualReturnDate(),
                 borrowDetailDTO.getBookId(),
                 id
         );
     }
     @Override
     public boolean delete(BorrowDetailDTO borrowDetailDTO) {
-        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND substatus = ?";
+        String sql = "DELETE FROM borrowdetails WHERE bookId = ? AND borrowSheetId = ? AND quantity = ? AND substatus = ? AND actualReturnDate = ?";
         return genericDAL.update(sql, borrowDetailDTO.getBookId(),
                 borrowDetailDTO.getBorrowSheetId(),
                 borrowDetailDTO.getQuantity(),
-                borrowDetailDTO.getStatus().name()
+                borrowDetailDTO.getStatus().name(),
+                borrowDetailDTO.getActualReturnDate()
         );
     }
     public List<BorrowDetailDTO> findByBorrowSheetId(Long borrowSheetId) {

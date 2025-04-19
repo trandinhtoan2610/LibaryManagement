@@ -11,12 +11,10 @@ import GUI.Component.Dialog.UpdateEmployeeDialog;
 import GUI.Component.Filter.EmployeeFilter;
 import GUI.Component.Table.EmployeeTable;
 import GUI.Component.TextField.RoundedTextField;
-import GUI.Excel.ExcelMaster;
+import GUI.ExcelxPDF.ExcelMaster;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.itextpdf.io.exceptions.IOException;
-import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.io.font.PdfEncodings;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -25,7 +23,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
 
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
@@ -460,7 +457,6 @@ public class EmployeePanel extends JPanel {
     }
 
     private void exportToPDF() {
-        FlatLightLaf.setup();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn vị trí lưu file PDF");
         fileChooser.setSelectedFile(new File("DanhSachNhanVien.pdf"));
@@ -473,61 +469,75 @@ public class EmployeePanel extends JPanel {
             }
 
             try {
-                // 1. Tạo PDF Writer
+                // 1. Khởi tạo PDF Writer và Document
                 PdfWriter writer = new PdfWriter(filePath);
-
-                // 2. Tạo PDF Document
                 PdfDocument pdf = new PdfDocument(writer);
-
-                // 3. Tạo Document với font hỗ trợ Unicode
                 Document document = new Document(pdf);
 
-                // 4. Sử dụng font có sẵn hỗ trợ tiếng Việt
+                // 2. Tạo font với hỗ trợ Unicode và font bold
                 PdfFont font = PdfFontFactory.createFont(
-                        "C:/Windows/Fonts/Arial.ttf",  // Đường dẫn đến font Arial trên Windows
+                        "C:/Windows/Fonts/arial.ttf",
                         PdfEncodings.IDENTITY_H,
                         PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
                 );
-                document.setFont(font);
+                PdfFont fontBold = PdfFontFactory.createFont(
+                        "C:/Windows/Fonts/arialbd.ttf", // Font Arial Bold
+                        PdfEncodings.IDENTITY_H,
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+                );
 
-                // 5. Thêm tiêu đề
-                document.add(new Paragraph("DANH SÁCH NHÂN VIÊN")
+                // 3. Thêm tiêu đề
+                Paragraph title = new Paragraph("DANH SÁCH NHÂN VIÊN")
                         .setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(16)
-                        .setBold());
+                        .setFont(fontBold)
+                        .setMarginBottom(20);
+                document.add(title);
 
-                // 6. Tạo bảng (9 cột)
-                Table table = new Table(new float[]{1, 3, 2, 2, 2, 2, 3, 3, 3})
-                        .useAllAvailableWidth();
+                // 4. Tạo bảng với tỉ lệ cột hợp lý
+                float[] columnWidths = {1.5f, 3f, 1.5f, 2f, 2f, 2f, 2f, 3f, 2f};
+                Table table = new Table(columnWidths).useAllAvailableWidth();
 
-                // 7. Thêm header
-                String[] headers = {"Mã NV", "Họ tên", "Giới tính", "Tài khoản", "Mật khẩu", "Chức vụ", "SĐT", "Địa chỉ", "Lương"};
+                // 5. Thêm header với style riêng
+                String[] headers = {
+                        "Mã NV", "Họ tên", "Giới tính", "Tài khoản",
+                        "Mật khẩu", "Chức vụ", "SĐT", "Địa chỉ", "Lương"
+                };
+
                 for (String header : headers) {
-                    table.addCell(new Paragraph(header).setBold());
+                    table.addHeaderCell(
+                            new Paragraph(header)
+                                    .setFont(fontBold)
+                                    .setTextAlignment(TextAlignment.CENTER)
+                    );
                 }
 
-                // 8. Thêm dữ liệu
+                // 6. Thêm dữ liệu nhân viên
                 for (Employee emp : EmployeeBUS.employeeList) {
-                    String role = switch (emp.getRoleID().intValue()) {
-                        case 1 -> "Admin";
-                        case 2 -> "Quản lý";
-                        case 3 -> "Nhân viên";
-                        default -> "Khác";
-                    };
+                    String role = getRoleName(emp.getRoleID());
 
-                    addCell(table, emp.getId() != null ? emp.getId().toString() : "");
-                    addCell(table, (emp.getFirstName() != null ? emp.getFirstName() : "") + " " +
-                            (emp.getLastName() != null ? emp.getLastName() : ""));
-                    addCell(table, emp.getGender() != null ? emp.getGender().toString() : "");
-                    addCell(table, emp.getUsername() != null ? emp.getUsername() : "");
-                    addCell(table, emp.getPassword() != null ? emp.getPassword() : "");
-                    addCell(table, role);
-                    addCell(table, emp.getPhone() != null ? emp.getPhone() : "");
-                    addCell(table, emp.getAddress() != null ? emp.getAddress() : "");
-                    addCell(table, emp.getSalary() != null ? emp.getSalary().toString() + " VND" : "0 VND");
+                    addTableCell(table, emp.getId() != null ? emp.getId().toString() : "", font);
+                    addTableCell(table, getFullName(emp), font);
+                    addTableCell(table, emp.getGender() != null ? emp.getGender().toString() : "", font);
+                    addTableCell(table, emp.getUsername() != null ? emp.getUsername() : "", font);
+                    addTableCell(table, maskPassword(emp.getPassword()), font);
+                    addTableCell(table, role, font);
+                    addTableCell(table, emp.getPhone() != null ? emp.getPhone() : "", font);
+                    addTableCell(table, emp.getAddress() != null ? emp.getAddress() : "", font);
+                    addTableCell(table, formatSalary(emp.getSalary()), font);
                 }
 
                 document.add(table);
+
+                // 7. Thêm footer
+                Paragraph footer = new Paragraph()
+                        .setFont(font)
+                        .setFontSize(10)
+                        .setMarginTop(20)
+                        .add("Ngày xuất: " + new java.util.Date() + "\n")
+                        .add("Tổng số nhân viên: " + EmployeeBUS.employeeList.size());
+
+                document.add(footer);
                 document.close();
 
                 JOptionPane.showMessageDialog(parentFrame,
@@ -535,22 +545,48 @@ public class EmployeePanel extends JPanel {
                         "Thành công",
                         JOptionPane.INFORMATION_MESSAGE);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(parentFrame,
                         "Lỗi khi xuất PDF: " + e.getMessage(),
                         "Lỗi",
                         JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (java.io.IOException e) {
-                throw new RuntimeException(e);
             }
         }
     }
 
-    // Helper method để thêm cell
-    private void addCell(Table table, String content) {
-        table.addCell(new Paragraph(content).setFontSize(10));
+    // Các phương thức helper
+    private String getRoleName(Long roleId) {
+        if (roleId == null) return "Khác";
+        return switch (roleId.intValue()) {
+            case 1 -> "Admin";
+            case 2 -> "Quản lý";
+            case 3 -> "Nhân viên";
+            default -> "Khác";
+        };
+    }
+
+    private String getFullName(Employee emp) {
+        return (emp.getFirstName() != null ? emp.getFirstName() : "") + " " +
+                (emp.getLastName() != null ? emp.getLastName() : "");
+    }
+
+    private String maskPassword(String password) {
+        return password != null ? "********" : "";
+    }
+
+    private String formatSalary(Long salary) {
+        if (salary == null) return "0 VND";
+        return String.format("%,.0f VND", salary);
+    }
+
+    private void addTableCell(Table table, String content, PdfFont font) {
+        table.addCell(
+                new Paragraph(content)
+                        .setFont(font)
+                        .setFontSize(10)
+                        .setTextAlignment(TextAlignment.LEFT)
+                        .setPadding(5)
+        );
     }
 }

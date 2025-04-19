@@ -1,17 +1,28 @@
 package GUI.Component.Dialog;
 
+import BUS.BookBUS;
+import BUS.BorrowDetailBUS;
 import BUS.BorrowSheetBUS;
 import BUS.EmployeeBUS;
+import DTO.Book;
 import DTO.BorrowDTO;
+import DTO.BorrowDetailDTO;
 import DTO.Employee;
+import DTO.Enum.Status;
 import GUI.Component.Button.ButtonAction;
+import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.BorrowPanel;
 import GUI.Component.Panel.EmployeePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+
+import static GUI.Component.Panel.BookPanel.bookTable;
 
 public class DeleteBorrowDialog extends JDialog {
+    private final BookBUS bookBUS = new BookBUS();
+    private final BorrowDetailBUS borrowDetailBUS = new BorrowDetailBUS();
     private boolean confirmed = false;
     private BorrowPanel borrowPanel;
     private BorrowDTO borrowToDelete;
@@ -59,10 +70,32 @@ public class DeleteBorrowDialog extends JDialog {
                 new Color(0, 80, 170),    // press
                 5);
         yesButton.addActionListener(e -> {
-            confirmed = true;
-            borrowPanel.deleteBorrow(borrowToDelete);
-            borrowSheetBUS.deleteBorrowSheet(Long.parseLong(borrowToDelete.getId().substring(2)));
-            dispose();
+            try {
+                if (borrowToDelete.getStatus() == Status.Đang_Mượn) {
+                    List<BorrowDetailDTO> details = borrowDetailBUS.getBorrowDetailsBySheetId(
+                            Long.parseLong(borrowToDelete.getId().substring(2))
+                    );
+                    for (BorrowDetailDTO detail : details) {
+                        Book book = bookBUS.getBookById(detail.getBookId());
+                        book.setBorrowedQuantity(book.getBorrowedQuantity() - detail.getQuantity());
+                        bookBUS.updateBook(book);
+                        borrowDetailBUS.deleteBorrowDetail(detail);
+                    }
+                }
+                boolean success = borrowSheetBUS.deleteBorrowSheet(
+                        Long.parseLong(borrowToDelete.getId().substring(2))
+                );
+                if (success) {
+                    confirmed = true;
+                    borrowPanel.refreshTable();
+                    BookPanel.loadData();
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         // Nút Hủy bỏ (màu đỏ)
@@ -79,5 +112,8 @@ public class DeleteBorrowDialog extends JDialog {
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(contentPanel, BorderLayout.CENTER);
+    }
+    public boolean isConfirmed() {
+        return confirmed;
     }
 }

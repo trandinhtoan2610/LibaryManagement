@@ -154,8 +154,6 @@ public class AddBorrowDetailDialog extends JDialog {
 
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         statusPanel.add(borrowedRadioButton);
-        statusPanel.add(returnedRadioButton);
-
         gbc.gridx = 1;
         panel.add(statusPanel, gbc);
 
@@ -184,14 +182,14 @@ public class AddBorrowDetailDialog extends JDialog {
                 categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
                 publisherLabel.setText("NXB: " + currentBook.getPublisherName());
                 yearLabel.setText("Năm: " + currentBook.getYearOfPublication());
-                quantityLabel.setText("Còn: " + currentBook.getQuantity());
+                quantityLabel.setText("Còn: " + (currentBook.getQuantity() - currentBook.getBorrowedQuantity()));
             } else {
-                titleLabel.setText("Tên sách: ");
-                authorLabel.setText("Tác giả: ");
-                categoryLabel.setText("Thể loại: ");
-                publisherLabel.setText("NXB: ");
-                yearLabel.setText("Năm: ");
-                quantityLabel.setText("Còn: ");
+                titleLabel.setText("Tên sách:            ");
+                authorLabel.setText("Tác giả:            ");
+                categoryLabel.setText("Thể loại:            ");
+                publisherLabel.setText("NXB:            ");
+                yearLabel.setText("Năm:            ");
+                quantityLabel.setText("Còn:            ");
             }
         } catch (NumberFormatException e) {
             // Handle invalid input
@@ -209,7 +207,7 @@ public class AddBorrowDetailDialog extends JDialog {
             categoryLabel.setText("Thể loại: " + currentBook.getCategoryName());
             publisherLabel.setText("NXB: " + currentBook.getPublisherName());
             yearLabel.setText("Năm: " + currentBook.getYearOfPublication());
-            quantityLabel.setText("Còn: " + currentBook.getQuantity());
+            quantityLabel.setText("Còn: " + (currentBook.getQuantity()- currentBook.getBorrowedQuantity()));
         }
     }
 
@@ -275,11 +273,7 @@ public class AddBorrowDetailDialog extends JDialog {
             int quantity = Integer.parseInt(quantityField.getText());
             boolean isBorrowed = borrowedRadioButton.isSelected();
             SubStatus subStatus = isBorrowed ? SubStatus.Đang_Mượn : SubStatus.Đã_Trả;
-            if (subStatus == SubStatus.Đã_Trả) {
-                borrowedRadioButton.disable();
-                quantity = -quantity;
-            }
-            currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus);
+            currentBorrowDetail = new BorrowDetailDTO(bookID, borrowSheetId, quantity, subStatus, null);
             if (borrowSheetId > 0) {
                 borrowDetailBUS.addBorrowDetail(currentBorrowDetail);
             }

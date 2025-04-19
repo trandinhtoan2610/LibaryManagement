@@ -15,7 +15,7 @@ public class BookBUS {
     private final CategoryBUS categoryBUS;
     private final AuthorBUS authorBUS;
     private final PublisherBUS publisherBUS;
-    private List<BookViewModel> bookViewModels; // Danh sách nội bộ để lưu trữ
+    public static List<BookViewModel> bookViewModels; // Danh sách nội bộ để lưu trữ
 
     public BookBUS() {
         this.bookRepository = new BookDAL();
@@ -23,15 +23,13 @@ public class BookBUS {
         this.authorBUS = new AuthorBUS();
         this.publisherBUS = new PublisherBUS();
         this.bookViewModels = new ArrayList<>();
-        
     }
 
     // tải lại danh sách từ csdl
     private void refreshBooks() {
         if (!bookViewModels.isEmpty()) {
-            return; 
+            return;
         }
-
         bookViewModels.clear();
         try {
             List<Book> books = bookRepository.findAll();
@@ -56,13 +54,13 @@ public class BookBUS {
 
     // Lấy danh sách tất cả sách dưới dạng BookViewModel từ danh sách nội bộ
     public List<BookViewModel> getAllBooksForDisplay() {
-        refreshBooks(); 
-        return new ArrayList<>(bookViewModels); 
+        refreshBooks();
+        return new ArrayList<>(bookViewModels);
     }
 
     // Tìm kiếm sách theo tiêu chí và từ khóa trên danh sách nội bộ
     public List<BookViewModel> searchBooks(String type, String keyword) {
-        refreshBooks(); 
+        refreshBooks();
         if (keyword == null || keyword.trim().isEmpty()) {
             return getAllBooksForDisplay();
         }
@@ -87,7 +85,7 @@ public class BookBUS {
                             .collect(Collectors.toList());
                     break;
                 case "Năm":
-                    int year = Integer.parseInt(keyword); 
+                    int year = Integer.parseInt(keyword);
                     filteredBooks = bookViewModels.stream()
                             .filter(book -> book.getYearOfPublication() != null && book.getYearOfPublication().getValue() == year)
                             .collect(Collectors.toList());
@@ -111,7 +109,7 @@ public class BookBUS {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
         }
-        refreshBooks(); 
+        refreshBooks();
         return bookViewModels.stream()
                 .filter(book -> book.getId().equals(id))
                 .findFirst()
@@ -170,9 +168,9 @@ public class BookBUS {
             if (newBookId == null || newBookId <= 0) {
                 throw new RuntimeException("Thêm sách thất bại");
             }
-           
+
             book.setId(newBookId);
-           
+
             BookViewModel newBookViewModel = convertToBookViewModel(book);
             bookViewModels.add(newBookViewModel);
             return newBookId;
@@ -193,7 +191,7 @@ public class BookBUS {
             if (!success) {
                 throw new RuntimeException("Cập nhật sách thất bại");
             }
-           
+
             BookViewModel updatedBookViewModel = convertToBookViewModel(book);
             for (int i = 0; i < bookViewModels.size(); i++) {
                 if (bookViewModels.get(i).getId().equals(book.getId())) {
@@ -217,7 +215,7 @@ public class BookBUS {
             if (!success) {
                 throw new RuntimeException("Xóa sách thất bại");
             }
-           
+
             bookViewModels.removeIf(book -> book.getId().equals(id));
         } catch (Exception e) {
             System.err.println("Lỗi khi xóa sách với ID " + id + ": " + e.getMessage());
@@ -267,5 +265,5 @@ public class BookBUS {
         }
     }
 
-    
+
 }

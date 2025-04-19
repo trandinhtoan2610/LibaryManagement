@@ -15,13 +15,10 @@ import GUI.Component.Dialog.AddBorrowDialog;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeleteBorrowDialog;
 import GUI.Component.Dialog.UpdateBorrowDialog;
-import GUI.Component.Filter.EmployeeFilter;
-import GUI.Component.Panel.Components.SearchNavBarLabel;
 import GUI.Component.Table.BookTable;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.Table.BorrowinSheetTable;
 import GUI.Component.TextField.RoundedTextField;
-
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumnModel;
@@ -405,19 +402,6 @@ public class BorrowPanel extends JPanel {
             List<RowFilter<Object, Object>> filters = new ArrayList<>();
             if(!searchText.isEmpty()){
                 filters.add(RowFilter.regexFilter("(?i)" + searchText, searchColumm));
-            }
-            if(!allRadioButton.isSelected()){
-                if(borrowedRadioButton.isSelected() || returnedRadioButton.isSelected() || overdueRadioButton.isSelected()) {
-                    Status statusFilter;
-                    if (borrowedRadioButton.isSelected()) {
-                        statusFilter = Status.Đang_Mượn;
-                    } else if (returnedRadioButton.isSelected()) {
-                        statusFilter = Status.Đã_Trả;
-                    } else {
-                        statusFilter = Status.Quá_Ngày;
-                    }
-                    filters.add(RowFilter.regexFilter(statusFilter.toString(), 6));
-                }
             }
             if(filters.isEmpty()) {
                 sorter.setRowFilter(null);

@@ -452,7 +452,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     Long.parseLong(txtReaderID.getText()),
                     firstName,
                     lastName,
-                    btnFemale.isSelected() ? Gender.Nam : Gender.Nữ,
+                    btnMale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
                     txtReaderAddress.getText(),
                     newCount

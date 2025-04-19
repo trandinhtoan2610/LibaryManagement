@@ -9,32 +9,14 @@ import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class SupplierDTO extends EntityAuditNameBase<Long> {
-    private String phone, address;
+public class SupplierDTO{
+    private String id,name,phone, address;
 
-    public SupplierDTO(Long id, String name, String phone, String address) {
+    public SupplierDTO(String id, String name, String phone, String address) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.address = address;
         
     }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-    
 }

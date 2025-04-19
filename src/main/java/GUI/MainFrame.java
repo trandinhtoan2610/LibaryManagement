@@ -5,6 +5,8 @@ import DTO.Enum.Gender;
 import GUI.Component.Dialog.LogOutDialog;
 import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +29,7 @@ public class MainFrame extends JFrame implements SidebarListener {
     private Employee currentEmployee;
 
     public MainFrame(Employee currentEmployee) {
+        FlatLightLaf.setup();
         setupUI(currentEmployee);
     }
 
