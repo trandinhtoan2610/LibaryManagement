@@ -176,19 +176,18 @@ public class SupplierPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
-        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, (this));
+        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, SupplierPanel.this);
         addDialog.setVisible(true);
     }
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {
         SupplierDTO selectedSupplier = supplierTable1.getSelectedSupplier();
-        if (selectedSupplier != null) {
-            DeleteSupplierDialog deleteDialog = new DeleteSupplierDialog(
-                (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this),  true,  selectedSupplier,this );
-            deleteDialog.setVisible(true);
-        } else {
+        if (selectedSupplier == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp để xóa.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+
+        } else {
+            DeleteSupplierDialog deleteDialog = new DeleteSupplierDialog(null,  true,  selectedSupplier,this );
+              deleteDialog.setVisible(true);        }
     }
     
     private void buttonUpdateMouseClicked(java.awt.event.MouseEvent evt) {
@@ -196,7 +195,7 @@ public class SupplierPanel extends javax.swing.JPanel {
         if (selectedSupplier == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         } else {
-            UpdateSupplierDialog updateDialog = new UpdateSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), this,selectedSupplier );
+            UpdateSupplierDialog updateDialog = new UpdateSupplierDialog(null, this, selectedSupplier, SupplierBUS.supplierList);
             updateDialog.setVisible(true);
         }
     }

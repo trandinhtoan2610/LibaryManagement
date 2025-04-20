@@ -6,6 +6,7 @@ import DAL.Interface.RowMapper;
 import DTO.SupplierDTO;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
@@ -34,12 +35,18 @@ public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
         String sql = "INSERT INTO Supplier (id, name, phone, address) VALUES (?, ?, ?, ?)"; // Thêm trường id vào câu lệnh INSERT
         return genericDAL.insert(sql, supplierDTO.getId(), supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress()); // Thêm supplierDTO.getId() vào tham số
     }
+    
+    public boolean update(SupplierDTO supplierDTO, String oldId) {
+    String sql = "UPDATE Supplier SET id = ?, name = ?, phone = ?, address = ? WHERE id = ?";
+    return genericDAL.update(sql,
+        supplierDTO.getId(),
+        supplierDTO.getName(),
+        supplierDTO.getPhone(),
+        supplierDTO.getAddress(),
+        oldId // WHERE điều kiện theo oldId
+    );
+}
 
-    @Override
-    public boolean update(SupplierDTO supplierDTO) {
-        String sql = "UPDATE Supplier SET id = ?, name = ?, phone = ?, address = ? WHERE id = ?";
-        return genericDAL.update(sql, supplierDTO.getId(), supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress(), supplierDTO.getId());
-    }
 
     @Override
     public boolean delete(String id) {

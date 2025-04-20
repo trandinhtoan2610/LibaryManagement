@@ -73,20 +73,20 @@ public class DeleteSupplierDialog extends java.awt.Dialog {
                 btnDeleteActionPerformed(evt);
             }
         });
-        btnDeleteSupplier.addMouseListener(new MouseListener() {
-            public void mouseEntered(MouseEvent evt) {
-                btnDeleteMouseEntered(evt);
-            }
-            public void mouseExited(MouseEvent evt) {
-                btnDeleteMouseExited(evt);
-            }
-            public void mouseClicked(MouseEvent evt) {
-            }
-            public void mousePressed(MouseEvent evt) {
-            }
-            public void mouseReleased(MouseEvent evt) {
-            }
-        });
+        // btnDeleteSupplier.addMouseListener(new MouseListener() {
+        //     public void mouseEntered(MouseEvent evt) {
+        //         btnDeleteMouseEntered(evt);
+        //     }
+        //     public void mouseExited(MouseEvent evt) {
+        //         btnDeleteMouseExited(evt);
+        //     }
+        //     public void mouseClicked(MouseEvent evt) {
+        //     }
+        //     public void mousePressed(MouseEvent evt) {
+        //     }
+        //     public void mouseReleased(MouseEvent evt) {
+        //     }
+        // });
 
         btnCancelSupplier.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnCancelSupplier.setText("Hủy bỏ");
@@ -144,18 +144,18 @@ public class DeleteSupplierDialog extends java.awt.Dialog {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
+    private void closeDialog(java.awt.event.WindowEvent evt) {
         setVisible(false);
-        dispose();
+        this.dispose();
     }//GEN-LAST:event_closeDialog
 
     private void btnDeleteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         boolean deleted = supplierBUS.deleteSupplier(supplierToDelete);
         if (deleted) {
-            supplierPanel.reloadSupplierTable();
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa nhà cung cấp thành công !");
-            this.dispose();
             successDeleteAlert.setVisible(true);
+            supplierPanel.reloadSupplierTable();
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa nhà cung cấp.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
