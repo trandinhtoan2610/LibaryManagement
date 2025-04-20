@@ -18,10 +18,20 @@ public class SupplierBUS {
             supplierList = supplierDAL.findAll();
         }
     }
+    
     public List<SupplierDTO> getAllSuppliers() {
         return supplierList;
     }
 
+    public boolean isDuplicateID(String supplierID) {
+    for (SupplierDTO supplier : supplierList) {
+            if (supplier.getId().equalsIgnoreCase(supplierID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean addSupplier(SupplierDTO supplier) {
         if (supplierList.stream().anyMatch(s -> s.getId().equals(supplier.getId()))) {
             JOptionPane.showMessageDialog(null, "ID nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -34,8 +44,10 @@ public class SupplierBUS {
             return false;
         }
     }
+    
+    
 
-    public boolean deleteSupplier(SupplierDTO supplier) {
+    public boolean deleteSupplier(SupplierDTO supplier){
         boolean success = supplierDAL.delete(supplier.getId());
         if (success) {
             supplierList.removeIf(s -> s.getId().equals(supplier.getId()));
@@ -45,12 +57,12 @@ public class SupplierBUS {
         }
     }
 
-    public boolean updateSupplier(SupplierDTO supplier) {
-        boolean success = supplierDAL.update(supplier); 
+    public boolean updateSupplier(SupplierDTO supplierDTO, String oldId) {
+        boolean success = supplierDAL.update(supplierDTO, oldId); 
         if (success) {
-            supplierList.replaceAll(s -> s.getId().equals(supplier.getId()) ? supplier : s);
+            supplierList.replaceAll(s -> s.getId().equals(oldId) ? supplierDTO : s);
         }
-        return success; 
+        return success;
     }
     
     public SupplierDTO findSupplierByID(SupplierDTO supplier) {

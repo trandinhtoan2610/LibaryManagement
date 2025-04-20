@@ -7,15 +7,10 @@ import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
 
 import javax.swing.*;
-import javax.swing.GroupLayout;
-import javax.swing.LayoutStyle;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class UpdateSupplierDialog extends JDialog {
     private String currentID;
@@ -27,12 +22,14 @@ public class UpdateSupplierDialog extends JDialog {
     private SupplierDTO supplierToUpdate;
     private SupplierBUS supplierBUS;
     private SupplierPanel supplierPanel;
+    private List<SupplierDTO> supplierList; // Thêm danh sách nhà cung cấp
 
-    public UpdateSupplierDialog(JFrame parent, SupplierPanel supplierPanel, SupplierDTO supplierToUpdate) {
+    public UpdateSupplierDialog(JFrame parent, SupplierPanel supplierPanel, SupplierDTO supplierToUpdate, List<SupplierDTO> supplierList) {
         super(parent, "Cập Nhật Nhà Cung Cấp", true);
         this.supplierPanel = supplierPanel;
         this.supplierBUS = new SupplierBUS();
         this.supplierToUpdate = supplierToUpdate;
+        this.supplierList = supplierList; // Khởi tạo danh sách nhà cung cấp
         initComponents();
         if (supplierToUpdate != null) {
             fillSupplierData();
@@ -44,7 +41,7 @@ public class UpdateSupplierDialog extends JDialog {
     private void fillSupplierData() {
         if (supplierToUpdate != null) {
             currentID = supplierToUpdate.getId();
-            id.setText(String.valueOf(currentID));
+            id.setText(currentID);
             name.setText(supplierToUpdate.getName());
             phone.setText(supplierToUpdate.getPhone());
             address.setText(supplierToUpdate.getAddress());
@@ -99,13 +96,6 @@ public class UpdateSupplierDialog extends JDialog {
             id.requestFocus();
             return false;
         }
-        try {
-            Long.parseLong(id.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Mã nhà cung cấp phải là số !");
-            id.requestFocus();
-            return false;
-        }
 
         if (name.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà cung cấp ! ");
@@ -133,55 +123,55 @@ public class UpdateSupplierDialog extends JDialog {
         return true;
     }
 
-    private void setCurrentID() {
-        try {
-            if (supplierToUpdate != null) {
-                currentID = supplierToUpdate.getId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp cần cập nhật", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi lấy ID nhà cung cấp: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     public void updateSupplier() {
         String oldName = this.name.getText();
         String oldPhone = this.phone.getText();
         String oldAddress = this.address.getText();
         String oldID = currentID; // Lưu lại ID cũ để so sánh
+        String newID = id.getText().trim(); // Lấy ID đã chỉnh sửa
+
         if (fieldController()) {
-            try {
-                currentID = id.getText(); // Lấy ID đã chỉnh sửa
-                String supplierName = this.name.getText();
-                String supplierPhone = this.phone.getText();
-                String supplierAddress = this.address.getText();
-
-                SupplierDTO updatedSupplier = new SupplierDTO(
-                        currentID,
-                        supplierName,
-                        supplierPhone,
-                        supplierAddress
-                );
-
-                boolean success = supplierBUS.updateSupplier(updatedSupplier);
-                if (success) {
-                    supplierPanel.reloadSupplierTable();
-                    JOptionPane.showMessageDialog(this, "Cập nhật thành công");
-                    dispose();
-                } else {
-                    this.name.setText(oldName);
-                    this.phone.setText(oldPhone);
-                    this.address.setText(oldAddress);
-                    JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    currentID = oldID; // Khôi phục ID cũ nếu cập nhật thất bại
-                    fillSupplierData(); // Hiển thị lại ID cũ trên form
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã nhà cung cấp phải là số !");
+            if (!newID.equals(oldID) && isSupplierIdDuplicate(newID)) {
+                JOptionPane.showMessageDialog(this, "Mã nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 id.requestFocus();
+                return; // Không cho phép cập nhật nếu ID mới bị trùng
+            }
+
+            String supplierName = this.name.getText();
+            String supplierPhone = this.phone.getText();
+            String supplierAddress = this.address.getText();
+
+            SupplierDTO updatedSupplier = new SupplierDTO(
+                    newID, // Sử dụng ID đã chỉnh sửa (newID)
+                    supplierName,
+                    supplierPhone,
+                    supplierAddress
+            );
+
+            boolean success = supplierBUS.updateSupplier(updatedSupplier, oldID);
+            if (success) {
+                supplierPanel.reloadSupplierTable(); 
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+                dispose();
+            } else {
+                this.id.setText(oldID); // Khôi phục ID cũ
+                this.name.setText(oldName);
+                this.phone.setText(oldPhone);
+                this.address.setText(oldAddress);
+                JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                currentID = oldID; 
+                fillSupplierData(); // Hiển thị lại ID cũ trên form
             }
         }
+    }
+
+    private boolean isSupplierIdDuplicate(String idToCheck) {
+        // Kiểm tra xem IDToCheck có tồn tại trong danh sách nhà cung cấp (trừ nhà cung cấp đang được chỉnh sửa)
+        return supplierList.stream()
+                .anyMatch(s -> s.getId().equals(idToCheck) && !s.getId().equals(currentID));
+    }
+    public void setCurrentID(String id) {
+        this.currentID = id;
     }
 
     public JPanel title() {
