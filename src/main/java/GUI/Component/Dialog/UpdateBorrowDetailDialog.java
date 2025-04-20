@@ -48,7 +48,7 @@ public class UpdateBorrowDetailDialog extends JDialog {
         this.borrowSheetId = borrowSheetId;
         this.borrowDetailToEdit = borrowDetailToEdit;
         initComponents();
-        setSize(550, 530);
+        setSize(550, 550);
         setLocationRelativeTo(parentDialog);
         if (parentDialog != null) {
             Point location = this.getLocation();
@@ -194,9 +194,12 @@ public class UpdateBorrowDetailDialog extends JDialog {
 
         gbc.gridx = 1;
         gbc.gridwidth = 2;
-        gbc.weightx = 1;
-        subStatusComboBox.setPreferredSize(new Dimension(200, 30));
-        contentPanel.add(subStatusComboBox, gbc);
+        gbc.weightx = 0;
+        JPanel comboBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        comboBoxPanel.add(subStatusComboBox);
+        subStatusComboBox.setPreferredSize(new Dimension(150, 30));
+        subStatusComboBox.setMaximumSize(new Dimension(150, 30));
+        contentPanel.add(comboBoxPanel, gbc);
 
         // Row 5: Date Chooser (bottom panel)
         gbc.gridx = 0;

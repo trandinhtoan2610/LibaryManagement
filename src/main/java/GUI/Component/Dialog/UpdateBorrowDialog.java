@@ -20,8 +20,6 @@ import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
-import static GUI.Component.Panel.BookPanel.bookTable;
-
 public class UpdateBorrowDialog extends JDialog {
     private BorrowSheetBUS borrowSheetBUS = new BorrowSheetBUS();
     private BorrowDetailBUS borrowDetailBUS = new BorrowDetailBUS();
@@ -247,6 +245,7 @@ public class UpdateBorrowDialog extends JDialog {
         borrowedDateChooser.setDate(borrowToUpdate.getBorrowedDate());
         borrowedDateChooser.setDateFormatString("dd/MM/yyyy");
         borrowedDateChooser.setPreferredSize(new Dimension(150, 30));
+        borrowedDateChooser.setEnabled(false);
         dueDateLabel = new JLabel("Hạn trả:");
         dueDateChooser = new JDateChooser();
         dueDateChooser.setDate(borrowToUpdate.getDuedate());
@@ -356,10 +355,32 @@ public class UpdateBorrowDialog extends JDialog {
         if (latestReturnDate != null) {
             actualReturnDateChooser.setDate(latestReturnDate);
         }
+        if (newDetail.getActualReturnDate() != null) {
+            checkDueDate();
+        }
 
         borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
         borrowDetailTable.refreshTable();
         updateMainStatus();
+    }
+
+    private void checkDueDate() {
+        Date dueDate = dueDateChooser.getDate();
+        if (dueDate == null) {
+            return;
+        }
+        boolean hasOverDueDate = false;
+        for (BorrowDetailDTO borrow : pendingBorrowDetails) {
+            if (borrow.getActualReturnDate() != null && borrow.getActualReturnDate().after(dueDate)) {
+                borrow.setStatus(SubStatus.Quá_Hạn);
+                borrowDetailBUS.updateBorrowDetail(borrow);
+                hasOverDueDate = true;
+            }
+        }
+        if (hasOverDueDate){
+            borrowDetailTable.setBorrowDetails(pendingBorrowDetails);
+            updateMainStatus();
+        }
     }
 
     private void updateMainStatus() {
@@ -367,6 +388,7 @@ public class UpdateBorrowDialog extends JDialog {
             statusValueLabel.setText("");
             return;
         }
+
         boolean hasDangMuon = false;
         boolean hasPhat = false;
         boolean hasDaTra = true;
@@ -622,6 +644,9 @@ public class UpdateBorrowDialog extends JDialog {
                 for (BorrowDetailDTO detail : pendingBorrowDetails) {
                     detail.setBorrowSheetId(borrowSheetId);
                     borrowDetailBUS.updateBorrowDetail(detail);
+                }
+                if (actualReturnDateChooser.getDate() != null) {
+                    checkDueDate();
                 }
                 boolean success = borrowSheetBUS.updateBorrowSheet(borrowDTO);
                 if (success) {
