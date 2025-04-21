@@ -152,7 +152,7 @@ public class UpdateSupplierDialog extends JDialog {
             if (success) {
                 supplierPanel.reloadSupplierTable(); 
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
-                dispose();
+                this.dispose();
             } else {
                 this.id.setText(oldID); // Khôi phục ID cũ
                 this.name.setText(oldName);

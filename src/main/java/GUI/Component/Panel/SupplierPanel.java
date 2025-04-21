@@ -137,6 +137,7 @@ public class SupplierPanel extends javax.swing.JPanel {
         leftNavbarSupplierPanel.add(buttonUpdate);
 
         leftNavbarSupplierPanel.add(buttonExportExcel);
+
         leftNavbarSupplierPanel.add(buttonImportExcel1);
         navbarSupplierPanel.add(leftNavbarSupplierPanel, java.awt.BorderLayout.LINE_START);
 
@@ -176,7 +177,7 @@ public class SupplierPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {
-        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, SupplierPanel.this);
+        AddSupplierDialog addDialog = new AddSupplierDialog((javax.swing.JFrame) SwingUtilities.getWindowAncestor(this), true, SupplierPanel.this, SupplierBUS.supplierList);
         addDialog.setVisible(true);
     }
 
@@ -184,10 +185,10 @@ public class SupplierPanel extends javax.swing.JPanel {
         SupplierDTO selectedSupplier = supplierTable1.getSelectedSupplier();
         if (selectedSupplier == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp để xóa.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-
         } else {
             DeleteSupplierDialog deleteDialog = new DeleteSupplierDialog(null,  true,  selectedSupplier,this );
-              deleteDialog.setVisible(true);        }
+              deleteDialog.setVisible(true);
+            }
     }
     
     private void buttonUpdateMouseClicked(java.awt.event.MouseEvent evt) {

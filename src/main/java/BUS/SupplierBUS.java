@@ -22,21 +22,8 @@ public class SupplierBUS {
     public List<SupplierDTO> getAllSuppliers() {
         return supplierList;
     }
-
-    public boolean isDuplicateID(String supplierID) {
-    for (SupplierDTO supplier : supplierList) {
-            if (supplier.getId().equalsIgnoreCase(supplierID)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     public boolean addSupplier(SupplierDTO supplier) {
-        if (supplierList.stream().anyMatch(s -> s.getId().equals(supplier.getId()))) {
-            JOptionPane.showMessageDialog(null, "ID nhà cung cấp đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false; 
-        }if (true) {
+        if (true){
             supplierDAL.create(supplier);
             supplierList.add(supplier);
             return true;
