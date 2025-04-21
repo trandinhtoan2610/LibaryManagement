@@ -65,6 +65,7 @@ public class EmployeePanel extends JPanel {
     private double currentMinSalary = 0;
     private double currentMaxSalary = Double.MAX_VALUE;
     private String currentPositionFilter = "";
+    private boolean isAndFilter;
 
     private JFrame parentFrame;
     public EmployeePanel(JFrame parentFrame) {
@@ -316,18 +317,19 @@ public class EmployeePanel extends JPanel {
             }
             if (salaryFilterActive){
                 if(!currentPositionFilter.isEmpty()){
-                    System.out.println(currentPositionFilter);
                     filters.add(RowFilter.regexFilter(currentPositionFilter, 5));
                 }
-                System.out.println(currentMinSalary);
-                System.out.println(currentMaxSalary);
                 filters.add(RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, currentMaxSalary+0.0001, 8));
                 filters.add(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER, currentMinSalary -0.0001, 8));
             }
             if(filters.isEmpty()) {
                 sorter.setRowFilter(null);
             } else {
-                sorter.setRowFilter(RowFilter.andFilter(filters));
+                if (isAndFilter){
+                    sorter.setRowFilter(RowFilter.andFilter(filters));
+                }else {
+                    sorter.setRowFilter(RowFilter.orFilter(filters));
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -336,11 +338,12 @@ public class EmployeePanel extends JPanel {
     }
     private void openDialogFilter(){
         EmployeeFilter dialog = new EmployeeFilter(parentFrame);
-        dialog.setEmployeeFilterListener((position, minSalary, maxSalary) -> {
+        dialog.setEmployeeFilterListener((position, minSalary, maxSalary, isAndFilter) -> {
             salaryFilterActive = true;
             currentMinSalary = minSalary;
             currentMaxSalary = maxSalary;
             currentPositionFilter = position;
+            this.isAndFilter = isAndFilter;
             performSearch();
         });
         dialog.setVisible(true);
@@ -524,7 +527,7 @@ public class EmployeePanel extends JPanel {
                     addTableCell(table, role, font);
                     addTableCell(table, emp.getPhone() != null ? emp.getPhone() : "", font);
                     addTableCell(table, emp.getAddress() != null ? emp.getAddress() : "", font);
-                    addTableCell(table, formatSalary(emp.getSalary()), font);
+                    addTableCell(table, Long.toString(emp.getSalary()), font);
                 }
 
                 document.add(table);
@@ -574,12 +577,6 @@ public class EmployeePanel extends JPanel {
     private String maskPassword(String password) {
         return password != null ? "********" : "";
     }
-
-    private String formatSalary(Long salary) {
-        if (salary == null) return "0 VND";
-        return String.format("%,.0f VND", salary);
-    }
-
     private void addTableCell(Table table, String content, PdfFont font) {
         table.addCell(
                 new Paragraph(content)

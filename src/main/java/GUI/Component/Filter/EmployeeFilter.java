@@ -25,6 +25,10 @@ public class EmployeeFilter extends JDialog {
 
     private EmployeeFilterListener filterListener;
 
+    private final JRadioButton andRadioButton = new JRadioButton("AND(Tất cả điều kiện)");
+    private final JRadioButton orRadioButton = new JRadioButton("OR(Bất kỳ điều kiện)");
+    private final ButtonGroup filterTypeGroup = new ButtonGroup();
+
     public EmployeeFilter(JFrame parent) {
         super(parent, "Lọc nhân viên", true);
         setSize(400, 400);
@@ -51,8 +55,22 @@ public class EmployeeFilter extends JDialog {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        JPanel filterTypePanel = new JPanel(new GridLayout(1, 2, 10, 5));
+        filterTypePanel.setBorder(BorderFactory.createTitledBorder("Loại bộ lọc"));
+
+        filterTypeGroup.add(andRadioButton);
+        filterTypeGroup.add(orRadioButton);
+        andRadioButton.setSelected(true);
+
+        filterTypePanel.add(andRadioButton);
+        filterTypePanel.add(orRadioButton);
+
+        JPanel containerPanel = new JPanel();
+        containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
+
         JPanel positionPanel = new JPanel(new GridLayout(5, 1, 5, 5));
         positionPanel.setBorder(BorderFactory.createTitledBorder("Lọc theo chức vụ"));
+        positionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         group.add(none);
         group.add(admin);
@@ -69,6 +87,7 @@ public class EmployeeFilter extends JDialog {
         // Panel lương
         JPanel salaryPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         salaryPanel.setBorder(BorderFactory.createTitledBorder("Lọc theo khoảng lương"));
+        salaryPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         salaryPanel.add(salaryLabel);
         salaryPanel.add(new JLabel()); // placeholder
@@ -77,13 +96,18 @@ public class EmployeeFilter extends JDialog {
         salaryPanel.add(new JLabel("Đến:"));
         salaryPanel.add(maxSalaryField);
 
-        // Panel button
+        containerPanel.add(positionPanel);
+        containerPanel.add(Box.createVerticalStrut(10));
+        containerPanel.add(salaryPanel);
+
+        // Panel button (BOTTOM)
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(filterButton);
         buttonPanel.add(cancelButton);
 
-        mainPanel.add(positionPanel, BorderLayout.NORTH);
-        mainPanel.add(salaryPanel, BorderLayout.CENTER);
+        // Thêm tất cả vào main panel
+        mainPanel.add(filterTypePanel, BorderLayout.NORTH);
+        mainPanel.add(containerPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
@@ -113,7 +137,8 @@ public class EmployeeFilter extends JDialog {
                     double maxSalary = maxSalaryField.getText().isEmpty() ? Double.MAX_VALUE :
                             Double.parseDouble(maxSalaryField.getText());
                     if (checkSalary(minSalary, maxSalary)) {
-                        filterListener.onFilterApplied(position, minSalary, maxSalary);
+                        boolean isAndFilter = andRadioButton.isSelected();
+                        filterListener.onFilterApplied(position, minSalary, maxSalary, isAndFilter);
                     }else{
                         return;
                     }
@@ -139,7 +164,7 @@ public class EmployeeFilter extends JDialog {
     }
 
     public interface EmployeeFilterListener {
-        void onFilterApplied(String position, double minSalary, double maxSalary);
+        void onFilterApplied(String position, double minSalary, double maxSalary, boolean isAndFilter);
     }
 
 

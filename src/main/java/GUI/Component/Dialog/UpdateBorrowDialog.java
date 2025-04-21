@@ -595,12 +595,18 @@ public class UpdateBorrowDialog extends JDialog {
         }
 
         Date latestDate = null;
+        boolean flag = false;
         for (BorrowDetailDTO detail : pendingBorrowDetails) {
-            if (detail.getActualReturnDate() != null) {
-                if (latestDate == null || detail.getActualReturnDate().after(latestDate)) {
-                    latestDate = detail.getActualReturnDate();
-                }
+            if (detail.getActualReturnDate() == null) {
+                flag = true;
+                break;
             }
+            if (latestDate == null || detail.getActualReturnDate().after(latestDate)) {
+                latestDate = detail.getActualReturnDate();
+            }
+        }
+        if (flag){
+            latestDate = null;
         }
         return latestDate;
     }
