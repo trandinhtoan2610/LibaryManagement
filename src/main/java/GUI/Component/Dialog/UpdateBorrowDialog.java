@@ -371,6 +371,7 @@ public class UpdateBorrowDialog extends JDialog {
         }
         boolean hasOverDueDate = false;
         for (BorrowDetailDTO borrow : pendingBorrowDetails) {
+            if (borrow.getStatus() == SubStatus.Mất_Sách || borrow.getStatus() == SubStatus.Hư_Sách) break;
             if (borrow.getActualReturnDate() != null && borrow.getActualReturnDate().after(dueDate)) {
                 borrow.setStatus(SubStatus.Quá_Hạn);
                 borrowDetailBUS.updateBorrowDetail(borrow);
@@ -595,19 +596,43 @@ public class UpdateBorrowDialog extends JDialog {
         }
 
         Date latestDate = null;
-        boolean flag = false;
+        boolean hasUnreturnedItems = false;
+        boolean hasInvalidDates = false;
+
         for (BorrowDetailDTO detail : pendingBorrowDetails) {
             if (detail.getActualReturnDate() == null) {
-                flag = true;
-                break;
+                hasUnreturnedItems = true;
+                continue;
             }
+
+            if (borrowedDateChooser.getDate() != null &&
+                    detail.getActualReturnDate().before(borrowedDateChooser.getDate())) {
+                new AlertDialog(this, "Ngày thực trả không được trước ngày mượn").setVisible(true);
+                detail.setStatus(SubStatus.Đang_Mượn);
+                detail.setActualReturnDate(null);
+                hasInvalidDates = true;
+                continue;
+            }
+
             if (latestDate == null || detail.getActualReturnDate().after(latestDate)) {
                 latestDate = detail.getActualReturnDate();
             }
         }
-        if (flag){
+
+        if (hasInvalidDates) {
+            latestDate = null;
+            for (BorrowDetailDTO detail : pendingBorrowDetails) {
+                if (detail.getActualReturnDate() != null) {
+                    if (latestDate == null || detail.getActualReturnDate().after(latestDate)) {
+                        latestDate = detail.getActualReturnDate();
+                    }
+                }
+            }
+        }
+        if (hasUnreturnedItems) {
             latestDate = null;
         }
+
         return latestDate;
     }
     private void updateBorrow() {

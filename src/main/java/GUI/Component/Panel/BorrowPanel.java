@@ -1,15 +1,8 @@
 package GUI.Component.Panel;
 
-import BUS.BorrowDetailBUS;
-import BUS.BorrowSheetBUS;
-import BUS.EmployeeBUS;
-import BUS.ReaderBUS;
-import DTO.BorrowDTO;
-import DTO.BorrowDetailDTO;
-import DTO.Employee;
-import DTO.Enum.Gender;
+import BUS.*;
+import DTO.*;
 import DTO.Enum.Status;
-import DTO.ReaderDTO;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddBorrowDialog;
 import GUI.Component.Dialog.AlertDialog;
@@ -19,6 +12,19 @@ import GUI.Component.Table.BookTable;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.Table.BorrowinSheetTable;
 import GUI.Component.TextField.RoundedTextField;
+import com.itextpdf.kernel.colors.DeviceGray;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumnModel;
@@ -28,7 +34,11 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BorrowPanel extends JPanel {
@@ -36,6 +46,7 @@ public class BorrowPanel extends JPanel {
     private final BorrowDetailBUS borrowDetailBUS = new BorrowDetailBUS();
     private final EmployeeBUS employeeBUS = new EmployeeBUS();
     private final ReaderBUS readerBUS = new ReaderBUS();
+    private final BookBUS bookBUS = new BookBUS();
     private ButtonAdd buttonAdd;
     private ButtonUpdate buttonUpdate;
     private ButtonDelete buttonDelete;
@@ -164,6 +175,12 @@ public class BorrowPanel extends JPanel {
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         buttonExportPDF = new ButtonExportPDF();
+        buttonExportPDF.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+                exportToPDF(selectedBorrow);
+            }
+        });
         searchNavBarLabel = getSearchNavBarLabel();
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
@@ -433,5 +450,138 @@ public class BorrowPanel extends JPanel {
         searchfield.setText("");
         buttonGroup.clearSelection();
         allRadioButton.setSelected(true);
+    }
+    public void exportToPDF(BorrowDTO selectedBorrow) {
+        if (selectedBorrow == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu mượn cần xuất", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Lấy thông tin cần thiết
+            Employee employee = employeeBUS.getEmployeeById(selectedBorrow.getEmployeeId());
+            ReaderDTO reader = readerBUS.findReaderByID(selectedBorrow.getReaderId());
+            List<BorrowDetailDTO> borrowDetails = borrowDetailBUS.getBorrowDetailsBySheetId(
+                    Long.parseLong(selectedBorrow.getId().substring(2))
+            );
+
+            String employeeName = employee.getFirstName() + " " + employee.getLastName();
+            String readerName = reader.getLastName() + " " + reader.getFirstName();
+            String readerPhone = reader.getPhone();
+            String readerAddress = reader.getAddress();
+            String borrowDate = formatDate(selectedBorrow.getBorrowedDate());
+            String dueDate = formatDate(selectedBorrow.getDuedate());
+            String actualReturnDate = selectedBorrow.getActualReturnDate() != null
+                    ? formatDate(selectedBorrow.getActualReturnDate())
+                    : "Chưa trả";
+            String status = selectedBorrow.getStatus().toString();
+            String borrowId = selectedBorrow.getId();
+
+            // Hiển thị dialog chọn nơi lưu file
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Lưu file PDF");
+            fileChooser.setSelectedFile(new File("PhieuMuon_" + borrowId + ".pdf"));
+
+            int userSelection = fileChooser.showSaveDialog(null);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                if (!fileToSave.getAbsolutePath().endsWith(".pdf")) {
+                    fileToSave = new File(fileToSave.getAbsolutePath() + ".pdf");
+                }
+
+                // Tạo tài liệu PDF
+                PdfWriter writer = new PdfWriter(new FileOutputStream(fileToSave));
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // Tiêu đề
+                String fontPath = "src/main/resources/fonts/NotoSans-Italic-VariableFont_wdth,wght.ttf";
+                PdfFont unicodeFont = PdfFontFactory.createFont(fontPath, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+                Paragraph title = new Paragraph("PHIẾU MƯỢN SÁCH")
+                        .setFont(unicodeFont)
+                        .setFontSize(18)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setBold()
+                        .setMarginBottom(20);
+                document.add(title);
+
+                // Bảng thông tin phiếu mượn
+                Table infoTable = new Table(UnitValue.createPercentArray(new float[]{1, 2})).useAllAvailableWidth();
+                addInfoRow(infoTable, "Mã phiếu mượn:", borrowId, unicodeFont);
+                addInfoRow(infoTable, "Ngày mượn:", borrowDate, unicodeFont);
+                addInfoRow(infoTable, "Hạn trả:", dueDate, unicodeFont);
+                addInfoRow(infoTable, "Ngày trả thực tế:", actualReturnDate, unicodeFont);
+                addInfoRow(infoTable, "Trạng thái:", status, unicodeFont);
+                document.add(infoTable);
+
+                // Bảng thông tin nhân viên
+                document.add(new Paragraph("THÔNG TIN NHÂN VIÊN").setFont(unicodeFont).setBold().setMarginTop(15));
+                Table empTable = new Table(UnitValue.createPercentArray(new float[]{1, 2})).useAllAvailableWidth();
+                addInfoRow(empTable, "Mã nhân viên:", employee.getId().toString(), unicodeFont);
+                addInfoRow(empTable, "Họ tên:", employeeName, unicodeFont);
+                document.add(empTable);
+
+                // Bảng thông tin độc giả
+                document.add(new Paragraph("THÔNG TIN ĐỘC GIẢ").setFont(unicodeFont).setBold().setMarginTop(15));
+                Table readerTable = new Table(UnitValue.createPercentArray(new float[]{1, 2})).useAllAvailableWidth();
+                addInfoRow(readerTable, "Mã độc giả:", reader.getId().toString(), unicodeFont);
+                addInfoRow(readerTable, "Họ tên:", readerName, unicodeFont);
+                addInfoRow(readerTable, "Điện thoại:", readerPhone, unicodeFont);
+                addInfoRow(readerTable, "Địa chỉ:", readerAddress, unicodeFont);
+                document.add(readerTable);
+
+                // Chi tiết sách mượn
+                document.add(new Paragraph("CHI TIẾT SÁCH MƯỢN").setFont(unicodeFont).setBold().setMarginTop(15));
+                if (!borrowDetails.isEmpty()) {
+                    Table detailTable = new Table(UnitValue.createPercentArray(new float[]{1, 3, 1})).useAllAvailableWidth();
+                    addTableHeader(detailTable, "Mã sách", unicodeFont);
+                    addTableHeader(detailTable, "Tên sách", unicodeFont);
+                    addTableHeader(detailTable, "Số lượng", unicodeFont);
+                    for (BorrowDetailDTO detail : borrowDetails) {
+                        Book book = bookBUS.getBookById(detail.getBookId());
+                        addTableCell(detailTable, detail.getBookId().toString(), unicodeFont);
+                        addTableCell(detailTable, book.getName(), unicodeFont);
+                        addTableCell(detailTable, String.valueOf(detail.getQuantity()), unicodeFont);
+                    }
+                    document.add(detailTable);
+                } else {
+                    document.add(new Paragraph("Không có chi tiết sách mượn").setFont(unicodeFont).setMarginTop(10));
+                }
+
+                // Ngày xuất và chữ ký
+                Paragraph sign = new Paragraph()
+                        .add(new Text("\n\nNgày xuất: " + formatDate(new Date()) + "\n").setFont(unicodeFont))
+                        .add(new Text("\t\t\t\tNgười lập phiếu\n").setFont(unicodeFont))
+                        .add(new Text("\t\t\t\t(Ký và ghi rõ họ tên)").setFont(unicodeFont))
+                        .setTextAlignment(TextAlignment.RIGHT);
+                document.add(sign);
+
+                document.close();
+
+                JOptionPane.showMessageDialog(null, "Xuất PDF thành công!\nFile đã được lưu tại: " + fileToSave.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void addInfoRow(Table table, String label, String value, PdfFont font) {
+        table.addCell(new Cell().add(new Paragraph(label).setFont(font).setBold()));
+        table.addCell(new Cell().add(new Paragraph(value != null ? value : "").setFont(font)));
+    }
+
+    private void addTableHeader(Table table, String headerText, PdfFont font) {
+        table.addCell(new Cell().add(new Paragraph(headerText).setFont(font).setBold()).setBackgroundColor(DeviceGray.GRAY));
+    }
+
+    private void addTableCell(Table table, String text, PdfFont font) {
+        table.addCell(new Cell().add(new Paragraph(text).setFont(font)));
+    }
+
+    private String formatDate(Date date) {
+        if (date == null) return "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
     }
 }

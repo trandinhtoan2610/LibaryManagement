@@ -166,6 +166,4 @@ public class EmployeeFilter extends JDialog {
     public interface EmployeeFilterListener {
         void onFilterApplied(String position, double minSalary, double maxSalary, boolean isAndFilter);
     }
-
-
 }

@@ -257,7 +257,6 @@ public class PublisherPanel extends JPanel {
     private void importExcelData() {
         try {
             // Thiết lập giao diện
-            FlatLightLaf.setup();
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Chọn file Excel nhập dữ liệu");
 

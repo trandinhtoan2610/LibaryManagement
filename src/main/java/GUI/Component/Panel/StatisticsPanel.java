@@ -1,5 +1,7 @@
 package GUI.Component.Panel;
 
+import GUI.Component.Panel.Statistics.BorrowStatistics;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,12 +11,12 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private final Color selectedColor = new Color(100, 200, 250);
     private final Color hoverColor = new Color(180, 220, 250);
 
+    private final BorrowStatistics borrowStatistics = new BorrowStatistics();
+
 
     private JPanel selectedPanel;
 
     public StatisticsPanel() {
-
-
         initComponents();
         OverviewStatTab.setOpaque(true);
         ReaderStatTab.setOpaque(true);
@@ -23,6 +25,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
         LoanSlipStatTab.setOpaque(true);
         SupplierStatTab.setOpaque(true);
         isSelected(OverviewStatTab);
+        LayerPane.add(borrowStatistics);
     }
 
     public void clearSelect() {

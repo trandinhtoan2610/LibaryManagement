@@ -2,8 +2,12 @@ package BUS;
 
 import DAL.BorrowDAL;
 import DTO.BorrowDTO;
+import DTO.Statistics.MonthData;
+import DTO.Statistics.QuarterData;
+import DTO.Statistics.StatusData;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BorrowSheetBUS {
@@ -13,6 +17,9 @@ public class BorrowSheetBUS {
         if (borrowSheetList.isEmpty()) {
             borrowSheetList = borrowSheetDAL.findAll();
         }
+    }
+    public int getCountBorrowSheet() {
+        return borrowSheetList.size();
     }
     public long createBorrowSheet(BorrowDTO dto) {
         validateBorrowData(dto);
@@ -48,5 +55,38 @@ public class BorrowSheetBUS {
     }
     public long getCurrentID(){
         return borrowSheetDAL.getCurrentID();
+    }
+    public List<Integer> getListYear() {
+        return borrowSheetDAL.getListYear();
+    }
+    public List<QuarterData> getQuarterEmloyeeData(int year){
+        return borrowSheetDAL.getQuarterEmployeeData(year);
+    }
+    public List<QuarterData> getQuarterReaderData(int year){
+        return borrowSheetDAL.getQuarterReaderData(year);
+    }
+    public List<QuarterData> getQuarterBookData(int year){
+        return borrowSheetDAL.getQuarterBookData(year);
+    }
+    public List<QuarterData> getQuarterBookDataByDate(Date startDate, Date endDate) {
+        return borrowSheetDAL.getQuarterBookDataByDate(startDate, endDate);
+    }
+    public List<QuarterData> getQuarterReaderDataByDate(Date startDate, Date endDate) {
+        return borrowSheetDAL.getQuarterReaderDataByDate(startDate, endDate);
+    }
+    public List<QuarterData> getQuarterEmployeeDataByDate(Date startDate, Date endDate) {
+        return borrowSheetDAL.getQuarterEmployeeDataByDate(startDate, endDate);
+    }
+    public List<MonthData> getMonthDataByYear(int year){
+        return borrowSheetDAL.getListMonthForYear(year);
+    }
+    public List<MonthData> getMonthDataByDate(Date startDate, Date endDate) {
+        return borrowSheetDAL.getListMonthByDate(startDate, endDate);
+    }
+    public List<StatusData> getStatusDataByYear(int Year){
+        return borrowSheetDAL.getListStatusByYear(Year);
+    }
+    public List<StatusData> getStatusDataByDate(Date startDate, Date endDate) {
+        return borrowSheetDAL.getListStatusByDate(startDate, endDate);
     }
 }

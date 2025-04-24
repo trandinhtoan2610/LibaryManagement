@@ -26,16 +26,19 @@ public class JTableCustom extends JTable {
         initialize();
     }
 
+    public JTableCustom(Object[] header) {
+        super(new Object[][]{}, header);
+        initialize();
+    }
+
     private void initialize() {
         setRowHeight(28);
         setGridColor(new Color(220, 220, 220));
         setShowGrid(true);
         setFillsViewportHeight(true);
 
-        // Áp dụng font và màu sắc cho header
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 15), new Color(60, 80, 100));
 
-        // Đăng ký renderer cho các kiểu dữ liệu cụ thể
         setDefaultRenderer(Object.class, new CustomTableCellRenderer());
         setDefaultRenderer(String.class, new CustomTableCellRenderer());
         setDefaultRenderer(Long.class, new CustomTableCellRenderer());
@@ -44,15 +47,13 @@ public class JTableCustom extends JTable {
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         setCustomGrid(new Color(200, 200, 200), 30);
         setCellAlignment();
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // Lấy vị trí click
                 Point p = e.getPoint();
                 int row = rowAtPoint(p);
                 int col = columnAtPoint(p);
-
-                // Chỉ xử lý nếu click vào ô hợp lệ
                 if (row >= 0 && col >= 0) {
                     // Giữ nguyên selection
                 } else {
@@ -60,6 +61,7 @@ public class JTableCustom extends JTable {
                 }
             }
         });
+
         addHierarchyListener(new HierarchyListener() {
             @Override
             public void hierarchyChanged(HierarchyEvent e) {
@@ -79,35 +81,28 @@ public class JTableCustom extends JTable {
             }
         });
     }
+
     private boolean isClickInTable(MouseEvent e) {
-        // Chuyển tọa độ click sang hệ tọa độ của JTable
         Point tablePoint = SwingUtilities.convertPoint(
                 e.getComponent(), e.getPoint(), this);
-
-        // Kiểm tra click có nằm trong biên của JTable không
         if (!getVisibleRect().contains(tablePoint)) {
             return false;
         }
-
-        // Kiểm tra có click vào ô hợp lệ không
         int row = rowAtPoint(tablePoint);
         int col = columnAtPoint(tablePoint);
         return row >= 0 && col >= 0;
     }
 
-    // Ngăn không cho chỉnh sửa ô trong bảng
     @Override
     public boolean isCellEditable(int row, int column) {
-        return false; // Không cho phép chỉnh sửa
+        return false;
     }
 
-    // Renderer cho ô dữ liệu
     private class CustomTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
             if (isSelected) {
                 c.setBackground(new Color(100, 149, 237));
                 c.setForeground(Color.WHITE);
@@ -165,17 +160,12 @@ public class JTableCustom extends JTable {
         super.changeSelection(rowIndex, columnIndex, toggle, extend);
     }
 
-    //Hàm căn giữa các cột trong bảng :
     private void setCellAlignment() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-
-        // Áp dụng cho tất cả các cột của bảng
         for (int i = 0; i < getColumnCount(); i++) {
             getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
-        // Cập nhật lại bảng nếu cần thiết
         revalidate();
         repaint();
     }

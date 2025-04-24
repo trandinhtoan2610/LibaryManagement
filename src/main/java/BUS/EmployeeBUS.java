@@ -66,6 +66,9 @@ public class EmployeeBUS {
     public long getCurrentID(){
         return employeeDAL.getCurrentID();
     }
+    public int countEmployee(){
+        return employeeList.size();
+    }
     public int addEmployeesFromExcel(List<Employee> employees) {
         int successCount = 0;
 

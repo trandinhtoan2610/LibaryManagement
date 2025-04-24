@@ -25,6 +25,9 @@ public class BookBUS {
         this.bookViewModels = new ArrayList<>();
     }
 
+    public int getCountBook() {
+        return bookViewModels.size();
+    }
     // tải lại danh sách từ csdl
     private void refreshBooks() {
         if (!bookViewModels.isEmpty()) {
@@ -199,6 +202,7 @@ public class BookBUS {
                     break;
                 }
             }
+            bookViewModels.replaceAll(p -> p.getId() == book.getId() ? updatedBookViewModel : p);
         } catch (Exception e) {
             System.err.println("Lỗi khi cập nhật sách với ID " + book.getId() + ": " + e.getMessage());
             throw new RuntimeException("Không thể cập nhật sách", e);
@@ -264,6 +268,11 @@ public class BookBUS {
             throw new IllegalArgumentException("ID nhà xuất bản không hợp lệ");
         }
     }
-
-
+    // xin dung sua cua minh
+    public int sumBorrowedBook(){
+        return bookRepository.sumBorrowedBook();
+    }
+    public int sumAvailableBook(){
+        return bookRepository.sumAvailableBook();
+    }
 }

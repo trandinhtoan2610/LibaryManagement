@@ -17,7 +17,9 @@ public class ReaderBUS {
             getReaderList();
 
     }
-
+    public int getCountReader(){
+        return readerList.size();
+    }
     public void getReaderList(){
         readerList = readerDAL.findAll();
         

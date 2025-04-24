@@ -200,4 +200,30 @@ public class BookDAL implements IRepositoryBase<Book> {
         }
         return list;
     }
+    // cua minh dung sua nhe
+    public int sumBorrowedBook(){
+        try {
+            PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT SUM(borrowedQuantity) AS SachDangMuon FROM book");
+            ResultSet rs = p.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("SachDangMuon");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+    public int sumAvailableBook(){
+        try {
+            PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT (SUM(quantity) - SUM(borrowedQuantity)) AS SachTrongKho FROM book");
+            ResultSet rs = p.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("SachTrongKho");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
+    }
 }
