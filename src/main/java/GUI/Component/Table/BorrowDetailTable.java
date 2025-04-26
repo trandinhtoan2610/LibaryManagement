@@ -39,24 +39,6 @@ public class BorrowDetailTable extends JTableCustom{
         }
         refreshTable();
     }
-    public void addBorrowDetail(BorrowDetailDTO borrowDetailDTO) {
-        if (borrowDetailDTO != null) {
-            borrowDetailDTOS.add(borrowDetailDTO);
-            refreshTable();
-        }
-    }
-    public boolean updateBorrowDetail(BorrowDetailDTO borrowDetailDTO) {
-        BorrowDetailDTO selectedBorrowDetailDTO = getSelectedBorrowDetail();
-        if (selectedBorrowDetailDTO != null) {
-            int index = borrowDetailDTOS.indexOf(selectedBorrowDetailDTO);
-            if (index != -1) {
-                borrowDetailDTOS.set(index, borrowDetailDTO);
-                refreshTable();
-                return true;
-            }
-        }
-        return false;
-    }
     public BorrowDetailDTO getSelectedBorrowDetail() {
         int selectedRow = getSelectedRow();
         if (selectedRow != -1) {

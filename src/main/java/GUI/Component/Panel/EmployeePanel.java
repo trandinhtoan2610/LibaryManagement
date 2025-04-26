@@ -402,13 +402,9 @@ public class EmployeePanel extends JPanel {
 
             // Xử lý kết quả
             if (confirm == JOptionPane.YES_OPTION) {
-                // Thực hiện import
                 int successCount = employeeBUS.addEmployeesFromExcel(employeesFromExcel);
-
-                // Cập nhật giao diện
                 employeeTable.setEmployees(EmployeeBUS.employeeList);
-
-                // Hiển thị kết quả
+                employeeTable.refreshTable();
                 new AlertDialog(parentFrame,
                         "Đã nhập thành công " + successCount + "/" + employeesFromExcel.size() + " nhân viên")
                         .setVisible(true);
