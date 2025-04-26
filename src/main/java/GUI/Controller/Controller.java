@@ -5,11 +5,15 @@
 package GUI.Controller;
 
 
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Controller {
     private static final String nameRegex = "^[A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?( [A-Za-zÀ-Ỹà-ỹ]+(?:[-'][A-Za-zÀ-Ỹà-ỹ]+)?)+$";
     private static final String phoneRegex = "^0\\d{9}$";
+    private static final DateFormat DATE_FMT = new SimpleDateFormat("dd-MM-yyyy");
+
 
     public static boolean checkSalary(float salary) { return salary >= 0 ; }
     public static boolean checkValidName(String name){
@@ -32,4 +36,15 @@ public class Controller {
         }
         return result.toString().trim();
     }
+
+    public static String formatVND(Long money) {
+        if (money == null) return "0 đ";
+        return String.format("%,d đ", money);
+    }
+
+    public static String formatDate(Date date){
+        return  DATE_FMT.format(date);
+    }
+
+
 }

@@ -66,6 +66,9 @@
               </Events>
             </Component>
             <Component class="GUI.Component.Button.ButtonExportExcel" name="btnExportExcel">
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnExportExcelMouseClicked"/>
+              </Events>
             </Component>
             <Component class="GUI.Component.Button.ButtonImportExcel" name="buttonImportExcel1">
             </Component>

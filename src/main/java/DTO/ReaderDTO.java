@@ -7,11 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReaderDTO extends EntityAuditGPABase<Long> {
+public class ReaderDTO extends EntityAuditGPABase<String> {
     int complianceCount;
 
     public ReaderDTO() {};
-    public ReaderDTO(Long id, String firstName, String lastName, Gender gender, String phone, String address, int count) {
+    public ReaderDTO(String id, String firstName, String lastName, Gender gender, String phone, String address, int count) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

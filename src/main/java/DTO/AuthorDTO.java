@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuthorDTO {
-    private long id;
+    private Long id;
     private String lastName;
     private String firstName;
     private long productQuantity;

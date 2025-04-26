@@ -49,4 +49,10 @@ public class BorrowSheetBUS {
     public long getCurrentID(){
         return borrowSheetDAL.getCurrentID();
     }
+
+    public BorrowDTO findBorrowSheetByID(Long id){
+        return borrowSheetDAL.findById(id);
+    }
+
+
 }

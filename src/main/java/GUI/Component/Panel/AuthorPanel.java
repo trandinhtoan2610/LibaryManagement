@@ -11,9 +11,15 @@ import GUI.Component.Dialog.UpdateAuthorDialog;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
 import GUI.Controller.Controller;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.io.File;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class AuthorPanel extends javax.swing.JPanel {
@@ -21,9 +27,12 @@ public class AuthorPanel extends javax.swing.JPanel {
     private BookBUS bookBUS;
     Window parent = SwingUtilities.getWindowAncestor(this);
     AlertDialog updateAlertDialog = new AlertDialog(parent,"Vui lòng chọn tác giả cần sửa");
-    
+    private JFrame parentFrame;
+
     
     public AuthorPanel() {
+        this.parentFrame = parentFrame;
+
         try {
             System.out.println("Khởi tạo Author Panel...");
             initComponents();
@@ -61,6 +70,7 @@ public class AuthorPanel extends javax.swing.JPanel {
         }
     }
     
+    
     //Cập nhật lại bảng sau khi thêm, sửa, xóa :
     public static void reloadTable(){
         tblAuthor.resetTable();
@@ -77,7 +87,40 @@ public class AuthorPanel extends javax.swing.JPanel {
            
     }
     
+    private void exportExcelData() {
+        FlatLightLaf.setup();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+        fileChooser.setSelectedFile(new File("DanhSachTacGia.xlsx"));
 
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Excel Files (*.xlsx)", "xlsx");
+        fileChooser.setFileFilter(filter);
+
+        int userSelection = fileChooser.showSaveDialog(parentFrame);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+
+            // Đảm bảo có đuôi .xlsx
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+
+            if (authorBUS.exportToExcel(filePath)) {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thành công!\nFile: " + filePath,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thất bại",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
    
     
     @SuppressWarnings("unchecked")
@@ -125,6 +168,12 @@ public class AuthorPanel extends javax.swing.JPanel {
             }
         });
         leftNavbarAuthorPanel.add(btnUpdate);
+
+        btnExportExcel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnExportExcelMouseClicked(evt);
+            }
+        });
         leftNavbarAuthorPanel.add(btnExportExcel);
         leftNavbarAuthorPanel.add(buttonImportExcel1);
 
@@ -244,6 +293,10 @@ public class AuthorPanel extends javax.swing.JPanel {
            
         }
     }//GEN-LAST:event_tblAuthorMouseClicked
+
+    private void btnExportExcelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExportExcelMouseClicked
+        exportExcelData();
+    }//GEN-LAST:event_btnExportExcelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

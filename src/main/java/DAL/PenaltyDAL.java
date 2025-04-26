@@ -2,70 +2,59 @@ package DAL;
 
 import DAL.Interface.IRepositoryDetails;
 import DAL.Interface.RowMapper;
-import DTO.Enum.Pay;
+import DTO.Enum.PayStatus;
 import DTO.PenaltyDTO;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
     private final GenericDAL genericDAL = new GenericDAL();
-    private final RowMapper<PenaltyDTO> lawRowMapper = this::lawRowToLawDTO;
-
-    public PenaltyDTO lawRowToLawDTO(ResultSet rs) throws SQLException {
-        Pay stringPay = Pay.valueOf(rs.getString("pay"));
-
-        return new PenaltyDTO(
-                rs.getLong("id"),
-                rs.getLong("penaltyId"),
-                rs.getLong("borrowId"),
+    private final RowMapper<PenaltyDTO> penaltyDTORowMapper = rs -> new PenaltyDTO(
+                rs.getString("id"),
+                rs.getDate("penaltyDate"),
+                PayStatus.valueOf(rs.getString("status")),
+                rs.getLong("totalamount"),
                 rs.getDate("payDate"),
-                rs.getInt("totalAmount"),
-                stringPay
-        );
-    }
+                rs.getObject("employeeID") == null ? null : rs.getLong("employeeID")
+            );
+
 
     @Override
     public PenaltyDTO findById(String id) {
-        String sql = "SELECT * FROM penalty WHERE id = ?";
-        return genericDAL.queryForObject(sql, lawRowMapper, id);
+        String sql = "SELECT * FROM penalty WHERE id = ? ";
+        return genericDAL.queryForObject(sql, penaltyDTORowMapper, id);
     }
 
     @Override
     public List<PenaltyDTO> findAll() {
         String sql = "SELECT * FROM penalty";
-        return genericDAL.queryForList(sql, lawRowMapper);
+        return genericDAL.queryForList(sql,penaltyDTORowMapper);
     }
 
     @Override
-    public Long create(PenaltyDTO penaltyDTO) {
-        String formatID = "PEN" + String.format("%04d", penaltyDTO.getPenaltyId());
-        String sql = "INSERT INTO penalty (penaltyId, borrowId, payDate, totalAmount, pay)" +
-                " VALUES (?, ?, ?, ?, ?)";
-        return genericDAL.insert(sql, formatID
-                , penaltyDTO.getBorrowId()
-                , penaltyDTO.getPayDate()
-                , penaltyDTO.getTotalAmount()
-                , penaltyDTO.getPay()
-        );
+    public Long create(PenaltyDTO p){
+        String sql = "INSERT INTO penalty (id, penaltyDate, totalamount, status, payDate, employeeID) " +
+                     " VALUES(?, ?, ?, ?, ?, ?)";
+        return genericDAL.insert(sql, p.getId(), p.getPenaltyDate(), p.getTotalAmount(), p.getPayStatus().name() ,p.getPayDate(), p.getEmployeeID());
     }
 
     @Override
     public boolean update(PenaltyDTO penaltyDTO) {
-        String formatID = "PEN" + String.format("%04d", penaltyDTO.getPenaltyId());
-        String sql = "UPDATE penalty SET penaltyId = ?, SET borrowId = ?, SET payDate = ?, SET totalAmount = ?, SET pay = ? WHERE id = ?";
-        return genericDAL.update(sql, formatID,
-                penaltyDTO.getBorrowId(),
-                penaltyDTO.getPayDate(),
-                penaltyDTO.getTotalAmount(),
-                penaltyDTO.getPay()
-        );
+        String sql = "UPDATE penalty SET " +
+                    " penaltyDate = ?, totalamount = ?, status = ?, payDate = ?, employeeID = ? WHERE id = ?";
+        return genericDAL.update(sql,penaltyDTO.getPenaltyDate(), penaltyDTO.getTotalAmount(), penaltyDTO.getPayStatus().name(),
+                                penaltyDTO.getPayDate(), penaltyDTO.getEmployeeID(), penaltyDTO.getId() );
     }
 
     @Override
     public boolean delete(PenaltyDTO penaltyDTO) {
-        String sql = "DELETE FROM penalty WHERE id = ?";
-        return genericDAL.delete(sql, penaltyDTO);
+        String sql = "DELETE FROM penalty WHERE id = ? ";
+        return genericDAL.delete(sql, penaltyDTO.getId());
     }
+
+    public Long getCurrentID(){
+        String sql = "SELECT MAX(CAST(SUBSTRING(id,3) AS UNSIGNED)) FROM penalty";
+        return genericDAL.getMaxID(sql);
+    }
+
 }

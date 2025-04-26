@@ -455,8 +455,7 @@ public class AddBorrowDialog extends JDialog {
             readerAddressLabel.setText("Địa chỉ: Không tìm thấy");
         } else {
             try {
-                Long reader = Long.parseLong(readerId);
-                currentReader = readerBUS.findReaderByID(reader);
+                currentReader = readerBUS.findReaderByID(readerId);
                 readerNameLabel.setText("          Tên độc giả: " + currentReader.getLastName() + " " + currentReader.getFirstName());
                 readerGenderLabel.setText("Giới tính: " + currentReader.getGender().toString());
                 readerPhoneLabel.setText("          SĐT: " + currentReader.getPhone());
@@ -541,7 +540,7 @@ public class AddBorrowDialog extends JDialog {
             BorrowDTO borrowDTO = new BorrowDTO(
                     borrowSheetId,
                     Long.parseLong(employeeField.getText()),
-                    Long.parseLong(readerField.getText()),
+                    readerField.getText(),
                     borrowedDateChooser.getDate(),
                     dueDateChooser.getDate(),
                     statusValueLabel.getText().equals("Đã Trả") ? Status.Đã_Trả : Status.Đang_Mượn

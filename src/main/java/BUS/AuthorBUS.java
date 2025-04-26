@@ -1,11 +1,19 @@
 package BUS;
 
+import static BUS.PublisherBUS.publisherList;
 import DAL.AuthorDAL;
 import DAL.Interface.IRepositoryBase;
 import DTO.AuthorDTO;
+import DTO.PublisherDTO;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class AuthorBUS {
     private final AuthorDAL authorRepository;
@@ -13,8 +21,8 @@ public class AuthorBUS {
 
     public AuthorBUS() {
         this.authorRepository = new AuthorDAL();
-        authorDTOList = new ArrayList<>();
-        if (authorDTOList.size() == 0) {
+        if (authorDTOList == null) {
+            authorDTOList = new ArrayList<>();
             getAuthorList();
         }
     }
@@ -156,6 +164,48 @@ public class AuthorBUS {
         }
         if (author.getProductQuantity() < 0) {
             throw new IllegalArgumentException("Số lượng sản phẩm không được âm");
+        }
+    }
+    
+    
+    public boolean exportToExcel(String filePath) {
+        try {
+            // Tạo workbook mới
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Danh sách nhà xuất bản");
+
+            // Tạo header
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {"ID", "Tên tác giả", "Số lượng tác phẩm"};
+
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+            }
+
+            int rowNum = 1;
+            for (AuthorDTO a : authorDTOList) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(a.getId());
+                row.createCell(1).setCellValue(a.getName());
+                row.createCell(2).setCellValue(a.getProductQuantity());
+            }
+
+            // Tự động điều chỉnh độ rộng cột
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Ghi file
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+                return true;
+            } finally {
+                workbook.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

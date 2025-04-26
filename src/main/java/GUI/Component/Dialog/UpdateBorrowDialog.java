@@ -2,6 +2,7 @@ package GUI.Component.Dialog;
 
 import BUS.*;
 import DTO.*;
+import DTO.Enum.PayStatus;
 import DTO.Enum.Status;
 import DTO.Enum.SubStatus;
 import GUI.Component.Button.ButtonBack;
@@ -9,6 +10,7 @@ import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.BorrowPanel;
+import GUI.Component.Panel.PenaltyPanel;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.TextField.CustomTextField;
 import com.toedter.calendar.JDateChooser;
@@ -466,7 +468,7 @@ public class UpdateBorrowDialog extends JDialog {
         } else {
             try {
                 Long reader = Long.parseLong(readerId);
-                currentReader = readerBUS.findReaderByID(reader);
+                currentReader = readerBUS.findReaderByID(readerId);
                 readerNameLabel.setText("          Tên độc giả: " + currentReader.getLastName() + " " + currentReader.getFirstName());
                 readerGenderLabel.setText("Giới tính: " + currentReader.getGender().toString());
                 readerPhoneLabel.setText("          SĐT: " + currentReader.getPhone());
@@ -641,7 +643,7 @@ public class UpdateBorrowDialog extends JDialog {
                 BorrowDTO borrowDTO = new BorrowDTO(
                         borrowSheetId,
                         Long.parseLong(employeeField.getText()),
-                        Long.parseLong(readerField.getText()),
+                        readerField.getText(),
                         borrowedDateChooser.getDate(),
                         dueDateChooser.getDate(),
                         actualReturnDate,
@@ -659,6 +661,31 @@ public class UpdateBorrowDialog extends JDialog {
                     borrowPanel.updateBorrow(borrowDTO);
                     BookPanel.loadData();
                     new AlertDialog(this, "Cập nhật phiếu mượn thành công!").setVisible(true);
+
+
+                    //Sinh ra phiếu phạt ở đây :
+                    if(statusImport.equals(Status.Phạt)) {
+                        PenaltyBUS penaltyBUS = new PenaltyBUS();
+                        PenaltyDetailsBUS penaltyDetailsBUS = new PenaltyDetailsBUS();
+                        try {
+                            PenaltyDTO p = new PenaltyDTO(
+                                    penaltyBUS.getCurrentID(),
+                                    actualReturnDate,
+                                    PayStatus.Chưa_Thanh_Toán,
+                                    0L, null, null
+                            );
+                            penaltyBUS.addPenaltySheet(p);
+                            penaltyDetailsBUS.addPenaltyDetails(p.getId(), borrowDTO);
+                            Long totalAmount = penaltyDetailsBUS.getTotalFee(p.getId());
+                            p.setTotalAmount(totalAmount);
+                            penaltyBUS.updatePenaltySheet(p);
+
+                            PenaltyPanel.reloadTable();
+                        }catch (Exception e) {
+                            throw new RuntimeException("Tạo phiếu phạt thất bại");
+                        }
+                    }
+
                 } else {
                     new AlertDialog(this, "Cập nhật phiếu mượn thất bại!").setVisible(true);
                 }

@@ -5,6 +5,7 @@ import DTO.Enum.Gender;
 import GUI.Component.Dialog.LogOutDialog;
 import GUI.Component.Panel.*;
 import GUI.Component.Panel.Components.SidebarListener;
+import GUI.Component.Panel.Statistics.StatisticsPanel;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
@@ -72,7 +73,7 @@ public class MainFrame extends JFrame implements SidebarListener {
         readerPanel = new ReaderPanel();
         employeePanel = new EmployeePanel(this);
         authorPanel = new AuthorPanel();
-        penaltyPanel = new PenaltyPanel(this);
+        penaltyPanel = new PenaltyPanel();
         borrowPanel = new BorrowPanel(this);
         publisherPanel = new PublisherPanel(this);
         homePagePanel = new HomePagePanel();

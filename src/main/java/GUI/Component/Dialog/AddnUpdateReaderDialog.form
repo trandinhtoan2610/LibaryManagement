@@ -335,9 +335,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtReaderID">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtReaderFullName">
             </Component>
@@ -374,9 +371,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtReaderPrestige">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtReaderPrestigeActionPerformed"/>
               </Events>

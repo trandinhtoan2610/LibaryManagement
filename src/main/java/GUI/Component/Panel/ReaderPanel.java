@@ -7,20 +7,20 @@ import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeleteReaderDialog;
 import GUI.Component.Table.JTableCustom;
 import GUI.Component.Table.ReaderTable;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Window;
+import GUI.ExcelxPDF.ExcelMaster;
+import com.formdev.flatlaf.FlatLightLaf;
+
+import java.awt.*;
+
 import static java.awt.font.TextAttribute.FONT;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -30,11 +30,12 @@ public class ReaderPanel extends javax.swing.JPanel {
     Window parent = SwingUtilities.getWindowAncestor(this);
     private final AlertDialog fixReaderAlert = new AlertDialog(parent,"Vui lòng chọn độc giả cần sửa !");
     private final AlertDialog deleteReaderAlert = new AlertDialog(parent, "Vui lòng chọn độc giả cần xóa !");
+    private JFrame parentFrame;
     
 
        
     public ReaderPanel() {
-
+        parentFrame = new JFrame();
         try {
             System.out.println("Khởi tạo ReaderPanel...");
             initComponents(); 
@@ -107,12 +108,46 @@ public class ReaderPanel extends javax.swing.JPanel {
     }
 
 
-    public void reloadReaderTable() {  
+    public static void reloadReaderTable() {
         tblReader.resetTable();
     }
     
     
-    
+    private void exportExcelData() {
+        FlatLightLaf.setup();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+        fileChooser.setSelectedFile(new File("DanhSachDocGia.xlsx"));
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Excel Files (*.xlsx)", "xlsx");
+        fileChooser.setFileFilter(filter);
+
+        int userSelection = fileChooser.showSaveDialog(parentFrame);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+
+            // Đảm bảo có đuôi .xlsx
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                filePath += ".xlsx";
+            }
+
+            if (readerBUS.exportToExcel(filePath)) {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thành công!\nFile: " + filePath,
+                        "Thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Xuất Excel thất bại",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     
     //Hàm thay đổi bảng khi có tìm kiếm :
     public void loadTableFilter(){
@@ -198,6 +233,12 @@ public class ReaderPanel extends javax.swing.JPanel {
             }
         });
         LeftNavbarReader.add(buttonUpdate);
+
+        buttonExportExcel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonExportExcelMouseClicked(evt);
+            }
+        });
         LeftNavbarReader.add(buttonExportExcel);
         LeftNavbarReader.add(buttonImportExcel1);
 
@@ -208,7 +249,7 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         searchFooterPanel.setBackground(new java.awt.Color(255, 255, 255));
         searchFooterPanel.setPreferredSize(new java.awt.Dimension(578, 35));
-        searchFooterPanel.setLayout(new java.awt.GridLayout());
+        searchFooterPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         searchAddressPanel.setBackground(new java.awt.Color(255, 255, 255));
         searchAddressPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 5));
@@ -323,7 +364,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     
     //Nút thêm -> Hiện dialog thêm
     private void buttonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonAddMouseClicked
-        AddnUpdateReaderDialog addDialog = new AddnUpdateReaderDialog(null,true,"add",this,null);
+        AddnUpdateReaderDialog addDialog = new AddnUpdateReaderDialog(null,true,"add",null);
         addDialog.setVisible(true);
     }//GEN-LAST:event_buttonAddMouseClicked
 
@@ -346,7 +387,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         }
         else{
             ReaderDTO reader = tblReader.getSelectedReader();
-            AddnUpdateReaderDialog updateDialog = new AddnUpdateReaderDialog(null, true, "update" , this, reader );
+            AddnUpdateReaderDialog updateDialog = new AddnUpdateReaderDialog(null, true, "update" , reader );
             updateDialog.setVisible(true);
         }
     }//GEN-LAST:event_buttonUpdateMouseClicked
@@ -379,6 +420,10 @@ public class ReaderPanel extends javax.swing.JPanel {
     private void cbSearchGenderItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchGenderItemStateChanged
         loadTableFilter();
     }//GEN-LAST:event_cbSearchGenderItemStateChanged
+
+    private void buttonExportExcelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonExportExcelMouseClicked
+        exportExcelData();
+    }//GEN-LAST:event_buttonExportExcelMouseClicked
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -409,7 +454,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel searchPrestigePanel;
     private javax.swing.JSpinner spnMaxPrestige;
     private javax.swing.JSpinner spnMinPrestige;
-    private GUI.Component.Table.ReaderTable tblReader;
+    public static GUI.Component.Table.ReaderTable tblReader;
     private javax.swing.JTextField txtSearchAddress;
     private javax.swing.JTextField txtSearchName;
     private javax.swing.JTextField txtSearchPhone;

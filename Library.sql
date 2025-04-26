@@ -102,18 +102,23 @@ CREATE TABLE `PurchaseOrderDetails` (
 );
 
 CREATE TABLE `Penalty` (
-                           `Id` BIGINT PRIMARY KEY AUTO_INCREMENT,
-                           `penaltyDate` DATETIME NOT NULL,
-                           `totalamount` DECIMAL(10,2) NOT NULL,
-                           `status` ENUM ('Đã_Thanh_Toán', 'Chưa_Thanh_Toán') NOT NULL DEFAULT 'Chưa_Thanh_Toán'
+    `id` VARCHAR(10) PRIMARY KEY,
+    `penaltyDate` DATETIME NOT NULL,
+    `totalamount` DECIMAL(10,2) NOT NULL,
+    `status` ENUM ('Đã_Thanh_Toán', 'Chưa_Thanh_Toán') NOT NULL DEFAULT 'Chưa_Thanh_Toán',
+    `employeeID` BIGINT,
+    `payDate` DATETIME DEFAULT NULL,
+    FOREIGN KEY (`employeeID`) REFERENCES `Employee`(`id`)
 );
 
+
 CREATE TABLE `PenaltyDetails` (
-                                  `penaltyId` BIGINT NOT NULL,
+                                  `penaltyId` VARCHAR(10) NOT NULL,
                                   `bookId` BIGINT NOT NULL,
                                   `borrowId` BIGINT NOT NULL,
                                   `name` VARCHAR(255),
                                   `subamount` DECIMAL(10,2) NOT NULL,
+                                  `bookQuantity` INT(30) NOT NULL,
                                   PRIMARY KEY (`penaltyId`, `bookId`, `borrowId`)
 );
 

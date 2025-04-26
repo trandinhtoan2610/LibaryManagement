@@ -1,13 +1,7 @@
 package GUI.Component.Dialog;
 
-import BUS.BookBUS;
-import BUS.BorrowDetailBUS;
-import BUS.BorrowSheetBUS;
-import BUS.EmployeeBUS;
-import DTO.Book;
-import DTO.BorrowDTO;
-import DTO.BorrowDetailDTO;
-import DTO.Employee;
+import BUS.*;
+import DTO.*;
 import DTO.Enum.Status;
 import GUI.Component.Button.ButtonAction;
 import GUI.Component.Panel.BookPanel;
@@ -27,11 +21,15 @@ public class DeleteBorrowDialog extends JDialog {
     private BorrowPanel borrowPanel;
     private BorrowDTO borrowToDelete;
     private BorrowSheetBUS borrowSheetBUS;
+    private PenaltyBUS penaltyBUS;
+    private PenaltyDetailsBUS penaltyDetailsBUS;
     public DeleteBorrowDialog(JFrame parent, BorrowPanel borrowPanel, BorrowDTO borrowToDelete) {
         super(parent, "Xóa Phiếu Mượn", true);
         this.borrowPanel = borrowPanel;
         borrowSheetBUS = new BorrowSheetBUS();
         this.borrowToDelete = borrowToDelete;
+        penaltyBUS = new PenaltyBUS();
+        penaltyDetailsBUS = new PenaltyDetailsBUS();
         initComponents();
         pack();
         setLocationRelativeTo(parent);
@@ -82,6 +80,20 @@ public class DeleteBorrowDialog extends JDialog {
                         borrowDetailBUS.deleteBorrowDetail(detail);
                     }
                 }
+
+                //Xóa phiếu phạt :
+                String penaltyID = penaltyDetailsBUS.getPenaltyIDByBorrowSheet(borrowToDelete);
+                PenaltyDTO penaltySheet = penaltyBUS.findPenaltySheetByID(penaltyID);
+                if(penaltySheet != null ){
+                    try{
+                        penaltyDetailsBUS.deletePenaltyDetailsByPenaltyID(penaltySheet.getId());
+                        penaltyBUS.deletePenaltySheet(penaltySheet);
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+
+                    }
+                }
+                //
                 boolean success = borrowSheetBUS.deleteBorrowSheet(
                         Long.parseLong(borrowToDelete.getId().substring(2))
                 );
@@ -90,8 +102,13 @@ public class DeleteBorrowDialog extends JDialog {
                     borrowPanel.refreshTable();
                     BookPanel.loadData();
                     dispose();
+                    new AlertDialog(this, "Xóa phiếu mượn thành công !").setVisible(true);
+
                 } else {
                     JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    //ROLLBACK PHIẾU PHẠT :
+                    penaltyBUS.addPenaltySheet(penaltySheet);
+                    penaltyDetailsBUS.addPenaltyDetails(penaltySheet.getId(), borrowToDelete);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

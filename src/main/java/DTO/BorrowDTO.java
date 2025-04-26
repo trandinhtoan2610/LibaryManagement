@@ -10,13 +10,14 @@ import java.util.Date;
 @Setter
 public class BorrowDTO
 {
-    private Long employeeId, readerId, id;
+    private Long employeeId, id;
+    private String readerId;
     private Status status;
     private Date duedate, borrowedDate, actualReturnDate;
 
     public BorrowDTO() {
     }
-    public BorrowDTO(Long id, Long employeeId, Long readerId, Date borrowedDate, Date duedate, Status status) {
+    public BorrowDTO(Long id, Long employeeId, String readerId, Date borrowedDate, Date duedate, Status status) {
         this.id = id;
         this.employeeId = employeeId;
         this.readerId = readerId;
@@ -24,7 +25,7 @@ public class BorrowDTO
         this.duedate = duedate;
         this.status = status;
     }
-    public BorrowDTO(Long id, Long employeeId, Long readerId, Date borrowedDate, Date duedate, Date actualReturnDate, Status status) {
+    public BorrowDTO(Long id, Long employeeId, String readerId, Date borrowedDate, Date duedate, Date actualReturnDate, Status status) {
         this.id = id;
         this.employeeId = employeeId;
         this.readerId = readerId;
@@ -37,6 +38,7 @@ public class BorrowDTO
         return "HD" + String.format("%04d", this.id);
     }
 
+    public Long getLongID(){ return this.id;}
     @Override
     public String toString() {
         return "BorrowDTO{" +

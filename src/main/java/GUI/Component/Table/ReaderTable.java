@@ -18,8 +18,7 @@ public class ReaderTable extends JTableCustom {
         super(new DefaultTableModel(readerTableHeader, 0));
         this.tblModel= (DefaultTableModel)getModel();
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        setCellAlignment(); // Thiết lập căn chỉnh văn bản
-        
+        //setCellAlignment();
         rowSorter = new TableRowSorter<>(tblModel);
         this.setRowSorter(rowSorter);
         
@@ -41,12 +40,12 @@ public class ReaderTable extends JTableCustom {
         }
     }
     
-    public void addReader(ReaderDTO r){
-        if(r!=null){
-            ReaderBUS.readerList.add(r);
-            resetTable();
-        }
-    }
+//    public void addReader(ReaderDTO r){
+//        if(r!=null){
+//            ReaderBUS.readerList.add(r);
+//            resetTable();
+//        }
+//    }
     
     public ReaderDTO getSelectedReader(){
         int selectedRow = getSelectedRow();
@@ -57,21 +56,21 @@ public class ReaderTable extends JTableCustom {
         return null;
     }
     
-    public void deleteReader(ReaderDTO r){
-        if(r != null){
-            ReaderBUS.readerList.remove(r);
-            resetTable();
-        }
-    }
+//    public void deleteReader(ReaderDTO r){
+//        if(r != null){
+//            ReaderBUS.readerList.remove(r);
+//            resetTable();
+//        }
+//    }
     
-    private void setCellAlignment() {
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-             
-        for (int i = 0 ; i < 5 ; i++){
-            getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-    }
+//    private void setCellAlignment() {
+//        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+//        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+//
+//        for (int i = 0 ; i < 5 ; i++){
+//            getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+//        }
+//    }
     
     public void filterTable(String name, String phone, String address, String gender, int minPres, int maxPres) {
     List<RowFilter<Object, Object>> filters = new ArrayList<>();

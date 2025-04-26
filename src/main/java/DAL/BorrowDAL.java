@@ -16,7 +16,7 @@ public class BorrowDAL implements IRepositoryBase<BorrowDTO> {
         return new BorrowDTO(
                 rs.getLong("id"),
                 rs.getLong("employeeId"),
-                rs.getLong("readerId"),
+                rs.getString("readerId"),
                 rs.getDate("borrowedDate"),
                 rs.getDate("duedate"),
                 rs.getDate("actualReturnDate"),

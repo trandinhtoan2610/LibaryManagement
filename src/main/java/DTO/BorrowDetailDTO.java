@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ToString
 public class BorrowDetailDTO {
     private Long bookId, borrowSheetId;
     private int quantity;
@@ -24,6 +23,9 @@ public class BorrowDetailDTO {
     }
     public String getBorrowSheetId(){
         return "HD" + String.format("%04d", this.borrowSheetId);
+    }
+    public Long getLongBorrowSheetID(){
+        return this.borrowSheetId;
     }
 
     @Override
