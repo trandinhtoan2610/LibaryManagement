@@ -299,6 +299,9 @@ public class BorrowDAL implements IRepositoryBase<BorrowDTO> {
         return list;
     }
     public List<StatusData> getListStatusByDate(Date startDate, Date endDate){
+        if (startDate == null || endDate == null) {
+            return null;
+        }
         List<StatusData> list = new ArrayList<>();
         try {
             PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT id, status \n" +

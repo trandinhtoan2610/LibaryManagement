@@ -35,10 +35,9 @@ public class BorrowStatistics extends JPanel {
     private final BorrowSheetBUS borrowSheetBUS = new BorrowSheetBUS();
     private final BookBUS bookBUS = new BookBUS();
 
-    private JPanel headerPanel;
     private JPanel westPanel;
     private JPanel centerPanel;
-    private JPanel filterPanel;
+
 
     private final EmployeeTableStatistics tableTheoNV = new EmployeeTableStatistics();
     private final ReaderTableStatistics tableTheoDG = new ReaderTableStatistics();
@@ -191,8 +190,8 @@ public class BorrowStatistics extends JPanel {
             }
             int year = (Integer) theoNam.getSelectedItem();
             List<QuarterData> data = borrowSheetBUS.getQuarterReaderData(year);
-            Map<Long, int[]> readerStats = new HashMap<>();
-            Map<Long, String> readerNames = new HashMap<>();
+            Map<String, int[]> readerStats = new HashMap<>();
+            Map<String, String> readerNames = new HashMap<>();
 
             for (ReaderDTO r : ReaderBUS.readerList) {
                 readerStats.put(r.getId(), new int[4]);
@@ -212,8 +211,8 @@ public class BorrowStatistics extends JPanel {
             DefaultTableModel model = (DefaultTableModel) tableTheoDG.getModel();
             model.setRowCount(0);
             int finalTotal = 0, quarter1 = 0, quarter2 = 0, quarter3 = 0, quarter4 = 0;
-            for (Map.Entry<Long, int[]> r : readerStats.entrySet()) {
-                long readerId = r.getKey();
+            for (Map.Entry<String, int[]> r : readerStats.entrySet()) {
+                String readerId = r.getKey();
                 int[] quarter = r.getValue();
                 String readerName = readerNames.get(readerId);
 
@@ -489,8 +488,8 @@ public class BorrowStatistics extends JPanel {
                 model.setRowCount(0);
                 return;
             }
-            Map<Long, int[]> readerStats = new HashMap<>();
-            Map<Long, String> readerNames = new HashMap<>();
+            Map<String, int[]> readerStats = new HashMap<>();
+            Map<String, String> readerNames = new HashMap<>();
 
             for (ReaderDTO r : ReaderBUS.readerList) {
                 readerStats.put(r.getId(), new int[4]);
@@ -512,8 +511,8 @@ public class BorrowStatistics extends JPanel {
 
             int finalTotal = 0, quarter1 = 0, quarter2 = 0, quarter3 = 0, quarter4 = 0;
 
-            for (Map.Entry<Long, int[]> r : readerStats.entrySet()) {
-                long readerId = r.getKey();
+            for (Map.Entry<String, int[]> r : readerStats.entrySet()) {
+                String readerId = r.getKey();
                 int[] quarter = r.getValue();
                 String readerName = readerNames.get(readerId);
 
@@ -836,6 +835,9 @@ public class BorrowStatistics extends JPanel {
             int year = (Integer) theoNam.getSelectedItem();
             statusDataList = borrowSheetBUS.getStatusDataByYear(year);
         }
+        if (statusDataList == null) {
+            return;
+        }
         int muon = 0, tra = 0, phat = 0;
         for (StatusData statusData : statusDataList) {
             switch (statusData.getStatus()) {
@@ -880,18 +882,5 @@ public class BorrowStatistics extends JPanel {
             bookData.put(String.valueOf(monthData.getThang()), monthData.getSoluong());
         }
         chartPanel.updateData(bookData, "Thống kê mượn sách theo tháng - Năm " + year);
-    }
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            FlatLightLaf.setup();
-            JFrame frame = new JFrame("Thống kê mượn sách");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1200, 800);
-            frame.setLocationRelativeTo(null);
-
-            BorrowStatistics borrowStatistics = new BorrowStatistics();
-            frame.add(borrowStatistics);
-            frame.setVisible(true);
-        });
     }
 }

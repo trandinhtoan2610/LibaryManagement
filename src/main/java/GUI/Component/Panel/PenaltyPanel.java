@@ -10,7 +10,6 @@ import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Dialog.DeletePenaltyDialog;
 import GUI.Component.Dialog.PenaltyFilterDialog;
 import GUI.Component.Dialog.UpdatePenaltyDialog;
-import GUI.Component.Panel.Statistics.Borrow;
 import GUI.Controller.Controller;
 
 import java.util.List;

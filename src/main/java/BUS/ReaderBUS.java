@@ -26,7 +26,9 @@ public class ReaderBUS {
 
     }
 
-    
+    public int getCountReader(){
+        return readerList.size();
+    }
 
     public void addReader(ReaderDTO reader){
         try {

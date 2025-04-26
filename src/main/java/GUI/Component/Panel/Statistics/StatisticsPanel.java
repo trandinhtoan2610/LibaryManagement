@@ -16,6 +16,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private JPanel testOverviewPanel;
     private JPanel testPanel2;
     private JPanel testPanel3;
+    private BorrowStatistics borrowStatistics;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -36,12 +37,14 @@ public class StatisticsPanel extends javax.swing.JPanel {
         testOverviewPanel = new JPanel();
         testPanel2 = new JPanel();
         testPanel3 = new JPanel();
+        borrowStatistics = new BorrowStatistics();
         testOverviewPanel.setBackground(Color.RED);
         testPanel3.setBackground(Color.blue);
 
         //cardPanel.add( <<JPanel>> , <<Alias>>). VD :
         cardPanel.add(testOverviewPanel, overviewAlias);
         cardPanel.add(testPanel3, bookAlias);
+        cardPanel.add(borrowStatistics, borrowAlias);
 
         //Mặc định là thống kê overview(Tổng quan) :
         isSelected(overviewTab, overviewAlias);  //Kéo xuống dưới có các hàm MouseClick -> ghi isSelected phù hợp.
