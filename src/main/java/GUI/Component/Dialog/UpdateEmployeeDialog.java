@@ -6,6 +6,8 @@ import DTO.Enum.Gender;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Combobox.CustomComboBox;
 import GUI.Component.Panel.EmployeePanel;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
 
@@ -245,6 +247,7 @@ public class UpdateEmployeeDialog extends JDialog {
             boolean success = employeeBUS.updateEmployee(updatedEmployee);
             if (success) {
                 employeePanel.updateEmployee(updatedEmployee);
+                EventBusManager.getEventBus().post(new DataRefreshListener());
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
                 dispose();
             } else {

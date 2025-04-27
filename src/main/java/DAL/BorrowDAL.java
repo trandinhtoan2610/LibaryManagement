@@ -6,6 +6,7 @@ import DTO.BorrowDTO;
 import DTO.Enum.Status;
 import DTO.Statistics.MonthData;
 import DTO.Statistics.QuarterData;
+import DTO.Statistics.QuarterDataStringId;
 import DTO.Statistics.StatusData;
 
 import java.sql.PreparedStatement;
@@ -115,17 +116,17 @@ public class BorrowDAL implements IRepositoryBase<BorrowDTO> {
         }
         return qlist;
     }
-    public List<QuarterData> getQuarterReaderData(int Year){
-        List<QuarterData> qlist = new ArrayList<>();
+    public List<QuarterDataStringId> getQuarterReaderData(int Year){
+        List<QuarterDataStringId> qlist = new ArrayList<>();
         try {
             PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT QUARTER(borrowedDate) AS Quy,r.id AS Madocgia,  SUM(quantity) AS Soluong FROM borrow_in_sheet AS bs JOIN borrowdetails AS b ON bs.id = b.borrowSheetId JOIN reader AS r ON bs.readerId = r.id WHERE DATE_FORMAT(borrowedDate, '%Y') = ? GROUP BY Quy, Madocgia ORDER BY Quy ASC");
             p.setInt(1, Year);
             ResultSet rs = p.executeQuery();
             while (rs.next()){
                 int quarter = rs.getInt("Quy");
-                int readerId = rs.getInt("Madocgia");
+                String readerId = rs.getString("Madocgia");
                 int soluong = rs.getInt("Soluong");
-                qlist.add(new QuarterData(quarter, readerId, soluong));
+                qlist.add(new QuarterDataStringId(quarter, readerId, soluong));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -183,8 +184,8 @@ public class BorrowDAL implements IRepositoryBase<BorrowDTO> {
         }
         return qlist;
     }
-    public List<QuarterData> getQuarterReaderDataByDate(Date startDate, Date endDate){
-        List<QuarterData> qlist = new ArrayList<>();
+    public List<QuarterDataStringId> getQuarterReaderDataByDate(Date startDate, Date endDate){
+        List<QuarterDataStringId> qlist = new ArrayList<>();
         try {
             PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT QUARTER(borrowedDate) AS Quy,\n" +
                     "r.id AS Madocgia,\n" +
@@ -200,9 +201,9 @@ public class BorrowDAL implements IRepositoryBase<BorrowDTO> {
             ResultSet rs = p.executeQuery();
             while (rs.next()){
                 int quy = rs.getInt("Quy");
-                int readerId = rs.getInt("Madocgia");
+                String readerId = rs.getString("Madocgia");
                 int soluong = rs.getInt("Soluong");
-                qlist.add(new QuarterData(quy, readerId, soluong));
+                qlist.add(new QuarterDataStringId(quy, readerId, soluong));
             }
         }catch (SQLException e){
             e.printStackTrace();

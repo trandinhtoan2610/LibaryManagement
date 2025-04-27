@@ -6,6 +6,7 @@ import java.awt.geom.RoundRectangle2D;
 
 public class BoxDashBoard extends JPanel {
     private int cornerRadius = 15; // Độ bo góc
+    private JLabel valueLabel;
 
     public BoxDashBoard(String header, String value) {
         setPreferredSize(new Dimension(200, 150));
@@ -26,7 +27,7 @@ public class BoxDashBoard extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         // Value label
-        JLabel valueLabel = new JLabel(value, SwingConstants.CENTER);
+        valueLabel = new JLabel(value, SwingConstants.CENTER);
         valueLabel.setFont(new Font("Arial", Font.BOLD, 36));
         valueLabel.setForeground(new Color(71, 71, 71)); // Dark green for value
         valueLabel.setBorder(BorderFactory.createEmptyBorder(-10, 0, 0, 0));
@@ -52,5 +53,10 @@ public class BoxDashBoard extends JPanel {
         g2d.dispose();
 
         super.paintComponent(g);
+    }
+    public void setValue(String value){
+        this.valueLabel.setText(value);
+        this.repaint();
+        this.revalidate();
     }
 }

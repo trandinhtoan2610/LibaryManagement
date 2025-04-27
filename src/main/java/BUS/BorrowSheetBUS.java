@@ -4,6 +4,7 @@ import DAL.BorrowDAL;
 import DTO.BorrowDTO;
 import DTO.Statistics.MonthData;
 import DTO.Statistics.QuarterData;
+import DTO.Statistics.QuarterDataStringId;
 import DTO.Statistics.StatusData;
 
 import java.util.ArrayList;
@@ -30,23 +31,31 @@ public class BorrowSheetBUS {
         return borrowSheetDAL.findAll();
     }
     public Long addBorrowSheet(BorrowDTO dto) {
-        return borrowSheetDAL.create(dto);
+        Long newId = borrowSheetDAL.create(dto);
+        if (newId != null) {
+            dto.setId(newId);
+            borrowSheetList.add(dto);
+        }
+        return newId;
     }
     public boolean updateBorrowSheet(BorrowDTO dto) {
-        try {
-            return borrowSheetDAL.update(dto);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (borrowSheetDAL.update(dto)) {
+            for (int i = 0; i < borrowSheetList.size(); i++) {
+                if (borrowSheetList.get(i).getId().equals(dto.getId())) {
+                    borrowSheetList.set(i, dto);
+                    break;
+                }
+            }
+            return true;
         }
+        return false;
     }
     public boolean deleteBorrowSheet(Long id) {
-        try {
-            return borrowSheetDAL.delete(id);
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (borrowSheetDAL.delete(id)) {
+            borrowSheetList.removeIf(borrow -> borrow.getId().equals(id));
+            return true;
         }
+        return false;
     }
 
     private void validateBorrowData(BorrowDTO dto) throws IllegalArgumentException {
@@ -68,7 +77,7 @@ public class BorrowSheetBUS {
     public List<QuarterData> getQuarterEmloyeeData(int year){
         return borrowSheetDAL.getQuarterEmployeeData(year);
     }
-    public List<QuarterData> getQuarterReaderData(int year){
+    public List<QuarterDataStringId> getQuarterReaderData(int year){
         return borrowSheetDAL.getQuarterReaderData(year);
     }
     public List<QuarterData> getQuarterBookData(int year){
@@ -77,7 +86,7 @@ public class BorrowSheetBUS {
     public List<QuarterData> getQuarterBookDataByDate(Date startDate, Date endDate) {
         return borrowSheetDAL.getQuarterBookDataByDate(startDate, endDate);
     }
-    public List<QuarterData> getQuarterReaderDataByDate(Date startDate, Date endDate) {
+    public List<QuarterDataStringId> getQuarterReaderDataByDate(Date startDate, Date endDate) {
         return borrowSheetDAL.getQuarterReaderDataByDate(startDate, endDate);
     }
     public List<QuarterData> getQuarterEmployeeDataByDate(Date startDate, Date endDate) {

@@ -10,10 +10,14 @@ import DTO.Enum.Status;
 import DTO.ReaderDTO;
 import DTO.Statistics.MonthData;
 import DTO.Statistics.QuarterData;
+import DTO.Statistics.QuarterDataStringId;
 import DTO.Statistics.StatusData;
 import GUI.Component.Button.ButtonIcon;
+import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Panel.Statistics.Components.*;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -23,8 +27,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
-public class BorrowStatistics extends JPanel {
+public class BorrowStatistics extends JPanel{
     private BoxDashBoard sachtrongkho;
     private BoxDashBoard nhanvien;
     private BoxDashBoard docgia;
@@ -58,8 +61,17 @@ public class BorrowStatistics extends JPanel {
             actionReaderTable();
             actionBookTable();
         }
+        EventBusManager.getEventBus().register(this);
     }
-
+    @Subscribe
+    public void handleBorrowDataChanged(DataRefreshListener event) {
+        SwingUtilities.invokeLater(() -> refreshData());
+    }
+    @Override
+    public void removeNotify() {
+        EventBusManager.getEventBus().unregister(this);
+        super.removeNotify();
+    }
     private void setMainUI() {
         setLayout(new BorderLayout(5, 5));
 
@@ -189,7 +201,7 @@ public class BorrowStatistics extends JPanel {
                 return;
             }
             int year = (Integer) theoNam.getSelectedItem();
-            List<QuarterData> data = borrowSheetBUS.getQuarterReaderData(year);
+            List<QuarterDataStringId> data = borrowSheetBUS.getQuarterReaderData(year);
             Map<String, int[]> readerStats = new HashMap<>();
             Map<String, String> readerNames = new HashMap<>();
 
@@ -198,9 +210,9 @@ public class BorrowStatistics extends JPanel {
                 readerNames.put(r.getId(), r.getFirstName() + " " + r.getLastName());
             }
 
-            for (QuarterData d : data) {
+            for (QuarterDataStringId d : data) {
                 int quarter = d.getQuarter() - 1;
-                long readerId = d.getId();
+                String readerId = d.getId();
                 int soluong = d.getSoluong();
 
                 if (readerStats.containsKey(readerId)) {
@@ -374,11 +386,9 @@ public class BorrowStatistics extends JPanel {
             Date startDate = tuNgay.getDate();
             Date endDate = denNgay.getDate();
             if (startDate == null || endDate == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn cả 2 ngày", "Lỗi", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (startDate.after(endDate)) {
-                JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc", "Lỗi", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             List<QuarterData> data = borrowSheetBUS.getQuarterBookDataByDate(startDate, endDate);
@@ -482,7 +492,7 @@ public class BorrowStatistics extends JPanel {
             if (startDate.after(endDate)) {
                 return;
             }
-            List<QuarterData> data = borrowSheetBUS.getQuarterReaderDataByDate(startDate, endDate);
+            List<QuarterDataStringId> data = borrowSheetBUS.getQuarterReaderDataByDate(startDate, endDate);
             if (data == null) {
                 DefaultTableModel model = (DefaultTableModel) tableTheoSachChoMuon.getModel();
                 model.setRowCount(0);
@@ -496,9 +506,9 @@ public class BorrowStatistics extends JPanel {
                 readerNames.put(r.getId(), r.getFirstName() + " " + r.getLastName());
             }
 
-            for (QuarterData d : data) {
+            for (QuarterDataStringId d : data) {
                 int quarter = d.getQuarter() - 1;
-                long readerId = d.getId();
+                String readerId = d.getId();
                 int soluong = d.getSoluong();
 
                 if (readerStats.containsKey(readerId)) {
@@ -582,9 +592,11 @@ public class BorrowStatistics extends JPanel {
             Date startDate = tuNgay.getDate();
             Date endDate = denNgay.getDate();
             if (startDate == null || endDate == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn cả 2 ngày", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (startDate.after(endDate)) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu không thể sau ngày kết thúc", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             List<QuarterData> data = borrowSheetBUS.getQuarterEmployeeDataByDate(startDate, endDate);
@@ -882,5 +894,23 @@ public class BorrowStatistics extends JPanel {
             bookData.put(String.valueOf(monthData.getThang()), monthData.getSoluong());
         }
         chartPanel.updateData(bookData, "Thống kê mượn sách theo tháng - Năm " + year);
+    }
+    public void refreshData() {
+        sachtrongkho.setValue(Integer.toString(bookBUS.getCountBook()));
+        nhanvien.setValue(Integer.toString(employeeBUS.countEmployee()));
+        docgia.setValue(Integer.toString(readerBUS.getCountReader()));
+        phieumuon.setValue(Integer.toString(borrowSheetBUS.getCountBorrowSheet()));
+
+        if (theoNam.getSelectedIndex() == -1) {
+            actionEmployeeTableByDate();
+            actionReaderTableByDate();
+            actionBookTableByDate();
+        } else {
+            actionEmployeeTable();
+            actionReaderTable();
+            actionBookTable();
+        }
+        actionPieChart();
+        actionBarchart();
     }
 }

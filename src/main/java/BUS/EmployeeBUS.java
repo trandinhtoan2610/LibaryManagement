@@ -44,24 +44,37 @@ public class EmployeeBUS {
         JOptionPane.showMessageDialog(null, s);
     }
     public long addEmployee(Employee employee) {
-        return employeeDAL.create(employee);
+        Long newId = employeeDAL.create(employee);
+        if (newId != null){
+            employee.setId(newId);
+            employeeList.add(employee);
+        }
+        return newId;
     }
 
     public boolean updateEmployee(Employee employee) {
-        try {
-            return employeeDAL.update(employee);
-        }catch (Exception e){
-            e.printStackTrace();    
-            return false;
+        if(employeeDAL.update(employee)) {
+            for (Employee emp : employeeList) {
+                if (emp.getId() == employee.getId()) {
+                    employeeList.set(employeeList.indexOf(emp), employee);
+                    break;
+                }
+            }
+            return true;
         }
+        return false;
     }
     public boolean deleteEmployee(long id) {
-        try {
-            return employeeDAL.delete(id);
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+        if (employeeDAL.delete(id)) {
+            for (Employee emp : employeeList) {
+                if (emp.getId() == id) {
+                    employeeList.remove(emp);
+                    break;
+                }
+            }
+            return true;
         }
+        return false;
     }
     public long getCurrentID(){
         return employeeDAL.getCurrentID();

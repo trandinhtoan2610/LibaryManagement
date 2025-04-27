@@ -11,6 +11,8 @@ import GUI.Component.Button.ButtonIcon;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.BorrowPanel;
 import GUI.Component.Panel.PenaltyPanel;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.TextField.CustomTextField;
 import com.toedter.calendar.JDateChooser;
@@ -685,6 +687,7 @@ public class UpdateBorrowDialog extends JDialog {
                 if (success) {
                     borrowPanel.updateBorrow(borrowDTO);
                     BookPanel.loadData();
+                    EventBusManager.getEventBus().post(new DataRefreshListener());
                     new AlertDialog(this, "Cập nhật phiếu mượn thành công!").setVisible(true);
 
 

@@ -26,27 +26,40 @@ public class PublisherBUS {
     public List<PublisherDTO> getAllPublishers() {
         return publisherDAL.findAll();
     }
-    public PublisherDTO getPublisherById(long id) {
+    public PublisherDTO getPublisherById(Long id) {
         return publisherDAL.findById(id);
     }
-    public long addPublisher(PublisherDTO publisherDTO) {
-        return publisherDAL.create(publisherDTO);
+    public Long addPublisher(PublisherDTO publisherDTO) {
+        Long newId = publisherDAL.create(publisherDTO);
+        if (newId != null){
+            publisherDTO.setId(newId);
+            publisherList.add(publisherDTO);
+        }
+        return newId;
     }
     public boolean updatePublisher(PublisherDTO publisherDTO) {
-        try {
-            return publisherDAL.update(publisherDTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (publisherDAL.update(publisherDTO)) {
+            for (PublisherDTO publisher : publisherList) {
+                if (publisher.getId().equals(publisherDTO.getId())) {
+                    publisherList.set(publisherList.indexOf(publisher), publisherDTO);
+                    break;
+                }
+            }
+            return true;
         }
+        return false;
     }
     public boolean deletePublisher(long id) {
-        try {
-            return publisherDAL.delete(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (publisherDAL.delete(id)) {
+            for (PublisherDTO publisher : publisherList) {
+                if (publisher.getId().equals(id)) {
+                    publisherList.remove(publisher);
+                    break;
+                }
+            }
+            return true;
         }
+        return false;
     }
     public long getCurrentID(){
         return publisherDAL.getCurrentID();

@@ -17,7 +17,7 @@ CREATE TABLE `Employee` (
 );
 
 CREATE TABLE `Reader` (
-                          `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          `id` VARCHAR(10) PRIMARY KEY,
                           `firstName` VARCHAR(255) NOT NULL,
                           `lastName` VARCHAR(255) NOT NULL,
                           `gender` ENUM ('Nam', 'Nữ') NOT NULL DEFAULT 'Nam',
@@ -60,7 +60,7 @@ CREATE TABLE `Publisher` (
 CREATE TABLE `Borrow_in_Sheet` (
                                    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
                                    `employeeId` BIGINT NOT NULL,
-                                   `readerId` BIGINT NOT NULL,
+                                   `readerId` VARCHAR(10) NOT NULL,
                                    `borrowedDate` DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
                                    `duedate` DATETIME NOT NULL,
                                    `actualReturnDate` DATETIME DEFAULT NULL,
@@ -160,15 +160,15 @@ INSERT INTO  `Employee` (`firstName`, `lastName`, `gender`, `username`, `passwor
 ('Lê', 'Văn', 1, 'employee', 'employee', 3, '0912345678', 'Hà Nội', 6000000);
 
 
-INSERT INTO Reader (firstName, lastName, gender, phone, address)
+INSERT INTO Reader (id, firstName, lastName, gender, phone, address)
 VALUES
-('Nguyễn', 'Minh', 'Nam', '0911111111', 'Hà Nội'),
-('Trần', 'Lan', 'Nữ', '0922222222', 'TP.HCM'),
-('Lê', 'Hùng', 'Nam', '0933333333', 'Đà Nẵng'),
-('Phạm', 'Hòa', 'Nữ', '0944444444', 'Hải Phòng'),
-('Hoàng', 'Khanh', 'Nam', '0955555555', 'Cần Thơ'),
-('Đặng', 'Anh', 'Nữ', '0966666666', 'Huế'),
-('Bùi', 'Tùng', 'Nam', '0977777777', 'Quảng Ninh');
+('RD1','Nguyễn', 'Minh', 'Nam', '0911111111', 'Hà Nội'),
+('RD2','Trần', 'Lan', 'Nữ', '0922222222', 'TP.HCM'),
+('RD3','Lê', 'Hùng', 'Nam', '0933333333', 'Đà Nẵng'),
+('RD4','Phạm', 'Hòa', 'Nữ', '0944444444', 'Hải Phòng'),
+('RD5','Hoàng', 'Khanh', 'Nam', '0955555555', 'Cần Thơ'),
+('RD6','Đặng', 'Anh', 'Nữ', '0966666666', 'Huế'),
+('RD7','Bùi', 'Tùng', 'Nam', '0977777777', 'Quảng Ninh');
 
 INSERT INTO Author (lastName, firstName)
 VALUES

@@ -4,6 +4,8 @@ import BUS.EmployeeBUS;
 import DTO.Employee;
 import GUI.Component.Button.ButtonAction;
 import GUI.Component.Panel.EmployeePanel;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,6 +60,7 @@ public class DeleteEmployeeDialog extends JDialog {
         yesButton.addActionListener(e -> {
             confirmed = true;
             employeePanel.removeEmployee(employeeToDelete);
+            EventBusManager.getEventBus().post(new DataRefreshListener());
             employeeBUS.deleteEmployee(employeeToDelete.getId());
             dispose();
         });

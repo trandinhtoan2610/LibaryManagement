@@ -9,6 +9,9 @@ import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.BorrowPanel;
+import GUI.Component.Panel.Statistics.BorrowStatistics;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.TextField.CustomTextField;
 import com.toedter.calendar.JDateChooser;
@@ -553,6 +556,7 @@ public class AddBorrowDialog extends JDialog {
             borrowDTO.setId(uuid);
             borrowPanel.addBorrow(borrowDTO);
             BookPanel.loadData();
+            EventBusManager.getEventBus().post(new DataRefreshListener());
             new AlertDialog(this, "Thêm phiếu mượn thành công!").setVisible(true);
             dispose();
         }

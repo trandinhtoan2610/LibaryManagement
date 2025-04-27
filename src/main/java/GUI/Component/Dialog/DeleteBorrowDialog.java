@@ -7,6 +7,8 @@ import GUI.Component.Button.ButtonAction;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.BorrowPanel;
 import GUI.Component.Panel.EmployeePanel;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,6 +103,7 @@ public class DeleteBorrowDialog extends JDialog {
                     confirmed = true;
                     borrowPanel.refreshTable();
                     BookPanel.loadData();
+                    EventBusManager.getEventBus().post(new DataRefreshListener());
                     dispose();
                     new AlertDialog(this, "Xóa phiếu mượn thành công !").setVisible(true);
 

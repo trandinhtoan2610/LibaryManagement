@@ -23,6 +23,7 @@ public class BookBUS {
         this.authorBUS = new AuthorBUS();
         this.publisherBUS = new PublisherBUS();
         this.bookViewModels = new ArrayList<>();
+        refreshBooks();
     }
 
     public int getCountBook() {
