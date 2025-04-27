@@ -12,6 +12,7 @@ public class AuthorBookDTO {
     private int quantity;
     private Long unitPrice;
     private Year yearOfPublication;
+    private boolean isActive = true;
     public AuthorBookDTO(Long iD, String name, String category, String authorName, String publisherName, int quantity, Long unitPrice, Year yearOfPublication) {
         this.iD = iD;
         this.name = name;

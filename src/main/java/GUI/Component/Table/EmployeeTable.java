@@ -62,7 +62,10 @@ public class EmployeeTable extends JTableCustom {
         return false;
     }
     public void removeEmployee(Employee employee) {
-        employees.remove(employee);
+        if (employee != null) {
+            employee.setActive(false);
+            employees.remove(employee);
+        }
         refreshTable();
     }
 
@@ -77,34 +80,36 @@ public class EmployeeTable extends JTableCustom {
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (Employee emp : employees) {
-            Long tmp = emp.getRoleID();
-            String role = "";
-            if(tmp == 1L){
-                role = "Admin";
-            }else if(tmp == 2L){
-                role = "Quản Lý";
-            }else{
-                role = "Nhân Viên";
+            if (emp.isActive()){
+                Long tmp = emp.getRoleID();
+                String role = "";
+                if(tmp == 1L){
+                    role = "Admin";
+                }else if(tmp == 2L){
+                    role = "Quản Lý";
+                }else{
+                    role = "Nhân Viên";
+                }
+                String gender = "";
+                if (emp.getGender() == Gender.Nam) {
+                    gender = "Nam";
+                } else {
+                    gender = "Nữ";
+                }
+                String fullName = emp.getFirstName() + " " + emp.getLastName();
+                Object[] rowData = {
+                        emp.getId(),
+                        fullName,
+                        gender,
+                        emp.getUsername(),
+                        "********",
+                        role,
+                        emp.getPhone(),
+                        emp.getAddress(),
+                        emp.getSalary()
+                };
+                tableModel.addRow(rowData);
             }
-            String gender = "";
-            if (emp.getGender() == Gender.Nam) {
-                gender = "Nam";
-            } else {
-                gender = "Nữ";
-            }
-            String fullName = emp.getFirstName() + " " + emp.getLastName();
-            Object[] rowData = {
-                    emp.getId(),
-                    fullName,
-                    gender,
-                    emp.getUsername(),
-                    "********",
-                    role,
-                    emp.getPhone(),
-                    emp.getAddress(),
-                    emp.getSalary()
-            };
-            tableModel.addRow(rowData);
         }
     }
 }

@@ -36,13 +36,6 @@ public class EmployeeBUS {
         }
         return employeeDAL.findById(id);
     }
-    public List<Employee> getAllEmployees() {
-        return employeeDAL.findAll();
-    }
-
-    public void showmess(String s) {
-        JOptionPane.showMessageDialog(null, s);
-    }
     public long addEmployee(Employee employee) {
         Long newId = employeeDAL.create(employee);
         if (newId != null){

@@ -269,11 +269,4 @@ public class BookBUS {
             throw new IllegalArgumentException("ID nhà xuất bản không hợp lệ");
         }
     }
-    // xin dung sua cua minh
-    public int sumBorrowedBook(){
-        return bookRepository.sumBorrowedBook();
-    }
-    public int sumAvailableBook(){
-        return bookRepository.sumAvailableBook();
-    }
 }

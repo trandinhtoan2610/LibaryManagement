@@ -2,13 +2,12 @@ package GUI.Component.Table;
 
 import BUS.ReaderBUS;
 import DTO.ReaderDTO;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 public class ReaderTable extends JTableCustom {
     private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ", "Uy tín"};
@@ -27,16 +26,18 @@ public class ReaderTable extends JTableCustom {
         tblModel.setRowCount(0); // Xóa dữ liệu cũ
 
         for (ReaderDTO r : ReaderBUS.readerList){
-            Object[] rowData = {
-                r.getId(),
-                r.getLastName() + ' ' + r.getFirstName(),
-                r.getGender().toString(),
-                r.getPhone(),
-                r.getAddress(),
-                r.getComplianceCount()
-                   
-            };
-            tblModel.addRow(rowData);
+            if (r.isActive()) {
+                Object[] rowData = {
+                        r.getId(),
+                        r.getLastName() + ' ' + r.getFirstName(),
+                        r.getGender().toString(),
+                        r.getPhone(),
+                        r.getAddress(),
+                        r.getComplianceCount()
+
+                };
+                tblModel.addRow(rowData);
+            }
         }
     }
     

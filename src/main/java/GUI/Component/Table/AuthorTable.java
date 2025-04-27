@@ -29,13 +29,15 @@ public class AuthorTable extends JTableCustom {
         tblModel.setRowCount(0);
         this.clearSelection();
         for (AuthorDTO a : AuthorBUS.authorDTOList){
-            Object[] rowData = {
-                a.getId(),
-                a.getLastName() + ' ' + a.getFirstName(),
-                a.getProductQuantity()
-            };
-            
-            tblModel.addRow(rowData);
+            if (a.isActive()){
+                Object[] rowData = {
+                        a.getId(),
+                        a.getLastName() + ' ' + a.getFirstName(),
+                        a.getProductQuantity()
+                };
+
+                tblModel.addRow(rowData);
+            }
         }
     }
     

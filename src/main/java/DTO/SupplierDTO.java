@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 public class SupplierDTO{
     private String id,name,phone, address;
+    private boolean isActive = true;
 
     public SupplierDTO(String id, String name, String phone, String address) {
         this.id = id;

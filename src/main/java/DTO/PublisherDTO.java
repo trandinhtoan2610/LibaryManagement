@@ -9,6 +9,7 @@ import lombok.Setter;
 public class PublisherDTO {
     private Long id;
     private String name, phone, address;
+    private boolean isActive = true;
 
     public PublisherDTO(String name, String phone, String address) {
         this.name = name;

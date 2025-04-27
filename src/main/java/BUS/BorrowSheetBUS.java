@@ -22,14 +22,6 @@ public class BorrowSheetBUS {
     public int getCountBorrowSheet(){
         return borrowSheetList.size();
     }
-
-    public long createBorrowSheet(BorrowDTO dto) {
-        validateBorrowData(dto);
-        return borrowSheetDAL.create(dto);
-    }
-    public List<BorrowDTO> getAllBorrowSheet() {
-        return borrowSheetDAL.findAll();
-    }
     public Long addBorrowSheet(BorrowDTO dto) {
         Long newId = borrowSheetDAL.create(dto);
         if (newId != null) {

@@ -8,7 +8,6 @@ import java.util.List;
 public class BorrowDetailBUS {
     private final BorrowDetailDAL borrowDetailDAL = new BorrowDetailDAL();
 
-    public List<BorrowDetailDTO> getAllBorrowDetails(){ return borrowDetailDAL.findAll(); }
     public Long addBorrowDetail(BorrowDetailDTO  borrowDetailDTO) {
         return borrowDetailDAL.create(borrowDetailDTO);
     }

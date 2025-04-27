@@ -12,6 +12,7 @@ public class AuthorDTO {
     private String lastName;
     private String firstName;
     private long productQuantity;
+    private boolean isActive = true;
 
     public AuthorDTO() {}
 

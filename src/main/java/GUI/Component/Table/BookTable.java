@@ -71,32 +71,36 @@ public class BookTable extends JTableCustom {
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (BookViewModel book : books) {
-            Object[] rowData = {
-                    book.getId(),
-                    book.getName(),
-                    book.getCategoryName(),  // Hiển thị tên danh mục
-                    book.getAuthorName(),    // Hiển thị tên tác giả
-                    book.getPublisherName(), // Hiển thị tên nhà xuất bản
-                    book.getQuantity(),
-                    book.getBorrowedQuantity(),
-                    book.getUnitPrice(),
-                    book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
-            };
-            tableModel.addRow(rowData);
+            if (book.isActive()){
+                Object[] rowData = {
+                        book.getId(),
+                        book.getName(),
+                        book.getCategoryName(),  // Hiển thị tên danh mục
+                        book.getAuthorName(),    // Hiển thị tên tác giả
+                        book.getPublisherName(), // Hiển thị tên nhà xuất bản
+                        book.getQuantity(),
+                        book.getBorrowedQuantity(),
+                        book.getUnitPrice(),
+                        book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
+                };
+                tableModel.addRow(rowData);
+            }
         }
     }
     public void refreshTableCustom() {
         tableModel.setRowCount(0);
         for (BookViewModel book : books) {
-            Object[] rowData = {
-                    book.getName(),
-                    book.getCategoryName(),  // Hiển thị tên danh mục
-                    book.getAuthorName(),    // Hiển thị tên tác giả
-                    book.getPublisherName(), // Hiển thị tên nhà xuất bản
-                    book.getQuantity() - book.getBorrowedQuantity(),
-                    book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
-            };
-            tableModel.addRow(rowData);
+            if (book.isActive()){
+                Object[] rowData = {
+                        book.getName(),
+                        book.getCategoryName(),  // Hiển thị tên danh mục
+                        book.getAuthorName(),    // Hiển thị tên tác giả
+                        book.getPublisherName(), // Hiển thị tên nhà xuất bản
+                        book.getQuantity() - book.getBorrowedQuantity(),
+                        book.getYearOfPublication() != null ? book.getYearOfPublication().toString() : "N/A"
+                };
+                tableModel.addRow(rowData);
+            }
         }
     }
 }

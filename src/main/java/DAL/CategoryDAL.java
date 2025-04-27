@@ -14,7 +14,7 @@ public class CategoryDAL implements IRepositoryBase<Category> {
 
     @Override
     public Category findById(Long id) {
-        String query = "SELECT * FROM Category WHERE id = ?";
+        String query = "SELECT * FROM Category WHERE id = ? AND isActive = 1";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, id);
@@ -32,7 +32,7 @@ public class CategoryDAL implements IRepositoryBase<Category> {
     @Override
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();
-        String query = "SELECT * FROM Category";
+        String query = "SELECT * FROM Category WHERE isActive = 1";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -82,7 +82,7 @@ public class CategoryDAL implements IRepositoryBase<Category> {
 
     @Override
     public boolean delete(Long id) {
-        String query = "DELETE FROM Category WHERE id = ?";
+        String query = "UPDATE Category SET isActive = 0 WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, id);

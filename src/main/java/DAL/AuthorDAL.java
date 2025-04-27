@@ -20,13 +20,13 @@ public class AuthorDAL implements IRepositoryBase<AuthorDTO> {
 
     @Override
     public AuthorDTO findById(Long id) {
-        String sql = "SELECT * FROM Author WHERE id = ? ";
+        String sql = "SELECT * FROM Author WHERE id = ? AND isActive = 1";
         return genericDAL.queryForObject(sql,authorDTORowMapper,id);
     }
 
     @Override
     public List<AuthorDTO> findAll() {
-        String sql = "SELECT * FROM Author";
+        String sql = "SELECT * FROM Author WHERE isActive = 1";
         return genericDAL.queryForList(sql,authorDTORowMapper);
     }
 
@@ -49,7 +49,7 @@ public class AuthorDAL implements IRepositoryBase<AuthorDTO> {
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM Author WHERE id = ?";
+        String sql = "UPDATE Author SET isActive = 0 WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
 

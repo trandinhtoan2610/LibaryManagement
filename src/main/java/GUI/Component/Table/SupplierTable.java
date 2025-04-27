@@ -28,13 +28,15 @@ public class SupplierTable extends JTableCustom {
         List<SupplierDTO> suppliers = supplierBUS.supplierList;
         if (suppliers != null) {
             for (SupplierDTO s : suppliers) {
-                Object[] rowData = {
-                        s.getId(),
-                        s.getName(),
-                        s.getPhone(),
-                        s.getAddress()
-                };
-                tblModel.addRow(rowData);
+                if (s.isActive()) {
+                    Object[] rowData = {
+                            s.getId(),
+                            s.getName(),
+                            s.getPhone(),
+                            s.getAddress()
+                    };
+                    tblModel.addRow(rowData);
+                }
             }
         }
     }
@@ -60,6 +62,7 @@ public class SupplierTable extends JTableCustom {
 
     public void deleteSupplier(SupplierDTO s) {
         if (s != null) {
+            s.setActive(false);
             supplierBUS.deleteSupplier(s); // Delete using BUS
             resetTable();
         }
@@ -76,13 +79,15 @@ public class SupplierTable extends JTableCustom {
         tblModel.setRowCount(0); // Xóa dữ liệu cũ
         if (data != null) {
             for (SupplierDTO s : data) {
-                Object[] rowData = {
-                        s.getId(),
-                        s.getName(),
-                        s.getPhone(),
-                        s.getAddress()
-                };
-                tblModel.addRow(rowData);
+                if (s.isActive()) {
+                    Object[] rowData = {
+                            s.getId(),
+                            s.getName(),
+                            s.getPhone(),
+                            s.getAddress()
+                    };
+                    tblModel.addRow(rowData);
+                }
             }
         }
     }

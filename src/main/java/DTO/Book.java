@@ -20,6 +20,7 @@ public class Book extends EntityBase<Long> {
     private PublisherDTO publisherDTO;
     private Category category;
     private AuthorDTO author;
+    private boolean isActive = true;
 
     public AuthorDTO getAuthor() {
         for(DTO.AuthorDTO a : AuthorBUS.authorDTOList){

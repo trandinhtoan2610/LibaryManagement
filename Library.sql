@@ -13,7 +13,8 @@ CREATE TABLE `Employee` (
                             `roleId` BIGINT NOT NULL,
                             `phone` VARCHAR(20) NOT NULL,
                             `address` VARCHAR(255) NOT NULL,
-                            `salary` BIGINT NOT NULL
+                            `salary` BIGINT NOT NULL,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Reader` (
@@ -23,19 +24,22 @@ CREATE TABLE `Reader` (
                           `gender` ENUM ('Nam', 'Nữ') NOT NULL DEFAULT 'Nam',
                           `phone` VARCHAR(10) NOT NULL,
                           `address` VARCHAR(255) NOT NULL,
-                          `complianceCount` int NOT NULL DEFAULT 3
+                          `complianceCount` int NOT NULL DEFAULT 3,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Author` (
                           `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
                           `firstName` VARCHAR(255) NOT NULL,
                           `lastName` VARCHAR(255) NOT NULL,
-                          `quantity` INT NOT NULL DEFAULT 0
+                          `quantity` INT NOT NULL DEFAULT 0,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Category` (
                             `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
-                            `name` VARCHAR(255) NOT NULL
+                            `name` VARCHAR(255) NOT NULL,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Book` (
@@ -47,14 +51,16 @@ CREATE TABLE `Book` (
                         `quantity` INT NOT NULL,
                         `borrowedQuantity` INT NOT NULL DEFAULT 0,
                         `unitprice` BIGINT NOT NULL,
-                        `yearOfpublication` YEAR
+                        `yearOfpublication` YEAR,
+                        `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Publisher` (
                              `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
                              `name` VARCHAR(255) NOT NULL,
                              `phone` VARCHAR(10) NOT NULL,
-                             `address` VARCHAR(255) NOT NULL
+                             `address` VARCHAR(255) NOT NULL,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `Borrow_in_Sheet` (
@@ -80,7 +86,8 @@ CREATE TABLE `Supplier` (
                             `id` varchar(10) NOT NULL PRIMARY KEY,
                             `name` VARCHAR(255) NOT NULL,
                             `phone` VARCHAR(10) NOT NULL,
-                            `address` VARCHAR(255) NOT NULL
+                            `address` VARCHAR(255) NOT NULL,
+                            `isActive` SMALLINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE `PurchaseOrders` (

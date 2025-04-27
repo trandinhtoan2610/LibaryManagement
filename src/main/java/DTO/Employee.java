@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Employee extends EmployeeAuditBase {
+    private boolean isActive = true;
     public Employee() {};
     public Employee(Long id, String firstName, String lastName) {
         this.id = id;

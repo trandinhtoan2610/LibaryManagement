@@ -34,7 +34,7 @@ public class BookDAL implements IRepositoryBase<Book> {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
         }
-        String query = "SELECT * FROM Book WHERE id = ?";
+        String query = "SELECT * FROM Book WHERE id = ? AND isActive = 1";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -58,7 +58,7 @@ public class BookDAL implements IRepositoryBase<Book> {
     @Override
     public List<Book> findAll() {
         List<Book> books = new ArrayList<>();
-        String query = "SELECT * FROM Book";
+        String query = "SELECT * FROM Book WHERE isActive = 1";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -146,7 +146,7 @@ public class BookDAL implements IRepositoryBase<Book> {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID sách không hợp lệ");
         }
-        String query = "DELETE FROM Book WHERE id = ?";
+        String query = "UPDATE Book SET isActive = 0 WHERE id = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         try {

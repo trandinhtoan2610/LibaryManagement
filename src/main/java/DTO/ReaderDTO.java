@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReaderDTO extends EntityAuditGPABase<String> {
-    int complianceCount;
+    private int complianceCount;
+    private boolean isActive = true;
 
     public ReaderDTO() {};
     public ReaderDTO(String id, String firstName, String lastName, Gender gender, String phone, String address, int count) {

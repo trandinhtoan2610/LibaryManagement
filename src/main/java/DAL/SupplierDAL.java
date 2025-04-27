@@ -21,12 +21,12 @@ public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
 
     @Override
     public SupplierDTO findById(String id) {
-        String sql = "SELECT * FROM Supplier WHERE id = ?";
+        String sql = "SELECT * FROM Supplier WHERE id = ? AND isActive = 1";
         return genericDAL.queryForObject(sql, supplierRowMapper, id);
     }
     @Override
     public List<SupplierDTO> findAll() {
-        String sql = "SELECT * FROM Supplier";
+        String sql = "SELECT * FROM Supplier WHERE isActive = 1";
         return genericDAL.queryForList(sql, supplierRowMapper);
     }
 
@@ -55,7 +55,7 @@ public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM Supplier WHERE id = ?";
+        String sql = "UPDATE Supplier SET isActive = 0 WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
 

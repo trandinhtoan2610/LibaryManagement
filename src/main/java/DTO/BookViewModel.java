@@ -17,6 +17,7 @@ public class BookViewModel {
     private int borrowedQuantity;
     private Long unitPrice;
     private Year yearOfPublication;
+    private boolean isActive = true;
 
 
     public BookViewModel(){};

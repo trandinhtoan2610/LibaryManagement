@@ -24,13 +24,13 @@ public class ReaderDAL implements IRepositoryStringID<ReaderDTO> {
 
     @Override
     public ReaderDTO findById(String id) {
-        String sql = "SELECT * FROM Reader WHERE id = ?";
+        String sql = "SELECT * FROM Reader WHERE id = ? AND isActive = 1";
         return genericDAL.queryForObject(sql, readerRowMapper, id);
     }
 
     @Override
     public List<ReaderDTO> findAll() {
-        String sql = "SELECT * FROM Reader";
+        String sql = "SELECT * FROM Reader WHERE isActive = 1";
         return genericDAL.queryForList(sql,readerRowMapper);
     }
 
@@ -58,7 +58,7 @@ public class ReaderDAL implements IRepositoryStringID<ReaderDTO> {
 
     @Override
     public boolean delete(String id) {
-        String sql = "DELETE FROM Reader WHERE id = ? ";
+        String sql = "UPDATE Reader SET isActive = 0 WHERE id = ? ";
         return genericDAL.delete(sql,id);
     }
     

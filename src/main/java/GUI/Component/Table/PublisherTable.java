@@ -66,6 +66,7 @@ public class PublisherTable extends JTableCustom {
         if (selectedPublisher != null) {
             int index = publisherDTOS.indexOf(selectedPublisher);
             if (index != -1) {
+                publisherDTO.setActive(false);
                 publisherDTOS.remove(index);
                 refreshTable();
                 return true;
@@ -86,13 +87,15 @@ public class PublisherTable extends JTableCustom {
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (PublisherDTO publisherDTO : publisherDTOS) {
-            Object[] rowData = {
-                    publisherDTO.getId(),
-                    publisherDTO.getName(),
-                    publisherDTO.getPhone(),
-                    publisherDTO.getAddress()
-            };
-            tableModel.addRow(rowData);
+            if (publisherDTO.isActive()){
+                Object[] rowData = {
+                        publisherDTO.getId(),
+                        publisherDTO.getName(),
+                        publisherDTO.getPhone(),
+                        publisherDTO.getAddress()
+                };
+                tableModel.addRow(rowData);
+            }
         }
     }
     public void filterTable(String name, String phone, String address) {

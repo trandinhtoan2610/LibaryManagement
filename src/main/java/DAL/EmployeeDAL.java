@@ -46,7 +46,7 @@ public class EmployeeDAL implements IEmployeeDAL {
     @Override
     public List<Employee> findAll() {
         try {
-            String sql = "SELECT * FROM employee";
+            String sql = "SELECT * FROM employee WHERE isActive = 1";
             return genericDAL.queryForList(sql, employeeRowMapper);
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch all employees", e);
@@ -77,7 +77,7 @@ public class EmployeeDAL implements IEmployeeDAL {
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM employee WHERE id = ?";
+        String sql = "UPDATE employee SET isActive = 0 WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
     public List<Employee> findByGender(Gender gender) {

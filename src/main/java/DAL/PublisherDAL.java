@@ -23,13 +23,13 @@ public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
 
     @Override
     public PublisherDTO findById(Long id) {
-        String sql = "SELECT * FROM publisher WHERE id = ?";
+        String sql = "SELECT * FROM publisher WHERE id = ? AND isActive = 1";
         return genericDAL.queryForObject(sql, publisherRowMapper, id);
     }
 
     @Override
     public List<PublisherDTO> findAll() {
-        String sql = "SELECT * FROM publisher";
+        String sql = "SELECT * FROM publisher WHERE isActive = 1";
         return genericDAL.queryForList(sql, publisherRowMapper);
     }
 
@@ -47,7 +47,7 @@ public class PublisherDAL implements IRepositoryBase<PublisherDTO> {
 
     @Override
     public boolean delete(Long id) {
-        String sql = "DELETE FROM publisher WHERE id = ?";
+        String sql = "UPDATE publisher SET isActive = 0 WHERE id = ?";
         return genericDAL.delete(sql, id);
     }
     public long getCurrentID() {
