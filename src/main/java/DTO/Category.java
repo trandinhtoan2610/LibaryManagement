@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class Category extends EntityAuditNameBase<Long> {
     private boolean isActive = true;
+    public Category() {}
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;

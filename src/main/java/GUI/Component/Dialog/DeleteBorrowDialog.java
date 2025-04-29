@@ -101,6 +101,7 @@ public class DeleteBorrowDialog extends JDialog {
                 );
                 if (success) {
                     confirmed = true;
+                    borrowPanel.deleteBorrow(borrowToDelete);
                     borrowPanel.refreshTable();
                     BookPanel.loadData();
                     EventBusManager.getEventBus().post(new DataRefreshListener());

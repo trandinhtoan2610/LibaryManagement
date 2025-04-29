@@ -2,7 +2,9 @@ package GUI.Component.Panel;
 
 import BUS.*;
 import DTO.*;
+import DTO.Enum.PayStatus;
 import DTO.Enum.Status;
+import DTO.Enum.SubStatus;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddBorrowDialog;
 import GUI.Component.Dialog.AlertDialog;
@@ -34,6 +36,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -50,8 +53,7 @@ public class BorrowPanel extends JPanel {
     private ButtonAdd buttonAdd;
     private ButtonUpdate buttonUpdate;
     private ButtonDelete buttonDelete;
-    private ButtonExportExcel buttonExportExcel;
-    private ButtonImportExcel buttonImportExcel;
+    private ButtonPaidBook buttonPaidBook;
     private ButtonExportPDF buttonExportPDF;
     private JPanel searchNavBarLabel;
     private RoundedTextField searchfield;
@@ -115,7 +117,166 @@ public class BorrowPanel extends JPanel {
         paddedPanel.add(bottomPanel, BorderLayout.CENTER);
         paddedPanel.setBackground(new Color(240, 240, 240));
         this.add(paddedPanel, BorderLayout.SOUTH);
+        addRightClickMenutoDetailTable();
         loadData();
+    }
+    private void addRightClickMenutoDetailTable() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem menuItemBorrowing = new JMenuItem("Đang mượn");
+        menuItemBorrowing.addActionListener(e -> updateSelectedDetailStatus(SubStatus.Đang_Mượn));
+        JMenuItem menuItemReturned = new JMenuItem("Đã Trả");
+        menuItemReturned.addActionListener(e -> updateSelectedDetailStatus(SubStatus.Đã_Trả));
+        JMenuItem menuItemLostBook = new JMenuItem("Mất Sách");
+        menuItemLostBook.addActionListener(e -> updateSelectedDetailStatus(SubStatus.Mất_Sách));
+        JMenuItem menuItemBrokenBook = new JMenuItem("Hư Sách");
+        menuItemBrokenBook.addActionListener(e -> updateSelectedDetailStatus(SubStatus.Hư_Sách));
+        popupMenu.add(menuItemBorrowing);
+        popupMenu.add(menuItemReturned);
+        popupMenu.add(menuItemLostBook);
+        popupMenu.add(menuItemBrokenBook);
+        borrowDetailTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int row = borrowDetailTable.rowAtPoint(e.getPoint());
+                    if (row >= 0) {
+                        BorrowDetailDTO selectedDetails = borrowDetailTable.getBorrowDetailAt(row);
+                        if (selectedDetails.getStatus() == SubStatus.Đang_Mượn){
+                            menuItemBorrowing.setVisible(false);
+                            menuItemReturned.setVisible(true);
+                            menuItemLostBook.setVisible(true);
+                            menuItemBrokenBook.setVisible(true);
+                        }else {
+                            menuItemBorrowing.setVisible(true);
+                            menuItemReturned.setVisible(false);
+                            menuItemLostBook.setVisible(false);
+                            menuItemBrokenBook.setVisible(false);
+                        }
+                        borrowDetailTable.setRowSelectionInterval(row, row);
+                        popupMenu.show(borrowDetailTable, e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+    }
+    private void updateBorrowSheetStatus(BorrowDTO borrowDTO){
+        List<BorrowDetailDTO> borrowDetailList = borrowDetailBUS.getBorrowDetailsBySheetId(Long.parseLong(borrowDTO.getId().substring(2)));
+        boolean hasBorrowing = false;
+        boolean hasOverdue = false;
+        boolean hasLostBook = false;
+        boolean hasBrokenBook = false;
+        for (BorrowDetailDTO borrowDetail : borrowDetailList) {
+            if (borrowDetail.getStatus() == SubStatus.Đang_Mượn){
+                hasBorrowing = true;
+            }
+            if (borrowDetail.getStatus() == SubStatus.Quá_Hạn){
+                hasOverdue = true;
+            }
+            if (borrowDetail.getStatus() == SubStatus.Mất_Sách){
+                hasLostBook = true;
+            }
+            if (borrowDetail.getStatus() == SubStatus.Hư_Sách){
+                hasBrokenBook = true;
+            }
+        }
+        if (hasBorrowing) {
+            borrowDTO.setStatus(Status.Đang_Mượn);
+            borrowDTO.setActualReturnDate(null);
+        } else {
+            if (hasOverdue || hasLostBook || hasBrokenBook) {
+                borrowDTO.setStatus(Status.Phạt);
+            } else {
+                borrowDTO.setStatus(Status.Đã_Trả);
+            }
+            borrowDTO.setActualReturnDate(new Date());
+        }
+        borrowSheetBUS.updateBorrowSheet(borrowDTO);
+        if(borrowDTO.getStatus().equals(Status.Phạt)) {
+            PenaltyBUS penaltyBUS = new PenaltyBUS();
+            PenaltyDetailsBUS penaltyDetailsBUS = new PenaltyDetailsBUS();
+            try {
+                PenaltyDTO p = new PenaltyDTO(
+                        penaltyBUS.getCurrentID(),
+                        borrowDTO.getActualReturnDate(),
+                        PayStatus.Chưa_Thanh_Toán,
+                        0L, null, null
+                );
+                penaltyBUS.addPenaltySheet(p);
+                penaltyDetailsBUS.addPenaltyDetails(p.getId(), borrowDTO);
+                Long totalAmount = penaltyDetailsBUS.getTotalFee(p.getId());
+                p.setTotalAmount(totalAmount);
+                penaltyBUS.updatePenaltySheet(p);
+                PenaltyPanel.reloadTable();
+            }catch (Exception e) {
+                throw new RuntimeException("Tạo phiếu phạt thất bại");
+            }
+        }
+    }
+    private void updateSelectedDetailStatus(SubStatus newStatus){
+        int selectedRow = borrowDetailTable.getSelectedRow();
+        if (selectedRow < 0){
+            new AlertDialog(parentFrame, "Vui lòng chọn một chi tiết mượn sách").setVisible(true);
+            return;
+        }
+        try {
+            BorrowDetailDTO selectedDetail = borrowDetailTable.getBorrowDetailAt(selectedRow);
+            if (selectedDetail == null){
+                new AlertDialog(parentFrame, "Không tìm thấy chi tiết mượn sách");
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(parentFrame,
+                    "Xác nhận chuyển trạng thái sang " + newStatus + " ?",
+                    "Xác nhận", JOptionPane.YES_OPTION
+                    );
+            if (confirm != JOptionPane.YES_OPTION){
+                return;
+            }
+            SubStatus oldStatus = selectedDetail.getStatus();
+            BorrowDTO borrowSelected = borrowinSheetTable.getSelectedBorrow();
+            Date currentDate = new Date();
+
+            SubStatus finalStatus = newStatus;
+            if (newStatus == SubStatus.Đã_Trả && currentDate.after(borrowSelected.getDuedate())) {
+                finalStatus = SubStatus.Quá_Hạn;
+            }
+            selectedDetail.setStatus(finalStatus);
+            if (finalStatus == SubStatus.Đã_Trả || finalStatus == SubStatus.Quá_Hạn || finalStatus == SubStatus.Mất_Sách || finalStatus == SubStatus.Hư_Sách) {
+                selectedDetail.setActualReturnDate(new Date());
+            } else {
+                selectedDetail.setActualReturnDate(null);
+            }
+
+            Book selectedBook = bookBUS.getBookById(selectedDetail.getBookId());
+            if (selectedBook != null){
+                if (oldStatus == SubStatus.Đang_Mượn && finalStatus != SubStatus.Đang_Mượn){
+                    if (finalStatus == SubStatus.Đã_Trả || finalStatus == SubStatus.Quá_Hạn){
+                        selectedBook.setBorrowedQuantity(selectedBook.getBorrowedQuantity() - selectedDetail.getQuantity());
+                    }
+                    if (finalStatus == SubStatus.Hư_Sách || finalStatus == SubStatus.Mất_Sách){
+                        selectedBook.setQuantity(selectedBook.getQuantity() - selectedDetail.getQuantity());
+                        selectedBook.setBorrowedQuantity(selectedBook.getBorrowedQuantity() - selectedDetail.getQuantity());
+                    }
+                }else if (oldStatus != SubStatus.Đang_Mượn && finalStatus == SubStatus.Đang_Mượn){
+                    if (oldStatus == SubStatus.Đã_Trả || oldStatus == SubStatus.Quá_Hạn){
+                        selectedBook.setBorrowedQuantity(selectedBook.getBorrowedQuantity() + selectedDetail.getQuantity());
+                    }
+                    if (oldStatus == SubStatus.Hư_Sách || oldStatus == SubStatus.Mất_Sách){
+                        selectedBook.setQuantity(selectedBook.getQuantity() + selectedDetail.getQuantity());
+                        selectedBook.setBorrowedQuantity(selectedBook.getBorrowedQuantity() + selectedDetail.getQuantity());
+                    }
+                }
+                bookBUS.updateBook(selectedBook);
+                BookPanel.loadData();
+            }
+            borrowDetailBUS.updateBorrowDetail(selectedDetail);
+            if (borrowSelected != null){
+               updateBorrowSheetStatus(borrowSelected);
+            }
+            refreshData();
+            new AlertDialog(parentFrame, "Cập nhật trạng thái thành công").setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void customizeDetailTable() {
         TableColumnModel columnModel = borrowDetailTable.getColumnModel();
@@ -166,14 +327,17 @@ public class BorrowPanel extends JPanel {
                 } else {
                     DeleteBorrowDialog deleteBorrowDialog = new DeleteBorrowDialog(parentFrame, BorrowPanel.this, selectedBorrow);
                     deleteBorrowDialog.setVisible(true);
-                    deleteBorrow(selectedBorrow);
-                    borrowSheetBUS.deleteBorrowSheet(Long.parseLong(selectedBorrow.getId().substring(2)));
                     refreshTable();
                 }
             }
         });
-        buttonExportExcel = new ButtonExportExcel();
-        buttonImportExcel = new ButtonImportExcel();
+        buttonPaidBook = new ButtonPaidBook();
+        buttonPaidBook.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                BorrowDTO selectedBorrow = borrowinSheetTable.getSelectedBorrow();
+                actionPaidBook(selectedBorrow);
+            }
+        });
         buttonExportPDF = new ButtonExportPDF();
         buttonExportPDF.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -185,10 +349,9 @@ public class BorrowPanel extends JPanel {
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
-        buttonPanel.add(buttonExportExcel);
-        buttonPanel.add(buttonImportExcel);
+        buttonPanel.add(buttonPaidBook);
         buttonPanel.add(buttonExportPDF);
-        buttonPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+        buttonPanel.add(Box.createRigidArea(new Dimension(175, 0)));
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
@@ -450,6 +613,50 @@ public class BorrowPanel extends JPanel {
         searchfield.setText("");
         buttonGroup.clearSelection();
         allRadioButton.setSelected(true);
+    }
+    public void actionPaidBook(BorrowDTO selectedBorrow){
+        if (selectedBorrow == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu mượn cần trả", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (selectedBorrow.getStatus() != Status.Đang_Mượn){
+            new AlertDialog(parentFrame, "Chỉ cho phép trạng thái đang mượn dùng nút bấm này").setVisible(true);
+            return;
+        }
+        try {
+            List<BorrowDetailDTO> borrowDetails = borrowDetailBUS.getBorrowDetailsBySheetId(Long.parseLong(selectedBorrow.getId().substring(2)));
+            Date now = new Date();
+            boolean hasOverDate = false;
+            for (BorrowDetailDTO borrowDetail : borrowDetails) {
+                SubStatus skipStatus = borrowDetail.getStatus();
+                if (skipStatus == SubStatus.Đã_Trả || skipStatus == SubStatus.Hư_Sách || skipStatus == SubStatus.Mất_Sách || skipStatus == SubStatus.Quá_Hạn){
+                    continue;
+                }
+                borrowDetail.setActualReturnDate(now);
+                if (now.after(selectedBorrow.getDuedate())){
+                    borrowDetail.setStatus(SubStatus.Quá_Hạn);
+                    hasOverDate = true;
+                }else {
+                    borrowDetail.setStatus(SubStatus.Đã_Trả);
+                }
+                Book selectedBook = bookBUS.getBookById(borrowDetail.getBookId());
+                selectedBook.setBorrowedQuantity(selectedBook.getBorrowedQuantity() - borrowDetail.getQuantity());
+                bookBUS.updateBook(selectedBook);
+                borrowDetailBUS.updateBorrowDetail(borrowDetail);
+            }
+            selectedBorrow.setActualReturnDate(now);
+            if (hasOverDate) {
+                selectedBorrow.setStatus(Status.Phạt);
+            }else {
+                selectedBorrow.setStatus(Status.Đã_Trả);
+            }
+            updateBorrowSheetStatus(selectedBorrow);
+            BookPanel.loadData();
+            refreshData();
+            new AlertDialog(parentFrame, "Trả sách thành công").setVisible(true);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void exportToPDF(BorrowDTO selectedBorrow) {
         if (selectedBorrow == null) {

@@ -470,7 +470,6 @@ public class UpdateBorrowDialog extends JDialog {
             readerAddressLabel.setText("Địa chỉ: Không tìm thấy");
         } else {
             try {
-                Long reader = Long.parseLong(readerId);
                 currentReader = readerBUS.findReaderByID(readerId);
                 readerNameLabel.setText("          Tên độc giả: " + currentReader.getLastName() + " " + currentReader.getFirstName());
                 readerGenderLabel.setText("Giới tính: " + currentReader.getGender().toString());

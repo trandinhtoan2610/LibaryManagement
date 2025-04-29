@@ -6,17 +6,13 @@ import BUS.EmployeeBUS;
 import BUS.ReaderBUS;
 import DTO.BookViewModel;
 import DTO.Employee;
-import DTO.Enum.Status;
 import DTO.ReaderDTO;
 import DTO.Statistics.MonthData;
 import DTO.Statistics.QuarterData;
 import DTO.Statistics.QuarterDataStringId;
 import DTO.Statistics.StatusData;
 import GUI.Component.Button.ButtonIcon;
-import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Panel.Statistics.Components.*;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.toedter.calendar.JDateChooser;
 
@@ -592,11 +588,9 @@ public class BorrowStatistics extends JPanel{
             Date startDate = tuNgay.getDate();
             Date endDate = denNgay.getDate();
             if (startDate == null || endDate == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn cả 2 ngày", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (startDate.after(endDate)) {
-                JOptionPane.showMessageDialog(this, "Ngày bắt đầu không thể sau ngày kết thúc", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             List<QuarterData> data = borrowSheetBUS.getQuarterEmployeeDataByDate(startDate, endDate);
@@ -748,10 +742,20 @@ public class BorrowStatistics extends JPanel{
         applyDateFilterBtn.setPressedBackgroundColor(new Color(240, 240, 240));
         applyDateFilterBtn.putClientProperty("JButton.buttonType", "toolBarButton");
         applyDateFilterBtn.addActionListener(e -> {
+            if (tuNgay.getDate() == null || denNgay.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn cả 2 ngày", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (tuNgay.getDate().after(denNgay.getDate())){
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu không thể sau ngày kết thúc", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             theoNam.setSelectedIndex(-1);
             actionEmployeeTableByDate();
             actionReaderTableByDate();
             actionBookTableByDate();
+            actionPieChart();
+            actionBarchart();
         });
         datePanel.add(applyDateFilterBtn);
 
@@ -761,15 +765,10 @@ public class BorrowStatistics extends JPanel{
         JLabel label3 = new JLabel("Năm: ");
         quarterPanel.add(label3);
 
-        List<Integer> searchOptionsY = borrowSheetBUS.getListYear();
-        if (!searchOptionsY.isEmpty()) {
-            theoNam = new JComboBox<>(searchOptionsY.toArray(new Integer[0]));
-        } else {
-            theoNam = new JComboBox<>();
-            theoNam.addItem(0);
-        }
+        List<Integer> searchOptionsY = actionByYear();
+        theoNam = new JComboBox<>();
 
-        theoNam = new JComboBox<>(searchOptionsY.toArray(new Integer[0]));
+        updateYearComboBox(searchOptionsY);
 
         theoNam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         theoNam.setBackground(Color.WHITE);
@@ -803,6 +802,28 @@ public class BorrowStatistics extends JPanel{
         containerPanel.add(filterPanel2);
 
         return containerPanel;
+    }
+
+    private void updateYearComboBox(List<Integer> years) {
+        DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
+        if (years.isEmpty()) {
+            model.addElement(0);
+        } else {
+            for (Integer year : years) {
+                model.addElement(year);
+            }
+        }
+        theoNam.setModel(model);
+    }
+
+    private void refreshYearComboBox() {
+        List<Integer> newYears = actionByYear();
+        updateYearComboBox(newYears);
+    }
+
+    private List<Integer> actionByYear() {
+        List<Integer> tmp = borrowSheetBUS.getListYear();
+        return tmp;
     }
 
     private JPanel mainContent() {
@@ -848,6 +869,8 @@ public class BorrowStatistics extends JPanel{
             statusDataList = borrowSheetBUS.getStatusDataByYear(year);
         }
         if (statusDataList == null) {
+            pieChartPanel.clearData();
+            pieChartPanel.repaint();
             return;
         }
         int muon = 0, tra = 0, phat = 0;
@@ -874,6 +897,7 @@ public class BorrowStatistics extends JPanel{
 
     private void actionBarchart() {
         Map<String, Integer> bookData = new LinkedHashMap<>();
+        boolean hasData = false;
         if (theoNam.getSelectedIndex() == -1) {
             List<MonthData> monthDataByDate = borrowSheetBUS.getMonthDataByDate(tuNgay.getDate(), denNgay.getDate());
             for (int i =1 ;i<= 12;i++){
@@ -881,6 +905,13 @@ public class BorrowStatistics extends JPanel{
             }
             for (MonthData monthData : monthDataByDate) {
                 bookData.put(String.valueOf(monthData.getThang()), monthData.getSoluong());
+                if (monthData.getSoluong() > 0) {
+                    hasData = true;
+                }
+            }
+            if (!hasData) {
+                chartPanel.updateData(new LinkedHashMap<>(), "Không có dữ liệu");
+                return;
             }
             chartPanel.updateData(bookData, "Thống kê mượn sách theo tháng");
             return;
@@ -910,6 +941,8 @@ public class BorrowStatistics extends JPanel{
             actionReaderTable();
             actionBookTable();
         }
+        refreshYearComboBox();
+        actionByYear();
         actionPieChart();
         actionBarchart();
     }

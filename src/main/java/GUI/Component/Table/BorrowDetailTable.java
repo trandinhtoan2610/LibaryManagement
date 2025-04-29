@@ -65,4 +65,10 @@ public class BorrowDetailTable extends JTableCustom{
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         return formatter.format(date);
     }
+    public BorrowDetailDTO getBorrowDetailAt(int row) {
+        if (row >= 0 && row < borrowDetailDTOS.size()) {
+            return borrowDetailDTOS.get(row);
+        }
+        return null;
+    }
 }
