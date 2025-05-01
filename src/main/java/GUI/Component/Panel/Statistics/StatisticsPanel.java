@@ -1,22 +1,32 @@
 package GUI.Component.Panel.Statistics;
 
+import BUS.BookBUS;
+import DTO.BookViewModel;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class StatisticsPanel extends javax.swing.JPanel {
-    private final Color defaultColor = new Color(255,255,255);
+    private final Color defaultColor = new Color(255, 255, 255);
     private final Color selectedColor = new Color(100, 200, 250);
     private final Color hoverColor = new Color(180, 220, 250);
     private final Font defaultFont = new Font("Segoe UI", Font.PLAIN, 12);
     private final Font selectedFont = new Font("Segoe UI", Font.BOLD, 15);
     private JPanel selectedPanelTab;
 
-    //Khai báo panel thống kê tại đây :
-    private JPanel testOverviewPanel;
-    private JPanel testPanel2;
-    private JPanel testPanel3;
-    private BorrowStatistics borrowStatistics;
+    // Panels cho các tab
+    private JPanel overviewPanel;
+    private BookStatisticsPanel bookStatisticsPanel;
+    private JPanel purchasePanel;
+    private JPanel borrowPanel;
+    private JPanel penaltyPanel;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -26,34 +36,40 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private final String borrowAlias = "BORROW";
     private final String penaltyAlias = "PENALTY";
 
-
     public StatisticsPanel() {
         initComponents();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         contentPanel.add(cardPanel);
 
-        //Ví dụ :
-        testOverviewPanel = new JPanel();
-        testPanel2 = new JPanel();
-        testPanel3 = new JPanel();
-        borrowStatistics = new BorrowStatistics();
-        testOverviewPanel.setBackground(Color.RED);
-        testPanel3.setBackground(Color.blue);
+        // Khởi tạo các panel
+        overviewPanel = new JPanel();
+        bookStatisticsPanel = new BookStatisticsPanel();
+        purchasePanel = new JPanel();
+        borrowPanel = new JPanel();
+        penaltyPanel = new JPanel();
 
-        //cardPanel.add( <<JPanel>> , <<Alias>>). VD :
-        cardPanel.add(testOverviewPanel, overviewAlias);
-        cardPanel.add(testPanel3, bookAlias);
-        cardPanel.add(borrowStatistics, borrowAlias);
+        // Thiết lập màu nền tạm thời cho các panel
+        overviewPanel.setBackground(Color.WHITE);
+        purchasePanel.setBackground(Color.WHITE);
+        borrowPanel.setBackground(Color.WHITE);
+        penaltyPanel.setBackground(Color.WHITE);
 
-        //Mặc định là thống kê overview(Tổng quan) :
-        isSelected(overviewTab, overviewAlias);  //Kéo xuống dưới có các hàm MouseClick -> ghi isSelected phù hợp.
+        // Thêm các panel vào cardPanel
+        cardPanel.add(overviewPanel, overviewAlias);
+        cardPanel.add(bookStatisticsPanel, bookAlias);
+        cardPanel.add(purchasePanel, purchaseAlias);
+        cardPanel.add(borrowPanel, borrowAlias);
+        cardPanel.add(penaltyPanel, penaltyAlias);
+
+        // Mặc định hiển thị tab Tổng quan
+        isSelected(overviewTab, overviewAlias);
     }
 
     public void clearSelect() {
         if (selectedPanelTab != null) {
             selectedPanelTab.setBackground(defaultColor);
-            if(selectedPanelTab == penaltyTab)
+            if (selectedPanelTab == penaltyTab)
                 selectedPanelTab.setBorder(null);
             else
                 selectedPanelTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
@@ -62,11 +78,10 @@ public class StatisticsPanel extends javax.swing.JPanel {
         }
     }
 
-
     public void isSelected(JPanel p, String header) {
         clearSelect();
         selectedPanelTab = p;
-        cardLayout.show(cardPanel,header);
+        cardLayout.show(cardPanel, header);
         p.setBackground(selectedColor);
         p.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLUE));
         p.setOpaque(true);
@@ -83,18 +98,15 @@ public class StatisticsPanel extends javax.swing.JPanel {
     public void deleteHover(JPanel p) {
         if (selectedPanelTab != p) {
             p.setBackground(defaultColor);
-            p.setOpaque(true);  // Đảm bảo JPanel hiển thị màu nền
+            p.setOpaque(true);
             p.revalidate();
             p.repaint();
         }
     }
 
-
-    
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-
         headerPanel = new javax.swing.JPanel();
         overviewTab = new javax.swing.JPanel();
         lblOverviewTab = new javax.swing.JLabel();
@@ -227,87 +239,74 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         contentPanel.setLayout(new java.awt.BorderLayout());
         add(contentPanel, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }
+    // </editor-fold>
 
-    private void lblOverviewTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblOverviewTabMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblOverviewTabMouseClicked
+    private void lblOverviewTabMouseClicked(java.awt.event.MouseEvent evt) {
+        overviewTabMouseClicked(evt);
+    }
 
+    private void overviewTabMouseClicked(java.awt.event.MouseEvent evt) {
+        isSelected(overviewTab, overviewAlias);
+    }
 
-    //MOUSE CLICK CỦA TAB TỔNG QUAN :
-    private void overviewTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_overviewTabMouseClicked
-        isSelected(overviewTab, overviewAlias);   // Tham số 1 : panel thống kê - Tham số 2 : alias
-    }//GEN-LAST:event_overviewTabMouseClicked
-
-
-
-    private void overviewTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_overviewTabMouseEntered
+    private void overviewTabMouseEntered(java.awt.event.MouseEvent evt) {
         addHover(overviewTab);
-    }//GEN-LAST:event_overviewTabMouseEntered
+    }
 
-    private void overviewTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_overviewTabMouseExited
+    private void overviewTabMouseExited(java.awt.event.MouseEvent evt) {
         deleteHover(overviewTab);
-    }//GEN-LAST:event_overviewTabMouseExited
+    }
 
-
-    //MOUSE CLICK CỦA TAB SÁCH :
-    private void bookTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookTabMouseClicked
+    private void bookTabMouseClicked(java.awt.event.MouseEvent evt) {
         isSelected(bookTab, bookAlias);
-    }//GEN-LAST:event_bookTabMouseClicked
+    }
 
-
-    private void bookTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookTabMouseEntered
+    private void bookTabMouseEntered(java.awt.event.MouseEvent evt) {
         addHover(bookTab);
-    }//GEN-LAST:event_bookTabMouseEntered
+    }
 
-    private void bookTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookTabMouseExited
+    private void bookTabMouseExited(java.awt.event.MouseEvent evt) {
         deleteHover(bookTab);
-    }//GEN-LAST:event_bookTabMouseExited
+    }
 
-
-    //MOUSE CLICK CỦA TAB PHIẾU NHẬP :
-    private void purchaseOrderTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseOrderTabMouseClicked
+    private void purchaseOrderTabMouseClicked(java.awt.event.MouseEvent evt) {
         isSelected(purchaseOrderTab, purchaseAlias);
-    }//GEN-LAST:event_purchaseOrderTabMouseClicked
+    }
 
-    private void purchaseOrderTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseOrderTabMouseEntered
+    private void purchaseOrderTabMouseEntered(java.awt.event.MouseEvent evt) {
         addHover(purchaseOrderTab);
-    }//GEN-LAST:event_purchaseOrderTabMouseEntered
+    }
 
-    private void purchaseOrderTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_purchaseOrderTabMouseExited
+    private void purchaseOrderTabMouseExited(java.awt.event.MouseEvent evt) {
         deleteHover(purchaseOrderTab);
-    }//GEN-LAST:event_purchaseOrderTabMouseExited
+    }
 
+    private void borrowSheetTabMouseClicked(java.awt.event.MouseEvent evt) {
+        isSelected(borrowSheetTab, borrowAlias);
+    }
 
-    //MOUSE CLICK CỦA TAB PHIẾU MƯỢN :
-    private void borrowSheetTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowSheetTabMouseClicked
-        isSelected(borrowSheetTab,borrowAlias);
-    }//GEN-LAST:event_borrowSheetTabMouseClicked
-
-    private void borrowSheetTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowSheetTabMouseEntered
+    private void borrowSheetTabMouseEntered(java.awt.event.MouseEvent evt) {
         addHover(borrowSheetTab);
-    }//GEN-LAST:event_borrowSheetTabMouseEntered
+    }
 
-
-    //MOUSE CLICK CỦA TAB PHIẾU PHẠT :
-    private void penaltyTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penaltyTabMouseClicked
-        isSelected(penaltyTab, penaltyAlias);
-    }//GEN-LAST:event_penaltyTabMouseClicked
-
-    private void penaltyTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penaltyTabMouseEntered
-        addHover(penaltyTab);
-    }//GEN-LAST:event_penaltyTabMouseEntered
-
-    private void penaltyTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penaltyTabMouseExited
-        deleteHover(penaltyTab);
-    }//GEN-LAST:event_penaltyTabMouseExited
-
-    private void borrowSheetTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_borrowSheetTabMouseExited
+    private void borrowSheetTabMouseExited(java.awt.event.MouseEvent evt) {
         deleteHover(borrowSheetTab);
-    }//GEN-LAST:event_borrowSheetTabMouseExited
+    }
 
+    private void penaltyTabMouseClicked(java.awt.event.MouseEvent evt) {
+        isSelected(penaltyTab, penaltyAlias);
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private void penaltyTabMouseEntered(java.awt.event.MouseEvent evt) {
+        addHover(penaltyTab);
+    }
+
+    private void penaltyTabMouseExited(java.awt.event.MouseEvent evt) {
+        deleteHover(penaltyTab);
+    }
+
+    // Variables declaration
     private javax.swing.JPanel bookTab;
     private javax.swing.JPanel borrowSheetTab;
     private javax.swing.JPanel contentPanel;
@@ -320,5 +319,4 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private javax.swing.JPanel overviewTab;
     private javax.swing.JPanel penaltyTab;
     private javax.swing.JPanel purchaseOrderTab;
-    // End of variables declaration//GEN-END:variables
 }
