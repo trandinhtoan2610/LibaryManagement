@@ -8,6 +8,9 @@ import GUI.Component.Button.*;
 import GUI.Component.Panel.Components.SearchNavBarLabel;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
 import GUI.Component.Table.PurchaseOrderTable;
+import GUI.Component.Dialog.AddPurchaseOrderDialog;
+import GUI.Component.Dialog.DeletePurchaseOrderDialog;
+import GUI.Component.Dialog.UpdatePurchaseOrdersDialog;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -38,7 +41,6 @@ public class PurchaseOrderPanel extends JPanel {
 
         this.add(buttonPanel(parentFrame), BorderLayout.NORTH);
 
-
         JScrollPane scrollPane = new JScrollPane(purchaseOrderTable);
         add(scrollPane, BorderLayout.CENTER);
 
@@ -63,6 +65,7 @@ public class PurchaseOrderPanel extends JPanel {
         paddedPanel.setBackground(new Color(240, 240, 240));
         this.add(paddedPanel, BorderLayout.SOUTH);
     }
+
     private void customizeDetailTable() {
         // Đặt kích thước cột
         TableColumnModel columnModel = purchaseOrderDetailsTable.getColumnModel();
@@ -77,28 +80,43 @@ public class PurchaseOrderPanel extends JPanel {
         // Tắt tự động resize
         purchaseOrderDetailsTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
+
     public JPanel buttonPanel(JFrame parentFrame) {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         buttonPanel.setBackground(Color.WHITE);
+        
+        // Add button
         buttonAdd = new ButtonAdd();
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                AddPurchaseOrderDialog addDialog = new AddPurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
+                addDialog.setVisible(true);
             }
         });
+        
+        // Update button
         buttonUpdate = new ButtonUpdate();
-        buttonUpdate.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-            }
-        });
+        // buttonUpdate.addMouseListener(new MouseAdapter() {
+        //     public void mouseClicked(MouseEvent e) {
+        //         UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
+        //         updateDialog.setVisible(true);
+        //     }
+        // });
+        
+        // Delete button
         buttonDelete = new ButtonDelete();
-        buttonDelete.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-            }
-        });
+        // buttonDelete.addMouseListener(new MouseAdapter() {
+        //     public void mouseClicked(MouseEvent e) {
+        //         DeletePurchaseOrderDialog deleteDialog = new DeletePurchaseOrderDialog(parentFrame, "Xóa phiếu nhập", true);
+        //         deleteDialog.setVisible(true);
+        //     }
+        // });
+        
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         searchNavBarLabel = new JPanel();
+        
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
@@ -108,10 +126,11 @@ public class PurchaseOrderPanel extends JPanel {
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
+    
     private JPanel employeeNsupplierPanel(Employee employee, SupplierDTO supplierDTO) {
-        JPanel container = new JPanel(new GridBagLayout()); // Dùng GridBagLayout để tùy chỉnh kích thước tốt hơn
+        JPanel container = new JPanel(new GridBagLayout());
         container.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        container.setBackground(new Color(245, 245, 245)); // Màu nền sáng
+        container.setBackground(new Color(245, 245, 245));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -122,26 +141,26 @@ public class PurchaseOrderPanel extends JPanel {
         employeePanel = new JPanel(new GridLayout(2, 1));
         employeePanel.setBorder(BorderFactory.createTitledBorder("Thông tin Nhân viên"));
         employeePanel.setBackground(Color.WHITE);
-        employeePanel.setPreferredSize(new Dimension(350, 80)); // Đảm bảo đủ không gian
+        employeePanel.setPreferredSize(new Dimension(350, 80));
         employeePanel.add(createStyledLabel("Mã NV: " + employee.getId()));
         employeePanel.add(createStyledLabel("Họ tên: " + employee.getFirstName() + " " + employee.getLastName()));
 
         gbc.gridy = 0;
-        gbc.weighty = 0.40; // Chiếm 40% chiều cao
+        gbc.weighty = 0.40;
         container.add(employeePanel, gbc);
 
         // Panel độc giả (60% chiều cao)
         supplierPanel = new JPanel(new GridLayout(5, 1));
         supplierPanel.setBorder(BorderFactory.createTitledBorder("Thông tin nhà cung cấp"));
         supplierPanel.setBackground(Color.WHITE);
-        supplierPanel.setPreferredSize(new Dimension(350, 120)); // Đủ không gian cho 5 dòng thông tin
+        supplierPanel.setPreferredSize(new Dimension(350, 120));
         supplierPanel.add(createStyledLabel("Mã Nhà Cung Cấp: " + supplierDTO.getId()));
         supplierPanel.add(createStyledLabel("Tên Nhà Cung Cấp: " + supplierDTO.getName()));
         supplierPanel.add(createStyledLabel("Điện thoại: " + supplierDTO.getPhone()));
         supplierPanel.add(createStyledLabel("Địa chỉ: " + supplierDTO.getAddress()));
 
         gbc.gridy = 1;
-        gbc.weighty = 0.60; // Chiếm 60% chiều cao
+        gbc.weighty = 0.60;
         container.add(supplierPanel, gbc);
 
         return container;

@@ -91,4 +91,12 @@ public class SupplierTable extends JTableCustom {
             }
         }
     }
+    public void setSuppliers(List<SupplierDTO> suppliers) {
+        loadData(suppliers);
+    }
+    public void refreshTable() {
+        resetTable();
+    }
+    
+    
 }

@@ -14,16 +14,66 @@ public class PurchaseOrderDTO{
         Hoàn_Thành,
         Đã_Hủy
     }
-    private long id,supplierId, employeeId;
+    private long id;
+    private long employeeId;
+    private String supplierId;
     private Status status;
-    private float totalAmount;
+    private Double totalAmount;
     private Date buyDate;
-    public PurchaseOrderDTO(Long id, long supplierId, long employeeId, Status status,Date buyDate,float totalAmount) {
+    public PurchaseOrderDTO(long id, String supplierId, long employeeId, Status status,Date buyDate,Double totalAmount) {
         this.id = id;
         this.supplierId = supplierId;
         this.employeeId = employeeId;
         this.status = status;
         this.buyDate = buyDate;
         this.totalAmount = totalAmount;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setBuyDate(Date buyDate) {
+        this.buyDate = buyDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public Date getBuyDate() {
+        return buyDate;
     }
 }

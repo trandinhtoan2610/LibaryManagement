@@ -67,6 +67,20 @@ public class SupplierBUS {
             supplierList.addAll(loadedList);
         }
     }
+    public SupplierDTO getSupplierById(String supplierId) {
+        if (supplierId == null) {
+            throw new IllegalArgumentException("ID nhà cung cấp không được null!");
+        }
+    
+        for (SupplierDTO supplier : supplierList) {
+            if (supplier.getId().equals(supplierId)) {
+                return supplier;
+            }
+        }
+    
+        return null; // không tìm thấy
+    }
+    
 
     
     // public List<SupplierDTO> searchSuppliersByName(String name) {
