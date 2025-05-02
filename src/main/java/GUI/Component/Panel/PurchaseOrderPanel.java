@@ -1,6 +1,7 @@
 package GUI.Component.Panel;
 
 import DTO.PurchaseOrderDTO;
+import DTO.PurchaseOrderDetailDTO;
 import DTO.SupplierDTO;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddPurchaseOrderDialog;
@@ -8,8 +9,12 @@ import GUI.Component.Dialog.DeletePurchaseOrderDialog;
 import GUI.Component.Dialog.UpdatePurchaseOrdersDialog;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
 import GUI.Component.Table.PurchaseOrderTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import BUS.EmployeeBUS;
 import BUS.PurchaseOrderBUS;
+import BUS.SupplierBUS;
 import DTO.Employee;
 
 import javax.swing.*;
@@ -50,8 +55,8 @@ public class PurchaseOrderPanel extends JPanel {
 
         // Panel thông tin chi tiết
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 0));
-        JPanel infoPanel = employeeNsupplierPanel(new Employee(1L, "Hoàng", "Quý"),
-                new SupplierDTO("NCC1", "Thanh Hóa", "0987654321", "Hà Nội"));
+        JPanel infoPanel = employeeNsupplierPanel(new Employee(1L, "", ""),
+                new SupplierDTO("", "", "", ""));
         infoPanel.setPreferredSize(new Dimension(400, 150));
 
         purchaseOrderDetailsTable = new PurchaseOrderDetailsTable();
@@ -74,6 +79,30 @@ public class PurchaseOrderPanel extends JPanel {
         // Đọc tất cả các phiếu nhập từ BUS và thiết lập bảng
         List<PurchaseOrderDTO> list = purchaseOrderBUS.getAllPurchaseOrders();
         purchaseOrderTable.setPurchaseOrderDTOS(list);
+        
+        purchaseOrderTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                PurchaseOrderDTO selectedPO = purchaseOrderTable.getSelectedPurchaseOrder();
+                if (selectedPO != null) {
+                    // Lấy thông tin từ BUS
+                    Employee employee = new EmployeeBUS().getEmployeeById(selectedPO.getEmployeeId()); // Đảm bảo employeeId là long
+                    SupplierDTO supplier = new SupplierBUS().getSupplierById(selectedPO.getSupplierId()); // Đảm bảo supplierId là String
+        
+                    // Cập nhật thông tin nhân viên và nhà cung cấp
+                    updateEmployeePanel(employee);
+                    updateSupplierPanel(supplier);
+        
+                    // Lấy chi tiết phiếu nhập và cập nhật bảng chi tiết
+                    List<PurchaseOrderDetailDTO> details = purchaseOrderBUS.getPurchaseOrderDetailsByOrderId(selectedPO.getId());
+                    updatePurchaseOrderDetailsTable(details);  // Cập nhật bảng chi tiết phiếu nhập
+                }
+            }
+        });
+        
+        
+
+
     }
 
     private void customizeDetailTable() {
@@ -117,9 +146,16 @@ public class PurchaseOrderPanel extends JPanel {
         // Thêm button Delete
         buttonDelete = new ButtonDelete();
         buttonDelete.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-                DeletePurchaseOrderDialog deleteDialog = new DeletePurchaseOrderDialog(parentFrame, "Xóa phiếu nhập", true);
-                deleteDialog.setVisible(true);
+                // Lấy phiếu nhập đã chọn
+                PurchaseOrderDTO selectedPO = purchaseOrderTable.getSelectedPurchaseOrder();
+                if (selectedPO != null) {
+                    DeletePurchaseOrderDialog deleteDialog = new DeletePurchaseOrderDialog(parentFrame, true, selectedPO, PurchaseOrderPanel.this);
+                    deleteDialog.setVisible(true);  // Đảm bảo gọi setVisible(true) để hiển thị dialog
+                } else {
+                    JOptionPane.showMessageDialog(parentFrame, "Vui lòng chọn phiếu nhập để xóa!");
+                }
             }
         });
 
@@ -184,4 +220,36 @@ public class PurchaseOrderPanel extends JPanel {
         label.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         return label;
     }
+    private void updateEmployeePanel(Employee employee) {
+        employeePanel.removeAll();
+        employeePanel.add(createStyledLabel("Mã NV: " + employee.getId()));
+        employeePanel.add(createStyledLabel("Họ tên: " + employee.getFirstName() + " " + employee.getLastName()));
+        employeePanel.revalidate();
+        employeePanel.repaint();
+    }
+    
+    private void updateSupplierPanel(SupplierDTO supplier) {
+        supplierPanel.removeAll();
+        supplierPanel.add(createStyledLabel("Mã Nhà Cung Cấp: " + supplier.getId()));
+        supplierPanel.add(createStyledLabel("Tên Nhà Cung Cấp: " + supplier.getName()));
+        supplierPanel.add(createStyledLabel("Điện thoại: " + supplier.getPhone()));
+        supplierPanel.add(createStyledLabel("Địa chỉ: " + supplier.getAddress()));
+        supplierPanel.revalidate();
+        supplierPanel.repaint();
+    }
+    // Cập nhật bảng chi tiết phiếu nhập
+    private void updatePurchaseOrderDetailsTable(List<PurchaseOrderDetailDTO> details) {
+        if (details != null) {
+            purchaseOrderDetailsTable.setPurchaseOrderDetails(details); // Cập nhật bảng chi tiết
+        }
+    }
+
+    public void reloadPurchaseOrderTable() {
+        List<PurchaseOrderDTO> list = purchaseOrderBUS.getAllPurchaseOrders();
+        purchaseOrderTable.setPurchaseOrderDTOS(list);
+    }
+    
+    
+
+    
 }

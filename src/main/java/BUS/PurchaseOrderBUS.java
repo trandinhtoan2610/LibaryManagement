@@ -3,6 +3,8 @@ package BUS;
 import DAL.PurchaseOrderDAL;
 import DAL.Interface.IRepositoryBase;
 import DTO.PurchaseOrderDTO;
+import DTO.PurchaseOrderDetailDTO;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,4 +111,10 @@ public class PurchaseOrderBUS {
             }
         }
     }
+
+    
+    public List<PurchaseOrderDetailDTO> getPurchaseOrderDetailsByOrderId(long orderId) {
+        // Lấy chi tiết phiếu nhập từ cơ sở dữ liệu hoặc giả lập dữ liệu
+        return someDatabaseService.getPurchaseOrderDetailsByOrderId(orderId);
+    }  
 }

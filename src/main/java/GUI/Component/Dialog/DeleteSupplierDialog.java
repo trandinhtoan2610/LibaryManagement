@@ -153,7 +153,6 @@ public class DeleteSupplierDialog extends java.awt.Dialog {
         boolean deleted = supplierBUS.deleteSupplier(supplierToDelete);
         if (deleted) {
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa nhà cung cấp thành công !");
-            this.dispose();
             successDeleteAlert.setVisible(true);
             supplierPanel.reloadSupplierTable();
             this.dispose();

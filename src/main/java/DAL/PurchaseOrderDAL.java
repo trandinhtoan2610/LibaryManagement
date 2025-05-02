@@ -75,4 +75,5 @@ public class PurchaseOrderDAL {
         String sql = "SELECT MAX(id) from PurchaseOrders";
         return genericDAL.getMaxID(sql);
     }
+    
 }

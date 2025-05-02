@@ -1,6 +1,5 @@
 package GUI.Component.Table;
 
-import DTO.PenaltyDTO;
 import DTO.PurchaseOrderDTO;
 
 import javax.swing.table.DefaultTableModel;
@@ -8,24 +7,27 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PurchaseOrderTable extends JTableCustom{
-    private static final String HEADER[] = {"Mã Phiếu Nhập", "Mã Nhà Cung Cấp", "Mã Nhân Viên", "Trạng Thái", "Ngày Mua", "Thành Tiền"};
+public class PurchaseOrderTable extends JTableCustom {
+    private static final String[] HEADER = {
+        "Mã Phiếu Nhập", "Mã Nhà Cung Cấp", "Mã Nhân Viên", "Trạng Thái", "Ngày Mua", "Thành Tiền"
+    };
+
     private DefaultTableModel tableModel;
-    private static List<PurchaseOrderDTO> purchaseOrderDTOS;
+    private List<PurchaseOrderDTO> purchaseOrderDTOS;
 
     public PurchaseOrderTable() {
         super(new DefaultTableModel(HEADER, 0));
         this.tableModel = (DefaultTableModel) getModel();
         this.purchaseOrderDTOS = new ArrayList<>();
+
         setHeaderStyle(new Font("Segoe UI", Font.BOLD, 14), new Color(70, 130, 180));
         setCustomGrid(new Color(220, 220, 220), 30);
-        //rowcolum
-
         setAutoCreateRowSorter(true);
     }
-    public void setPurchaseOrderDTOS(List<PurchaseOrderDTO> purchaseOrder) {
-        if (purchaseOrder != null) {
-            this.purchaseOrderDTOS = new ArrayList<>(purchaseOrder);
+
+    public void setPurchaseOrderDTOS(List<PurchaseOrderDTO> purchaseOrderList) {
+        if (purchaseOrderList != null) {
+            this.purchaseOrderDTOS = new ArrayList<>(purchaseOrderList);
         } else {
             this.purchaseOrderDTOS = new ArrayList<>();
         }
@@ -44,7 +46,7 @@ public class PurchaseOrderTable extends JTableCustom{
         if (selectedPurchaseOrder != null) {
             int index = purchaseOrderDTOS.indexOf(selectedPurchaseOrder);
             if (index != -1) {
-                purchaseOrderDTOS.set(index, selectedPurchaseOrder);
+                purchaseOrderDTOS.set(index, purchaseOrder);
                 refreshTable();
                 return true;
             }
@@ -55,7 +57,9 @@ public class PurchaseOrderTable extends JTableCustom{
     public boolean removePurchaseOrder(PurchaseOrderDTO purchaseOrder) {
         PurchaseOrderDTO selectedPurchaseOrder = getSelectedPurchaseOrder();
         if (selectedPurchaseOrder != null) {
-            return purchaseOrderDTOS.remove(selectedPurchaseOrder);
+            boolean removed = purchaseOrderDTOS.remove(selectedPurchaseOrder);
+            refreshTable();
+            return removed;
         }
         return false;
     }
@@ -68,16 +72,17 @@ public class PurchaseOrderTable extends JTableCustom{
         }
         return null;
     }
-    public void refreshTable(){
+
+    public void refreshTable() {
         tableModel.setRowCount(0);
-        for(PurchaseOrderDTO purchaseOrderDTO : purchaseOrderDTOS){
+        for (PurchaseOrderDTO dto : purchaseOrderDTOS) {
             Object[] rowData = {
-                    purchaseOrderDTO.getId(),
-                    purchaseOrderDTO.getSupplierId(),
-                    purchaseOrderDTO.getEmployeeId(),
-                    purchaseOrderDTO.getStatus(),
-                    purchaseOrderDTO.getBuyDate(),
-                    purchaseOrderDTO.getTotalAmount()
+                dto.getId(),
+                dto.getSupplierId(),
+                dto.getEmployeeId(),
+                dto.getStatus(),
+                dto.getBuyDate(),
+                dto.getTotalAmount()
             };
             tableModel.addRow(rowData);
         }
