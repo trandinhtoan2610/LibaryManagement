@@ -1,25 +1,27 @@
 package GUI.Component.Panel;
 
-import DTO.Employee;
-import DTO.Enum.Gender;
-import DTO.ReaderDTO;
+import DTO.PurchaseOrderDTO;
 import DTO.SupplierDTO;
 import GUI.Component.Button.*;
-import GUI.Component.Panel.Components.SearchNavBarLabel;
-import GUI.Component.Table.PurchaseOrderDetailsTable;
-import GUI.Component.Table.PurchaseOrderTable;
 import GUI.Component.Dialog.AddPurchaseOrderDialog;
 import GUI.Component.Dialog.DeletePurchaseOrderDialog;
 import GUI.Component.Dialog.UpdatePurchaseOrdersDialog;
+import GUI.Component.Table.PurchaseOrderDetailsTable;
+import GUI.Component.Table.PurchaseOrderTable;
+
+import BUS.PurchaseOrderBUS;
+import DTO.Employee;
 
 import javax.swing.*;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import javax.swing.table.TableColumnModel;
 
 public class PurchaseOrderPanel extends JPanel {
     private final PurchaseOrderTable purchaseOrderTable = new PurchaseOrderTable();
+    private final PurchaseOrderBUS purchaseOrderBUS = new PurchaseOrderBUS();
 
     private ButtonAdd buttonAdd;
     private ButtonUpdate buttonUpdate;
@@ -39,15 +41,19 @@ public class PurchaseOrderPanel extends JPanel {
         this.parentFrame = parentFrame;
         setLayout(new BorderLayout(0, 5));
 
+        // Nút điều khiển và thanh công cụ
         this.add(buttonPanel(parentFrame), BorderLayout.NORTH);
 
+        // Table phiếu nhập
         JScrollPane scrollPane = new JScrollPane(purchaseOrderTable);
         add(scrollPane, BorderLayout.CENTER);
 
+        // Panel thông tin chi tiết
         JPanel bottomPanel = new JPanel(new BorderLayout(10, 0));
         JPanel infoPanel = employeeNsupplierPanel(new Employee(1L, "Hoàng", "Quý"),
-                new SupplierDTO("NCC1", "Thanh Hóa","0987654321", "Hà Nội"));
+                new SupplierDTO("NCC1", "Thanh Hóa", "0987654321", "Hà Nội"));
         infoPanel.setPreferredSize(new Dimension(400, 150));
+
         purchaseOrderDetailsTable = new PurchaseOrderDetailsTable();
         customizeDetailTable();
         bottomPanel.setBackground(new Color(240, 240, 240));
@@ -64,6 +70,10 @@ public class PurchaseOrderPanel extends JPanel {
         paddedPanel.add(bottomPanel, BorderLayout.CENTER);
         paddedPanel.setBackground(new Color(240, 240, 240));
         this.add(paddedPanel, BorderLayout.SOUTH);
+
+        // Đọc tất cả các phiếu nhập từ BUS và thiết lập bảng
+        List<PurchaseOrderDTO> list = purchaseOrderBUS.getAllPurchaseOrders();
+        purchaseOrderTable.setPurchaseOrderDTOS(list);
     }
 
     private void customizeDetailTable() {
@@ -71,7 +81,7 @@ public class PurchaseOrderPanel extends JPanel {
         TableColumnModel columnModel = purchaseOrderDetailsTable.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100);  // Cột 1
         columnModel.getColumn(1).setPreferredWidth(100); // Cột 2
-        columnModel.getColumn(2).setPreferredWidth(100);// Cột 3
+        columnModel.getColumn(2).setPreferredWidth(100); // Cột 3
         // Đặt font và chiều cao
         purchaseOrderDetailsTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         purchaseOrderDetailsTable.setRowHeight(25);
@@ -84,8 +94,8 @@ public class PurchaseOrderPanel extends JPanel {
     public JPanel buttonPanel(JFrame parentFrame) {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         buttonPanel.setBackground(Color.WHITE);
-        
-        // Add button
+
+        // Thêm button Add
         buttonAdd = new ButtonAdd();
         buttonAdd.addMouseListener(new MouseAdapter() {
             @Override
@@ -94,29 +104,31 @@ public class PurchaseOrderPanel extends JPanel {
                 addDialog.setVisible(true);
             }
         });
-        
-        // Update button
+
+        // Thêm button Update
         buttonUpdate = new ButtonUpdate();
-        // buttonUpdate.addMouseListener(new MouseAdapter() {
-        //     public void mouseClicked(MouseEvent e) {
-        //         UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
-        //         updateDialog.setVisible(true);
-        //     }
-        // });
-        
-        // Delete button
+        buttonUpdate.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
+                updateDialog.setVisible(true);
+            }
+        });
+
+        // Thêm button Delete
         buttonDelete = new ButtonDelete();
-        // buttonDelete.addMouseListener(new MouseAdapter() {
-        //     public void mouseClicked(MouseEvent e) {
-        //         DeletePurchaseOrderDialog deleteDialog = new DeletePurchaseOrderDialog(parentFrame, "Xóa phiếu nhập", true);
-        //         deleteDialog.setVisible(true);
-        //     }
-        // });
-        
+        buttonDelete.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                DeletePurchaseOrderDialog deleteDialog = new DeletePurchaseOrderDialog(parentFrame, "Xóa phiếu nhập", true);
+                deleteDialog.setVisible(true);
+            }
+        });
+
+        // Các button Export Excel, Import Excel
         buttonExportExcel = new ButtonExportExcel();
         buttonImportExcel = new ButtonImportExcel();
         searchNavBarLabel = new JPanel();
-        
+
+        // Thêm vào panel
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonUpdate);
         buttonPanel.add(buttonDelete);
@@ -126,7 +138,7 @@ public class PurchaseOrderPanel extends JPanel {
         buttonPanel.add(searchNavBarLabel);
         return buttonPanel;
     }
-    
+
     private JPanel employeeNsupplierPanel(Employee employee, SupplierDTO supplierDTO) {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -137,7 +149,7 @@ public class PurchaseOrderPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Panel nhân viên (40% chiều cao)
+        // Panel nhân viên
         employeePanel = new JPanel(new GridLayout(2, 1));
         employeePanel.setBorder(BorderFactory.createTitledBorder("Thông tin Nhân viên"));
         employeePanel.setBackground(Color.WHITE);
@@ -149,7 +161,7 @@ public class PurchaseOrderPanel extends JPanel {
         gbc.weighty = 0.40;
         container.add(employeePanel, gbc);
 
-        // Panel độc giả (60% chiều cao)
+        // Panel nhà cung cấp
         supplierPanel = new JPanel(new GridLayout(5, 1));
         supplierPanel.setBorder(BorderFactory.createTitledBorder("Thông tin nhà cung cấp"));
         supplierPanel.setBackground(Color.WHITE);

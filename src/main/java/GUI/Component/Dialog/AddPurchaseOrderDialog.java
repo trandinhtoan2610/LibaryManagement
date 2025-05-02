@@ -312,7 +312,7 @@ public class AddPurchaseOrderDialog extends JDialog {
         }
         
         PurchaseOrderDetailDTO selectedDetail = pendingOrderDetails.get(selectedRow);
-        UpdatePurchaseOrderDetailDialog updateDialog = new UpdatePurchaseOrderDetailDialog(this, selectedDetail);
+        UpdatePurchaseOrderDetail updateDialog = new UpdatePurchaseOrderDetail(this, selectedDetail);
         updateDialog.setVisible(true);
         
         if (updateDialog.getUpdatedDetail() != null) {
@@ -367,7 +367,7 @@ public class AddPurchaseOrderDialog extends JDialog {
         if (!validateInput()) return;
     
         try {
-            // Lấy dữ liệu từ giao diện
+            
             String supplierId = supplierField.getText().trim();
             long employeeId = Long.parseLong(employeeField.getText().trim());
             Date buyDate = new java.sql.Timestamp(buyDateChooser.getDate().getTime());
