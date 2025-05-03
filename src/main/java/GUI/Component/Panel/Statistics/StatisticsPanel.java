@@ -25,8 +25,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private JPanel overviewPanel;
     private BookStatisticsPanel bookStatisticsPanel;
     private JPanel purchasePanel;
-    private JPanel borrowPanel;
-    private JPanel penaltyPanel;
+    private BorrowStatistics borrowPanel;
+    private PenaltyStatistics penaltyPanel;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -46,8 +46,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
         overviewPanel = new JPanel();
         bookStatisticsPanel = new BookStatisticsPanel();
         purchasePanel = new JPanel();
-        borrowPanel = new JPanel();
-        penaltyPanel = new JPanel();
+        borrowPanel = new BorrowStatistics();
+        penaltyPanel = new PenaltyStatistics();
 
         // Thiết lập màu nền tạm thời cho các panel
         overviewPanel.setBackground(Color.WHITE);

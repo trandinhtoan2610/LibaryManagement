@@ -5,6 +5,8 @@ import BUS.PenaltyBUS;
 import DTO.*;
 import DTO.Enum.PayStatus;
 import GUI.Component.Panel.PenaltyPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PenaltyChangeEvent;
 import GUI.Controller.Controller;
 
 import javax.swing.*;
@@ -431,6 +433,8 @@ public class UpdatePenaltyDialog extends JDialog {
             new AlertDialog(this, "Cập nhật thành công !").setVisible(true);
             this.dispose();
             PenaltyPanel.reloadTable();
+            EventBusManager.getEventBus().post(new PenaltyChangeEvent());
+
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Có lỗi khi cập nhật phiếu phạt");

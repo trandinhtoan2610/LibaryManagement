@@ -8,6 +8,8 @@ import BUS.PenaltyBUS;
 import BUS.PenaltyDetailsBUS;
 import DTO.PenaltyDTO;
 import GUI.Component.Panel.PenaltyPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PenaltyChangeEvent;
 
 import java.awt.*;
 
@@ -136,7 +138,7 @@ public class DeletePenaltyDialog extends javax.swing.JDialog {
             PenaltyPanel.reloadTable();
             this.dispose();
             new AlertDialog(this, "Xóa phiếu phạt thành công !").setVisible(true);
-
+            EventBusManager.getEventBus().post(new PenaltyChangeEvent());
 
         } catch (Exception e) {
             e.printStackTrace();
