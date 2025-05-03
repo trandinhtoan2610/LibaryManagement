@@ -13,6 +13,7 @@ import GUI.Component.Panel.BorrowPanel;
 import GUI.Component.Panel.PenaltyPanel;
 import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
 import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PenaltyChangeEvent;
 import GUI.Component.Table.BorrowDetailTable;
 import GUI.Component.TextField.CustomTextField;
 import com.toedter.calendar.JDateChooser;
@@ -708,6 +709,7 @@ public class UpdateBorrowDialog extends JDialog {
                             penaltyBUS.updatePenaltySheet(p);
 
                             PenaltyPanel.reloadTable();
+                            EventBusManager.getEventBus().post(new PenaltyChangeEvent());
                         }catch (Exception e) {
                             throw new RuntimeException("Tạo phiếu phạt thất bại");
                         }
