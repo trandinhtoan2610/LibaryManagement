@@ -106,4 +106,9 @@ public class PurchaseOrderDetailDAL{
         String sql = "SELECT MAX(purchaseOrderId) FROM PurchaseOrderDetails";
         return genericDAL.getMaxID(sql);
     }
+
+    public List<PurchaseOrderDetailDTO> findByOrderId(long orderId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
 }

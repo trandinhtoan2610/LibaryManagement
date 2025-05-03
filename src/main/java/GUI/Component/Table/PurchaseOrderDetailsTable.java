@@ -80,6 +80,5 @@ public class PurchaseOrderDetailsTable extends JTableCustom{
             });
         }
     }
-    
 
 }

@@ -28,7 +28,13 @@ public class AddPurchaseOrderDialog extends JDialog {
     private BookBUS bookBUS = new BookBUS();
 
     private JLabel supplierLabel;
+    private JLabel supplierNameLabel;
+    private JLabel supplierPhoneLabel;
+    private JLabel supplierAddressLabel;
+
     private JLabel employeeLabel;
+    private JLabel employeeNameLabel;
+
     private CustomTextField supplierField;
     private CustomTextField employeeField;
     private ButtonChosen supplierChosen;
@@ -78,9 +84,9 @@ public class AddPurchaseOrderDialog extends JDialog {
         panel.setBackground(new Color(0, 120, 215));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-        ButtonBack backButton = new ButtonBack();
-        backButton.addActionListener(e -> dispose());
-        panel.add(backButton, BorderLayout.WEST);
+        // ButtonBack backButton = new ButtonBack();
+        // backButton.addActionListener(e -> dispose());
+        // panel.add(backButton, BorderLayout.WEST);
 
         JLabel title = new JLabel("Thêm Phiếu Nhập");
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -101,7 +107,7 @@ public class AddPurchaseOrderDialog extends JDialog {
 
         // Panel for supplier information
         JPanel supplierPanel = new JPanel(new BorderLayout(5, 5));
-        supplierLabel = new JLabel("Nhà cung cấp (Mã NCC):");
+        supplierLabel = new JLabel("Mã nhà cung cấp:");
         supplierField = new CustomTextField();
         supplierField.setPreferredSize(new Dimension(100, 30));
         supplierChosen = new ButtonChosen();
@@ -119,9 +125,9 @@ public class AddPurchaseOrderDialog extends JDialog {
         supplierInputPanel.add(supplierChosen);
 
         JPanel supplierDetailsPanel = new JPanel(new GridLayout(3, 1, 5, 5));
-        JLabel supplierNameLabel = new JLabel("          Tên NCC: ");
-        JLabel supplierPhoneLabel = new JLabel("          Điện thoại: ");
-        JLabel supplierAddressLabel = new JLabel("          Địa chỉ: ");
+        supplierNameLabel = new JLabel("          Tên Nhà cung cấp: ");
+        supplierPhoneLabel = new JLabel("          Điện thoại: ");
+        supplierAddressLabel = new JLabel("          Địa chỉ: ");
         supplierDetailsPanel.add(supplierNameLabel);
         supplierDetailsPanel.add(supplierPhoneLabel);
         supplierDetailsPanel.add(supplierAddressLabel);
@@ -149,7 +155,7 @@ public class AddPurchaseOrderDialog extends JDialog {
         employeeInputPanel.add(employeeChosen);
 
         JPanel employeeDetailsPanel = new JPanel(new GridLayout(1, 1, 5, 5));
-        JLabel employeeNameLabel = new JLabel("          Tên NV: ");
+        employeeNameLabel = new JLabel("          Tên NV: ");
         employeeDetailsPanel.add(employeeNameLabel);
 
         employeePanel.add(employeeInputPanel, BorderLayout.NORTH);
@@ -246,11 +252,14 @@ public class AddPurchaseOrderDialog extends JDialog {
     private void showSupplierInfo() {
         String supplierId = supplierField.getText();
         if (supplierId.isEmpty()) {
-            // Clear supplier info
+            return;
         } else {
             try {
                 currentSupplier = supplierBUS.getSupplierById(supplierId);
-                // Update labels with supplier info
+                // Cập nhật thông tin nhà cung cấp lên giao diện
+                supplierNameLabel.setText("    Tên nhà cung cấp: " + currentSupplier.getName());
+                supplierPhoneLabel.setText("    Điện thoại: " + currentSupplier.getPhone());
+                supplierAddressLabel.setText("    Địa chỉ: " + currentSupplier.getAddress());
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -260,11 +269,12 @@ public class AddPurchaseOrderDialog extends JDialog {
     private void showEmployeeInfo() {
         String employeeId = employeeField.getText();
         if (employeeId.isEmpty()) {
-            // Clear employee info
+            return;
         } else {
             try {
                 currentEmployee = employeeBUS.getEmployeeById(Long.parseLong(employeeId));
                 // Update labels with employee info
+                employeeNameLabel.setText("    Tên NV: " + currentEmployee.getFirstName() + " " + currentEmployee.getLastName());
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -277,6 +287,7 @@ public class AddPurchaseOrderDialog extends JDialog {
         if (chooseSupplierDialog.getSelectedSupplier() != null) {
             currentSupplier = chooseSupplierDialog.getSelectedSupplier();
             supplierField.setText(currentSupplier.getId());
+            showSupplierInfo();
             // Update supplier info labels
         }
     }
@@ -287,12 +298,13 @@ public class AddPurchaseOrderDialog extends JDialog {
         if (chooseEmployeeDialog.getSelectedEmployee() != null) {
             currentEmployee = chooseEmployeeDialog.getSelectedEmployee();
             employeeField.setText(currentEmployee.getId().toString());
+            showEmployeeInfo();
             // Update employee info labels
         }
     }
 
     private void addOrderDetail() {
-        AddPurchaseOrderDetailsDialog addDetailDialog = new AddPurchaseOrderDetailsDialog(this, this.purchaseOrderId);
+        AddPurchaseOrderDetailsDialog addDetailDialog = new AddPurchaseOrderDetailsDialog(this,0L);
         addDetailDialog.setVisible(true);
         if (addDetailDialog.getCurrentOrderDetail() != null) {
             PurchaseOrderDetailDTO newDetail = addDetailDialog.getCurrentOrderDetail();

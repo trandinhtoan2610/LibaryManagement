@@ -135,7 +135,7 @@ public class DeletePurchaseOrderDialog extends java.awt.Dialog {
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa phiếu nhập hàng thành công!");
             successDeleteAlert.setVisible(true);
             purchaseOrderPanel.reloadPurchaseOrderTable();
-            this.dispose();
+            this.dispose();this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa phiếu nhập hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }

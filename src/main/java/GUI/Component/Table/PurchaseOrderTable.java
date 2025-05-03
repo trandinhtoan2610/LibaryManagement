@@ -32,6 +32,7 @@ public class PurchaseOrderTable extends JTableCustom {
             this.purchaseOrderDTOS = new ArrayList<>();
         }
         refreshTable();
+        
     }
 
     public void addPurchaseOrder(PurchaseOrderDTO purchaseOrder) {
