@@ -1,8 +1,8 @@
 package GUI.Component.Panel.Statistics.Components;
 
-import BUS.ReaderBUS;
-import DTO.ReaderDTO;
+import BUS.SupplierBUS;
 import DTO.Statistics.StatisticsPreciousData;
+import DTO.SupplierDTO;
 import GUI.Component.Table.JTableCustom;
 import GUI.Controller.Controller;
 
@@ -10,32 +10,32 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PenaltyReaderTable extends JTableCustom  {
-    private final static String[] tblHeader = {"Độc giả", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng"};
+public class PurchaseSupplierTable extends JTableCustom {
+    private final static String[] tblHeader = {"Nhà cung cấp", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng"};
     private DefaultTableModel tableModel;
-    private ReaderBUS readerBUS;
-    private List<StatisticsPreciousData<String>> readerList;
+    private SupplierBUS supplierBUS;
+    private List<StatisticsPreciousData<String>> supplierList;
 
-    public PenaltyReaderTable(){
+    public PurchaseSupplierTable(){
         super(new DefaultTableModel(tblHeader, 0));
         this.tableModel = (DefaultTableModel) getModel();
-        readerList = new ArrayList<>();
-        readerBUS = new ReaderBUS();
+        supplierList = new ArrayList<>();
+        supplierBUS = new SupplierBUS();
     }
 
     public void setList(List<StatisticsPreciousData<String>> list){
-        this.readerList = list;
+        this.supplierList = list;
     }
 
-    public void renderPenaltySheetTable(){
-        if(readerList == null) return;
+    public void renderPurchaseSheetTable(){
+        if(supplierList == null) return;
 
         tableModel.setRowCount(0);
         Long sumCountQ1 = 0L; Long sumCountQ2 = 0L; Long sumCountQ3 = 0L; Long sumCountQ4 = 0L; Long sumCountAll = 0L;
-        for(StatisticsPreciousData<String> data : readerList){
-            ReaderDTO reader = readerBUS.findReaderByID(data.getId());
+        for(StatisticsPreciousData<String> data : supplierList){
+            SupplierDTO supplierDTO = supplierBUS.getSupplierById(data.getId());
             Object[] rowData = {
-                    Controller.formatFullName(reader.getLastName()+ " " + reader.getFirstName()),
+                    supplierDTO.getName(),
                     data.getCountQ1(),
                     data.getCountQ2(),
                     data.getCountQ3(),
@@ -56,15 +56,15 @@ public class PenaltyReaderTable extends JTableCustom  {
 
     }
 
-    public void renderPenaltyFeeTable(){
-        if(readerList == null) return;
+    public void renderPurchaseFeeTable(){
+        if(supplierList == null) return;
 
         tableModel.setRowCount(0);
         Long sumTotalQ1 = 0L; Long sumTotalQ2 = 0L; Long sumTotalQ3 = 0L; Long sumTotalQ4 = 0L; Long sumTotalAll = 0L;
-        for(StatisticsPreciousData<String> data : readerList){
-            ReaderDTO reader = readerBUS.findReaderByID(data.getId());
+        for(StatisticsPreciousData<String> data : supplierList){
+            SupplierDTO supplierDTO = supplierBUS.getSupplierById(data.getId());
             Object[] rowData = {
-                    Controller.formatFullName(reader.getLastName()+ " " + reader.getFirstName()),
+                    supplierDTO.getName(),
                     Controller.formatVND(data.getTotalQ1()),
                     Controller.formatVND(data.getTotalQ2()),
                     Controller.formatVND(data.getTotalQ3()),

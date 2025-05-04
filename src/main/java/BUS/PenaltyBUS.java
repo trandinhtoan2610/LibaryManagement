@@ -5,7 +5,7 @@ import DTO.*;
 import DTO.Statistics.LostBookPreciousData;
 import DTO.Statistics.PenaltyDateData;
 import DTO.Statistics.PenaltyTimeData;
-import DTO.Statistics.PenaltyPreciousData;
+import DTO.Statistics.StatisticsPreciousData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,7 +175,7 @@ public class PenaltyBUS {
         return null;
     }
 
-    public List<PenaltyPreciousData<Long>> getPreciousPenaltyEmployee (String year){
+    public List<StatisticsPreciousData<Long>> getPreciousPenaltyEmployee (String year){
         try{
             return penaltyDAL.getPreciousEachEmployee(year);
         }catch (Exception e){
@@ -184,7 +184,7 @@ public class PenaltyBUS {
         return null;
     }
 
-    public List<PenaltyPreciousData<String>> getPreciousPenaltyReader(String year){
+    public List<StatisticsPreciousData<String>> getPreciousPenaltyReader(String year){
         try{
             return penaltyDAL.getPreciousEachReader(year);
         }catch (Exception e){
@@ -223,7 +223,7 @@ public class PenaltyBUS {
 
     public List<PenaltyDateData> getDatesData(String startYear, String endYear){
         try{
-            return penaltyDAL.getDatesDate(startYear, endYear);
+            return penaltyDAL.getDateData(startYear, endYear);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -4,6 +4,8 @@ import BUS.PublisherBUS;
 import DTO.PublisherDTO;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Panel.PublisherPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
 
@@ -215,6 +217,7 @@ public class UpdatePublisherDialog extends JDialog {
                 AlertDialog successDialog = new AlertDialog(this, "Cập nhật nhà xuất bản thành công!");
                 successDialog.setVisible(true);
                 dispose();
+                EventBusManager.getEventBus().post(new PurchaseChangeEvent());
             } else {
                 // Restore old values if update failed
                 nameField.setText(oldName);

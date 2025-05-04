@@ -2,7 +2,7 @@ package GUI.Component.Panel.Statistics.Components;
 
 import BUS.EmployeeBUS;
 import DTO.Employee;
-import DTO.Statistics.PenaltyPreciousData;
+import DTO.Statistics.StatisticsPreciousData;
 import GUI.Component.Table.JTableCustom;
 import GUI.Controller.Controller;
 
@@ -14,7 +14,7 @@ public class PenaltyEmployeeTable extends JTableCustom {
     private final static String[] tblHeader = {"Nhân viên", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng"};
     private DefaultTableModel tableModel;
     private EmployeeBUS employeeBUS;
-    private List<PenaltyPreciousData<Long>> employeeList;
+    private List<StatisticsPreciousData<Long>> employeeList;
 
     public PenaltyEmployeeTable(){
         super(new DefaultTableModel(tblHeader, 0));
@@ -23,7 +23,7 @@ public class PenaltyEmployeeTable extends JTableCustom {
         employeeBUS = new EmployeeBUS();
     }
 
-    public void setList(List<PenaltyPreciousData<Long>> list){
+    public void setList(List<StatisticsPreciousData<Long>> list){
         this.employeeList = list;
     }
 
@@ -32,7 +32,7 @@ public class PenaltyEmployeeTable extends JTableCustom {
 
         tableModel.setRowCount(0);
         Long totalQ1 = 0L; Long totalQ2 = 0L; Long totalQ3 = 0L; Long totalQ4 = 0L; Long totalAll = 0L;
-        for(PenaltyPreciousData<Long> data : employeeList){
+        for(StatisticsPreciousData<Long> data : employeeList){
             Employee employee = employeeBUS.getEmployeeById(data.getId());
             Object[] rowData = {
                     employee.getFirstName() + ' ' + employee.getLastName(),
@@ -60,7 +60,7 @@ public class PenaltyEmployeeTable extends JTableCustom {
 
         tableModel.setRowCount(0);
         Long sumTotalQ1 = 0L; Long sumTotalQ2 = 0L; Long sumTotalQ3 = 0L; Long sumTotalQ4 = 0L; Long sumTotalAll = 0L;
-        for(PenaltyPreciousData<Long> data : employeeList){
+        for(StatisticsPreciousData<Long> data : employeeList){
             Employee employee = employeeBUS.getEmployeeById(data.getId());
             Object[] rowData = {
                     employee.getFirstName() + ' ' + employee.getLastName(),

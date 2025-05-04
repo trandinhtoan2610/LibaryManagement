@@ -1,10 +1,8 @@
 package GUI.Component.Panel.Statistics;
 
 import BUS.PenaltyBUS;
-import DTO.Statistics.LostBookPreciousData;
-import DTO.Statistics.PenaltyDateData;
-import DTO.Statistics.PenaltyTimeData;
-import DTO.Statistics.StatisticsPreciousData;
+import BUS.PurchaseStatisticsBUS;
+import DTO.Statistics.*;
 import GUI.Component.Dialog.AlertDialog;
 import GUI.Component.Panel.Statistics.Components.*;
 import GUI.Controller.Controller;
@@ -19,7 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PenaltyStatistics extends javax.swing.JPanel {
+public class PurchaseStatistics extends javax.swing.JPanel {
     private final static Color pageDefaultColor = new Color(204,204,204);
     private final static Color pageHoverColor = new Color(104,204,204);
     private final static Color tabHoverColor = new Color(255,255,204);
@@ -30,17 +28,19 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     Window parent = SwingUtilities.getWindowAncestor(this);
     private boolean typeStatus;
     private List<String> years;
-    private static String countPenaltySheet;
-    private static String countEmployee;
-    private static Long penaltyTotalFee;
-    private static String countLostBook;
+    private static String countPurchaseSheet;
+    private static String countSupplier;
+    private static Long purchaseTotalFee;
+    private static String countPurchaseBook;
+    
+    private static PurchaseStatisticsBUS purchaseStatsBUS;
     private static PenaltyBUS penaltyBUS;
     private Map<String, List<StatisticsPreciousData<Long>> > employeeStats;
-    private Map<String, List<StatisticsPreciousData<String>> > readerStats;
-    private Map<String, List<LostBookPreciousData>> lostBookStats;
-    private Map<String, List<PenaltyTimeData>> monthStats;
-    private List<PenaltyTimeData> yearsDataList;
-    private List<PenaltyDateData> dateDataList;
+    private Map<String, List<StatisticsPreciousData<String>> > supplierStats;
+    private Map<String, List<StatisticsPreciousData<Long>> > bookStats;
+    private Map<String, List<PurchaseTimeData>> monthStats;
+    private List<PurchaseTimeData> yearsDataList;
+    private List<PurchaseDateData> dateDataList;
 
     private FeeMonthBarChart monthBarChart;
     private FeeYearBarChart yearBarChart;
@@ -52,7 +52,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
 
 
-    public PenaltyStatistics() {
+    public PurchaseStatistics() {
         initComponents();
         initialize();
     }
@@ -71,12 +71,12 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         selectedPage = new JPanel();
         selectedTab = new JPanel();
 
-        penaltyBUS = new PenaltyBUS();
+        purchaseStatsBUS = new PurchaseStatisticsBUS();
 
         //Map - HashMap :
         employeeStats = new HashMap<>();
-        readerStats = new HashMap<>();
-        lostBookStats = new HashMap<>();
+        supplierStats = new HashMap<>();
+        bookStats = new HashMap<>();
         monthStats = new HashMap<>();
 
         txtStartDate.setDateFormatString("dd/MM/yyyy");
@@ -96,7 +96,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     }
 
     @Subscribe
-    public void onPenaltyChanged(PenaltyChangeEvent event) {
+    public void onPurchaseChanged(PurchaseChangeEvent event) {
         reloadYears();
         renderBox();
         loadPreciousData();
@@ -105,25 +105,24 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         initYearPanel();
     }
 
-
     public void renderPreciousPanel(){
         String year = cboxChooseYear.getSelectedItem().toString();
-        List<StatisticsPreciousData<Long>> employeeList = employeeStats.get(year);
-        List<StatisticsPreciousData<String>> readerList = readerStats.get(year);
-        List<LostBookPreciousData> lostBookList = lostBookStats.get(year);
-        List<PenaltyTimeData> monthDataList = monthStats.get(year);
+        List<StatisticsPreciousData<Long>> employeeList = purchaseStatsBUS.getEmployeePreciousData(year);
+        List<StatisticsPreciousData<String>> supplierList = purchaseStatsBUS.getSupplierPreciousData(year);
+        List<StatisticsPreciousData<Long>> bookList = purchaseStatsBUS.getBookPreciousData(year);
+        List<PurchaseTimeData> monthList = purchaseStatsBUS.getPurchaseMonthData(year);
 
         tblEmployee.setList(employeeList);
-        tblReader.setList(readerList);
-        tblLostBook.setList(lostBookList);
-        tblMonths.setList(monthDataList);
+        tblSupplier.setList(supplierList);
+        tblBook.setList(bookList);
+        tblMonth.setList(monthList);
         resetPreciousPanel();
         showMonthBarChart(year);
     }
 
     //Lấy các năm bỏ vào combobox :
     public void reloadYears(){
-        years = penaltyBUS.getActiveYears();
+        years = purchaseStatsBUS.getActiveYears();
         cboxChooseYear.removeAllItems();
         for(String year : years ){
             cboxChooseYear.addItem(year);
@@ -133,30 +132,30 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
     //Hàm render các ô thông tin chung :
     public void renderBox(){
-        countPenaltySheet = penaltyBUS.countPenaltySheet();
-        penaltyTotalFee = penaltyBUS.sumPenaltyFee();
-        countEmployee = penaltyBUS.countEmployeePenalty();
-        countLostBook = penaltyBUS.countLostBook();
+        countPurchaseSheet = purchaseStatsBUS.countSheet();
+        purchaseTotalFee = purchaseStatsBUS.sumPurchaseFee();
+        countSupplier = purchaseStatsBUS.countSupplier();
+        countPurchaseBook = purchaseStatsBUS.countBook();
 
-        lblPenaltyBoxContent.setText(countPenaltySheet);
-        lblEmployeeBoxContent.setText(countEmployee);
-        lblLostBookBoxContent.setText(countLostBook);
-        String totalFee = Controller.formatVND(penaltyTotalFee);
-        lblPunishFeeBoxContent.setText(totalFee);
+        lblPurchaseBoxContent.setText(countPurchaseSheet);
+        lblSupplierBoxContent.setText(countSupplier);
+        lblBookBoxContent.setText(countPurchaseBook);
+        String totalFee = Controller.formatVND(purchaseTotalFee);
+        lblPurchaseFeeBoxContent.setText(totalFee);
     }
 
     //Lấy thống kê các quý theo từng năm :
     public void loadPreciousData(){
         for(String year : years){
             String key = year;
-            List<StatisticsPreciousData<Long>> employeeList = penaltyBUS.getPreciousPenaltyEmployee(year);
-            List<StatisticsPreciousData<String>> readerList = penaltyBUS.getPreciousPenaltyReader(year);
-            List<LostBookPreciousData> lostBookList = penaltyBUS.getPreciousLostBook(year);
-            List<PenaltyTimeData> monthDataList = penaltyBUS.getMonthsData(year);
+            List<StatisticsPreciousData<Long>> employeeList = purchaseStatsBUS.getEmployeePreciousData(year);
+            List<StatisticsPreciousData<String>> supplierList = purchaseStatsBUS.getSupplierPreciousData(year);
+            List<StatisticsPreciousData<Long>> bookList = purchaseStatsBUS.getBookPreciousData(year);
+            List<PurchaseTimeData> monthDataList = purchaseStatsBUS.getPurchaseMonthData(year);
 
             employeeStats.put(key, employeeList);
-            readerStats.put(key, readerList);
-            lostBookStats.put(key, lostBookList);
+            supplierStats.put(key, supplierList);
+            bookStats.put(key, bookList);
             monthStats.put(key,monthDataList);
         }
     }
@@ -168,7 +167,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     }
 
     public void renderYearPanel(String startYear, String endYear){
-        yearsDataList = penaltyBUS.getYearsData(startYear, endYear);
+        yearsDataList = purchaseStatsBUS.getPurchaseYearData(startYear, endYear);
         lblStartYear.setText(startYear);
         lblEndYear.setText(endYear);
         tblYear.setList(yearsDataList);
@@ -189,7 +188,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     public void renderDatePanel(Date startDate, Date finishDate){
         String beginDate = dateFormat.format(startDate);
         String endDate = dateFormat.format(finishDate);
-        dateDataList = penaltyBUS.getDatesData(beginDate, endDate);
+        dateDataList = purchaseStatsBUS.getPurchaseDateData(beginDate, endDate);
         tblDate.setList(dateDataList);
         tblDate.renderDateTable();
         lblStartDateTitle.setText(Controller.formatDate(startDate));
@@ -202,7 +201,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
     public void showMonthBarChart(String year){
         preciousChartPanel.removeAll(); // Xóa chart cũ
-        monthBarChart = new FeeMonthBarChart(monthStats.get(year));
+        monthBarChart = new FeeMonthBarChart(monthStats.get(year), "purchaseFee");
         preciousChartPanel.add(monthBarChart, BorderLayout.CENTER);
         preciousChartPanel.revalidate();
         preciousChartPanel.repaint();
@@ -210,7 +209,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
     public void showYearBarChart(){
         yearChartPanel.removeAll();
-        yearBarChart = new FeeYearBarChart(yearsDataList);
+        yearBarChart = new FeeYearBarChart(yearsDataList, true);
         yearChartPanel.add(yearBarChart, BorderLayout.CENTER);
         yearChartPanel.revalidate();
         yearChartPanel.repaint();
@@ -218,19 +217,19 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
     public void showDatePieChart(){
         Long sumDateFee = 0L;
-        for(PenaltyDateData d : dateDataList){
-            sumDateFee += d.getTotalAmount();
+        for(PurchaseDateData d : dateDataList){
+            sumDateFee += d.getPurchaseFee();
         }
         String beginDate = Controller.formatDate(txtStartDate.getDate());
         String endDate = Controller.formatDate(txtEndDate.getDate());
         String title = beginDate + " đến " + endDate;
         double totalDateFee = (double) sumDateFee;
-        double otherDateFee = (double) penaltyTotalFee - totalDateFee; // Tổng tiền phạt từ trước đến nay.
+        double otherDateFee = (double) purchaseTotalFee - totalDateFee; // Tổng tiền phạt từ trước đến nay.
         dateChartPanel.removeAll();
         datePieChart = new PieChart();
         datePieChart.setChartType(PieChart.PeiChartType.DONUT_CHART);
         datePieChart.addData(new ModelPieChart(title,totalDateFee, new Color(66, 133, 244)));
-        datePieChart.addData(new ModelPieChart("Tiền phạt các ngày khác", otherDateFee,new Color(53, 244, 0)));
+        datePieChart.addData(new ModelPieChart("Tổng chi các ngày khác", otherDateFee,new Color(53, 244, 0)));
         dateChartPanel.add(datePieChart, BorderLayout.CENTER);
         dateChartPanel.revalidate();
         dateChartPanel.repaint();
@@ -251,14 +250,6 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         selectedTab.revalidate();
         selectedTab.repaint();
 
-        if(selectedTab == lostBookTab){
-            radCountPenaltySheet.setVisible(false);
-            radSumPenaltyFee.setVisible(false);
-        }
-        else{
-            radCountPenaltySheet.setVisible(true);
-            radSumPenaltyFee.setVisible(true);
-        }
     }
 
     public void pageSelected(JPanel pagePanel, JLabel pageTitle){
@@ -317,14 +308,14 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     }
 
     public void resetPreciousPanel(){
-        radCountPenaltySheet.setSelected(true);
+        radCountAmount.setSelected(true);
         tblEmployee.renderPenaltySheetTable();
-        tblReader.renderPenaltySheetTable();
-        tblLostBook.renderLostBookTable();
+        tblSupplier.renderPurchaseSheetTable();
+        tblBook.renderPurchaseQuantiyTable();
         tabSelected(employeeTab,"EMPLOYEE");
 
         pageSelected(firstPageTab, lblPageOne);
-        tblMonths.renderMonthsTable(1);
+        tblMonth.renderMonthsTable(1);
     }
 
     public void firstRenderPanel(){
@@ -371,26 +362,26 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         blankPanel2 = new javax.swing.JPanel();
         blankPanel3 = new javax.swing.JPanel();
         boxContainerPanel = new javax.swing.JPanel();
-        penaltyBoxPanel = new javax.swing.JPanel();
-        penaltyBoxHeader = new javax.swing.JPanel();
-        lblPenaltyHeader = new javax.swing.JLabel();
-        penaltyBoxContent = new javax.swing.JPanel();
-        lblPenaltyBoxContent = new javax.swing.JLabel();
-        punishFeePanel = new javax.swing.JPanel();
-        punishFeeBoxHeader = new javax.swing.JPanel();
-        lblPunishFeeHeader = new javax.swing.JLabel();
-        punishFeeBoxContent = new javax.swing.JPanel();
-        lblPunishFeeBoxContent = new javax.swing.JLabel();
-        employeeBoxPanel = new javax.swing.JPanel();
-        employeeBoxHeader = new javax.swing.JPanel();
-        lblEmployeeHeader = new javax.swing.JLabel();
-        employeeBoxContent = new javax.swing.JPanel();
-        lblEmployeeBoxContent = new javax.swing.JLabel();
-        readerBoxPanel = new javax.swing.JPanel();
-        readerBoxHeader = new javax.swing.JPanel();
-        lblLostBookHeader = new javax.swing.JLabel();
-        readerBoxContent = new javax.swing.JPanel();
-        lblLostBookBoxContent = new javax.swing.JLabel();
+        purchaseBoxPanel = new javax.swing.JPanel();
+        purchaseBoxHeader = new javax.swing.JPanel();
+        lblPurchaseHeader = new javax.swing.JLabel();
+        purchaseBoxContent = new javax.swing.JPanel();
+        lblPurchaseBoxContent = new javax.swing.JLabel();
+        purchaseFeePanel = new javax.swing.JPanel();
+        purchaseFeeBoxHeader = new javax.swing.JPanel();
+        lblPurchaseFeeHeader = new javax.swing.JLabel();
+        purchaseFeeBoxContent = new javax.swing.JPanel();
+        lblPurchaseFeeBoxContent = new javax.swing.JLabel();
+        supplierBoxPanel = new javax.swing.JPanel();
+        supplierBoxHeader = new javax.swing.JPanel();
+        lblSupplierHeader = new javax.swing.JLabel();
+        supplierBoxContent = new javax.swing.JPanel();
+        lblSupplierBoxContent = new javax.swing.JLabel();
+        bookBoxPanel = new javax.swing.JPanel();
+        bookBoxHeader = new javax.swing.JPanel();
+        lblBookHeader = new javax.swing.JLabel();
+        bookBoxContent = new javax.swing.JPanel();
+        lblBookBoxContent = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         leftContentPanel = new javax.swing.JPanel();
         searchTimePanel = new javax.swing.JPanel();
@@ -439,8 +430,8 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         lblDateTitle2 = new javax.swing.JLabel();
         lblEndDateTitle = new javax.swing.JLabel();
         dateTablePanel = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        tblDate = new GUI.Component.Panel.Statistics.Components.PenaltyDateStatisticsTable();
+        scroll = new javax.swing.JScrollPane();
+        tblDate = new GUI.Component.Panel.Statistics.Components.PurchaseDateStatisticsTable();
         yearPanel = new javax.swing.JPanel();
         yearPanelTitle = new javax.swing.JPanel();
         lblYearHeaderTitle1 = new javax.swing.JLabel();
@@ -448,8 +439,8 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         lblYearHeaderTitle2 = new javax.swing.JLabel();
         lblEndYear = new javax.swing.JLabel();
         yearTablePanel = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tblYear = new GUI.Component.Panel.Statistics.Components.PenaltyYearStatisticsTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblYear = new GUI.Component.Panel.Statistics.Components.PurchaseYearStatisticsTable();
         preciousPanel = new javax.swing.JPanel();
         monthDataPanel = new javax.swing.JPanel();
         preciousMonthFooter = new javax.swing.JPanel();
@@ -463,29 +454,29 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         fourthPageTab = new javax.swing.JPanel();
         lblPageFour = new javax.swing.JLabel();
         monthTablePanel = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tblMonths = new GUI.Component.Panel.Statistics.Components.PenaltyMonthStatisticsTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblMonth = new GUI.Component.Panel.Statistics.Components.PurchaseMonthStatisticsTable();
         preciousDataPanel = new javax.swing.JPanel();
         preciousDataHeader = new javax.swing.JPanel();
         preciousTaskbar = new javax.swing.JPanel();
         employeeTab = new javax.swing.JPanel();
         lblEmployeeTab = new javax.swing.JLabel();
-        readerTab = new javax.swing.JPanel();
-        lblReaderTab = new javax.swing.JLabel();
-        lostBookTab = new javax.swing.JPanel();
-        lblLostBookTab = new javax.swing.JLabel();
+        supplierTab = new javax.swing.JPanel();
+        lblSupplierTab = new javax.swing.JLabel();
+        bookTab = new javax.swing.JPanel();
+        lblBookTab = new javax.swing.JLabel();
         radPenaltyPanel = new javax.swing.JPanel();
-        radCountPenaltySheet = new javax.swing.JRadioButton();
-        radSumPenaltyFee = new javax.swing.JRadioButton();
+        radCountAmount = new javax.swing.JRadioButton();
+        radSumFee = new javax.swing.JRadioButton();
         preciousTablePanel = new javax.swing.JPanel();
-        lostBookTablePanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblLostBook = new GUI.Component.Panel.Statistics.Components.LostBookTable();
-        readerTablePanel = new javax.swing.JPanel();
+        bookTablePanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblReader = new GUI.Component.Panel.Statistics.Components.PenaltyReaderTable();
+        tblBook = new GUI.Component.Panel.Statistics.Components.PurchaseBookTable();
+        supplierTablePanel = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblSupplier = new GUI.Component.Panel.Statistics.Components.PurchaseSupplierTable();
         employeeTablePanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
         tblEmployee = new GUI.Component.Panel.Statistics.Components.PenaltyEmployeeTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -547,113 +538,113 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         boxContainerPanel.setBackground(new java.awt.Color(255, 255, 255));
         boxContainerPanel.setLayout(new java.awt.GridLayout(1, 0, 15, 0));
 
-        penaltyBoxPanel.setLayout(new java.awt.BorderLayout());
+        purchaseBoxPanel.setLayout(new java.awt.BorderLayout());
 
-        penaltyBoxHeader.setBackground(new java.awt.Color(255, 102, 102));
-        penaltyBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
-        penaltyBoxHeader.setLayout(new java.awt.BorderLayout());
+        purchaseBoxHeader.setBackground(new java.awt.Color(255, 102, 102));
+        purchaseBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
+        purchaseBoxHeader.setLayout(new java.awt.BorderLayout());
 
-        lblPenaltyHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblPenaltyHeader.setForeground(new java.awt.Color(255, 255, 255));
-        lblPenaltyHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPenaltyHeader.setText("Phiếu phạt ");
-        penaltyBoxHeader.add(lblPenaltyHeader, java.awt.BorderLayout.CENTER);
+        lblPurchaseHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblPurchaseHeader.setForeground(new java.awt.Color(255, 255, 255));
+        lblPurchaseHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPurchaseHeader.setText("Phiếu nhập");
+        purchaseBoxHeader.add(lblPurchaseHeader, java.awt.BorderLayout.CENTER);
 
-        penaltyBoxPanel.add(penaltyBoxHeader, java.awt.BorderLayout.PAGE_START);
+        purchaseBoxPanel.add(purchaseBoxHeader, java.awt.BorderLayout.PAGE_START);
 
-        penaltyBoxContent.setBackground(new java.awt.Color(255, 51, 51));
-        penaltyBoxContent.setLayout(new java.awt.BorderLayout());
+        purchaseBoxContent.setBackground(new java.awt.Color(255, 51, 51));
+        purchaseBoxContent.setLayout(new java.awt.BorderLayout());
 
-        lblPenaltyBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblPenaltyBoxContent.setForeground(new java.awt.Color(255, 255, 255));
-        lblPenaltyBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPenaltyBoxContent.setText("jLabel1");
-        penaltyBoxContent.add(lblPenaltyBoxContent, java.awt.BorderLayout.CENTER);
+        lblPurchaseBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblPurchaseBoxContent.setForeground(new java.awt.Color(255, 255, 255));
+        lblPurchaseBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPurchaseBoxContent.setText("jLabel1");
+        purchaseBoxContent.add(lblPurchaseBoxContent, java.awt.BorderLayout.CENTER);
 
-        penaltyBoxPanel.add(penaltyBoxContent, java.awt.BorderLayout.CENTER);
+        purchaseBoxPanel.add(purchaseBoxContent, java.awt.BorderLayout.CENTER);
 
-        boxContainerPanel.add(penaltyBoxPanel);
+        boxContainerPanel.add(purchaseBoxPanel);
 
-        punishFeePanel.setLayout(new java.awt.BorderLayout());
+        purchaseFeePanel.setLayout(new java.awt.BorderLayout());
 
-        punishFeeBoxHeader.setBackground(new java.awt.Color(10, 220, 160));
-        punishFeeBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
-        punishFeeBoxHeader.setLayout(new java.awt.BorderLayout());
+        purchaseFeeBoxHeader.setBackground(new java.awt.Color(10, 220, 160));
+        purchaseFeeBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
+        purchaseFeeBoxHeader.setLayout(new java.awt.BorderLayout());
 
-        lblPunishFeeHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblPunishFeeHeader.setForeground(new java.awt.Color(255, 255, 255));
-        lblPunishFeeHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPunishFeeHeader.setText("Tổng tiền phạt");
-        punishFeeBoxHeader.add(lblPunishFeeHeader, java.awt.BorderLayout.CENTER);
+        lblPurchaseFeeHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblPurchaseFeeHeader.setForeground(new java.awt.Color(255, 255, 255));
+        lblPurchaseFeeHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPurchaseFeeHeader.setText("Tổng chi");
+        purchaseFeeBoxHeader.add(lblPurchaseFeeHeader, java.awt.BorderLayout.CENTER);
 
-        punishFeePanel.add(punishFeeBoxHeader, java.awt.BorderLayout.PAGE_START);
+        purchaseFeePanel.add(purchaseFeeBoxHeader, java.awt.BorderLayout.PAGE_START);
 
-        punishFeeBoxContent.setBackground(new java.awt.Color(0, 204, 153));
-        punishFeeBoxContent.setLayout(new java.awt.BorderLayout());
+        purchaseFeeBoxContent.setBackground(new java.awt.Color(0, 204, 153));
+        purchaseFeeBoxContent.setLayout(new java.awt.BorderLayout());
 
-        lblPunishFeeBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblPunishFeeBoxContent.setForeground(new java.awt.Color(255, 255, 255));
-        lblPunishFeeBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPunishFeeBoxContent.setText("jLabel3");
-        punishFeeBoxContent.add(lblPunishFeeBoxContent, java.awt.BorderLayout.CENTER);
+        lblPurchaseFeeBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblPurchaseFeeBoxContent.setForeground(new java.awt.Color(255, 255, 255));
+        lblPurchaseFeeBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPurchaseFeeBoxContent.setText("jLabel3");
+        purchaseFeeBoxContent.add(lblPurchaseFeeBoxContent, java.awt.BorderLayout.CENTER);
 
-        punishFeePanel.add(punishFeeBoxContent, java.awt.BorderLayout.CENTER);
+        purchaseFeePanel.add(purchaseFeeBoxContent, java.awt.BorderLayout.CENTER);
 
-        boxContainerPanel.add(punishFeePanel);
+        boxContainerPanel.add(purchaseFeePanel);
 
-        employeeBoxPanel.setLayout(new java.awt.BorderLayout());
+        supplierBoxPanel.setLayout(new java.awt.BorderLayout());
 
-        employeeBoxHeader.setBackground(new java.awt.Color(1, 160, 214));
-        employeeBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
-        employeeBoxHeader.setLayout(new java.awt.BorderLayout());
+        supplierBoxHeader.setBackground(new java.awt.Color(1, 160, 214));
+        supplierBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
+        supplierBoxHeader.setLayout(new java.awt.BorderLayout());
 
-        lblEmployeeHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblEmployeeHeader.setForeground(new java.awt.Color(255, 255, 255));
-        lblEmployeeHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblEmployeeHeader.setText("Nhân viên xử lý");
-        employeeBoxHeader.add(lblEmployeeHeader, java.awt.BorderLayout.CENTER);
+        lblSupplierHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblSupplierHeader.setForeground(new java.awt.Color(255, 255, 255));
+        lblSupplierHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSupplierHeader.setText("Nhà cung cấp");
+        supplierBoxHeader.add(lblSupplierHeader, java.awt.BorderLayout.CENTER);
 
-        employeeBoxPanel.add(employeeBoxHeader, java.awt.BorderLayout.PAGE_START);
+        supplierBoxPanel.add(supplierBoxHeader, java.awt.BorderLayout.PAGE_START);
 
-        employeeBoxContent.setBackground(new java.awt.Color(0, 153, 204));
-        employeeBoxContent.setLayout(new java.awt.BorderLayout());
+        supplierBoxContent.setBackground(new java.awt.Color(0, 153, 204));
+        supplierBoxContent.setLayout(new java.awt.BorderLayout());
 
-        lblEmployeeBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lblEmployeeBoxContent.setForeground(new java.awt.Color(255, 255, 255));
-        lblEmployeeBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblEmployeeBoxContent.setText("jLabel2");
-        employeeBoxContent.add(lblEmployeeBoxContent, java.awt.BorderLayout.CENTER);
+        lblSupplierBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblSupplierBoxContent.setForeground(new java.awt.Color(255, 255, 255));
+        lblSupplierBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSupplierBoxContent.setText("jLabel2");
+        supplierBoxContent.add(lblSupplierBoxContent, java.awt.BorderLayout.CENTER);
 
-        employeeBoxPanel.add(employeeBoxContent, java.awt.BorderLayout.CENTER);
+        supplierBoxPanel.add(supplierBoxContent, java.awt.BorderLayout.CENTER);
 
-        boxContainerPanel.add(employeeBoxPanel);
+        boxContainerPanel.add(supplierBoxPanel);
 
-        readerBoxPanel.setLayout(new java.awt.BorderLayout());
+        bookBoxPanel.setLayout(new java.awt.BorderLayout());
 
-        readerBoxHeader.setBackground(new java.awt.Color(204, 102, 255));
-        readerBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
-        readerBoxHeader.setLayout(new java.awt.BorderLayout());
+        bookBoxHeader.setBackground(new java.awt.Color(204, 102, 255));
+        bookBoxHeader.setPreferredSize(new java.awt.Dimension(277, 40));
+        bookBoxHeader.setLayout(new java.awt.BorderLayout());
 
-        lblLostBookHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLostBookHeader.setForeground(new java.awt.Color(255, 255, 255));
-        lblLostBookHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLostBookHeader.setText("Sách tổn thất");
-        readerBoxHeader.add(lblLostBookHeader, java.awt.BorderLayout.CENTER);
+        lblBookHeader.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblBookHeader.setForeground(new java.awt.Color(255, 255, 255));
+        lblBookHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBookHeader.setText("Sách đã nhập");
+        bookBoxHeader.add(lblBookHeader, java.awt.BorderLayout.CENTER);
 
-        readerBoxPanel.add(readerBoxHeader, java.awt.BorderLayout.PAGE_START);
+        bookBoxPanel.add(bookBoxHeader, java.awt.BorderLayout.PAGE_START);
 
-        readerBoxContent.setBackground(new java.awt.Color(204, 51, 255));
-        readerBoxContent.setLayout(new java.awt.BorderLayout());
+        bookBoxContent.setBackground(new java.awt.Color(204, 51, 255));
+        bookBoxContent.setLayout(new java.awt.BorderLayout());
 
-        lblLostBookBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblLostBookBoxContent.setForeground(new java.awt.Color(255, 255, 255));
-        lblLostBookBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLostBookBoxContent.setText("jLabel4");
-        readerBoxContent.add(lblLostBookBoxContent, java.awt.BorderLayout.CENTER);
+        lblBookBoxContent.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblBookBoxContent.setForeground(new java.awt.Color(255, 255, 255));
+        lblBookBoxContent.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBookBoxContent.setText("jLabel4");
+        bookBoxContent.add(lblBookBoxContent, java.awt.BorderLayout.CENTER);
 
-        readerBoxPanel.add(readerBoxContent, java.awt.BorderLayout.CENTER);
+        bookBoxPanel.add(bookBoxContent, java.awt.BorderLayout.CENTER);
 
-        boxContainerPanel.add(readerBoxPanel);
+        boxContainerPanel.add(bookBoxPanel);
 
         headerPanel.add(boxContainerPanel, java.awt.BorderLayout.CENTER);
 
@@ -863,7 +854,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         subDataPanel.setLayout(new java.awt.CardLayout());
 
         dateChartPanel.setBackground(new java.awt.Color(255, 255, 255));
-        dateChartPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Tỉ lệ tiền phạt"));
+        dateChartPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Tỉ lệ chi tiêu"));
 
         javax.swing.GroupLayout dateChartPanelLayout = new javax.swing.GroupLayout(dateChartPanel);
         dateChartPanel.setLayout(dateChartPanelLayout);
@@ -916,7 +907,7 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         dataPanel.setLayout(new java.awt.CardLayout());
 
         datePanel.setBackground(new java.awt.Color(255, 255, 255));
-        datePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Danh sách phiếu phạt", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 3, 14))); // NOI18N
+        datePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Danh sách phiếu nhập", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 3, 14))); // NOI18N
         datePanel.setLayout(new java.awt.BorderLayout());
 
         dateHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -945,9 +936,9 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         dateTablePanel.setBackground(new java.awt.Color(255, 255, 255));
         dateTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane6.setViewportView(tblDate);
+        scroll.setViewportView(tblDate);
 
-        dateTablePanel.add(jScrollPane6, java.awt.BorderLayout.CENTER);
+        dateTablePanel.add(scroll, java.awt.BorderLayout.CENTER);
 
         datePanel.add(dateTablePanel, java.awt.BorderLayout.CENTER);
 
@@ -981,9 +972,9 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
         yearTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane5.setViewportView(tblYear);
+        jScrollPane1.setViewportView(tblYear);
 
-        yearTablePanel.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+        yearTablePanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         yearPanel.add(yearTablePanel, java.awt.BorderLayout.CENTER);
 
@@ -1093,9 +1084,9 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         monthTablePanel.setBackground(new java.awt.Color(255, 255, 255));
         monthTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane4.setViewportView(tblMonths);
+        jScrollPane2.setViewportView(tblMonth);
 
-        monthTablePanel.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        monthTablePanel.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         monthDataPanel.add(monthTablePanel, java.awt.BorderLayout.CENTER);
 
@@ -1133,69 +1124,69 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
         preciousTaskbar.add(employeeTab);
 
-        readerTab.setBackground(new java.awt.Color(255, 255, 255));
-        readerTab.setLayout(new java.awt.BorderLayout());
+        supplierTab.setBackground(new java.awt.Color(255, 255, 255));
+        supplierTab.setLayout(new java.awt.BorderLayout());
 
-        lblReaderTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblReaderTab.setText("Độc giả vi phạm");
-        lblReaderTab.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblSupplierTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSupplierTab.setText("Nhà cung cấp");
+        lblSupplierTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblReaderTabMouseClicked(evt);
+                lblSupplierTabMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lblReaderTabMouseEntered(evt);
+                lblSupplierTabMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                lblReaderTabMouseExited(evt);
+                lblSupplierTabMouseExited(evt);
             }
         });
-        readerTab.add(lblReaderTab, java.awt.BorderLayout.CENTER);
+        supplierTab.add(lblSupplierTab, java.awt.BorderLayout.CENTER);
 
-        preciousTaskbar.add(readerTab);
+        preciousTaskbar.add(supplierTab);
 
-        lostBookTab.setBackground(new java.awt.Color(255, 255, 255));
-        lostBookTab.setLayout(new java.awt.BorderLayout());
+        bookTab.setBackground(new java.awt.Color(255, 255, 255));
+        bookTab.setLayout(new java.awt.BorderLayout());
 
-        lblLostBookTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLostBookTab.setText("Sách tổn thất");
-        lblLostBookTab.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblBookTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBookTab.setText("Sách tổn thất");
+        lblBookTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblLostBookTabMouseClicked(evt);
+                lblBookTabMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lblLostBookTabMouseEntered(evt);
+                lblBookTabMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                lblLostBookTabMouseExited(evt);
+                lblBookTabMouseExited(evt);
             }
         });
-        lostBookTab.add(lblLostBookTab, java.awt.BorderLayout.CENTER);
+        bookTab.add(lblBookTab, java.awt.BorderLayout.CENTER);
 
-        preciousTaskbar.add(lostBookTab);
+        preciousTaskbar.add(bookTab);
 
         preciousDataHeader.add(preciousTaskbar, java.awt.BorderLayout.LINE_START);
 
         radPenaltyPanel.setBackground(new java.awt.Color(255, 255, 255));
         radPenaltyPanel.setPreferredSize(new java.awt.Dimension(250, 30));
 
-        btnGroupPenalty.add(radCountPenaltySheet);
-        radCountPenaltySheet.setSelected(true);
-        radCountPenaltySheet.setText("Phiếu phạt");
-        radCountPenaltySheet.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnGroupPenalty.add(radCountAmount);
+        radCountAmount.setSelected(true);
+        radCountAmount.setText("Số lượng");
+        radCountAmount.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radCountPenaltySheetMouseClicked(evt);
+                radCountAmountMouseClicked(evt);
             }
         });
-        radPenaltyPanel.add(radCountPenaltySheet);
+        radPenaltyPanel.add(radCountAmount);
 
-        btnGroupPenalty.add(radSumPenaltyFee);
-        radSumPenaltyFee.setText("Tiền phạt");
-        radSumPenaltyFee.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnGroupPenalty.add(radSumFee);
+        radSumFee.setText("Tiền nhập");
+        radSumFee.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radSumPenaltyFeeMouseClicked(evt);
+                radSumFeeMouseClicked(evt);
             }
         });
-        radPenaltyPanel.add(radSumPenaltyFee);
+        radPenaltyPanel.add(radSumFee);
 
         preciousDataHeader.add(radPenaltyPanel, java.awt.BorderLayout.LINE_END);
 
@@ -1204,29 +1195,29 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         preciousTablePanel.setBackground(new java.awt.Color(255, 255, 255));
         preciousTablePanel.setLayout(new java.awt.CardLayout());
 
-        lostBookTablePanel.setLayout(new java.awt.BorderLayout());
+        bookTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setViewportView(tblLostBook);
+        jScrollPane3.setViewportView(tblBook);
 
-        lostBookTablePanel.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        bookTablePanel.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        preciousTablePanel.add(lostBookTablePanel, "LOSTBOOK");
+        preciousTablePanel.add(bookTablePanel, "LOSTBOOK");
 
-        readerTablePanel.setBackground(new java.awt.Color(255, 255, 255));
-        readerTablePanel.setLayout(new java.awt.BorderLayout());
+        supplierTablePanel.setBackground(new java.awt.Color(255, 255, 255));
+        supplierTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane3.setViewportView(tblReader);
+        jScrollPane4.setViewportView(tblSupplier);
 
-        readerTablePanel.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        supplierTablePanel.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
-        preciousTablePanel.add(readerTablePanel, "READER");
+        preciousTablePanel.add(supplierTablePanel, "READER");
 
         employeeTablePanel.setBackground(new java.awt.Color(255, 255, 255));
         employeeTablePanel.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setViewportView(tblEmployee);
+        jScrollPane5.setViewportView(tblEmployee);
 
-        employeeTablePanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        employeeTablePanel.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
         preciousTablePanel.add(employeeTablePanel, "EMPLOYEE");
 
@@ -1262,49 +1253,50 @@ public class PenaltyStatistics extends javax.swing.JPanel {
 
         String year = cboxChooseYear.getSelectedItem().toString();
         List<StatisticsPreciousData<Long>> employeeListInYear = employeeStats.get(year);
-        List<StatisticsPreciousData<String>> readerListInYear = readerStats.get(year);
-        List<LostBookPreciousData> lostBookListInYear = lostBookStats.get(year);
-        List<PenaltyTimeData> monthDataInYear = monthStats.get(year);
+        List<StatisticsPreciousData<String>> supplierListInYear = supplierStats.get(year);
+        List<StatisticsPreciousData<Long>> bookListInYear = bookStats.get(year);
+        List<PurchaseTimeData> monthList = monthStats.get(year);
 
         tblEmployee.setList(employeeListInYear);
-        tblReader.setList(readerListInYear);
-        tblLostBook.setList(lostBookListInYear);
-        tblMonths.setList(monthDataInYear);
+        tblSupplier.setList(supplierListInYear);
+        tblBook.setList(bookListInYear);
+        tblMonth.setList(monthList);
 
-        tblLostBook.renderLostBookTable();
         resetPreciousPanel();
         showMonthBarChart(year);
     }//GEN-LAST:event_cboxChooseYearItemStateChanged
 
-    private void radCountPenaltySheetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radCountPenaltySheetMouseClicked
+    private void radCountAmountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radCountAmountMouseClicked
         tblEmployee.renderPenaltySheetTable();
-        tblReader.renderPenaltySheetTable();
-    }//GEN-LAST:event_radCountPenaltySheetMouseClicked
+        tblSupplier.renderPurchaseSheetTable();
+        tblBook.renderPurchaseQuantiyTable();
+    }//GEN-LAST:event_radCountAmountMouseClicked
 
-    private void radSumPenaltyFeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radSumPenaltyFeeMouseClicked
+    private void radSumFeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radSumFeeMouseClicked
         tblEmployee.renderPenaltyFeeTable();
-        tblReader.renderPenaltyFeeTable();
-    }//GEN-LAST:event_radSumPenaltyFeeMouseClicked
+        tblSupplier.renderPurchaseFeeTable();
+        tblBook.renderPurchaseFeeTable();
+    }//GEN-LAST:event_radSumFeeMouseClicked
 
     private void firstPageTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_firstPageTabMouseClicked
         pageSelected(firstPageTab, lblPageOne);
-        tblMonths.renderMonthsTable(1);
+        tblMonth.renderMonthsTable(1);
     }//GEN-LAST:event_firstPageTabMouseClicked
 
     private void secondePageTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secondePageTabMouseClicked
         pageSelected(secondePageTab, lblPageTwo);
-        tblMonths.renderMonthsTable(2);
+        tblMonth.renderMonthsTable(2);
 
     }//GEN-LAST:event_secondePageTabMouseClicked
 
     private void thirdPageTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_thirdPageTabMouseClicked
         pageSelected(thirdPageTab, lblPageThree);
-        tblMonths.renderMonthsTable(3);
+        tblMonth.renderMonthsTable(3);
     }//GEN-LAST:event_thirdPageTabMouseClicked
 
     private void fourthPageTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fourthPageTabMouseClicked
         pageSelected(fourthPageTab, lblPageFour);
-        tblMonths.renderMonthsTable(4);
+        tblMonth.renderMonthsTable(4);
     }//GEN-LAST:event_fourthPageTabMouseClicked
 
     private void firstPageTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_firstPageTabMouseEntered
@@ -1380,29 +1372,29 @@ public class PenaltyStatistics extends javax.swing.JPanel {
         tabClearHover(employeeTab);
     }//GEN-LAST:event_lblEmployeeTabMouseExited
 
-    private void lblReaderTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReaderTabMouseClicked
-        tabSelected(readerTab, "READER");
-    }//GEN-LAST:event_lblReaderTabMouseClicked
+    private void lblSupplierTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSupplierTabMouseClicked
+        tabSelected(supplierTab, "READER");
+    }//GEN-LAST:event_lblSupplierTabMouseClicked
 
-    private void lblReaderTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReaderTabMouseEntered
-        tabHover(readerTab);
-    }//GEN-LAST:event_lblReaderTabMouseEntered
+    private void lblSupplierTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSupplierTabMouseEntered
+        tabHover(supplierTab);
+    }//GEN-LAST:event_lblSupplierTabMouseEntered
 
-    private void lblReaderTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReaderTabMouseExited
-        tabClearHover(readerTab);
-    }//GEN-LAST:event_lblReaderTabMouseExited
+    private void lblSupplierTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSupplierTabMouseExited
+        tabClearHover(supplierTab);
+    }//GEN-LAST:event_lblSupplierTabMouseExited
 
-    private void lblLostBookTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLostBookTabMouseClicked
-        tabSelected(lostBookTab, "LOSTBOOK");
-    }//GEN-LAST:event_lblLostBookTabMouseClicked
+    private void lblBookTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBookTabMouseClicked
+        tabSelected(bookTab, "LOSTBOOK");
+    }//GEN-LAST:event_lblBookTabMouseClicked
 
-    private void lblLostBookTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLostBookTabMouseEntered
-        tabHover(lostBookTab);
-    }//GEN-LAST:event_lblLostBookTabMouseEntered
+    private void lblBookTabMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBookTabMouseEntered
+        tabHover(bookTab);
+    }//GEN-LAST:event_lblBookTabMouseEntered
 
-    private void lblLostBookTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLostBookTabMouseExited
-        tabClearHover(lostBookTab);
-    }//GEN-LAST:event_lblLostBookTabMouseExited
+    private void lblBookTabMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBookTabMouseExited
+        tabClearHover(bookTab);
+    }//GEN-LAST:event_lblBookTabMouseExited
 
 
     private void radPenaltySheetStateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1419,6 +1411,11 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     private javax.swing.JPanel blankPanel;
     private javax.swing.JPanel blankPanel2;
     private javax.swing.JPanel blankPanel3;
+    private javax.swing.JPanel bookBoxContent;
+    private javax.swing.JPanel bookBoxHeader;
+    private javax.swing.JPanel bookBoxPanel;
+    private javax.swing.JPanel bookTab;
+    private javax.swing.JPanel bookTablePanel;
     private javax.swing.JPanel boxContainerPanel;
     private javax.swing.ButtonGroup btnGroupPenalty;
     private javax.swing.ButtonGroup btnGroupTime;
@@ -1436,9 +1433,6 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     private javax.swing.JPanel dateInputPanel;
     private javax.swing.JPanel datePanel;
     private javax.swing.JPanel dateTablePanel;
-    private javax.swing.JPanel employeeBoxContent;
-    private javax.swing.JPanel employeeBoxHeader;
-    private javax.swing.JPanel employeeBoxPanel;
     private javax.swing.JPanel employeeTab;
     private javax.swing.JPanel employeeTablePanel;
     private javax.swing.JPanel endDatePanel;
@@ -1451,44 +1445,38 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel lblBookBoxContent;
+    private javax.swing.JLabel lblBookHeader;
+    private javax.swing.JLabel lblBookTab;
     private javax.swing.JLabel lblChooseYear;
     private javax.swing.JLabel lblDateTitle1;
     private javax.swing.JLabel lblDateTitle2;
-    private javax.swing.JLabel lblEmployeeBoxContent;
-    private javax.swing.JLabel lblEmployeeHeader;
     private javax.swing.JLabel lblEmployeeTab;
     private javax.swing.JLabel lblEndDate;
     private javax.swing.JLabel lblEndDateTitle;
     private javax.swing.JLabel lblEndYear;
-    private javax.swing.JLabel lblLostBookBoxContent;
-    private javax.swing.JLabel lblLostBookHeader;
-    private javax.swing.JLabel lblLostBookTab;
     private javax.swing.JLabel lblPageFour;
     private javax.swing.JLabel lblPageOne;
     private javax.swing.JLabel lblPageThree;
     private javax.swing.JLabel lblPageTwo;
-    private javax.swing.JLabel lblPenaltyBoxContent;
-    private javax.swing.JLabel lblPenaltyHeader;
     private javax.swing.JLabel lblPreciousPage;
-    private javax.swing.JLabel lblPunishFeeBoxContent;
-    private javax.swing.JLabel lblPunishFeeHeader;
-    private javax.swing.JLabel lblReaderTab;
+    private javax.swing.JLabel lblPurchaseBoxContent;
+    private javax.swing.JLabel lblPurchaseFeeBoxContent;
+    private javax.swing.JLabel lblPurchaseFeeHeader;
+    private javax.swing.JLabel lblPurchaseHeader;
     private javax.swing.JLabel lblSearchEndYear;
     private javax.swing.JLabel lblSearchStartYear;
     private javax.swing.JLabel lblStartDate;
     private javax.swing.JLabel lblStartDateTitle;
     private javax.swing.JLabel lblStartYear;
+    private javax.swing.JLabel lblSupplierBoxContent;
+    private javax.swing.JLabel lblSupplierHeader;
+    private javax.swing.JLabel lblSupplierTab;
     private javax.swing.JLabel lblYearHeaderTitle1;
     private javax.swing.JLabel lblYearHeaderTitle2;
     private javax.swing.JPanel leftContentPanel;
-    private javax.swing.JPanel lostBookTab;
-    private javax.swing.JPanel lostBookTablePanel;
     private javax.swing.JPanel monthDataPanel;
     private javax.swing.JPanel monthTablePanel;
-    private javax.swing.JPanel penaltyBoxContent;
-    private javax.swing.JPanel penaltyBoxHeader;
-    private javax.swing.JPanel penaltyBoxPanel;
     private javax.swing.JPanel preciousChartPanel;
     private javax.swing.JPanel preciousDataHeader;
     private javax.swing.JPanel preciousDataPanel;
@@ -1497,35 +1485,39 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     private javax.swing.JPanel preciousPanel;
     private javax.swing.JPanel preciousTablePanel;
     private javax.swing.JPanel preciousTaskbar;
-    private javax.swing.JPanel punishFeeBoxContent;
-    private javax.swing.JPanel punishFeeBoxHeader;
-    private javax.swing.JPanel punishFeePanel;
-    private javax.swing.JRadioButton radCountPenaltySheet;
+    private javax.swing.JPanel purchaseBoxContent;
+    private javax.swing.JPanel purchaseBoxHeader;
+    private javax.swing.JPanel purchaseBoxPanel;
+    private javax.swing.JPanel purchaseFeeBoxContent;
+    private javax.swing.JPanel purchaseFeeBoxHeader;
+    private javax.swing.JPanel purchaseFeePanel;
+    private javax.swing.JRadioButton radCountAmount;
     private javax.swing.JRadioButton radDate;
     private javax.swing.JPanel radDatePanel;
     private javax.swing.JRadioButton radMonth;
     private javax.swing.JPanel radMonthPanel;
     private javax.swing.JPanel radPenaltyPanel;
-    private javax.swing.JRadioButton radSumPenaltyFee;
+    private javax.swing.JRadioButton radSumFee;
     private javax.swing.JRadioButton radYear;
     private javax.swing.JPanel radYearPanel;
     private javax.swing.JPanel radioTimePanel;
-    private javax.swing.JPanel readerBoxContent;
-    private javax.swing.JPanel readerBoxHeader;
-    private javax.swing.JPanel readerBoxPanel;
-    private javax.swing.JPanel readerTab;
-    private javax.swing.JPanel readerTablePanel;
+    private javax.swing.JScrollPane scroll;
     private javax.swing.JPanel searchTimePanel;
     private javax.swing.JPanel secondePageTab;
     private javax.swing.JPanel startDatePanel;
     private javax.swing.JPanel startYearPanel;
     private javax.swing.JPanel subDataPanel;
-    private GUI.Component.Panel.Statistics.Components.PenaltyDateStatisticsTable tblDate;
+    private javax.swing.JPanel supplierBoxContent;
+    private javax.swing.JPanel supplierBoxHeader;
+    private javax.swing.JPanel supplierBoxPanel;
+    private javax.swing.JPanel supplierTab;
+    private javax.swing.JPanel supplierTablePanel;
+    private GUI.Component.Panel.Statistics.Components.PurchaseBookTable tblBook;
+    private GUI.Component.Panel.Statistics.Components.PurchaseDateStatisticsTable tblDate;
     private GUI.Component.Panel.Statistics.Components.PenaltyEmployeeTable tblEmployee;
-    private GUI.Component.Panel.Statistics.Components.LostBookTable tblLostBook;
-    private GUI.Component.Panel.Statistics.Components.PenaltyMonthStatisticsTable tblMonths;
-    private GUI.Component.Panel.Statistics.Components.PenaltyReaderTable tblReader;
-    private GUI.Component.Panel.Statistics.Components.PenaltyYearStatisticsTable tblYear;
+    private GUI.Component.Panel.Statistics.Components.PurchaseMonthStatisticsTable tblMonth;
+    private GUI.Component.Panel.Statistics.Components.PurchaseSupplierTable tblSupplier;
+    private GUI.Component.Panel.Statistics.Components.PurchaseYearStatisticsTable tblYear;
     private javax.swing.JPanel thirdPageTab;
     private javax.swing.JPanel timeInputPanel;
     private com.toedter.calendar.JDateChooser txtEndDate;

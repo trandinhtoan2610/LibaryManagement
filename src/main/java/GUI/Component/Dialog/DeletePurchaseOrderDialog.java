@@ -8,6 +8,9 @@ import DTO.PurchaseOrderDTO;
 import DTO.PurchaseOrderDetailDTO;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.PurchaseOrderPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -143,6 +146,7 @@ public class DeletePurchaseOrderDialog extends java.awt.Dialog {
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa phiếu nhập hàng thành công!");
             successDeleteAlert.setVisible(true);
             this.dispose();
+            EventBusManager.getEventBus().post(new PurchaseChangeEvent());
         } else {
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa phiếu nhập hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }

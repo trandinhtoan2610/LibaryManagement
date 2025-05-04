@@ -7,7 +7,7 @@ import DTO.PenaltyDTO;
 import DTO.Statistics.LostBookPreciousData;
 import DTO.Statistics.PenaltyDateData;
 import DTO.Statistics.PenaltyTimeData;
-import DTO.Statistics.PenaltyPreciousData;
+import DTO.Statistics.StatisticsPreciousData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -181,8 +181,8 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
     }
 
     //Lấy từng dòng ' Mã NV - Tiền Q1 - Tiền Q2 - Tiền Q3 - Tiền Q4 - SL phiếu Q1 - SL phiếu Q2 ....' :
-    public List<PenaltyPreciousData<Long>> getPreciousEachEmployee(String year){
-        List<PenaltyPreciousData<Long>> employeeList = new ArrayList<>();
+    public List<StatisticsPreciousData<Long>> getPreciousEachEmployee(String year){
+        List<StatisticsPreciousData<Long>> employeeList = new ArrayList<>();
         String sql = "SELECT \n" +
                 "    p.employeeID AS 'employeeID',\n" +
                 "    SUM(CASE WHEN QUARTER(p.payDate) = 1 THEN p.totalAmount ELSE 0 END) AS sumQ1,\n" +
@@ -205,7 +205,7 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
             pst.setString(1,year);
             try(ResultSet rs = pst.executeQuery()){
                 while(rs.next()){
-                    PenaltyPreciousData<Long> p = new PenaltyPreciousData<>(
+                    StatisticsPreciousData<Long> p = new StatisticsPreciousData<>(
                             rs.getLong("employeeID"),
                             rs.getLong("sumQ1"),
                             rs.getLong("sumQ2"),
@@ -227,8 +227,8 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
     }
 
 
-    public List<PenaltyPreciousData<String>> getPreciousEachReader(String year){
-        List<PenaltyPreciousData<String>> readerList = new ArrayList<>();
+    public List<StatisticsPreciousData<String>> getPreciousEachReader(String year){
+        List<StatisticsPreciousData<String>> readerList = new ArrayList<>();
         String sql = "SELECT \n" +
                 "    readerId AS readerID,\n" +
                 "    SUM(CASE WHEN QUARTER(penaltyDate) = 1 THEN totalAmount ELSE 0 END) AS sumQ1,\n" +
@@ -255,7 +255,7 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
             pst.setString(1,year);
             try(ResultSet rs = pst.executeQuery()){
                 while (rs.next()){
-                    PenaltyPreciousData<String> p = new PenaltyPreciousData<>(
+                    StatisticsPreciousData<String> p = new StatisticsPreciousData<>(
                             rs.getString("readerID"),
                             rs.getLong("sumQ1"),
                             rs.getLong("sumQ2"),
@@ -430,7 +430,7 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
         return yearsDataList;
     }
 
-    public List<PenaltyDateData> getDatesDate(String startDate, String endDate){
+    public List<PenaltyDateData> getDateData(String startDate, String endDate){
         List<PenaltyDateData> dateDataList = new ArrayList<>();
         String sql = "SELECT DISTINCT p.id,\n" +
                 "\t\tp.penaltyDate,\n" +

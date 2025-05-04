@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PenaltyPreciousData<T> {
+public class StatisticsPreciousData<T> {
     private T id;
     private Long totalQ1;
     private Long totalQ2;
@@ -16,7 +16,7 @@ public class PenaltyPreciousData<T> {
     private Long countQ3;
     private Long countQ4;
 
-    public PenaltyPreciousData(T id, Long totalQ1, Long totalQ2, Long totalQ3, Long totalQ4, Long countQ1, Long countQ2, Long countQ3, Long countQ4) {
+    public StatisticsPreciousData(T id, Long totalQ1, Long totalQ2, Long totalQ3, Long totalQ4, Long countQ1, Long countQ2, Long countQ3, Long countQ4) {
         this.id = id;
         this.totalQ1 = totalQ1;
         this.totalQ2 = totalQ2;

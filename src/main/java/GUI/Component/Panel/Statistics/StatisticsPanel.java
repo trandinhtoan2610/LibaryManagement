@@ -14,7 +14,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     // Panels cho các tab
     private JPanel overviewPanel;
     private BookStatisticsPanel bookStatisticsPanel;
-    private JPanel purchasePanel;
+    private PurchaseStatistics purchasePanel;
     private BorrowStatistics borrowPanel;
     private PenaltyStatistics penaltyPanel;
 
@@ -35,7 +35,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
         // Khởi tạo các panel
         overviewPanel = new JPanel();
         bookStatisticsPanel = new BookStatisticsPanel();
-        purchasePanel = new JPanel();
+        purchasePanel = new PurchaseStatistics();
         borrowPanel = new BorrowStatistics();
         penaltyPanel = new PenaltyStatistics();
 
