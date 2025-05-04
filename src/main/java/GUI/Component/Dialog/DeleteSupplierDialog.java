@@ -17,10 +17,10 @@ public class DeleteSupplierDialog extends java.awt.Dialog {
     SupplierPanel supplierPanel;
 
     public DeleteSupplierDialog(java.awt.Frame parent, boolean modal, SupplierDTO s, SupplierPanel p) {
+        super(parent, modal);
         supplierBUS = new SupplierBUS();
         this.supplierToDelete = s;
         this.supplierPanel = p;
-        super(parent, modal);
         initComponents();
 
         setMinimumSize(new Dimension(388, 188));

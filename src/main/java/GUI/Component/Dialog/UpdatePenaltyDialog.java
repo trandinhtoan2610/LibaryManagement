@@ -27,13 +27,13 @@ public class UpdatePenaltyDialog extends JDialog {
 
    
     public UpdatePenaltyDialog(java.awt.Frame parent, boolean modal, PenaltyDTO p, List<PenaltyDetailsDTO> list, ReaderDTO reader, BorrowDTO borrowSheet ) {
+        super(parent, modal);
         penaltyBUS = new PenaltyBUS();
         this.penalty = p;
         this.penaltyDetails = list;
         this.reader = reader;
         this.borrowSheet = borrowSheet;
         this.employeeBUS = new EmployeeBUS();
-        super(parent, modal);
         initComponents();
         tblPenaltyDetails.resetTable(list);
         setMinimumSize(new Dimension(750,600));

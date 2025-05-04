@@ -13,12 +13,11 @@ public class DeleteReaderDialog extends java.awt.Dialog {
     ReaderPanel readerPanel;
     
     public DeleteReaderDialog(java.awt.Frame parent, boolean modal, ReaderDTO r, ReaderPanel p) {
+        super(parent, modal);
         readerBUS = new ReaderBUS();
         this.reader = r;
         this.readerPanel = p;
-        super(parent, modal);
         initComponents();
-        
         setMinimumSize(new Dimension(388, 188)); 
         setMaximumSize(new Dimension(388, 188));
         setLocationRelativeTo(null);

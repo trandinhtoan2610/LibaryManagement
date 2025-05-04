@@ -36,10 +36,10 @@ public class SupplierDAL implements IRepositoryStringID<SupplierDTO> {
         return genericDAL.insert(sql, supplierDTO.getId(), supplierDTO.getName(), supplierDTO.getPhone(), supplierDTO.getAddress()); // Thêm supplierDTO.getId() vào tham số
     }
 
-    // @Override
-    // public boolean update(SupplierDTO supplierDTO) {
-    //     return false;
-    // }
+     @Override
+     public boolean update(SupplierDTO supplierDTO) {
+         return false;
+     }
 
     public boolean update(SupplierDTO supplierDTO, String oldId) {
     String sql = "UPDATE Supplier SET id = ?, name = ?, phone = ?, address = ? WHERE id = ?";

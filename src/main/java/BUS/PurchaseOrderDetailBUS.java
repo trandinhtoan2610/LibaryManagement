@@ -102,7 +102,7 @@ public class PurchaseOrderDetailBUS {
         double total = 0;
         for (PurchaseOrderDetailDTO detail : purchaseOrderDetailList) {
             if (detail.getPurchaseOrderId().equals(purchaseOrderId)) {
-                total += detail.getSubTotal();
+                // total += detail.getSubTotal();
             }
         }
         return total;

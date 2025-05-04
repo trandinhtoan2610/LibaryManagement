@@ -24,11 +24,11 @@ public class DeletePenaltyDialog extends javax.swing.JDialog {
     private boolean mode;
     
     public DeletePenaltyDialog(java.awt.Frame parent, boolean modal, PenaltyDTO penalty, boolean isBorrowDeleted) {
+        super(parent, modal);
         penaltySheet = penalty;
         mode = isBorrowDeleted;
         penaltyBUS = new PenaltyBUS();
         penaltyDetailsBUS = new PenaltyDetailsBUS();
-        super(parent, modal);
         initComponents();
         setMinimumSize(new Dimension(400,200));
         setMaximumSize(new Dimension(400,200));

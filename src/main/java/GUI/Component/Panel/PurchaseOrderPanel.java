@@ -25,8 +25,8 @@ import java.util.List;
 import javax.swing.table.TableColumnModel;
 
 public class PurchaseOrderPanel extends JPanel {
-    private final PurchaseOrderTable purchaseOrderTable = new PurchaseOrderTable();
-    private final PurchaseOrderBUS purchaseOrderBUS = new PurchaseOrderBUS();
+    private static final PurchaseOrderTable purchaseOrderTable = new PurchaseOrderTable();
+    private static final PurchaseOrderBUS purchaseOrderBUS = new PurchaseOrderBUS();
 
     private ButtonAdd buttonAdd;
     private ButtonUpdate buttonUpdate;
@@ -136,12 +136,6 @@ public class PurchaseOrderPanel extends JPanel {
 
         // Thêm button Update
         buttonUpdate = new ButtonUpdate();
-        buttonUpdate.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
-                updateDialog.setVisible(true);
-            }
-        });
 
         // Thêm button Delete
         buttonDelete = new ButtonDelete();
@@ -244,12 +238,8 @@ public class PurchaseOrderPanel extends JPanel {
         }
     }
 
-    public void reloadPurchaseOrderTable() {
+    public static void reloadPurchaseOrderTable() {
         List<PurchaseOrderDTO> list = purchaseOrderBUS.getAllPurchaseOrders();
         purchaseOrderTable.setPurchaseOrderDTOS(list);
     }
-    
-    
-
-    
 }

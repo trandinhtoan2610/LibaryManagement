@@ -1,17 +1,7 @@
 package GUI.Component.Panel.Statistics;
 
-import BUS.BookBUS;
-import DTO.BookViewModel;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.List;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
 
 public class StatisticsPanel extends javax.swing.JPanel {
     private final Color defaultColor = new Color(255, 255, 255);

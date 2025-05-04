@@ -35,10 +35,10 @@ public class PenaltyFilterDialog extends JDialog {
     private PenaltyBUS penaltyBUS;
 
     public PenaltyFilterDialog(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         readerBUS = new ReaderBUS();
         employeeBUS = new EmployeeBUS();
         penaltyBUS = new PenaltyBUS();
-        super(parent, modal);
         initComponents();
         txtPayDateStart.setDateFormatString("dd/MM/yyyy");
         txtPayDateEnd.setDateFormatString("dd/MM/yyyy");
