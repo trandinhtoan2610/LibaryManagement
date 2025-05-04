@@ -6,7 +6,7 @@ import DTO.SupplierDTO;
 import GUI.Component.Button.*;
 import GUI.Component.Dialog.AddPurchaseOrderDialog;
 import GUI.Component.Dialog.DeletePurchaseOrderDialog;
-import GUI.Component.Dialog.UpdatePurchaseOrdersDialog;
+import GUI.Component.Dialog.UpdatePurchaseOrderDialog;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
 import GUI.Component.Table.PurchaseOrderTable;
 import javax.swing.event.ListSelectionEvent;
@@ -37,6 +37,7 @@ public class PurchaseOrderPanel extends JPanel {
 
     private JPanel supplierPanel;
     private JPanel employeePanel;
+    private PurchaseOrderPanel purchaseOrderPanel;
 
     private PurchaseOrderDetailsTable purchaseOrderDetailsTable;
 
@@ -138,10 +139,23 @@ public class PurchaseOrderPanel extends JPanel {
         buttonUpdate = new ButtonUpdate();
         buttonUpdate.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
-                updateDialog.setVisible(true);
+                // Get selected purchase order from the table
+                PurchaseOrderDTO selectedPO = purchaseOrderTable.getSelectedPurchaseOrder();
+                
+                if (selectedPO != null) {
+                    // Create an instance of UpdatePurchaseOrderDialog and pass the selected purchase order
+                    UpdatePurchaseOrderDialog updateDialog = new UpdatePurchaseOrderDialog(parentFrame, purchaseOrderPanel, selectedPO);
+                    updateDialog.setVisible(true);
+                } else {
+                    // Show message if no purchase order is selected
+                    JOptionPane.showMessageDialog(parentFrame, "Vui lòng chọn phiếu nhập để cập nhật!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
+
+
+
+
 
         // Thêm button Delete
         buttonDelete = new ButtonDelete();

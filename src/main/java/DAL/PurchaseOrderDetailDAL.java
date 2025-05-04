@@ -4,8 +4,12 @@ import DAL.Interface.IRepositoryBase;
 import DAL.Interface.RowMapper;
 import DTO.PurchaseOrderDetailDTO;
 import DTO.PurchaseOrderDTO; // Import PurchaseOrderDTO
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
@@ -22,15 +26,14 @@ public class PurchaseOrderDetailDAL{
     };
 
    
-    // @Override
-    // public PurchaseOrderDetailDTO findById(Long id) {
-    //     throw new UnsupportedOperationException("findById không được hỗ trợ cho khóa chính composite.  Sử dụng findByCompositeKey(Long purchaseOrderId, Long bookId)");
-    // }
+    
 
     public PurchaseOrderDetailDTO findByCompositeKey(Long purchaseOrderId, Long bookId) {
         String sql = "SELECT * FROM PurchaseOrderDetails WHERE purchaseOrderId = ? AND bookId = ?";
         return genericDAL.queryForObject(sql, detailRowMapper, purchaseOrderId, bookId);
     }
+
+    
 
 
     public List<PurchaseOrderDetailDTO> findAll() {
@@ -108,7 +111,9 @@ public class PurchaseOrderDetailDAL{
     }
 
     public List<PurchaseOrderDetailDTO> findByOrderId(long orderId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return getDetailsByOrderId(orderId);
     }
     
+    
+
 }
