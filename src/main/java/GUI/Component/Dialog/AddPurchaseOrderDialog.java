@@ -9,6 +9,9 @@ import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
 import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.PurchaseOrderPanel;
+import GUI.Component.Panel.Statistics.Components.DataRefreshListener;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 import GUI.Component.Table.PurchaseOrderTable;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
 import GUI.Component.TextField.CustomTextField;
@@ -456,6 +459,7 @@ public class AddPurchaseOrderDialog extends JDialog {
                     purchaseOrderDetailBUS.addPurchaseOrderDetail(detail);
                 }
             }
+            EventBusManager.getEventBus().post(new PurchaseChangeEvent());
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception ex) {

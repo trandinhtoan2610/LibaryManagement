@@ -106,29 +106,70 @@ public class PenaltyStatistics extends javax.swing.JPanel {
     }
 
 
-    public void renderPreciousPanel(){
-        String year = cboxChooseYear.getSelectedItem().toString();
-        List<StatisticsPreciousData<Long>> employeeList = employeeStats.get(year);
-        List<StatisticsPreciousData<String>> readerList = readerStats.get(year);
-        List<LostBookPreciousData> lostBookList = lostBookStats.get(year);
-        List<PenaltyTimeData> monthDataList = monthStats.get(year);
+    public void renderPreciousPanel() {
+        // Kiểm tra combobox có item được chọn không
+        if (cboxChooseYear.getSelectedItem() == null) {
+            // Xử lý khi không có năm nào được chọn
+            clearAllTables();
+            return;
+        }
 
-        tblEmployee.setList(employeeList);
-        tblReader.setList(readerList);
-        tblLostBook.setList(lostBookList);
-        tblMonths.setList(monthDataList);
-        resetPreciousPanel();
-        showMonthBarChart(year);
+        String year = cboxChooseYear.getSelectedItem().toString();
+
+        try {
+            // Lấy dữ liệu từ các map, nếu không có thì dùng list rỗng
+            List<StatisticsPreciousData<Long>> employeeList = employeeStats.getOrDefault(year, new ArrayList<>());
+            List<StatisticsPreciousData<String>> readerList = readerStats.getOrDefault(year, new ArrayList<>());
+            List<LostBookPreciousData> lostBookList = lostBookStats.getOrDefault(year, new ArrayList<>());
+            List<PenaltyTimeData> monthDataList = monthStats.getOrDefault(year, new ArrayList<>());
+
+            // Đặt dữ liệu vào các bảng
+            tblEmployee.setList(employeeList);
+            tblReader.setList(readerList);
+            tblLostBook.setList(lostBookList);
+            tblMonths.setList(monthDataList);
+
+            resetPreciousPanel();
+            showMonthBarChart(year);
+        } catch (Exception e) {
+            // Xử lý lỗi nếu có
+            JOptionPane.showMessageDialog(this, "Lỗi khi hiển thị dữ liệu: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            clearAllTables();
+            e.printStackTrace();
+        }
     }
 
-    //Lấy các năm bỏ vào combobox :
-    public void reloadYears(){
-        years = penaltyBUS.getActiveYears();
-        cboxChooseYear.removeAllItems();
-        for(String year : years ){
-            cboxChooseYear.addItem(year);
+    public void reloadYears() {
+        try {
+            years = penaltyBUS.getActiveYears();
+            cboxChooseYear.removeAllItems();
+
+            if (years != null && !years.isEmpty()) {
+                for (String year : years) {
+                    cboxChooseYear.addItem(year);
+                }
+                // Chỉ chọn item đầu tiên nếu có item
+                cboxChooseYear.setSelectedIndex(0);
+            } else {
+                // Xử lý khi không có năm nào
+                JOptionPane.showMessageDialog(this, "Không có dữ liệu năm nào",
+                        "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách năm: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        cboxChooseYear.setSelectedIndex(0);
+    }
+
+    private void clearAllTables() {
+        // Xóa dữ liệu ở tất cả các bảng
+        tblEmployee.setList(new ArrayList<>());
+        tblReader.setList(new ArrayList<>());
+        tblLostBook.setList(new ArrayList<>());
+        tblMonths.setList(new ArrayList<>());
+        resetPreciousPanel();
     }
 
     //Hàm render các ô thông tin chung :

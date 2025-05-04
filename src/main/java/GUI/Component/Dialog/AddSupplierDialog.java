@@ -6,6 +6,8 @@ package GUI.Component.Dialog;
 
 import BUS.SupplierBUS;
 import DTO.SupplierDTO;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 import GUI.Component.Panel.SupplierPanel;
 import GUI.Controller.Controller;
 import java.util.List;
@@ -231,6 +233,7 @@ public class AddSupplierDialog extends javax.swing.JDialog {
             AlertDialog addSupplierSuccess = new AlertDialog(this, "Thêm nhà cung cấp thành công !");
             addSupplierSuccess.setVisible(true);
             supplierPanel.reloadSupplierTable();
+            EventBusManager.getEventBus().post(new PurchaseChangeEvent());
             this.dispose();
 
         }

@@ -105,29 +105,56 @@ public class PurchaseStatistics extends javax.swing.JPanel {
         initYearPanel();
     }
 
-    public void renderPreciousPanel(){
-        String year = cboxChooseYear.getSelectedItem().toString();
-        List<StatisticsPreciousData<Long>> employeeList = purchaseStatsBUS.getEmployeePreciousData(year);
-        List<StatisticsPreciousData<String>> supplierList = purchaseStatsBUS.getSupplierPreciousData(year);
-        List<StatisticsPreciousData<Long>> bookList = purchaseStatsBUS.getBookPreciousData(year);
-        List<PurchaseTimeData> monthList = purchaseStatsBUS.getPurchaseMonthData(year);
+    public void renderPreciousPanel() {
+        // Kiểm tra nếu combobox không có item
+        if (cboxChooseYear.getItemCount() == 0) {
+            // Xử lý trường hợp không có năm nào
+            tblEmployee.setList(new ArrayList<>());
+            tblSupplier.setList(new ArrayList<>());
+            tblBook.setList(new ArrayList<>());
+            tblMonth.setList(new ArrayList<>());
+            resetPreciousPanel();
+            return;
+        }
 
-        tblEmployee.setList(employeeList);
-        tblSupplier.setList(supplierList);
-        tblBook.setList(bookList);
-        tblMonth.setList(monthList);
-        resetPreciousPanel();
-        showMonthBarChart(year);
+        // Nếu có item thì lấy năm được chọn
+        String year = cboxChooseYear.getSelectedItem().toString();
+
+        try {
+            List<StatisticsPreciousData<Long>> employeeList = purchaseStatsBUS.getEmployeePreciousData(year);
+            List<StatisticsPreciousData<String>> supplierList = purchaseStatsBUS.getSupplierPreciousData(year);
+            List<StatisticsPreciousData<Long>> bookList = purchaseStatsBUS.getBookPreciousData(year);
+            List<PurchaseTimeData> monthList = purchaseStatsBUS.getPurchaseMonthData(year);
+
+            tblEmployee.setList(employeeList != null ? employeeList : new ArrayList<>());
+            tblSupplier.setList(supplierList != null ? supplierList : new ArrayList<>());
+            tblBook.setList(bookList != null ? bookList : new ArrayList<>());
+            tblMonth.setList(monthList != null ? monthList : new ArrayList<>());
+
+            resetPreciousPanel();
+            showMonthBarChart(year);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 
-    //Lấy các năm bỏ vào combobox :
-    public void reloadYears(){
-        years = purchaseStatsBUS.getActiveYears();
-        cboxChooseYear.removeAllItems();
-        for(String year : years ){
-            cboxChooseYear.addItem(year);
+    public void reloadYears() {
+        try {
+            years = purchaseStatsBUS.getActiveYears();
+            cboxChooseYear.removeAllItems();
+
+            if (years != null && !years.isEmpty()) {
+                for (String year : years) {
+                    cboxChooseYear.addItem(year);
+                }
+                cboxChooseYear.setSelectedIndex(0);
+            }
+            // Nếu không có năm nào thì combobox sẽ trống nhưng không báo lỗi
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách năm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        cboxChooseYear.setSelectedIndex(0);
     }
 
     //Hàm render các ô thông tin chung :
@@ -1148,7 +1175,7 @@ public class PurchaseStatistics extends javax.swing.JPanel {
         bookTab.setLayout(new java.awt.BorderLayout());
 
         lblBookTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblBookTab.setText("Sách tổn thất");
+        lblBookTab.setText("Sách được nhập");
         lblBookTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblBookTabMouseClicked(evt);

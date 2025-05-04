@@ -62,7 +62,7 @@ public class BookStatisticsPanel extends JPanel {
         overviewPanel.add(totalBooksBox);
         overviewPanel.add(Box.createHorizontalStrut(10));
 
-        totalBorrowedBox = new BoxDashBoard("Sách đã mượn", "0");
+        totalBorrowedBox = new BoxDashBoard("Sách đang mượn", "0");
         overviewPanel.add(totalBorrowedBox);
         overviewPanel.add(Box.createHorizontalStrut(10));
 

@@ -138,17 +138,4 @@ public class MainFrame extends JFrame implements SidebarListener {
                 break;
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |
-                     IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-            MainFrame mainFrame = new MainFrame(new Employee(1L, "Hoàng", "Quý", Gender.Nam, "admin", "admin", 1L, "0329997881", "90 36 35", 10L));
-            mainFrame.setVisible(true);
-        });
-    }
 }

@@ -25,7 +25,7 @@ public class PurchaseMonthStatisticsTable extends JTableCustom {
     }
 
     public void renderMonthsTable(int page) {
-        if (dataList == null) return;
+        if (dataList == null || dataList.isEmpty()) return;
         int lastIndex = page * 3;
         int startIndex = lastIndex-3;
         tableModel.setRowCount(0);

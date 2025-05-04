@@ -145,9 +145,7 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -157,9 +155,7 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,
@@ -241,9 +237,8 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
+
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -253,9 +248,8 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
+
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,
@@ -334,9 +328,8 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
+
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -346,9 +339,8 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
+
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,
@@ -435,9 +427,8 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
+
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -447,9 +438,8 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
+
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,
@@ -539,9 +529,8 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
+
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -551,9 +540,8 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
+
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,
@@ -643,9 +631,8 @@ public class BorrowStatistics extends JPanel{
                         quarter[3],
                         total
                 };
-                if (!rowdata[5].equals(0)) {
-                    model.addRow(rowdata);
-                }
+                model.addRow(rowdata);
+
             }
             Object[] rowdata = {
                     "Tổng Cộng",
@@ -655,9 +642,8 @@ public class BorrowStatistics extends JPanel{
                     quarter4,
                     finalTotal
             };
-            if (!rowdata[5].equals(0)) {
-                model.addRow(rowdata);
-            }
+            model.addRow(rowdata);
+
             DefaultTableCellRenderer compositeRenderer = new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,

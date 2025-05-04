@@ -178,13 +178,4 @@ public class PurchaseOrderStatistics extends JPanel {
         panel.add(barChart, BorderLayout.CENTER);
         return panel;
     }
-
-    public static void main(String[] args) {
-        FlatLightLaf.setup();
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(new PurchaseOrderStatistics());
-        frame.pack();
-        frame.setVisible(true);
-    }
 }

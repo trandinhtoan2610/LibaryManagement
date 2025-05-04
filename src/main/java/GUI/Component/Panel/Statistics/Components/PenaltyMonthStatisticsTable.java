@@ -24,7 +24,7 @@ public class PenaltyMonthStatisticsTable extends JTableCustom {
     }
 
     public void renderMonthsTable(int page) {
-        if (penaltyTimeDataList == null) return;
+        if (penaltyTimeDataList == null || penaltyTimeDataList.isEmpty()) return;
         int lastIndex = page * 3;
         int startIndex = lastIndex-3;
         tableModel.setRowCount(0);
