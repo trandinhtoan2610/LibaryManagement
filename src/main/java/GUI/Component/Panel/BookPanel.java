@@ -146,7 +146,7 @@ public class BookPanel extends JPanel {
     }
 
     public static void loadData() {
-        List<BookViewModel> books = bookBUS.getAllBooksForDisplay();
+        List<BookViewModel> books = BookBUS.bookViewModels;
         if (books != null) {
             bookTable.setBooks(books);
         } else {

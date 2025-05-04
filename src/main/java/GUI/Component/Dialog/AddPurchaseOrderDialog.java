@@ -7,6 +7,7 @@ import DTO.Enum.PurchaseStatus;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
+import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.PurchaseOrderPanel;
 import GUI.Component.Table.PurchaseOrderTable;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
@@ -62,6 +63,7 @@ public class AddPurchaseOrderDialog extends JDialog {
     private Employee currentEmployee;
     private PurchaseOrderPanel purchaseOrderPanel;
     private List<PurchaseOrderDetailDTO> pendingOrderDetails = new ArrayList<>();
+    private Long currentPurchaseId;
 
     public AddPurchaseOrderDialog(JFrame parent, PurchaseOrderPanel purchaseOrderPanel) {
         super(parent, "Thêm Phiếu Nhập", true);
@@ -203,7 +205,7 @@ public class AddPurchaseOrderDialog extends JDialog {
         buyDateChooser.setDate(new Date());
 
         statusLabel = new JLabel("Trạng thái:");
-        statusComboBox = new JComboBox<>(new String[]{"Đang_Chờ", "Hoàn_Thành", "Đã_Hủy"});
+        statusComboBox = new JComboBox<>(new String[]{"Đang_Chờ"});
 
         infoPanel.add(buyDateLabel);
         infoPanel.add(buyDateChooser);
@@ -310,6 +312,17 @@ public class AddPurchaseOrderDialog extends JDialog {
         addDetailDialog.setVisible(true);
         if (addDetailDialog.getCurrentOrderDetail() != null) {
             PurchaseOrderDetailDTO newDetail = addDetailDialog.getCurrentOrderDetail();
+            for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
+                if (detail.getBookId() == newDetail.getBookId()) {
+                    detail.setQuantity(detail.getQuantity() + newDetail.getQuantity());
+                    BigDecimal subTotal = detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity()));
+                    detail.setSubTotal(subTotal);
+                    purchaseOrderDetailsTable.updatePurchaseOrderDetails(detail);
+                    purchaseOrderDetailsTable.refreshTable();
+                    updateTotalAmount();
+                    return;
+                }
+            }
             pendingOrderDetails.add(newDetail);
             purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
             purchaseOrderDetailsTable.refreshTable();
@@ -339,13 +352,37 @@ public class AddPurchaseOrderDialog extends JDialog {
 
     private void deleteOrderDetails() {
         int selectedRow = purchaseOrderDetailsTable.getSelectedRow();
+
         if (selectedRow != -1) {
-            pendingOrderDetails.remove(selectedRow);
-            purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
-            purchaseOrderDetailsTable.refreshTable();
-            updateTotalAmount();
+            // Show confirmation dialog
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Bạn có chắc chắn muốn xóa chi tiết đã chọn?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                pendingOrderDetails.remove(selectedRow);
+                purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
+                purchaseOrderDetailsTable.refreshTable();
+                updateTotalAmount();
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Xóa chi tiết thành công",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết để xóa", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng chọn một chi tiết để xóa",
+                    "Thông báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
     }
 
@@ -377,11 +414,20 @@ public class AddPurchaseOrderDialog extends JDialog {
         return true;
     }
 
+    private void setCurrentID() {
+        try {
+            currentPurchaseId = purchaseOrderBUS.getCurrentID() + 1;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Lỗi khi lấy ID phiếu mượn: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void addPurchaseOrder() {
         if (!validateInput()) return;
     
         try {
-            
+            setCurrentID();
             String supplierId = supplierField.getText().trim();
             long employeeId = Long.parseLong(employeeField.getText().trim());
             Date buyDate = new java.sql.Timestamp(buyDateChooser.getDate().getTime());
@@ -396,22 +442,20 @@ public class AddPurchaseOrderDialog extends JDialog {
     
             // Khởi tạo PurchaseOrderDTO
             PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
+            purchaseOrderDTO.setId(currentPurchaseId);
             purchaseOrderDTO.setSupplierId(supplierId);
             purchaseOrderDTO.setEmployeeId(employeeId);
             purchaseOrderDTO.setBuyDate(buyDate);
             purchaseOrderDTO.setStatus(status);
-            purchaseOrderDTO.setTotalAmount(totalAmount.doubleValue());
-            for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
-                detail.setPurchaseOrderId(purchaseOrderDTO.getId());
-                purchaseOrderDetailBUS.addPurchaseOrderDetail(detail);
-    
-                // Cập nhật số lượng sách
-                Book book = bookBUS.getBookById(detail.getBookId());
-                book.setQuantity(book.getQuantity() + detail.getQuantity());
-                bookBUS.updateBook(book);
+            purchaseOrderDTO.setTotalAmount(totalAmount);
+            boolean success = purchaseOrderBUS.addPurchaseOrder(purchaseOrderDTO);
+            if (success) {
+                purchaseOrderPanel.addPurchaseOrder(purchaseOrderDTO);
+                for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
+                    detail.setPurchaseOrderId(purchaseOrderDTO.getId());
+                    purchaseOrderDetailBUS.addPurchaseOrderDetail(detail);
+                }
             }
-            PurchaseOrderPanel.reloadPurchaseOrderTable();
-    
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception ex) {
@@ -419,6 +463,4 @@ public class AddPurchaseOrderDialog extends JDialog {
             ex.printStackTrace();
         }
     }
-    
-    
 }

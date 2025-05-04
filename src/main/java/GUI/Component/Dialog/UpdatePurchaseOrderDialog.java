@@ -2,8 +2,11 @@ package GUI.Component.Dialog;
 
 import BUS.*;
 import DTO.*;
+import DTO.Enum.PurchaseStatus;
+import DTO.Enum.Status;
 import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
+import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.PurchaseOrderPanel;
 import GUI.Component.Table.PurchaseOrderDetailsTable;
 import GUI.Component.Table.PurchaseOrderTable;
@@ -67,6 +70,7 @@ public class UpdatePurchaseOrderDialog extends JDialog {
         super(parent, "Cập Nhật Phiếu Nhập", true); 
         this.purchaseOrderPanel = purchaseOrderPanel; // Lưu trữ PurchaseOrderPanel để sau này gọi reloadPurchaseOrderTable()
         this.currentPurchaseOrder = purchaseOrder; // Lưu trữ phiếu nhập đang được cập nhật
+        this.pendingOrderDetails = purchaseOrderDetailBUS.getPurchaseOrderDetailsByOrderId(purchaseOrder.getId());
         initComponents(); // Khởi tạo các thành phần giao diện
         loadPurchaseOrderData(); // Tải dữ liệu của phiếu nhập vào các thành phần giao diện
         setSize(800, 700); // Đặt kích thước của dialog
@@ -245,7 +249,15 @@ public class UpdatePurchaseOrderDialog extends JDialog {
 
         statusLabel = new JLabel("Trạng thái:");
         statusComboBox = new JComboBox<>(new String[]{"Đang_Chờ", "Hoàn_Thành", "Đã_Hủy"});
-
+        if (currentPurchaseOrder.getStatus() == PurchaseStatus.Hoàn_Thành){
+            statusComboBox.setSelectedItem("Hoàn_Thành");
+            statusComboBox.setEnabled(false);
+        } else if (currentPurchaseOrder.getStatus() == PurchaseStatus.Đã_Hủy) {
+            statusComboBox.setSelectedItem("Đã_Hủy");
+            statusComboBox.setEnabled(false);
+        } else if (currentPurchaseOrder.getStatus() == PurchaseStatus.Đang_Chờ) {
+            statusComboBox.setSelectedItem("Đang_Chờ");
+        }
         infoPanel.add(buyDateLabel);
         infoPanel.add(buyDateChooser);
         infoPanel.add(statusLabel);
@@ -303,7 +315,6 @@ public class UpdatePurchaseOrderDialog extends JDialog {
             showEmployeeInfo();
 
             try {
-                List<PurchaseOrderDetailDTO> details = purchaseOrderDetailBUS.getDetailsByOrderId(currentPurchaseOrder.getId());
                 purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
                 purchaseOrderDetailsTable.refreshTable();
                 updateTotalAmount();
@@ -337,7 +348,6 @@ public class UpdatePurchaseOrderDialog extends JDialog {
             System.out.println(e);
             JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin nhà cung cấp: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     private void showEmployeeInfo() {
@@ -382,10 +392,21 @@ public class UpdatePurchaseOrderDialog extends JDialog {
     }
 
     private void addOrderDetail() {
-        AddPurchaseOrderDetailsDialog addDetailDialog = new AddPurchaseOrderDetailsDialog(this, 0L);
+        AddPurchaseOrderDetailsDialog addDetailDialog = new AddPurchaseOrderDetailsDialog(this,0L);
         addDetailDialog.setVisible(true);
         if (addDetailDialog.getCurrentOrderDetail() != null) {
             PurchaseOrderDetailDTO newDetail = addDetailDialog.getCurrentOrderDetail();
+            for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
+                if (detail.getBookId() == newDetail.getBookId()) {
+                    detail.setQuantity(detail.getQuantity() + newDetail.getQuantity());
+                    BigDecimal subTotal = detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity()));
+                    detail.setSubTotal(subTotal);
+                    purchaseOrderDetailsTable.updatePurchaseOrderDetails(detail);
+                    purchaseOrderDetailsTable.refreshTable();
+                    updateTotalAmount();
+                    return;
+                }
+            }
             pendingOrderDetails.add(newDetail);
             purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
             purchaseOrderDetailsTable.refreshTable();
@@ -405,8 +426,8 @@ public class UpdatePurchaseOrderDialog extends JDialog {
         UpdatePurchaseOrderDetail updateDialog = new UpdatePurchaseOrderDetail(this, selectedDetail);
         updateDialog.setVisible(true);
 
-        if (updateDialog.getUpdatedDetail() != null) {
-            pendingOrderDetails.set(selectedRow, updateDialog.getUpdatedDetail());
+        if (updateDialog.getCurrentOrderDetail() != null) {
+            pendingOrderDetails.set(selectedRow, updateDialog.getCurrentOrderDetail());
             purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
             purchaseOrderDetailsTable.refreshTable();
             updateTotalAmount();
@@ -415,13 +436,36 @@ public class UpdatePurchaseOrderDialog extends JDialog {
 
     private void deleteOrderDetails() {
         int selectedRow = purchaseOrderDetailsTable.getSelectedRow();
+
         if (selectedRow != -1) {
-            pendingOrderDetails.remove(selectedRow);
-            purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
-            purchaseOrderDetailsTable.refreshTable();
-            updateTotalAmount();
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Bạn có chắc chắn muốn xóa chi tiết đã chọn?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                pendingOrderDetails.remove(selectedRow);
+                purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
+                purchaseOrderDetailsTable.refreshTable();
+                updateTotalAmount();
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Xóa chi tiết thành công",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một chi tiết để xóa", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng chọn một chi tiết để xóa",
+                    "Thông báo",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
     }
 
@@ -455,20 +499,46 @@ public class UpdatePurchaseOrderDialog extends JDialog {
 
     private void updatePurchaseOrder() {
         if (!validateInput()) return;
-    
+
         try {
             currentPurchaseOrder.setSupplierId(supplierField.getText());
             currentPurchaseOrder.setEmployeeId(Long.parseLong(employeeField.getText()));
             currentPurchaseOrder.setBuyDate(buyDateChooser.getDate());
-            currentPurchaseOrder.setStatus(PurchaseOrderDTO.Status.valueOf(statusComboBox.getSelectedItem().toString().replace(" ", "_")));
-    
-            purchaseOrderBUS.update(currentPurchaseOrder);
-            purchaseOrderDetailBUS.updateDetails(currentPurchaseOrder.getId(), pendingOrderDetails);
-    
-            JOptionPane.showMessageDialog(this, "Cập nhật phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            if (purchaseOrderPanel != null) {
-                purchaseOrderPanel.reloadPurchaseOrderTable();
+            currentPurchaseOrder.setStatus(PurchaseStatus.valueOf(statusComboBox.getSelectedItem().toString().replace(" ", "_")));
+            BigDecimal totalAmount = BigDecimal.ZERO;
+            for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
+                BigDecimal subTotal = detail.getUnitPrice().multiply(BigDecimal.valueOf(detail.getQuantity()));
+                detail.setSubTotal(subTotal);
+                totalAmount = totalAmount.add(subTotal);
+
+                if (detail.getPurchaseOrderId() == 0) {
+                    detail.setPurchaseOrderId(currentPurchaseOrder.getId());
+                    purchaseOrderDetailBUS.addPurchaseOrderDetail(detail);
+                } else {
+                    boolean updated = purchaseOrderDetailBUS.updatePurchaseOrderDetail(detail);
+                    if (!updated) {
+                        throw new Exception("Không thể cập nhật chi tiết");
+                    }
+                }
             }
+            //tang so luong sach
+            if (currentPurchaseOrder.getStatus() == PurchaseStatus.Hoàn_Thành) {
+                for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
+                    Book book = bookBUS.getBookById(detail.getBookId());
+                    if (book != null) {
+                        book.setQuantity(book.getQuantity() + detail.getQuantity());
+                        bookBUS.updateBook(book);
+                    }
+                }
+                BookPanel.loadData();
+            }
+            currentPurchaseOrder.setTotalAmount(totalAmount);
+            boolean orderUpdated = purchaseOrderBUS.updatePurchaseOrder(currentPurchaseOrder);
+            if (!orderUpdated) {
+                throw new Exception("Không thể cập nhật thông tin phiếu nhập");
+            }
+            purchaseOrderPanel.updatePurchaseOrder(currentPurchaseOrder);
+            JOptionPane.showMessageDialog(this, "Cập nhật phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {
             e.printStackTrace();

@@ -19,14 +19,13 @@ public class BookBUS {
     private final CategoryBUS categoryBUS;
     private final AuthorBUS authorBUS;
     private final PublisherBUS publisherBUS;
-    private final List<BookViewModel> bookViewModels;
+    public static final List<BookViewModel> bookViewModels = new ArrayList<>();
 
     public BookBUS() {
         this.bookRepository = new BookDAL();
         this.categoryBUS = new CategoryBUS();
         this.authorBUS = new AuthorBUS();
         this.publisherBUS = new PublisherBUS();
-        this.bookViewModels = new ArrayList<>();
         refreshBooks();
     }
 

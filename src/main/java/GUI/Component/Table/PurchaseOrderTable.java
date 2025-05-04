@@ -1,11 +1,15 @@
 package GUI.Component.Table;
 
+import BUS.PurchaseOrderBUS;
 import DTO.PurchaseOrderDTO;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static GUI.Controller.Controller.formatDate;
+import static GUI.Controller.Controller.formatVND;
 
 public class PurchaseOrderTable extends JTableCustom {
     private static final String[] HEADER = {
@@ -14,6 +18,7 @@ public class PurchaseOrderTable extends JTableCustom {
 
     private DefaultTableModel tableModel;
     private List<PurchaseOrderDTO> purchaseOrderDTOS;
+    private final PurchaseOrderBUS purchaseOrderBUS = new PurchaseOrderBUS();
 
     public PurchaseOrderTable() {
         super(new DefaultTableModel(HEADER, 0));
@@ -32,7 +37,6 @@ public class PurchaseOrderTable extends JTableCustom {
             this.purchaseOrderDTOS = new ArrayList<>();
         }
         refreshTable();
-        
     }
 
     public void addPurchaseOrder(PurchaseOrderDTO purchaseOrder) {
@@ -82,8 +86,8 @@ public class PurchaseOrderTable extends JTableCustom {
                 dto.getSupplierId(),
                 dto.getEmployeeId(),
                 dto.getStatus(),
-                dto.getBuyDate(),
-                dto.getTotalAmount()
+                formatDate(dto.getBuyDate()),
+                formatVND(dto.getTotalAmount())
             };
             tableModel.addRow(rowData);
         }

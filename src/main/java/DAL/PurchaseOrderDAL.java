@@ -8,6 +8,8 @@ import DAL.Interface.RowMapper;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+
+import DTO.PurchaseOrderDetailDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,7 @@ public class PurchaseOrderDAL {
         dto.setId(rs.getLong("id"));
         dto.setSupplierId(rs.getString("supplierId"));
         dto.setEmployeeId(rs.getLong("employeeId"));
-        dto.setTotalAmount(rs.getDouble("totalAmount"));
+        dto.setTotalAmount(rs.getBigDecimal("totalAmount"));
         dto.setBuyDate(rs.getTimestamp("buyDate"));
         dto.setStatus(status);
         return dto;
@@ -71,9 +73,8 @@ public class PurchaseOrderDAL {
         return genericDAL.delete(sql, id);
     }
 
-    public long getCurrentID() throws SQLException {
+    public Long getCurrentID() throws SQLException {
         String sql = "SELECT MAX(id) from PurchaseOrders";
         return genericDAL.getMaxID(sql);
     }
-    
 }

@@ -1,7 +1,12 @@
 package GUI.Component.Dialog;
 
+import BUS.BookBUS;
 import BUS.PurchaseOrderBUS;
+import DTO.Book;
+import DTO.Enum.PurchaseStatus;
 import DTO.PurchaseOrderDTO;
+import DTO.PurchaseOrderDetailDTO;
+import GUI.Component.Panel.BookPanel;
 import GUI.Component.Panel.PurchaseOrderPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +14,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +25,7 @@ public class DeletePurchaseOrderDialog extends java.awt.Dialog {
     private PurchaseOrderBUS purchaseOrderBUS;
     private PurchaseOrderDTO purchaseOrderToDelete;
     private PurchaseOrderPanel purchaseOrderPanel;
+    private final BookBUS bookBUS = new BookBUS();
 
     private JPanel jPanel1;
     private JLabel jLabel1;
@@ -132,10 +139,10 @@ public class DeletePurchaseOrderDialog extends java.awt.Dialog {
     private void btnDeleteActionPerformed(ActionEvent evt) {
         boolean deleted = purchaseOrderBUS.deletePurchaseOrder(purchaseOrderToDelete.getId());
         if (deleted) {
+            purchaseOrderPanel.deletePurchaseOrder(purchaseOrderToDelete);
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa phiếu nhập hàng thành công!");
             successDeleteAlert.setVisible(true);
-            purchaseOrderPanel.reloadPurchaseOrderTable();
-            this.dispose();this.dispose();
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa phiếu nhập hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }

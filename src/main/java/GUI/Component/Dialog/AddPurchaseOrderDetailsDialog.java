@@ -286,10 +286,10 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
                 unitPrice,
                 subTotal
             );
-            
-            purchaseOrderDetailsBUS.addPurchaseOrderDetail(currentOrderDetail);
+            if (purchaseOrderId > 0) {
+                purchaseOrderDetailsBUS.addPurchaseOrderDetail(currentOrderDetail);
+            }
             dispose();
         }
-        
     }
 }

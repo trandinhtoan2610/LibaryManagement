@@ -5,6 +5,7 @@
 package GUI.Controller;
 
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +37,9 @@ public class Controller {
         }
         return result.toString().trim();
     }
-
+    public static String formatVND(double money) {
+        return String.format("%,.0f đ", money);
+    }
     public static String formatVND(Long money) {
         if (money == null) return "0 đ";
         return String.format("%,d đ", money);
@@ -45,6 +48,7 @@ public class Controller {
     public static String formatDate(Date date){
         return  DATE_FMT.format(date);
     }
-
-
+    public static String formatVND(BigDecimal money) {
+        return String.format("%,.0f đ", money);
+    }
 }

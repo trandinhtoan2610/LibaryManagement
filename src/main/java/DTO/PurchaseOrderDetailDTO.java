@@ -3,20 +3,18 @@ package DTO;
 import java.math.BigDecimal;
 
 import DTO.Abstract.EntityBase;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseOrderDetailDTO extends EntityBase<Long> {
+@ToString
+public class PurchaseOrderDetailDTO{
     private Long purchaseOrderId, bookId;
     private int quantity;
     private BigDecimal unitPrice, subTotal;
-    
+
     public PurchaseOrderDetailDTO(Long purchaseOrderId, Long bookId, BigDecimal unitPrice, int quantity, BigDecimal subTotal) {
         this.purchaseOrderId = purchaseOrderId;
         this.bookId = bookId;

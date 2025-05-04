@@ -15,9 +15,11 @@ import java.util.logging.Logger;
 public class PurchaseOrderBUS {
     private PurchaseOrderDAL purchaseOrderDAL;
     private List<PurchaseOrderDTO> purchaseOrderList;
+    private PurchaseOrderDetailDAL purchaseOrderDetailDAL;
 
     public PurchaseOrderBUS() {
         this.purchaseOrderDAL = new PurchaseOrderDAL();
+        this.purchaseOrderDetailDAL = new PurchaseOrderDetailDAL();
         this.purchaseOrderList = new ArrayList<>();
         loadPurchaseOrders();
     }
@@ -96,13 +98,6 @@ public class PurchaseOrderBUS {
         }
     }
 
-    
-    public boolean validatePurchaseOrder(PurchaseOrderDTO order) {
-        return order.getSupplierId() != null && !order.getSupplierId().isEmpty()
-                && order.getEmployeeId() > 0
-                && order.getTotalAmount() >= 0;
-    }
-
     // Cập nhật danh sách phiếu nhập khi có thay đổi
     private void updatePurchaseOrderList(PurchaseOrderDTO order) {
         for (int i = 0; i < purchaseOrderList.size(); i++) {
@@ -112,10 +107,10 @@ public class PurchaseOrderBUS {
             }
         }
     }
-
-    
-    public List<PurchaseOrderDetailDTO> getPurchaseOrderDetailsByOrderId(long orderId) {
-        // Lấy chi tiết phiếu nhập từ cơ sở dữ liệu hoặc giả lập dữ liệu
-        return new PurchaseOrderDetailDAL().findByOrderId(orderId);
-    }  
+    public Long getCurrentID() throws SQLException {
+        return purchaseOrderDAL.getCurrentID();
+    }
+    public List<PurchaseOrderDetailDTO> getPurchaseOrderDetailsByOrderId(Long orderId) {
+        return purchaseOrderDetailDAL.getDetailsByOrderId(orderId);
+    }
 }

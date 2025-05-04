@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -17,6 +18,6 @@ public class PurchaseOrderDTO {
     private long employeeId;
     private String supplierId;
     private PurchaseStatus status;
-    private Double totalAmount;
+    private BigDecimal totalAmount;
     private Date buyDate;
 }

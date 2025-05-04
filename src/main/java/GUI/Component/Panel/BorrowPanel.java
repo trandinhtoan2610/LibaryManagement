@@ -141,19 +141,14 @@ public class BorrowPanel extends JPanel {
                     int row = borrowDetailTable.rowAtPoint(e.getPoint());
                     if (row >= 0) {
                         BorrowDetailDTO selectedDetails = borrowDetailTable.getBorrowDetailAt(row);
-                        if (selectedDetails.getStatus() == SubStatus.Đang_Mượn){
+                        borrowDetailTable.setRowSelectionInterval(row, row);
+                        if (selectedDetails != null && selectedDetails.getStatus() == SubStatus.Đang_Mượn){
                             menuItemBorrowing.setVisible(false);
                             menuItemReturned.setVisible(true);
                             menuItemLostBook.setVisible(true);
                             menuItemBrokenBook.setVisible(true);
-                        }else {
-                            menuItemBorrowing.setVisible(true);
-                            menuItemReturned.setVisible(false);
-                            menuItemLostBook.setVisible(false);
-                            menuItemBrokenBook.setVisible(false);
+                            popupMenu.show(borrowDetailTable, e.getX(), e.getY());
                         }
-                        borrowDetailTable.setRowSelectionInterval(row, row);
-                        popupMenu.show(borrowDetailTable, e.getX(), e.getY());
                     }
                 }
             }

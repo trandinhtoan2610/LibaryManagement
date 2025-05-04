@@ -1,15 +1,21 @@
 package GUI.Component.Table;
 
+import BUS.BookBUS;
+import DTO.Book;
+import DTO.BookViewModel;
 import DTO.PurchaseOrderDetailDTO;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import static GUI.Controller.Controller.formatVND;
+
 public class PurchaseOrderDetailsTable extends JTableCustom{
-    private static final String HEADER[] = {"Mã Phiếu Nhập", "Mã Sách", "Số lượng", "Đơn giá", "Tổng tiền"};
+    private static final String HEADER[] = {"Tên Sách", "Số lượng", "Đơn giá", "Tổng tiền"};
     private DefaultTableModel tableModel;
     private static List<PurchaseOrderDetailDTO> purchaseOrderDetailDTOS;
+    private final BookBUS bookBUS = new BookBUS();
     public PurchaseOrderDetailsTable() {
         super(new DefaultTableModel(HEADER, 0));
         this.tableModel = (DefaultTableModel) getModel();
@@ -20,7 +26,6 @@ public class PurchaseOrderDetailsTable extends JTableCustom{
         getColumnModel().getColumn(1).setPreferredWidth(100);
         getColumnModel().getColumn(2).setPreferredWidth(100);
         getColumnModel().getColumn(3).setPreferredWidth(100);
-        getColumnModel().getColumn(4).setPreferredWidth(100);
         setAutoCreateRowSorter(true);
     }
     public void setPurchaseOrderDetails(List<PurchaseOrderDetailDTO> purchaseOrderDetail) {
@@ -71,12 +76,12 @@ public class PurchaseOrderDetailsTable extends JTableCustom{
     public void refreshTable() {
         tableModel.setRowCount(0);
         for (PurchaseOrderDetailDTO purchaseOrderDetailDTO : purchaseOrderDetailDTOS) {
+            BookViewModel book = bookBUS.getBookByIdForDisplay(purchaseOrderDetailDTO.getBookId());
             tableModel.addRow(new Object[]{
-                    purchaseOrderDetailDTO.getPurchaseOrderId(),
-                    purchaseOrderDetailDTO.getBookId(),
+                    book.getName(),
                     purchaseOrderDetailDTO.getQuantity(),
-                    purchaseOrderDetailDTO.getUnitPrice(),
-                    purchaseOrderDetailDTO.getSubTotal()
+                    formatVND(purchaseOrderDetailDTO.getUnitPrice()),
+                    formatVND(purchaseOrderDetailDTO.getSubTotal())
             });
         }
     }

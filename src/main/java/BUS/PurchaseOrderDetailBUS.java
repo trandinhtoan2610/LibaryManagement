@@ -92,12 +92,6 @@ public class PurchaseOrderDetailBUS {
             throw new RuntimeException("Lỗi khi cập nhật chi tiết phiếu nhập!", e);
         }
     }
-    
-
-    public List<PurchaseOrderDetailDTO> getDetailsByOrderId(Long purchaseOrderId) {
-        return purchaseOrderDetailDAL.findByOrderId(purchaseOrderId);
-    }
-
     public double getTotalAmount(Long purchaseOrderId) {
         double total = 0;
         for (PurchaseOrderDetailDTO detail : purchaseOrderDetailList) {
@@ -106,5 +100,14 @@ public class PurchaseOrderDetailBUS {
             }
         }
         return total;
+    }
+    public List<PurchaseOrderDetailDTO> getPurchaseOrderDetailsByOrderId(Long purchaseOrderId) {
+        List<PurchaseOrderDetailDTO> details = new ArrayList<>();
+        for (PurchaseOrderDetailDTO detail : purchaseOrderDetailList) {
+            if (detail.getPurchaseOrderId().equals(purchaseOrderId)) {
+                details.add(detail);
+            }
+        }
+        return details;
     }
 }
