@@ -5,6 +5,8 @@ import BUS.PenaltyBUS;
 import DTO.*;
 import DTO.Enum.PayStatus;
 import GUI.Component.Panel.PenaltyPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PenaltyChangeEvent;
 import GUI.Controller.Controller;
 
 import javax.swing.*;
@@ -25,13 +27,13 @@ public class UpdatePenaltyDialog extends JDialog {
 
    
     public UpdatePenaltyDialog(java.awt.Frame parent, boolean modal, PenaltyDTO p, List<PenaltyDetailsDTO> list, ReaderDTO reader, BorrowDTO borrowSheet ) {
+        super(parent, modal);
         penaltyBUS = new PenaltyBUS();
         this.penalty = p;
         this.penaltyDetails = list;
         this.reader = reader;
         this.borrowSheet = borrowSheet;
         this.employeeBUS = new EmployeeBUS();
-        super(parent, modal);
         initComponents();
         tblPenaltyDetails.resetTable(list);
         setMinimumSize(new Dimension(750,600));
@@ -431,6 +433,8 @@ public class UpdatePenaltyDialog extends JDialog {
             new AlertDialog(this, "Cập nhật thành công !").setVisible(true);
             this.dispose();
             PenaltyPanel.reloadTable();
+            EventBusManager.getEventBus().post(new PenaltyChangeEvent());
+
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Có lỗi khi cập nhật phiếu phạt");

@@ -90,20 +90,20 @@ public class PurchaseOrderDetailDAL{
         return genericDAL.delete(sql, purchaseOrderId, bookId);
     }
 
-    public BigDecimal getTotalAmountByOrderId(Long orderId) {
-        String sql = "SELECT SUM(SubTotal) AS total FROM PurchaseOrderDetails WHERE purchaseOrderId = ?";
-        try {
-            ResultSet rs = genericDAL.query(sql, orderId);
-            if (rs.next()) {
-                BigDecimal total = rs.getBigDecimal("total");
-                return total != null ? total : BigDecimal.ZERO;
-            }
-            return BigDecimal.ZERO;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return BigDecimal.ZERO;
-        }
-    }
+//    public BigDecimal getTotalAmountByOrderId(Long orderId) {
+//        String sql = "SELECT SUM(SubTotal) AS total FROM PurchaseOrderDetails WHERE purchaseOrderId = ?";
+//        try {
+//            ResultSet rs = genericDAL.query(sql, orderId);
+//            if (rs.next()) {
+//                BigDecimal total = rs.getBigDecimal("total");
+//                return total != null ? total : BigDecimal.ZERO;
+//            }
+//            return BigDecimal.ZERO;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return BigDecimal.ZERO;
+//        }
+//    }
 
     public long getCurrentID() {
         String sql = "SELECT MAX(purchaseOrderId) FROM PurchaseOrderDetails";

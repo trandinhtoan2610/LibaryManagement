@@ -8,6 +8,8 @@ import BUS.PenaltyBUS;
 import BUS.PenaltyDetailsBUS;
 import DTO.PenaltyDTO;
 import GUI.Component.Panel.PenaltyPanel;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PenaltyChangeEvent;
 
 import java.awt.*;
 
@@ -22,11 +24,11 @@ public class DeletePenaltyDialog extends javax.swing.JDialog {
     private boolean mode;
     
     public DeletePenaltyDialog(java.awt.Frame parent, boolean modal, PenaltyDTO penalty, boolean isBorrowDeleted) {
+        super(parent, modal);
         penaltySheet = penalty;
         mode = isBorrowDeleted;
         penaltyBUS = new PenaltyBUS();
         penaltyDetailsBUS = new PenaltyDetailsBUS();
-        super(parent, modal);
         initComponents();
         setMinimumSize(new Dimension(400,200));
         setMaximumSize(new Dimension(400,200));
@@ -136,7 +138,7 @@ public class DeletePenaltyDialog extends javax.swing.JDialog {
             PenaltyPanel.reloadTable();
             this.dispose();
             new AlertDialog(this, "Xóa phiếu phạt thành công !").setVisible(true);
-
+            EventBusManager.getEventBus().post(new PenaltyChangeEvent());
 
         } catch (Exception e) {
             e.printStackTrace();

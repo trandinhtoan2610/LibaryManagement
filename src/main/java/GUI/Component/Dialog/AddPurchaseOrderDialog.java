@@ -2,6 +2,8 @@ package GUI.Component.Dialog;
 
 import BUS.*;
 import DTO.*;
+import DTO.Enum.PayStatus;
+import DTO.Enum.PurchaseStatus;
 import GUI.Component.Button.ButtonBack;
 import GUI.Component.Button.ButtonChosen;
 import GUI.Component.Button.ButtonIcon;
@@ -323,16 +325,16 @@ public class AddPurchaseOrderDialog extends JDialog {
             return;
         }
         
-        PurchaseOrderDetailDTO selectedDetail = pendingOrderDetails.get(selectedRow);
-        UpdatePurchaseOrderDetail updateDialog = new UpdatePurchaseOrderDetail(this, selectedDetail);
-        updateDialog.setVisible(true);
-        
-        if (updateDialog.getUpdatedDetail() != null) {
-            pendingOrderDetails.set(selectedRow, updateDialog.getUpdatedDetail());
-            purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
-            purchaseOrderDetailsTable.refreshTable();
-            updateTotalAmount();
-        }
+//        PurchaseOrderDetailDTO selectedDetail = pendingOrderDetails.get(selectedRow);
+//        UpdatePurchaseOrderDetail updateDialog = new UpdatePurchaseOrderDetail(this, selectedDetail);
+//        updateDialog.setVisible(true);
+//
+//        if (updateDialog.getUpdatedDetail() != null) {
+//            pendingOrderDetails.set(selectedRow, updateDialog.getUpdatedDetail());
+//            purchaseOrderDetailsTable.setPurchaseOrderDetails(pendingOrderDetails);
+//            purchaseOrderDetailsTable.refreshTable();
+//            updateTotalAmount();
+//        }
     }
 
     private void deleteOrderDetails() {
@@ -383,7 +385,7 @@ public class AddPurchaseOrderDialog extends JDialog {
             String supplierId = supplierField.getText().trim();
             long employeeId = Long.parseLong(employeeField.getText().trim());
             Date buyDate = new java.sql.Timestamp(buyDateChooser.getDate().getTime());
-            PurchaseOrderDTO.Status status = PurchaseOrderDTO.Status.valueOf(statusComboBox.getSelectedItem().toString());
+            PurchaseStatus status = PurchaseStatus.valueOf(statusComboBox.getSelectedItem().toString());
     
             // Tính tổng tiền từ danh sách chi tiết
             BigDecimal totalAmount = BigDecimal.ZERO;
@@ -398,22 +400,17 @@ public class AddPurchaseOrderDialog extends JDialog {
             purchaseOrderDTO.setEmployeeId(employeeId);
             purchaseOrderDTO.setBuyDate(buyDate);
             purchaseOrderDTO.setStatus(status);
-            purchaseOrderDTO.setTotalAmount(totalAmount.floatValue());
-    
-            // Thêm phiếu nhập, nhận về ID
-            Long generatedOrderId = purchaseOrderBUS.addPurchaseOrder(purchaseOrderDTO);
-    
-            // Thêm từng chi tiết phiếu nhập
+            purchaseOrderDTO.setTotalAmount(totalAmount.doubleValue());
             for (PurchaseOrderDetailDTO detail : pendingOrderDetails) {
-                detail.setOrderId(generatedOrderId);
+                detail.setPurchaseOrderId(purchaseOrderDTO.getId());
                 purchaseOrderDetailBUS.addPurchaseOrderDetail(detail);
     
                 // Cập nhật số lượng sách
-                BookDTO book = bookBUS.getBookById(detail.getBookId());
+                Book book = bookBUS.getBookById(detail.getBookId());
                 book.setQuantity(book.getQuantity() + detail.getQuantity());
                 bookBUS.updateBook(book);
             }
-            purchaseOrderTable.refreshTable();
+            PurchaseOrderPanel.reloadPurchaseOrderTable();
     
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             dispose();

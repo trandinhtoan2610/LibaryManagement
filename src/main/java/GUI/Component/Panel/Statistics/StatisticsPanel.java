@@ -1,17 +1,7 @@
 package GUI.Component.Panel.Statistics;
 
-import BUS.BookBUS;
-import DTO.BookViewModel;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.List;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
 
 public class StatisticsPanel extends javax.swing.JPanel {
     private final Color defaultColor = new Color(255, 255, 255);
@@ -25,8 +15,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private JPanel overviewPanel;
     private BookStatisticsPanel bookStatisticsPanel;
     private JPanel purchasePanel;
-    private JPanel borrowPanel;
-    private JPanel penaltyPanel;
+    private BorrowStatistics borrowPanel;
+    private PenaltyStatistics penaltyPanel;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -46,8 +36,8 @@ public class StatisticsPanel extends javax.swing.JPanel {
         overviewPanel = new JPanel();
         bookStatisticsPanel = new BookStatisticsPanel();
         purchasePanel = new JPanel();
-        borrowPanel = new JPanel();
-        penaltyPanel = new JPanel();
+        borrowPanel = new BorrowStatistics();
+        penaltyPanel = new PenaltyStatistics();
 
         // Thiết lập màu nền tạm thời cho các panel
         overviewPanel.setBackground(Color.WHITE);

@@ -41,26 +41,6 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
         setSize(650, 500);
         setLocationRelativeTo(parentDialog);
     }
-    public class TestAddPurchaseOrderDetailsDialog {
-        public static void main(String[] args) {
-            // Sử dụng SwingUtilities.invokeLater để đảm bảo thread an toàn
-            SwingUtilities.invokeLater(() -> {
-                // Tạo một JFrame giả làm parent
-                JFrame parentFrame = new JFrame();
-                parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                parentFrame.setSize(800, 600);
-                parentFrame.setLocationRelativeTo(null);
-                
-                // Tạo dialog với purchaseOrderId giả định (ví dụ: 1)
-                AddPurchaseOrderDetailsDialog dialog = new AddPurchaseOrderDetailsDialog(parentFrame, 1L);
-                dialog.setVisible(true);
-                
-                // Hiển thị parentFrame (có thể không cần nếu chỉ test dialog)
-                parentFrame.setVisible(true);
-            });
-        }
-    }
-
     private void initComponents() {
         setLayout(new BorderLayout(5, 5));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

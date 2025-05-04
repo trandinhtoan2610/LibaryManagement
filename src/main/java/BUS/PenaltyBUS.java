@@ -2,6 +2,10 @@ package BUS;
 
 import DAL.PenaltyDAL;
 import DTO.*;
+import DTO.Statistics.LostBookPreciousData;
+import DTO.Statistics.PenaltyDateData;
+import DTO.Statistics.PenaltyTimeData;
+import DTO.Statistics.PenaltyPreciousData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,8 +125,110 @@ public class PenaltyBUS {
         }
     }
 
+    public List<String> getActiveYears(){
+        try{
+            return penaltyDAL.getActiveYears();
+        }catch (Exception e){
+            System.out.println("Lỗi BUS khi lấy các năm của phiếu phạt");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public String countPenaltySheet(){
+        try{
+            return penaltyDAL.countPenaltySheet();
+        }catch (Exception e){
+            System.out.println("Lỗi BUS khi lấy sl phiếu phạt");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public String countEmployeePenalty(){
+        try{
+            return penaltyDAL.countEmployeeHandle();
+        }catch (Exception e){
+            System.out.println("Lỗi BUS khi lấy sl nhân viên");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public Long sumPenaltyFee(){
+        try{
+            return penaltyDAL.sumPenaltyFee();
+        }catch (Exception e){
+            System.out.println("Lỗi BUS khi lấy sl độc giả");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String countLostBook(){
+        try{
+            return penaltyDAL.countLostBook();
+        }catch (Exception e){
+            System.out.println("Lỗi BUS khi lấy sl sách tổn thất");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PenaltyPreciousData<Long>> getPreciousPenaltyEmployee (String year){
+        try{
+            return penaltyDAL.getPreciousEachEmployee(year);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PenaltyPreciousData<String>> getPreciousPenaltyReader(String year){
+        try{
+            return penaltyDAL.getPreciousEachReader(year);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<LostBookPreciousData> getPreciousLostBook(String year){
+        try{
+            return penaltyDAL.getPreciousLostBook(year);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PenaltyTimeData> getMonthsData(String year){
+        try{
+            return penaltyDAL.getMonthsData(year);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PenaltyTimeData> getYearsData(String startYear, String endYear){
+        try{
+            return penaltyDAL.getYearsData(startYear, endYear);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<PenaltyDateData> getDatesData(String startYear, String endYear){
+        try{
+            return penaltyDAL.getDatesDate(startYear, endYear);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
 }
