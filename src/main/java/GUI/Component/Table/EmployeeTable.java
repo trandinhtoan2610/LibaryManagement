@@ -30,8 +30,8 @@ public class EmployeeTable extends JTableCustom {
         getColumnModel().getColumn(4).setPreferredWidth(90);
         getColumnModel().getColumn(5).setPreferredWidth(90);
         getColumnModel().getColumn(6).setPreferredWidth(100);
-        getColumnModel().getColumn(7).setPreferredWidth(120);
-        getColumnModel().getColumn(8).setPreferredWidth(180);
+        getColumnModel().getColumn(7).setPreferredWidth(210);
+        getColumnModel().getColumn(8).setPreferredWidth(100);
         setAutoCreateRowSorter(true);
     }
     public void setEmployees(List<Employee> employees) {

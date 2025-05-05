@@ -89,29 +89,42 @@ public class LoginForm extends JFrame {
         Action loginAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String password = new String(passwordField.getPassword());
-                Employee user = employeeBUS.login(usernameField.getText(), password);
-
+                // Hiển thị loading trước khi xử lý
                 loading load = new loading();
                 load.setVisible(true);
-                Sleep(1);
-                load.setVisible(false);
-                load.dispose();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(3000);
+                        String password = new String(passwordField.getPassword());
+                        Employee user = employeeBUS.login(usernameField.getText(), password);
 
-                if (user != null) {
-                    username = user.getUsername();
-                    currentUser = user;
-                    setVisible(false);
-                    SwingUtilities.invokeLater(() -> {
-                        MainFrame frame = new MainFrame(currentUser);
-                        frame.setVisible(true);
-                    });
-                } else {
-                    JOptionPane.showMessageDialog(LoginForm.this,
-                            "Sai tên đăng nhập hoặc mật khẩu!",
-                            "Lỗi",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                        SwingUtilities.invokeLater(() -> {
+                            load.setVisible(false);
+                            load.dispose();
+
+                            if (user != null) {
+                                username = user.getUsername();
+                                currentUser = user;
+                                setVisible(false);
+                                new MainFrame(currentUser).setVisible(true);
+                            } else {
+                                JOptionPane.showMessageDialog(LoginForm.this,
+                                        "Sai tên đăng nhập hoặc mật khẩu!",
+                                        "Lỗi",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                        });
+                    } catch (Exception ex) {
+                        SwingUtilities.invokeLater(() -> {
+                            load.setVisible(false);
+                            load.dispose();
+                            JOptionPane.showMessageDialog(LoginForm.this,
+                                    "Lỗi khi đăng nhập: " + ex.getMessage(),
+                                    "Lỗi",
+                                    JOptionPane.ERROR_MESSAGE);
+                        });
+                    }
+                }).start();
             }
         };
 

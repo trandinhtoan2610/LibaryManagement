@@ -199,7 +199,7 @@ public class BorrowStatistics extends JPanel{
 
             for (ReaderDTO r : ReaderBUS.readerList) {
                 readerStats.put(r.getId(), new int[4]);
-                readerNames.put(r.getId(), r.getFirstName() + " " + r.getLastName());
+                readerNames.put(r.getId(), r.getLastName() + " " + r.getFirstName());
             }
 
             for (QuarterDataStringId d : data) {
@@ -489,7 +489,7 @@ public class BorrowStatistics extends JPanel{
 
             for (ReaderDTO r : ReaderBUS.readerList) {
                 readerStats.put(r.getId(), new int[4]);
-                readerNames.put(r.getId(), r.getFirstName() + " " + r.getLastName());
+                readerNames.put(r.getId(), r.getLastName() + " " + r.getFirstName());
             }
 
             for (QuarterDataStringId d : data) {

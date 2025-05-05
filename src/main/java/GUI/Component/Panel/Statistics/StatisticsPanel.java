@@ -50,7 +50,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
         cardPanel.add(penaltyPanel, penaltyAlias);
 
         // Mặc định hiển thị tab Tổng quan
-        isSelected(borrowSheetTab, borrowAlias);
+        isSelected(bookTab, bookAlias);
     }
 
     public void clearSelect() {
