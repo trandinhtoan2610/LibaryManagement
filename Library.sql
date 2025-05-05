@@ -202,36 +202,36 @@ INSERT INTO `Employee` (`firstName`, `lastName`, `gender`, `username`, `password
 
 -- Insert Readers (Thêm nhiều độc giả hơn)
 INSERT INTO `Reader` (`id`, `firstName`, `lastName`, `gender`, `phone`, `address`, `isActive`) VALUES
-                                                                                                   ('RD001', 'Nguyễn', 'Văn A', 'Nam', '0911111101', '11 Đường Số 1, Quận 1, TP.HCM', 1),
-                                                                                                   ('RD002', 'Trần', 'Thị B', 'Nữ', '0922222202', '22 Đường Số 2, Quận 2, TP.HCM', 1),
-                                                                                                   ('RD003', 'Lê', 'Hoàng C', 'Nam', '0933333303', '33 Đường Số 3, Quận 3, TP.HCM', 1),
-                                                                                                   ('RD004', 'Phạm', 'Mỹ D', 'Nữ', '0944444404', '44 Đường Số 4, Quận 4, TP.HCM', 1),
-                                                                                                   ('RD005', 'Hoàng', 'Gia E', 'Nam', '0955555505', '55 Đường Số 5, Quận 5, TP.HCM', 1),
-                                                                                                   ('RD006', 'Đặng', 'Khánh F', 'Nam', '0966666606', '66 Đường Số 6, Quận 6, TP.HCM', 1),
-                                                                                                   ('RD007', 'Bùi', 'Thu G', 'Nữ', '0977777707', '77 Đường Số 7, Quận 7, TP.HCM', 1),
-                                                                                                   ('RD008', 'Vũ', 'Minh H', 'Nam', '0988888808', '88 Đường Số 8, Quận 8, TP.HCM', 1),
-                                                                                                   ('RD009', 'Lý', 'Ngọc I', 'Nữ', '0999999909', '99 Đường Số 9, Quận 9, TP.HCM', 1),
-                                                                                                   ('RD010', 'Trương', 'Anh K', 'Nam', '0901000010', '110 Đường Số 10, Quận 10, TP.HCM', 1),
-                                                                                                   ('RD011', 'Đinh', 'Tuyết L', 'Nữ', '0902000011', '111 Đường Số 11, Quận 11, TP.HCM', 1),
-                                                                                                   ('RD012', 'Ngô', 'Quốc M', 'Nam', '0903000012', '112 Đường Số 12, Quận 12, TP.HCM', 1),
-                                                                                                   ('RD013', 'Hà', 'Phương N', 'Nữ', '0904000013', '113 Đường Số 1, Quận Tân Bình, TP.HCM', 1),
-                                                                                                   ('RD014', 'Phan', 'Thành O', 'Nam', '0905000014', '114 Đường Số 2, Quận Bình Tân, TP.HCM', 1),
-                                                                                                   ('RD015', 'Tạ', 'Diễm P', 'Nữ', '0906000015', '115 Đường Số 3, Quận Phú Nhuận, TP.HCM', 1),
-                                                                                                   ('RD016', 'Dương', 'Huy Q', 'Nam', '0907000016', '116 Đường Số 4, Quận Gò Vấp, TP.HCM', 1),
-                                                                                                   ('RD017', 'Lương', 'Mai R', 'Nữ', '0908000017', '117 Đường Số 5, Thủ Đức, TP.HCM', 1),
-                                                                                                   ('RD018', 'Hoàng', 'Sơn S', 'Nam', '0909000018', '118 Đường Số 6, Bình Chánh, TP.HCM', 1),
-                                                                                                   ('RD019', 'Đặng', 'Trà T', 'Nữ', '0910000019', '119 Đường Số 7, Hóc Môn, TP.HCM', 1),
-                                                                                                   ('RD020', 'Võ', 'Đức U', 'Nam', '0911000020', '120 Đường Số 8, Củ Chi, TP.HCM', 1),
-                                                                                                   ('RD021', 'Nguyễn', 'Thị V', 'Nữ', '0912000021', '121 Đường Số 9, Quận 1, TP.HCM', 1),
-                                                                                                   ('RD022', 'Trần', 'Văn X', 'Nam', '0913000022', '122 Đường Số 10, Quận 2, TP.HCM', 1),
-                                                                                                   ('RD023', 'Lê', 'Mỹ Y', 'Nữ', '0914000023', '123 Đường Số 11, Quận 3, TP.HCM', 0), -- Reader không hoạt động
-                                                                                                   ('RD024', 'Phạm', 'Gia Z', 'Nam', '0915000024', '124 Đường Số 12, Quận 4, TP.HCM', 1),
-                                                                                                   ('RD025', 'Hoàng', 'Thị AA', 'Nữ', '0916000025', '125 Đường Số 1, Quận 5, TP.HCM', 1),
-                                                                                                   ('RD026', 'Đỗ', 'Văn BB', 'Nam', '0917000026', '126 Đường Số 2, Quận 6, TP.HCM', 1),
-                                                                                                   ('RD027', 'Võ', 'Ngọc CC', 'Nữ', '0918000027', '127 Đường Số 3, Quận 7, TP.HCM', 1),
-                                                                                                   ('RD028', 'Huỳnh', 'Minh DD', 'Nam', '0919000028', '128 Đường Số 4, Quận 8, TP.HCM', 1),
-                                                                                                   ('RD029', 'Nguyễn', 'Lan EE', 'Nữ', '0920000029', '129 Đường Số 5, Quận 9, TP.HCM', 1),
-                                                                                                   ('RD030', 'Lê', 'Tuấn FF', 'Nam', '0921000030', '130 Đường Số 6, Quận 10, TP.HCM', 1);
+                                                                                                   ('RD1', 'Nguyễn', 'Văn A', 'Nam', '0911111101', '11 Đường Số 1, Quận 1, TP.HCM', 1),
+                                                                                                   ('RD2', 'Trần', 'Thị B', 'Nữ', '0922222202', '22 Đường Số 2, Quận 2, TP.HCM', 1),
+                                                                                                   ('RD3', 'Lê', 'Hoàng C', 'Nam', '0933333303', '33 Đường Số 3, Quận 3, TP.HCM', 1),
+                                                                                                   ('RD4', 'Phạm', 'Mỹ D', 'Nữ', '0944444404', '44 Đường Số 4, Quận 4, TP.HCM', 1),
+                                                                                                   ('RD5', 'Hoàng', 'Gia E', 'Nam', '0955555505', '55 Đường Số 5, Quận 5, TP.HCM', 1),
+                                                                                                   ('RD6', 'Đặng', 'Khánh F', 'Nam', '0966666606', '66 Đường Số 6, Quận 6, TP.HCM', 1),
+                                                                                                   ('RD7', 'Bùi', 'Thu G', 'Nữ', '0977777707', '77 Đường Số 7, Quận 7, TP.HCM', 1),
+                                                                                                   ('RD8', 'Vũ', 'Minh H', 'Nam', '0988888808', '88 Đường Số 8, Quận 8, TP.HCM', 1),
+                                                                                                   ('RD9', 'Lý', 'Ngọc I', 'Nữ', '0999999909', '99 Đường Số 9, Quận 9, TP.HCM', 1),
+                                                                                                   ('RD10', 'Trương', 'Anh K', 'Nam', '0901000010', '110 Đường Số 10, Quận 10, TP.HCM', 1),
+                                                                                                   ('RD11', 'Đinh', 'Tuyết L', 'Nữ', '0902000011', '111 Đường Số 11, Quận 11, TP.HCM', 1),
+                                                                                                   ('RD12', 'Ngô', 'Quốc M', 'Nam', '0903000012', '112 Đường Số 12, Quận 12, TP.HCM', 1),
+                                                                                                   ('RD13', 'Hà', 'Phương N', 'Nữ', '0904000013', '113 Đường Số 1, Quận Tân Bình, TP.HCM', 1),
+                                                                                                   ('RD14', 'Phan', 'Thành O', 'Nam', '0905000014', '114 Đường Số 2, Quận Bình Tân, TP.HCM', 1),
+                                                                                                   ('RD15', 'Tạ', 'Diễm P', 'Nữ', '0906000015', '115 Đường Số 3, Quận Phú Nhuận, TP.HCM', 1),
+                                                                                                   ('RD16', 'Dương', 'Huy Q', 'Nam', '0907000016', '116 Đường Số 4, Quận Gò Vấp, TP.HCM', 1),
+                                                                                                   ('RD17', 'Lương', 'Mai R', 'Nữ', '0908000017', '117 Đường Số 5, Thủ Đức, TP.HCM', 1),
+                                                                                                   ('RD18', 'Hoàng', 'Sơn S', 'Nam', '0909000018', '118 Đường Số 6, Bình Chánh, TP.HCM', 1),
+                                                                                                   ('RD19', 'Đặng', 'Trà T', 'Nữ', '0910000019', '119 Đường Số 7, Hóc Môn, TP.HCM', 1),
+                                                                                                   ('RD20', 'Võ', 'Đức U', 'Nam', '0911000020', '120 Đường Số 8, Củ Chi, TP.HCM', 1),
+                                                                                                   ('RD21', 'Nguyễn', 'Thị V', 'Nữ', '0912000021', '121 Đường Số 9, Quận 1, TP.HCM', 1),
+                                                                                                   ('RD22', 'Trần', 'Văn X', 'Nam', '0913000022', '122 Đường Số 10, Quận 2, TP.HCM', 1),
+                                                                                                   ('RD23', 'Lê', 'Mỹ Y', 'Nữ', '0914000023', '123 Đường Số 11, Quận 3, TP.HCM', 0), -- Reader không hoạt động
+                                                                                                   ('RD24', 'Phạm', 'Gia Z', 'Nam', '0915000024', '124 Đường Số 12, Quận 4, TP.HCM', 1),
+                                                                                                   ('RD25', 'Hoàng', 'Thị AA', 'Nữ', '0916000025', '125 Đường Số 1, Quận 5, TP.HCM', 1),
+                                                                                                   ('RD26', 'Đỗ', 'Văn BB', 'Nam', '0917000026', '126 Đường Số 2, Quận 6, TP.HCM', 1),
+                                                                                                   ('RD27', 'Võ', 'Ngọc CC', 'Nữ', '0918000027', '127 Đường Số 3, Quận 7, TP.HCM', 1),
+                                                                                                   ('RD28', 'Huỳnh', 'Minh DD', 'Nam', '0919000028', '128 Đường Số 4, Quận 8, TP.HCM', 1),
+                                                                                                   ('RD29', 'Nguyễn', 'Lan EE', 'Nữ', '0920000029', '129 Đường Số 5, Quận 9, TP.HCM', 1),
+                                                                                                   ('RD30', 'Lê', 'Tuấn FF', 'Nam', '0921000030', '130 Đường Số 6, Quận 10, TP.HCM', 1);
 
 
 -- Insert Authors (Thêm tác giả)
@@ -305,171 +305,147 @@ INSERT INTO `Supplier` (`id`, `name`, `phone`, `address`, `isActive`) VALUES
 -- ### GIAO DỊCH MƯỢN TRẢ (Tổng cộng 35 phiếu) ###
 -- #####################################################
 -- Phiếu 1-15
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD001', '2023-11-15 10:22:05', '2023-11-29 17:00:00', '2023-11-28 16:15:30', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (1, 1, 1, 'Đã_Trả', '2023-11-28 16:15:30');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD002', '2024-01-10 14:05:11', '2024-01-24 17:00:00', '2024-01-28 09:30:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (4, 2, 1, 'Quá_Hạn', '2024-01-28 09:30:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD005', '2025-04-20 16:30:45', '2025-05-11 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (6, 3, 1, 'Đang_Mượn', NULL);
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (8, 3, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD003', '2024-08-05 09:11:52', '2024-08-26 17:00:00', '2024-09-02 14:20:10', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (10, 4, 1, 'Quá_Hạn', '2024-09-02 14:20:10');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD001', '2025-04-28 11:55:00', '2025-05-19 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (15, 5, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD008', '2024-12-01 08:30:15', '2024-12-15 17:00:00', '2024-12-14 10:05:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (12, 6, 1, 'Đã_Trả', '2024-12-14 10:05:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD010', '2025-04-05 15:00:00', '2025-04-26 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (7, 7, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD015', '2024-11-11 13:45:30', '2024-12-02 17:00:00', '2024-12-10 11:10:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (11, 8, 1, 'Quá_Hạn', '2024-12-10 11:10:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD004', '2025-02-10 09:00:00', '2025-02-24 17:00:00', '2025-02-22 14:00:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (17, 9, 1, 'Đã_Trả', '2025-02-22 14:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (7, 'RD011', '2025-04-25 10:30:00', '2025-05-16 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (16, 10, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD018', '2024-06-15 11:00:00', '2024-07-06 17:00:00', '2024-07-10 15:45:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (18, 11, 1, 'Quá_Hạn', '2024-07-10 15:45:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (9, 'RD007', '2025-05-01 14:15:00', '2025-05-15 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (13, 12, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (10, 'RD014', '2024-09-20 10:00:00', '2024-10-11 17:00:00', '2024-10-10 11:30:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (11, 13, 1, 'Đã_Trả', '2024-10-10 11:30:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (11, 'RD019', '2025-03-01 16:00:00', '2025-03-22 17:00:00', '2025-03-25 10:00:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (19, 14, 1, 'Quá_Hạn', '2025-03-25 10:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (12, 'RD020', '2025-04-18 13:30:00', '2025-05-09 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (20, 15, 1, 'Đang_Mượn', NULL);
 
--- Phiếu 16-35
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD026', '2025-05-03 09:15:00', '2025-05-24 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (21, 16, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD027', '2024-10-01 14:00:00', '2024-10-22 17:00:00', '2024-10-20 16:00:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (22, 17, 1, 'Đã_Trả', '2024-10-20 16:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD028', '2025-01-15 11:20:00', '2025-02-05 17:00:00', '2025-02-10 08:45:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (23, 18, 1, 'Quá_Hạn', '2025-02-10 08:45:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD029', '2025-04-29 15:00:00', '2025-05-20 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (24, 19, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD030', '2024-11-05 10:45:00', '2024-11-26 17:00:00', '2024-11-25 09:30:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (25, 20, 1, 'Đã_Trả', '2024-11-25 09:30:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (7, 'RD002', '2025-05-02 13:00:00', '2025-05-23 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (26, 21, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD006', '2025-01-02 16:10:00', '2025-01-23 17:00:00', '2025-01-20 10:00:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (27, 22, 1, 'Đã_Trả', '2025-01-20 10:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (9, 'RD012', '2024-07-01 09:30:00', '2024-07-22 17:00:00', '2024-07-25 11:00:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (28, 23, 1, 'Quá_Hạn', '2024-07-25 11:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (10, 'RD016', '2025-04-10 10:15:00', '2025-05-01 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (29, 24, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (11, 'RD021', '2024-12-10 15:30:00', '2024-12-31 17:00:00', '2024-12-30 09:00:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (30, 25, 1, 'Đã_Trả', '2024-12-30 09:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (13, 'RD009', '2025-05-04 08:30:00', '2025-05-25 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (5, 26, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (14, 'RD013', '2024-05-20 11:00:00', '2024-06-10 17:00:00', '2024-06-08 14:30:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (9, 27, 1, 'Đã_Trả', '2024-06-08 14:30:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD017', '2025-02-18 10:00:00', '2025-03-11 17:00:00', '2025-03-15 16:20:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (1, 28, 1, 'Quá_Hạn', '2025-03-15 16:20:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD022', '2025-04-22 14:45:00', '2025-05-13 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (21, 29, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD024', '2024-08-10 09:00:00', '2024-08-31 17:00:00', '2024-08-30 10:15:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (22, 30, 1, 'Đã_Trả', '2024-08-30 10:15:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD026', '2025-05-04 10:00:00', '2025-05-25 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (3, 31, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD027', '2024-03-10 13:20:00', '2024-03-31 17:00:00', '2024-04-05 15:00:00', 'Phạt');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (14, 32, 1, 'Quá_Hạn', '2024-04-05 15:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (7, 'RD028', '2025-04-27 11:00:00', '2025-05-18 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (25, 33, 1, 'Đang_Mượn', NULL);
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD029', '2024-05-01 10:00:00', '2024-05-22 17:00:00', '2024-05-20 14:00:00', 'Đã_Trả');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (7, 34, 1, 'Đã_Trả', '2024-05-20 14:00:00');
-INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (9, 'RD030', '2025-05-03 16:30:00', '2025-05-24 17:00:00', NULL, 'Đang_Mượn');
-INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (30, 35, 1, 'Đang_Mượn', NULL);
-
-
--- ############################################################
--- ### PHIẾU NHẬP SÁCH (Tổng cộng 29 phiếu) ###
--- ############################################################
--- Phiếu Nhập 1-9
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP01', 1, 5650000.00, '2023-09-05 11:30:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (1, 1, 30, 70000.00, 2100000.00), (1, 4, 50, 71000.00, 3550000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP02', 4, 3160000.00, '2024-02-18 15:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (2, 2, 20, 60000.00, 1200000.00), (2, 5, 25, 72000.00, 1800000.00), (2, 13, 10, 16000.00, 160000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP04', 5, 4500000.00, '2025-04-15 09:45:10', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (3, 6, 40, 90000.00, 3600000.00), (3, 15, 10, 90000.00, 900000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP01', 1, 1150000.00, '2024-10-20 14:00:00', 'Đã_Hủy');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (4, 7, 10, 85000.00, 850000.00), (4, 9, 5, 60000.00, 300000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP05', 4, 2875000.00, '2024-07-11 10:10:10', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (5, 10, 25, 80000.00, 2000000.00), (5, 14, 15, 58000.00, 870000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP03', 5, 3375000.00, '2025-01-30 16:20:30', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (6, 15, 30, 100000.00, 3000000.00), (6, 12, 5, 75000.00, 375000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP06', 6, 4900000.00, '2024-11-25 09:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (7, 16, 35, 100000.00, 3500000.00), (7, 17, 10, 140000.00, 1400000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP07', 7, 1250000.00, '2025-05-02 10:00:00', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (8, 13, 50, 20000.00, 1000000.00), (8, 2, 5, 50000.00, 250000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP01', 8, 3200000.00, '2025-03-10 14:30:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (9, 20, 20, 130000.00, 2600000.00), (9, 11, 5, 120000.00, 600000.00);
-
--- Phiếu Nhập 10-29
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP08', 9, 2460000.00, '2024-04-12 10:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (10, 21, 30, 65000.00, 1950000.00), (10, 24, 10, 51000.00, 510000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP09', 10, 4170000.00, '2024-05-20 11:15:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (11, 22, 40, 72000.00, 2880000.00), (11, 28, 10, 89000.00, 890000.00), (11, 6, 5, 80000.00, 400000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP02', 11, 6250000.00, '2025-04-28 14:00:00', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (12, 29, 25, 200000.00, 5000000.00), (12, 3, 15, 83000.00, 1245000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP03', 13, 2940000.00, '2024-06-18 09:30:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (13, 23, 30, 80000.00, 2400000.00), (13, 30, 6, 90000.00, 540000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP04', 14, 3900000.00, '2024-08-22 16:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (14, 25, 20, 150000.00, 3000000.00), (14, 26, 10, 90000.00, 900000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP05', 2, 1300000.00, '2025-02-05 10:45:00', 'Đã_Hủy');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (15, 27, 20, 50000.00, 1000000.00), (15, 2, 5, 60000.00, 300000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP06', 3, 4400000.00, '2023-12-12 13:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (16, 1, 20, 70000.00, 1400000.00), (16, 5, 30, 70000.00, 2100000.00), (16, 8, 10, 90000.00, 900000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP07', 4, 3600000.00, '2024-01-25 15:20:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (17, 18, 20, 150000.00, 3000000.00), (17, 10, 10, 60000.00, 600000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP08', 5, 2750000.00, '2025-05-04 09:00:00', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (18, 13, 100, 20000.00, 2000000.00), (18, 27, 10, 50000.00, 500000.00), (18, 2, 5, 50000.00, 250000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP09', 6, 5100000.00, '2024-03-05 10:30:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (19, 6, 30, 100000.00, 3000000.00), (19, 15, 20, 90000.00, 1800000.00), (19, 22, 5, 60000.00, 300000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP01', 7, 3850000.00, '2024-04-19 14:50:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (20, 4, 20, 110000.00, 2200000.00), (20, 9, 15, 80000.00, 1200000.00), (20, 17, 5, 90000.00, 450000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP02', 8, 4200000.00, '2025-04-30 16:10:00', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (21, 11, 20, 150000.00, 3000000.00), (21, 20, 10, 120000.00, 1200000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP03', 9, 2050000.00, '2024-07-28 08:45:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (22, 19, 20, 60000.00, 1200000.00), (22, 14, 10, 70000.00, 700000.00), (22, 26, 3, 50000.00, 150000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP04', 10, 3300000.00, '2024-09-15 11:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (23, 7, 15, 90000.00, 1350000.00), (23, 24, 20, 55000.00, 1100000.00), (23, 29, 10, 85000.00, 850000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP05', 11, 1750000.00, '2025-03-20 09:20:00', 'Đã_Hủy');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (24, 8, 10, 100000.00, 1000000.00), (24, 12, 10, 75000.00, 750000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP06', 13, 4800000.00, '2024-10-30 13:40:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (25, 1, 10, 70000.00, 700000.00), (25, 16, 20, 100000.00, 2000000.00), (25, 21, 15, 70000.00, 1050000.00), (25, 28, 10, 80000.00, 800000.00), (25, 30, 3, 85000.00, 255000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP07', 14, 2200000.00, '2024-12-05 15:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (26, 2, 10, 65000.00, 650000.00), (26, 13, 50, 18000.00, 900000.00), (26, 27, 10, 65000.00, 650000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP08', 2, 3500000.00, '2025-05-03 10:10:00', 'Đang_Chờ');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (27, 3, 20, 85000.00, 1700000.00), (27, 18, 10, 180000.00, 1800000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP09', 3, 4000000.00, '2025-02-15 11:30:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (28, 5, 20, 75000.00, 1500000.00), (28, 15, 25, 100000.00, 2500000.00);
-INSERT INTO `PurchaseOrders` (`supplierId`, `employeeId`, `totalAmount`, `buyDate`, `status`) VALUES ('SUP01', 4, 3100000.00, '2025-04-01 09:00:00', 'Hoàn_Thành');
-INSERT INTO `PurchaseOrderDetails` (`purchaseOrderId`, `bookId`, `quantity`, `unitPrice`, `SubTotal`) VALUES (29, 10, 10, 80000.00, 800000.00), (29, 17, 10, 130000.00, 1300000.00), (29, 25, 10, 100000.00, 1000000.00);
-
--- ##############################################
--- ### PHIẾU PHẠT (Tổng cộng 9 phiếu) ###
--- ##############################################
--- Phiếu phạt 1-5
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN001', '2024-01-28 09:35:00', 20000.00, 'Đã_Thanh_Toán', 3, '2024-01-29 11:00:00');
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN001', 4, 2, 'Trả muộn 4 ngày', 20000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN002', '2024-09-02 14:25:00', 35000.00, 'Chưa_Thanh_Toán', NULL, NULL);
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN002', 10, 4, 'Trả muộn 7 ngày', 35000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN003', '2024-12-10 11:15:20', 40000.00, 'Chưa_Thanh_Toán', NULL, NULL);
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN003', 11, 8, 'Trả muộn 8 ngày', 40000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN004', '2024-07-10 15:50:00', 20000.00, 'Đã_Thanh_Toán', 8, '2024-07-11 09:00:00');
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN004', 18, 11, 'Trả muộn 4 ngày', 20000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN005', '2025-03-25 10:05:00', 15000.00, 'Chưa_Thanh_Toán', NULL, NULL);
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN005', 19, 14, 'Trả muộn 3 ngày', 15000.00, 1);
-
--- Phiếu phạt 6-9
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN006', '2025-02-10 08:50:00', 25000.00, 'Chưa_Thanh_Toán', NULL, NULL);
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN006', 23, 18, 'Trả muộn 5 ngày', 25000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN007', '2024-07-25 11:05:00', 15000.00, 'Đã_Thanh_Toán', 9, '2024-07-25 11:10:00');
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN007', 28, 23, 'Trả muộn 3 ngày', 15000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN008', '2025-03-15 16:25:00', 20000.00, 'Chưa_Thanh_Toán', NULL, NULL);
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN008', 1, 28, 'Trả muộn 4 ngày', 20000.00, 1);
-INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PEN009', '2024-04-05 15:05:00', 25000.00, 'Đã_Thanh_Toán', 6, '2024-04-06 10:00:00');
-INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PEN009', 14, 32, 'Trả muộn 5 ngày', 25000.00, 1);
-
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (1, 'RD3', '2023-03-09 00:00:00', '2023-03-23 00:00:00', '2023-03-27 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD15', '2023-02-06 00:00:00', '2023-02-20 00:00:00', '2023-03-01 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD8', '2023-08-08 00:00:00', '2023-08-22 00:00:00', '2023-08-24 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD9', '2023-07-20 00:00:00', '2023-08-03 00:00:00', '2023-08-09 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD9', '2023-07-08 00:00:00', '2023-07-22 00:00:00', '2023-07-24 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD13', '2023-08-19 00:00:00', '2023-09-02 00:00:00', '2023-09-03 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (1, 'RD19', '2024-03-03 00:00:00', '2024-03-17 00:00:00', '2024-03-23 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD13', '2024-01-28 00:00:00', '2024-02-11 00:00:00', '2024-02-18 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD5', '2023-04-28 00:00:00', '2023-05-12 00:00:00', '2023-05-22 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD7', '2023-01-13 00:00:00', '2023-01-27 00:00:00', '2023-02-06 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD20', '2023-03-08 00:00:00', '2023-03-22 00:00:00', '2023-03-29 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD7', '2023-08-11 00:00:00', '2023-08-25 00:00:00', '2023-08-27 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD12', '2023-11-25 00:00:00', '2023-12-09 00:00:00', '2023-12-10 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (7, 'RD16', '2023-10-12 00:00:00', '2023-10-26 00:00:00', '2023-11-02 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD19', '2023-01-22 00:00:00', '2023-02-05 00:00:00', '2023-02-13 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (1, 'RD11', '2023-10-19 00:00:00', '2023-11-02 00:00:00', '2023-11-06 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (1, 'RD12', '2023-03-28 00:00:00', '2023-04-11 00:00:00', '2023-04-16 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD19', '2024-01-21 00:00:00', '2024-02-04 00:00:00', '2024-02-11 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD11', '2023-12-15 00:00:00', '2023-12-29 00:00:00', '2024-01-02 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD5', '2023-04-04 00:00:00', '2023-04-18 00:00:00', '2023-04-23 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD17', '2023-03-19 00:00:00', '2023-04-02 00:00:00', '2023-04-05 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD3', '2023-12-11 00:00:00', '2023-12-25 00:00:00', '2024-01-02 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (6, 'RD9', '2023-01-11 00:00:00', '2023-01-25 00:00:00', '2023-01-26 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD19', '2024-02-16 00:00:00', '2024-03-01 00:00:00', '2024-03-04 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (9, 'RD7', '2023-01-20 00:00:00', '2023-02-03 00:00:00', '2023-02-09 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD1', '2023-02-22 00:00:00', '2023-03-08 00:00:00', '2023-03-10 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD8', '2023-07-06 00:00:00', '2023-07-20 00:00:00', '2023-07-26 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (4, 'RD7', '2023-09-20 00:00:00', '2023-10-04 00:00:00', '2023-10-09 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (10, 'RD8', '2023-11-20 00:00:00', '2023-12-04 00:00:00', '2023-12-13 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD5', '2023-03-04 00:00:00', '2023-03-18 00:00:00', '2023-03-24 00:00:00', 'Phạt');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (7, 'RD10', '2023-02-02 00:00:00', '2023-02-16 00:00:00', '2023-02-15 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (1, 'RD5', '2023-08-01 00:00:00', '2023-08-15 00:00:00', '2023-08-14 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD4', '2024-03-09 00:00:00', '2024-03-23 00:00:00', '2024-03-23 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD15', '2023-07-30 00:00:00', '2023-08-13 00:00:00', '2023-08-13 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD8', '2023-07-10 00:00:00', '2023-07-24 00:00:00', '2023-07-22 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (9, 'RD13', '2024-02-07 00:00:00', '2024-02-21 00:00:00', '2024-02-19 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (2, 'RD17', '2023-11-03 00:00:00', '2023-11-17 00:00:00', '2023-11-17 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (8, 'RD6', '2023-07-26 00:00:00', '2023-08-09 00:00:00', '2023-08-08 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (3, 'RD4', '2023-06-08 00:00:00', '2023-06-22 00:00:00', '2023-06-22 00:00:00', 'Đã_Trả');
+INSERT INTO `Borrow_in_Sheet` (`employeeId`, `readerId`, `borrowedDate`, `duedate`, `actualReturnDate`, `status`) VALUES (5, 'RD1', '2023-01-14 00:00:00', '2023-01-28 00:00:00', '2023-01-27 00:00:00', 'Đã_Trả');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (28, 1, 1, 'Quá_Hạn', '2023-03-27 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (21, 2, 1, 'Quá_Hạn', '2023-03-01 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (23, 3, 1, 'Quá_Hạn', '2023-08-24 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (26, 4, 1, 'Quá_Hạn', '2023-08-09 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (19, 5, 1, 'Quá_Hạn', '2023-07-24 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (17, 6, 1, 'Quá_Hạn', '2023-09-03 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (11, 7, 1, 'Quá_Hạn', '2024-03-23 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (30, 8, 1, 'Quá_Hạn', '2024-02-18 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (16, 9, 1, 'Quá_Hạn', '2023-05-22 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (11, 10, 1, 'Quá_Hạn', '2023-02-06 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (9, 11, 1, 'Quá_Hạn', '2023-03-29 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (3, 12, 1, 'Quá_Hạn', '2023-08-27 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (20, 13, 1, 'Quá_Hạn', '2023-12-10 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (28, 14, 1, 'Quá_Hạn', '2023-11-02 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (11, 15, 1, 'Quá_Hạn', '2023-02-13 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (7, 16, 1, 'Quá_Hạn', '2023-11-06 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (27, 17, 1, 'Quá_Hạn', '2023-04-16 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (15, 18, 1, 'Quá_Hạn', '2024-02-11 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (22, 19, 1, 'Quá_Hạn', '2024-01-02 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (14, 20, 1, 'Quá_Hạn', '2023-04-23 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (14, 21, 1, 'Quá_Hạn', '2023-04-05 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (14, 22, 1, 'Quá_Hạn', '2024-01-02 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (4, 23, 1, 'Quá_Hạn', '2023-01-26 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (18, 24, 1, 'Quá_Hạn', '2024-03-04 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (4, 25, 1, 'Quá_Hạn', '2023-02-09 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (14, 26, 1, 'Quá_Hạn', '2023-03-10 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (13, 27, 1, 'Quá_Hạn', '2023-07-26 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (7, 28, 1, 'Quá_Hạn', '2023-10-09 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (22, 29, 1, 'Quá_Hạn', '2023-12-13 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (19, 30, 1, 'Quá_Hạn', '2023-03-24 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (23, 31, 1, 'Đã_Trả', '2023-02-15 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (3, 32, 1, 'Đã_Trả', '2023-08-14 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (13, 33, 1, 'Đã_Trả', '2024-03-23 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (1, 34, 1, 'Đã_Trả', '2023-08-13 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (21, 35, 1, 'Đã_Trả', '2023-07-22 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (10, 36, 1, 'Đã_Trả', '2024-02-19 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (8, 37, 1, 'Đã_Trả', '2023-11-17 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (2, 38, 1, 'Đã_Trả', '2023-08-08 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (21, 39, 1, 'Đã_Trả', '2023-06-22 00:00:00');
+INSERT INTO `BorrowDetails` (`bookId`, `borrowSheetId`, `quantity`, `substatus`, `actualReturnDate`) VALUES (29, 40, 1, 'Đã_Trả', '2023-01-27 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP1', '2023-03-27 00:00:00', 40000.00, 'Đã_Thanh_Toán', 6, '2023-03-28 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP2', '2023-03-01 00:00:00', 25000.00, 'Đã_Thanh_Toán', 5, '2023-03-02 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP3', '2023-08-24 00:00:00', 25000.00, 'Đã_Thanh_Toán', 3, '2023-08-25 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP4', '2023-08-09 00:00:00', 40000.00, 'Đã_Thanh_Toán', 4, '2023-08-10 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP5', '2023-07-24 00:00:00', 40000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP6', '2023-09-03 00:00:00', 40000.00, 'Đã_Thanh_Toán', 2, '2023-09-04 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP7', '2024-03-23 00:00:00', 25000.00, 'Đã_Thanh_Toán', 3, '2024-03-24 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP8', '2024-02-18 00:00:00', 35000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP9', '2023-05-22 00:00:00', 20000.00, 'Đã_Thanh_Toán', 7, '2023-05-23 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP10', '2023-02-06 00:00:00', 40000.00, 'Đã_Thanh_Toán', 9, '2023-02-07 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP11', '2023-03-29 00:00:00', 20000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP12', '2023-08-27 00:00:00', 15000.00, 'Đã_Thanh_Toán', 2, '2023-08-28 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP13', '2023-12-10 00:00:00', 20000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP14', '2023-11-02 00:00:00', 40000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP15', '2023-02-13 00:00:00', 35000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP16', '2023-11-06 00:00:00', 20000.00, 'Đã_Thanh_Toán', 7, '2023-11-07 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP17', '2023-04-16 00:00:00', 35000.00, 'Đã_Thanh_Toán', 10, '2023-04-17 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP18', '2024-02-11 00:00:00', 15000.00, 'Đã_Thanh_Toán', 2, '2024-02-12 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP19', '2024-01-02 00:00:00', 15000.00, 'Đã_Thanh_Toán', 6, '2024-01-03 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP20', '2023-04-23 00:00:00', 15000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP21', '2023-04-05 00:00:00', 30000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP22', '2024-01-02 00:00:00', 15000.00, 'Đã_Thanh_Toán', 10, '2024-01-03 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP23', '2023-01-26 00:00:00', 25000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP24', '2024-03-04 00:00:00', 15000.00, 'Đã_Thanh_Toán', 1, '2024-03-05 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP25', '2023-02-09 00:00:00', 20000.00, 'Đã_Thanh_Toán', 1, '2023-02-10 00:00:00');
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP26', '2023-03-10 00:00:00', 15000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP27', '2023-07-26 00:00:00', 40000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP28', '2023-10-09 00:00:00', 15000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP29', '2023-12-13 00:00:00', 20000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `Penalty` (`id`, `penaltyDate`, `totalamount`, `status`, `employeeID`, `payDate`) VALUES ('PP30', '2023-03-24 00:00:00', 20000.00, 'Chưa_Thanh_Toán', NULL, NULL);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP1', 28, 1, 'Hư sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP2', 21, 2, 'Hư sách', 25000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP3', 23, 3, 'Hư sách', 25000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP4', 26, 4, 'Trả sách trễ 6 ngày', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP5', 19, 5, 'Mất sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP6', 17, 6, 'Hư sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP7', 11, 7, 'Mất sách', 25000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP8', 30, 8, 'Mất sách', 35000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP9', 16, 9, 'Hư sách', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP10', 11, 10, 'Hư sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP11', 9, 11, 'Mất sách', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP12', 3, 12, 'Hư sách', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP13', 20, 13, 'Mất sách', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP14', 28, 14, 'Mất sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP15', 11, 15, 'Hư sách', 35000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP16', 7, 16, 'Trả sách trễ 4 ngày', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP17', 27, 17, 'Trả sách trễ 5 ngày', 35000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP18', 15, 18, 'Hư sách', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP19', 22, 19, 'Hư sách', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP20', 14, 20, 'Trả sách trễ 5 ngày', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP21', 14, 21, 'Mất sách', 30000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP22', 14, 22, 'Mất sách', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP23', 4, 23, 'Trả sách trễ 1 ngày', 25000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP24', 18, 24, 'Trả sách trễ 3 ngày', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP25', 4, 25, 'Mất sách', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP26', 14, 26, 'Trả sách trễ 2 ngày', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP27', 13, 27, 'Mất sách', 40000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP28', 7, 28, 'Trả sách trễ 5 ngày', 15000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP29', 22, 29, 'Hư sách', 20000.00, 1);
+INSERT INTO `PenaltyDetails` (`penaltyId`, `bookId`, `borrowId`, `name`, `subamount`, `bookQuantity`) VALUES ('PP30', 19, 30, 'Mất sách', 20000.00, 1);
 
 -- ##############################################
 -- ### CẬP NHẬT SỐ LƯỢNG SAU KHI INSERT DATA ###
