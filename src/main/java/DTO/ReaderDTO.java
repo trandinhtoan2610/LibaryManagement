@@ -13,8 +13,8 @@ public class ReaderDTO extends EntityAuditGPABase<String> {
     public ReaderDTO() {};
     public ReaderDTO(String id, String firstName, String lastName, Gender gender, String phone, String address) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = lastName;
+        this.lastName = firstName;
         this.gender = gender;
         this.phone = phone;
         this.address = address;

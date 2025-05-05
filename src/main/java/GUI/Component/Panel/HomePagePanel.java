@@ -21,9 +21,12 @@ public class HomePagePanel extends JPanel {
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.add(titleLabel);
 
-        CardPanel cardPanel = new CardPanel("/images/tinhchinhxac.png", "Tính chính xác", "Mã IMEI là");
-        CardPanel cardPanel1 = new CardPanel("/images/tinhbaomat.png", "Tính bảo mật", "Mã IMEI là");
-        CardPanel cardPanel3 = new CardPanel("/images/tinhhiendai.png", "Tính hiện đại", "Mã IMEI là  asdf askdjhfl kashdlf jkhalskjdh flkajsdh flkasjdh flkajsh flkjash flkash flkjashf kaljshf lkjashd f lkahsd flkjhasdf");
+        CardPanel cardPanel = new CardPanel("/images/tinhchinhxac.png", "Tính chính xác",
+                "Đảm bảo thông tin sách, bạn đọc và các giao dịch được quản lý một cách chính xác, tránh sai sót trong quá trình mượn – trả và xử lý vi phạm." );
+        CardPanel cardPanel1 = new CardPanel("/images/tinhbaomat.png", "Tính bảo mật",
+                "Dữ liệu cá nhân của bạn đọc và thông tin hệ thống được bảo vệ an toàn, chỉ những người được phân quyền mới có thể truy cập và thao tác.");
+        CardPanel cardPanel3 = new CardPanel("/images/tinhhiendai.png", "Tính hiện đại",
+                "Giao diện thân thiện, dễ sử dụng cùng các công nghệ mới giúp việc quản lý thư viện trở nên nhanh chóng và hiệu quả hơn bao giờ hết.");
 
         JPanel containerCard = new JPanel(new GridLayout(1, 3, 20, 10));
         containerCard.add(cardPanel);

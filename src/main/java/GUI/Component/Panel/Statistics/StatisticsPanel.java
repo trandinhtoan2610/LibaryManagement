@@ -12,7 +12,6 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private JPanel selectedPanelTab;
 
     // Panels cho các tab
-    private JPanel overviewPanel;
     private BookStatisticsPanel bookStatisticsPanel;
     private PurchaseStatistics purchasePanel;
     private BorrowStatistics borrowPanel;
@@ -20,7 +19,6 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private final String overviewAlias = "OVERVIEW";
     private final String bookAlias = "BOOK";
     private final String purchaseAlias = "PURCHASE";
     private final String borrowAlias = "BORROW";
@@ -33,27 +31,26 @@ public class StatisticsPanel extends javax.swing.JPanel {
         contentPanel.add(cardPanel);
 
         // Khởi tạo các panel
-        overviewPanel = new JPanel();
         bookStatisticsPanel = new BookStatisticsPanel();
         purchasePanel = new PurchaseStatistics();
         borrowPanel = new BorrowStatistics();
         penaltyPanel = new PenaltyStatistics();
 
         // Thiết lập màu nền tạm thời cho các panel
-        overviewPanel.setBackground(Color.WHITE);
+     
         purchasePanel.setBackground(Color.WHITE);
         borrowPanel.setBackground(Color.WHITE);
         penaltyPanel.setBackground(Color.WHITE);
 
         // Thêm các panel vào cardPanel
-        cardPanel.add(overviewPanel, overviewAlias);
+  
         cardPanel.add(bookStatisticsPanel, bookAlias);
         cardPanel.add(purchasePanel, purchaseAlias);
         cardPanel.add(borrowPanel, borrowAlias);
         cardPanel.add(penaltyPanel, penaltyAlias);
 
         // Mặc định hiển thị tab Tổng quan
-        isSelected(overviewTab, overviewAlias);
+        isSelected(borrowSheetTab, borrowAlias);
     }
 
     public void clearSelect() {
@@ -98,8 +95,6 @@ public class StatisticsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
         headerPanel = new javax.swing.JPanel();
-        overviewTab = new javax.swing.JPanel();
-        lblOverviewTab = new javax.swing.JLabel();
         bookTab = new javax.swing.JPanel();
         lblBookTab = new javax.swing.JLabel();
         purchaseOrderTab = new javax.swing.JPanel();
@@ -114,33 +109,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
         headerPanel.setBackground(new java.awt.Color(255, 255, 255));
         headerPanel.setPreferredSize(new java.awt.Dimension(1106, 30));
-        headerPanel.setLayout(new java.awt.GridLayout(1, 5));
-
-        overviewTab.setBackground(new java.awt.Color(255, 255, 255));
-        overviewTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
-        overviewTab.setOpaque(false);
-        overviewTab.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                overviewTabMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                overviewTabMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                overviewTabMouseExited(evt);
-            }
-        });
-
-        lblOverviewTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblOverviewTab.setText("Tổng quan");
-        lblOverviewTab.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblOverviewTabMouseClicked(evt);
-            }
-        });
-        overviewTab.add(lblOverviewTab);
-
-        headerPanel.add(overviewTab);
+        headerPanel.setLayout(new java.awt.GridLayout(1, 4));
 
         bookTab.setBackground(new java.awt.Color(255, 255, 255));
         bookTab.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(204, 204, 204)));
@@ -232,21 +201,6 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
     // </editor-fold>
 
-    private void lblOverviewTabMouseClicked(java.awt.event.MouseEvent evt) {
-        overviewTabMouseClicked(evt);
-    }
-
-    private void overviewTabMouseClicked(java.awt.event.MouseEvent evt) {
-        isSelected(overviewTab, overviewAlias);
-    }
-
-    private void overviewTabMouseEntered(java.awt.event.MouseEvent evt) {
-        addHover(overviewTab);
-    }
-
-    private void overviewTabMouseExited(java.awt.event.MouseEvent evt) {
-        deleteHover(overviewTab);
-    }
 
     private void bookTabMouseClicked(java.awt.event.MouseEvent evt) {
         isSelected(bookTab, bookAlias);
@@ -306,7 +260,6 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblOverviewTab;
     private javax.swing.JLabel lblPenaltyTab;
     private javax.swing.JLabel lblPurchaseOrderTab;
-    private javax.swing.JPanel overviewTab;
     private javax.swing.JPanel penaltyTab;
     private javax.swing.JPanel purchaseOrderTab;
 }

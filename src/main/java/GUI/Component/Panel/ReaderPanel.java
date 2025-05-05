@@ -155,9 +155,8 @@ public class ReaderPanel extends javax.swing.JPanel {
        String phone = txtSearchPhone.getText();
        String address = txtSearchAddress.getText();
        String gender = cbSearchGender.getSelectedIndex() == 0 ? "" : cbSearchGender.getSelectedItem().toString();
-       int minPrestige = (int)spnMinPrestige.getValue();
-       int maxPrestige = (int)spnMaxPrestige.getValue();
-       tblReader.filterTable(name, phone, address, gender, minPrestige, maxPrestige);
+     
+       tblReader.filterTable(name, phone, address, gender);
        
     }
     
@@ -194,11 +193,6 @@ public class ReaderPanel extends javax.swing.JPanel {
         searchPhonePanel = new javax.swing.JPanel();
         lblSearchPhone = new javax.swing.JLabel();
         txtSearchPhone = new javax.swing.JTextField();
-        searchPrestigePanel = new javax.swing.JPanel();
-        lblSearchPrestige = new javax.swing.JLabel();
-        spnMinPrestige = new javax.swing.JSpinner();
-        lblPrestigeRange = new javax.swing.JLabel();
-        spnMaxPrestige = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReader = new GUI.Component.Table.ReaderTable();
 
@@ -317,40 +311,6 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         searchBodyPanel.add(searchPhonePanel);
 
-        searchPrestigePanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchPrestigePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 2));
-
-        lblSearchPrestige.setText("Uy tín :");
-        searchPrestigePanel.add(lblSearchPrestige);
-
-        spnMinPrestige.setModel(new javax.swing.SpinnerNumberModel(0, 0, 3, 1));
-        spnMinPrestige.setPreferredSize(new java.awt.Dimension(50, 25));
-        spnMinPrestige.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spnMinPrestigeStateChanged(evt);
-            }
-        });
-        spnMinPrestige.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                spnMinPrestigeMouseClicked(evt);
-            }
-        });
-        searchPrestigePanel.add(spnMinPrestige);
-
-        lblPrestigeRange.setText("~");
-        searchPrestigePanel.add(lblPrestigeRange);
-
-        spnMaxPrestige.setModel(new javax.swing.SpinnerNumberModel(3, 0, 3, 1));
-        spnMaxPrestige.setPreferredSize(new java.awt.Dimension(50, 25));
-        spnMaxPrestige.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spnMaxPrestigeStateChanged(evt);
-            }
-        });
-        searchPrestigePanel.add(spnMaxPrestige);
-
-        searchBodyPanel.add(searchPrestigePanel);
-
         RightNavbarReader.add(searchBodyPanel, java.awt.BorderLayout.CENTER);
 
         NavbarReaderPanel.add(RightNavbarReader, java.awt.BorderLayout.CENTER);
@@ -392,31 +352,6 @@ public class ReaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_buttonUpdateMouseClicked
 
-    private void spnMinPrestigeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spnMinPrestigeMouseClicked
-       
-    }//GEN-LAST:event_spnMinPrestigeMouseClicked
-
-    private void spnMinPrestigeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnMinPrestigeStateChanged
-        int min = (int)spnMinPrestige.getValue();
-        int max = (int)spnMaxPrestige.getValue();
-        
-        if(min>max){
-            spnMaxPrestige.setValue(min);
-        }
-        loadTableFilter();
-    }//GEN-LAST:event_spnMinPrestigeStateChanged
-
-    private void spnMaxPrestigeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnMaxPrestigeStateChanged
-        int min = (int)spnMinPrestige.getValue();
-        int max = (int)spnMaxPrestige.getValue();
-        
-        if(max < min){
-            spnMinPrestige.setValue(max);
-        }
-        
-        loadTableFilter();
-    }//GEN-LAST:event_spnMaxPrestigeStateChanged
-
     private void cbSearchGenderItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchGenderItemStateChanged
         loadTableFilter();
     }//GEN-LAST:event_cbSearchGenderItemStateChanged
@@ -438,12 +373,10 @@ public class ReaderPanel extends javax.swing.JPanel {
     private GUI.Component.Button.ButtonUpdate buttonUpdate;
     private javax.swing.JComboBox<String> cbSearchGender;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblPrestigeRange;
     private javax.swing.JLabel lblSearchAddress;
     private javax.swing.JLabel lblSearchGender;
     private javax.swing.JLabel lblSearchName;
     private javax.swing.JLabel lblSearchPhone;
-    private javax.swing.JLabel lblSearchPrestige;
     private javax.swing.JPanel searchAddressPanel;
     private javax.swing.JPanel searchBodyPanel;
     private javax.swing.JPanel searchFooterPanel;
@@ -451,9 +384,6 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JPanel searchHeaderPanel;
     private javax.swing.JPanel searchNamePanel;
     private javax.swing.JPanel searchPhonePanel;
-    private javax.swing.JPanel searchPrestigePanel;
-    private javax.swing.JSpinner spnMaxPrestige;
-    private javax.swing.JSpinner spnMinPrestige;
     public static GUI.Component.Table.ReaderTable tblReader;
     private javax.swing.JTextField txtSearchAddress;
     private javax.swing.JTextField txtSearchName;

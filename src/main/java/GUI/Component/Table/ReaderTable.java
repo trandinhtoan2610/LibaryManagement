@@ -71,15 +71,11 @@ public class ReaderTable extends JTableCustom {
 //        }
 //    }
     
-    public void filterTable(String name, String phone, String address, String gender, int minPres, int maxPres) {
+    public void filterTable(String name, String phone, String address, String gender) {
     List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-    // Bộ lọc theo khoảng giá trị prestige
-    RowFilter<Object, Object> minFilter = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER, minPres - 1, 5);
-    RowFilter<Object, Object> maxFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, maxPres + 1, 5);
     
-    filters.add(minFilter);
-    filters.add(maxFilter);
+   
 
     // Các bộ lọc khác
     if (!name.isEmpty()) {
