@@ -115,25 +115,25 @@ public class SupplierPanel extends javax.swing.JPanel {
 
         leftNavbarSupplierPanel.setBackground(new java.awt.Color(255, 255, 255));
         leftNavbarSupplierPanel.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
-        // buttonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
-        //     public void mouseClicked(java.awt.event.MouseEvent evt) {
-        //         buttonAddMouseClicked(evt);
-        //     }
-        // });
-        // leftNavbarSupplierPanel.add(buttonAdd);
+         buttonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                 buttonAddMouseClicked(evt);
+             }
+         });
+         leftNavbarSupplierPanel.add(buttonAdd);
 
-        // buttonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
-        //     public void mouseClicked(java.awt.event.MouseEvent evt) {
-        //         buttonDeleteMouseClicked(evt);
-        //     }
-        // });
-        // leftNavbarSupplierPanel.add(buttonDelete);
+         buttonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                 buttonDeleteMouseClicked(evt);
+             }
+         });
+         leftNavbarSupplierPanel.add(buttonDelete);
 
-        // buttonUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
-        //     public void mouseClicked(java.awt.event.MouseEvent evt) {
-        //         buttonUpdateMouseClicked(evt);
-        //     }
-        // });
+         buttonUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                 buttonUpdateMouseClicked(evt);
+             }
+         });
         leftNavbarSupplierPanel.add(buttonUpdate);
 
         leftNavbarSupplierPanel.add(buttonExportExcel);

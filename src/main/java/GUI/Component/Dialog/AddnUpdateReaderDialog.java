@@ -87,7 +87,6 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
         txtReaderFullName.setText(readerUpdate.getLastName() + ' ' +readerUpdate.getFirstName() );
         lblReaderPrestige.setVisible(true);
         txtReaderPrestige.setVisible(true);
-        txtReaderPrestige.setText(Integer.toString(readerUpdate.getComplianceCount()));
         String gender = readerUpdate.getGender() == Gender.Nam ? "Nam" : "Nữ";
         
         if(gender.equals("Nam"))
@@ -457,8 +456,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     lastName,
                     btnMale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
-                    txtReaderAddress.getText(),
-                    newCount
+                    txtReaderAddress.getText()
             );
             
             readerBUS.addReader(r);
@@ -484,8 +482,7 @@ public class AddnUpdateReaderDialog extends java.awt.Dialog {
                     lastName,
                     btnMale.isSelected() ? Gender.Nam : Gender.Nữ,
                     txtReaderPhone.getText(),
-                    txtReaderAddress.getText(),
-                    readerUpdate.getComplianceCount()
+                    txtReaderAddress.getText()
             );
             
             readerBUS.updateReader(r);

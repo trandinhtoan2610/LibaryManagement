@@ -34,7 +34,6 @@ public class PenaltyReaderTable extends JTableCustom  {
 
         Long sumCountQ1 = 0L; Long sumCountQ2 = 0L; Long sumCountQ3 = 0L; Long sumCountQ4 = 0L; Long sumCountAll = 0L;
         for(StatisticsPreciousData<String> data : readerList){
-            System.out.println(data.getId());
             ReaderDTO reader = readerBUS.findAllStatusReaderByID(data.getId());
             Object[] rowData = {
                     Controller.formatFullName(reader.getLastName()+ " " + reader.getFirstName()),

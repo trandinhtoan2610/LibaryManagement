@@ -112,7 +112,6 @@ public class ReaderBUS {
                 row.createCell(3).setCellValue(a.getGender().toString());
                 row.createCell(4).setCellValue(a.getPhone());
                 row.createCell(5).setCellValue(a.getAddress());
-                row.createCell(6).setCellValue(a.getComplianceCount());
             }
 
             // Tự động điều chỉnh độ rộng cột

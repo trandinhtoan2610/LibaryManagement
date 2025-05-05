@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReaderTable extends JTableCustom {
-    private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ", "Uy tín"};
+    private static final String[] readerTableHeader = {"Mã độc giả", "Họ và tên", "Giới tính", "Số điện thoại", "Địa chỉ"};
     private DefaultTableModel tblModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
     public ReaderTable(){
@@ -33,8 +33,6 @@ public class ReaderTable extends JTableCustom {
                         r.getGender().toString(),
                         r.getPhone(),
                         r.getAddress(),
-                        r.getComplianceCount()
-
                 };
                 tblModel.addRow(rowData);
             }

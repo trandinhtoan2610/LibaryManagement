@@ -501,3 +501,28 @@ UPDATE Book b
 WHERE
     po.status = 'Hoàn_Thành';
 
+-- Cập nhật số lượng đầu sách cho mỗi tác giả dựa trên bảng Book
+UPDATE Author a
+    JOIN (
+    SELECT
+    authorId,
+    COUNT(id) AS book_count -- Đếm số lượng sách (theo ID sách) cho mỗi authorId
+    FROM
+    Book
+    GROUP BY
+    authorId -- Nhóm kết quả theo authorId để đếm riêng cho từng tác giả
+    ) AS book_counts ON a.id = book_counts.authorId -- Kết nối bảng Author với kết quả đếm dựa trên ID
+    SET
+        a.quantity = book_counts.book_count; -- Cập nhật cột quantity của Author bằng số lượng sách đếm được
+
+-- Optional: Cập nhật số lượng về 0 cho những tác giả không có sách nào trong bảng Book
+-- (Những tác giả này sẽ không được cập nhật bởi câu lệnh JOIN ở trên)
+UPDATE Author
+SET quantity = 0
+WHERE id NOT IN (SELECT DISTINCT authorId FROM Book); -- Tìm những authorId không tồn tại trong bảng Book
+
+-- Xóa cột complianceCount khỏi bảng Reader
+ALTER TABLE `Reader`
+DROP COLUMN `complianceCount`;
+
+
