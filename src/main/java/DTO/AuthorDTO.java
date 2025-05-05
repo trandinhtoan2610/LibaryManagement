@@ -18,8 +18,8 @@ public class AuthorDTO {
 
     public AuthorDTO(Long id, String lastName, String firstName, long quantity) {
         this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
+        this.lastName = firstName;
+        this.firstName = lastName;
         this.productQuantity = quantity;
     }
 

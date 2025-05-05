@@ -34,7 +34,7 @@ public class BookStatisticsPanel extends JPanel {
     private ChartPanel chartPanel;
 
     private static final String[] STATISTICS_HEADER = {
-            "Mã sách", "Tên sách", "Thể loại", "Số lượng trong kho", "Số lượng đã mượn", "Số lần bị phạt"
+            "Mã sách", "Tên sách", "Thể loại", "Tác Giả", "Nhà xuất bản", "Số lượng"
     };
 
     public BookStatisticsPanel() {
