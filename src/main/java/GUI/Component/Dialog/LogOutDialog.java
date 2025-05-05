@@ -70,16 +70,4 @@ public class LogOutDialog extends JDialog {
     public boolean isConfirmed() {
         return confirmed;
     }
-
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame();
-//        DeleteEmployeeDialog dialog = new DeleteEmployeeDialog(frame);
-//        dialog.setVisible(true);
-//
-//        if (dialog.isConfirmed()) {
-//            System.out.println("Người dùng đã đồng ý xóa");
-//        } else {
-//            System.out.println("Người dùng đã hủy bỏ");
-//        }
-//    }
 }

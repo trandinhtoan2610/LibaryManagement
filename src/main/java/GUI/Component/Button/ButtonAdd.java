@@ -106,20 +106,4 @@ public class ButtonAdd extends JLabel {
             return new Insets(radius, radius, radius, radius);
         }
     }
-
-//    public static void main(String[] args) {
-//
-//        Frame frame = new Frame("ButtonAdd");
-//        frame.setSize(800, 600);
-//        frame.setLayout(new FlowLayout());
-//        frame.add(new ButtonAdd());
-//        frame.add(new ButtonUpdate());
-//        frame.add(new ButtonDelete());
-//        frame.add(new ButtonDetails());
-//        frame.add(new ButtonExportExcel());
-//        frame.add(new ButtonImportExcel());
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
-//
-//    }
 }

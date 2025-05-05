@@ -79,23 +79,8 @@ public class SupplierPanel extends javax.swing.JPanel {
         navbarSupplierPanel = new javax.swing.JPanel();
         leftNavbarSupplierPanel = new javax.swing.JPanel();
         buttonAdd = new GUI.Component.Button.ButtonAdd();
-        buttonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonAddMouseClicked(evt);
-            }
-        });
         buttonDelete = new GUI.Component.Button.ButtonDelete();
-        buttonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonDeleteMouseClicked(evt);
-            }
-        });
         buttonUpdate = new GUI.Component.Button.ButtonUpdate();
-        buttonUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                buttonUpdateMouseClicked(evt);
-            }
-        });
         buttonExportExcel = new GUI.Component.Button.ButtonExportExcel();
         buttonImportExcel1 = new GUI.Component.Button.ButtonImportExcel();
         rightNavbarSupplierPanel = new javax.swing.JPanel();

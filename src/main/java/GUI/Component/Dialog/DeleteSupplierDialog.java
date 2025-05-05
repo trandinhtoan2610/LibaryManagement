@@ -2,6 +2,8 @@ package GUI.Component.Dialog;
 
 import BUS.SupplierBUS;
 import DTO.SupplierDTO;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 import GUI.Component.Panel.SupplierPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -155,6 +157,7 @@ public class DeleteSupplierDialog extends java.awt.Dialog {
             AlertDialog successDeleteAlert = new AlertDialog(this, "Xóa nhà cung cấp thành công !");
             successDeleteAlert.setVisible(true);
             supplierPanel.reloadSupplierTable();
+            EventBusManager.getEventBus().post(new PurchaseChangeEvent());
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Lỗi khi xóa nhà cung cấp.", "Lỗi", JOptionPane.ERROR_MESSAGE);

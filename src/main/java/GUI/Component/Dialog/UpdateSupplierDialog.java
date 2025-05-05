@@ -2,6 +2,8 @@ package GUI.Component.Dialog;
 
 import DTO.SupplierDTO;
 import BUS.SupplierBUS;
+import GUI.Component.Panel.Statistics.Components.EventBusManager;
+import GUI.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 import GUI.Component.Panel.SupplierPanel;
 import GUI.Component.TextField.CustomTextField;
 import GUI.Controller.Controller;
@@ -150,7 +152,8 @@ public class UpdateSupplierDialog extends JDialog {
 
             boolean success = supplierBUS.updateSupplier(updatedSupplier, oldID);
             if (success) {
-                supplierPanel.reloadSupplierTable(); 
+                supplierPanel.reloadSupplierTable();
+                EventBusManager.getEventBus().post(new PurchaseChangeEvent());
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
                 this.dispose();
             } else {

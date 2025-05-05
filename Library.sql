@@ -276,15 +276,15 @@ INSERT INTO `Book` (`name`, `categoryId`, `authorId`, `publisherId`, `quantity`,
 
 -- Insert Suppliers
 INSERT INTO `Supplier` (`id`, `name`, `phone`, `address`, `isActive`) VALUES
-                                                                          ('SUP01', 'FAHASA', '1900636467', 'Nhiều chi nhánh', 1),
-                                                                          ('SUP02', 'Phương Nam Book', '19006656', 'Nhiều chi nhánh', 1),
-                                                                          ('SUP03', 'Nhà Sách Cá Chép', '02439448946', '211 Xã Đàn, Hà Nội', 1),
-                                                                          ('SUP04', 'ADCBook', '18006989', 'Nhiều chi nhánh', 1),
-                                                                          ('SUP05', 'TiKi Trading', '19006035', 'Online Platform', 1),
-                                                                          ('SUP06', 'NhaSachPhuongDong', '02838383838', '12 Lê Lợi, Q1, TP.HCM', 1),
-                                                                          ('SUP07', 'Vinabook.com', '19006401', 'Online Platform', 1),
-                                                                          ('SUP08', 'NXB Kim Đồng HCM', '02839390811', '248 Cống Quỳnh, Q1, TP.HCM', 1),
-                                                                          ('SUP09', 'Công ty Sách Alpha', '02437226234', '176 Thái Hà, Hà Nội', 1);
+                                                                          ('SUP01', 'FAHASA', '0900636467', 'Nhiều chi nhánh', 1),
+                                                                          ('SUP02', 'Phương Nam Book', '0190066569', 'Nhiều chi nhánh', 1),
+                                                                          ('SUP03', 'Nhà Sách Cá Chép', '024394489', '211 Xã Đàn, Hà Nội', 1),
+                                                                          ('SUP04', 'ADCBook', '0918006989', 'Nhiều chi nhánh', 1),
+                                                                          ('SUP05', 'TiKi Trading', '0919006035', 'Online Platform', 1),
+                                                                          ('SUP06', 'NhaSachPhuongDong', '0283838383', '12 Lê Lợi, Q1, TP.HCM', 1),
+                                                                          ('SUP07', 'Vinabook.com', '0919006401', 'Online Platform', 1),
+                                                                          ('SUP08', 'NXB Kim Đồng HCM', '0283939081', '248 Cống Quỳnh, Q1, TP.HCM', 1),
+                                                                          ('SUP09', 'Công ty Sách Alpha', '0243722623', '176 Thái Hà, Hà Nội', 1);
 
 -- ##############################################
 -- ### GIAO DỊCH MƯỢN TRẢ (Phạt + Đã trả) ###

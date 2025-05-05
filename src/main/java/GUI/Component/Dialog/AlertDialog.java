@@ -63,31 +63,4 @@ public class AlertDialog extends JDialog {
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(contentPanel, BorderLayout.CENTER);
     }
-
-//    public static void main(String[] args) {
-//        // Tạo frame chính
-//        JFrame frame = new JFrame("Main Frame");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(400, 300);
-//        frame.setLocationRelativeTo(null);
-//
-//        // Tạo button để mở dialog
-//        JButton openDialogBtn = new JButton("Mở Dialog");
-//        openDialogBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                // Tạo dialog đầu tiên (parent là JFrame)
-//                AlertDialog dialog1 = new AlertDialog(frame, "Số Điện Thoại Phải Có Đúng 10 Số");
-//
-//                // Tạo dialog thứ hai (parent là dialog1)
-//                AlertDialog dialog2 = new AlertDialog(dialog1, "Text Case");
-//
-//                dialog1.setVisible(true); // Hiển thị dialog1
-//                dialog2.setVisible(true); // Hiển thị dialog2
-//            }
-//        });
-//
-//        frame.add(openDialogBtn);
-//        frame.setVisible(true);
-//    }
 }

@@ -94,17 +94,4 @@ public class CustomComboBox extends JComboBox<String> {
             return false;
         }
     }
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Custom ComboBox Demo");
-//        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-//        frame.add(Box.createVerticalGlue());
-//        CustomComboBox comboBox = new CustomComboBox();
-//        comboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Option 1", "Option 2", "Option 3"}));
-//        comboBox.setPreferredSize(new Dimension(200, 30));
-//        frame.add(comboBox);
-//
-//        frame.setSize(300, 150);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
-//    }
 }
