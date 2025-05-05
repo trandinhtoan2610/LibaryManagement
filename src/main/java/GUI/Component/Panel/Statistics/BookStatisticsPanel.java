@@ -8,6 +8,8 @@ import DTO.Statistics.QuarterData;
 import GUI.Component.Panel.Statistics.Components.BoxDashBoard;
 import GUI.Component.Table.BookTable;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,6 +138,32 @@ public class BookStatisticsPanel extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
         add(splitPane, BorderLayout.CENTER);
+
+        // Thiết lập listener cho bộ lọc
+        setupFilterListeners();
+    }
+
+    private void setupFilterListeners() {
+        // Khi chọn năm, xóa khoảng ngày
+        yearComboBox.addActionListener(e -> {
+            if (yearComboBox.getSelectedItem() != null && !((String) yearComboBox.getSelectedItem()).isEmpty()) {
+                fromDateChooser.setDate(null);
+                toDateChooser.setDate(null);
+            }
+        });
+
+        // Khi chọn ngày bắt đầu hoặc kết thúc, xóa năm
+        PropertyChangeListener dateListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (fromDateChooser.getDate() != null || toDateChooser.getDate() != null) {
+                    yearComboBox.setSelectedIndex(0); // Chọn giá trị trống
+                }
+            }
+        };
+
+        fromDateChooser.addPropertyChangeListener("date", dateListener);
+        toDateChooser.addPropertyChangeListener("date", dateListener);
     }
 
     private void loadStatistics() {
@@ -150,10 +178,21 @@ public class BookStatisticsPanel extends JPanel {
         Date toDate = toDateChooser.getDate();
         String selectedYear = (String) yearComboBox.getSelectedItem();
 
+        // Kiểm tra xem có đang cố lọc theo cả 2 cách không
+        boolean hasDateFilter = fromDate != null || toDate != null;
+        boolean hasYearFilter = selectedYear != null && !selectedYear.isEmpty();
+
+        if (hasDateFilter && hasYearFilter) {
+            JOptionPane.showMessageDialog(this,
+                    "Chỉ có thể lọc theo khoảng ngày HOẶC theo năm, không thể lọc theo cả hai cùng lúc!",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         List<BookViewModel> filteredBooks = bookBUS.getAllBooksForDisplay();
 
         // Lọc theo năm xuất bản
-        if (selectedYear != null && !selectedYear.isEmpty()) {
+        if (hasYearFilter) {
             try {
                 int year = Integer.parseInt(selectedYear);
                 filteredBooks = filteredBooks.stream()
@@ -166,11 +205,17 @@ public class BookStatisticsPanel extends JPanel {
         }
 
         // Lọc theo khoảng ngày (dựa trên phiếu mượn)
-        if (fromDate != null && toDate != null) {
+        if (hasDateFilter) {
+            if (fromDate == null || toDate == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (fromDate.after(toDate)) {
                 JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được lớn hơn ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
             try {
                 List<QuarterData> borrowData = borrowSheetBUS.getQuarterBookDataByDate(fromDate, toDate);
                 Set<Long> borrowedBookIds = borrowData.stream()

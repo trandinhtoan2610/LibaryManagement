@@ -184,7 +184,7 @@ public class BookDAL implements IRepositoryBase<Book> {
 
     public List<Book> findBooksByAuthorID(Long authorID){
         String sql = "SELECT * FROM book WHERE authorID = ?";
-        List<Book> list = new ArrayList<Book>();
+        List<Book> list = new ArrayList<>();
         try (
             Connection c = DatabaseConnection.getConnection();
             PreparedStatement pst = c.prepareStatement(sql); )
@@ -199,31 +199,5 @@ public class BookDAL implements IRepositoryBase<Book> {
             System.out.println("ERROR when query books by authour :D ");
         }
         return list;
-    }
-    // cua minh dung sua nhe
-    public int sumBorrowedBook(){
-        try {
-            PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT SUM(borrowedQuantity) AS SachDangMuon FROM book");
-            ResultSet rs = p.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("SachDangMuon");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 0;
-    }
-    public int sumAvailableBook(){
-        try {
-            PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("SELECT (SUM(quantity) - SUM(borrowedQuantity)) AS SachTrongKho FROM book");
-            ResultSet rs = p.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("SachTrongKho");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return 0;
     }
 }
