@@ -28,12 +28,14 @@ public class PenaltyReaderTable extends JTableCustom  {
     }
 
     public void renderPenaltySheetTable(){
-        if(readerList == null) return;
-
         tableModel.setRowCount(0);
+        if(readerList == null) return;
+        if(readerList.size()==0) return;
+
         Long sumCountQ1 = 0L; Long sumCountQ2 = 0L; Long sumCountQ3 = 0L; Long sumCountQ4 = 0L; Long sumCountAll = 0L;
         for(StatisticsPreciousData<String> data : readerList){
-            ReaderDTO reader = readerBUS.findReaderByID(data.getId());
+            System.out.println(data.getId());
+            ReaderDTO reader = readerBUS.findAllStatusReaderByID(data.getId());
             Object[] rowData = {
                     Controller.formatFullName(reader.getLastName()+ " " + reader.getFirstName()),
                     data.getCountQ1(),
@@ -62,7 +64,7 @@ public class PenaltyReaderTable extends JTableCustom  {
         tableModel.setRowCount(0);
         Long sumTotalQ1 = 0L; Long sumTotalQ2 = 0L; Long sumTotalQ3 = 0L; Long sumTotalQ4 = 0L; Long sumTotalAll = 0L;
         for(StatisticsPreciousData<String> data : readerList){
-            ReaderDTO reader = readerBUS.findReaderByID(data.getId());
+            ReaderDTO reader = readerBUS.findAllStatusReaderByID(data.getId());
             Object[] rowData = {
                     Controller.formatFullName(reader.getLastName()+ " " + reader.getFirstName()),
                     Controller.formatVND(data.getTotalQ1()),

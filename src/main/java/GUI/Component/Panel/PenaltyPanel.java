@@ -373,6 +373,13 @@ public class PenaltyPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_tblPenaltyMouseClicked
 
     private void tblPenaltyMouseExited(java.awt.event.MouseEvent evt) {
+        lblBorrowID.setText("");
+        lblEmployeeInfo.setText("");
+        lblReaderGender.setText("");
+        lblReaderAddress.setText("");
+        lblReaderPhone.setText("");
+        lblReaderID.setText("");
+        lblReaderName.setText("");
         tblPenaltyDetails.resetTable(null);
     }
 

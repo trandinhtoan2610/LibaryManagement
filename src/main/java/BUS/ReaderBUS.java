@@ -80,7 +80,7 @@ public class ReaderBUS {
         String maxID = "RD";
         try {
             Long maxNum = readerDAL.getCurrentID() + 1;
-            return maxID+= maxNum;
+            return maxID + maxNum;
 
         } catch (Exception e) {
             System.out.println("Lỗi khi lấy ID : " + e.getMessage());
@@ -130,6 +130,19 @@ public class ReaderBUS {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public ReaderDTO findAllStatusReaderByID(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID độc giả không được để trống");
+        }
+        try {
+            return readerDAL.findBothStatusById(id);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tìm độc giả theo ID: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 }

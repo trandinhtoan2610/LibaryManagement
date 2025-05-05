@@ -66,4 +66,12 @@ public class ReaderDAL implements IRepositoryStringID<ReaderDTO> {
         String sql = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) FROM Reader;";
         return genericDAL.getMaxID(sql);
     }
+
+    public ReaderDTO findBothStatusById(String id) {
+        String sql = "SELECT * FROM Reader WHERE id = ? ";
+        return genericDAL.queryForObject(sql, readerRowMapper, id);
+    }
+
+
+
 }

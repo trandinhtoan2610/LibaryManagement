@@ -12,7 +12,6 @@ import DTO.Enum.PayStatus;
 import DTO.PenaltyDTO;
 import DTO.ReaderDTO;
 import GUI.Component.Panel.PenaltyPanel;
-import GUI.Controller.Controller;
 import GUI.Controller.SearchCondition;
 import com.toedter.calendar.JDateChooser;
 
@@ -33,6 +32,7 @@ public class PenaltyFilterDialog extends JDialog {
     private EmployeeBUS employeeBUS;
     private ReaderBUS readerBUS;
     private PenaltyBUS penaltyBUS;
+    private static final Color offColor = new Color(245,245,245);
 
     public PenaltyFilterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -49,7 +49,7 @@ public class PenaltyFilterDialog extends JDialog {
         setSize(650, 600);
         setResizable(false);
         setLocationRelativeTo(null);
-
+        initialize();
 
         txtReaderID.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -72,7 +72,30 @@ public class PenaltyFilterDialog extends JDialog {
             @Override
             public void changedUpdate(DocumentEvent e) {showEmployeeInfo();}
         });
+    }
 
+    public void initialize(){
+
+        employeeInputPanel.setBackground(offColor);
+        readerInputPanel.setBackground(offColor);
+        payDateInputPanel.setBackground(offColor);
+        penaltyDateInputPanel.setBackground(offColor);
+        amountInputPanel.setBackground(offColor);
+        statusInputPanel.setBackground(offColor);
+
+        checkboxStatus.setVisible(false);
+        checkboxReader.setVisible(false);
+        checkboxEmployee.setVisible(false);
+        checkboxPayDate.setVisible(false);
+        checkboxPenaltyDate.setVisible(false);
+        checkboxAmount.setVisible(false);
+
+        turnOffTxt(searchEmployeeIdPanel, searchEmployeeNamePanel, txtEmployeeID,  btnChooseEmployee);
+        turnOffTxt(searchReaderIdPanel,searchReaderNamePanel,txtReaderID, btnChooseReader);
+        turnOffDate(searchStartPayDatePanel, searchEndPayDatePanel, txtPayDateStart, txtPayDateEnd);
+        turnOffDate(searchStartPenaltyDatePanel, searchEndPenaltyDatePanel, txtPenaltyStart, txtPenaltyEnd);
+        turnOffSpn(searchMinAmountPanel, searchMaxAmountPanel, txtMinAmount, txtMaxAmount);
+        turnOffRad(subStatusPanel1, subStatusPanel2, subStatusPanel3);
     }
 
     //Hiển thị nhân viên lên textfield :
@@ -219,8 +242,75 @@ public class PenaltyFilterDialog extends JDialog {
         }).collect(Collectors.toList());
     }
 
+    private void turnOffTxt(JPanel panel, JPanel panel2, JTextField txtField, JButton button){
+        panel.setBackground(offColor);
+        panel2.setBackground(offColor);
+        txtField.setText("");
+        txtField.setEnabled(false);
+        txtField.setEditable(false);
+        button.setEnabled(false);
+    }
 
+    private void turnOnTxt(JPanel panel, JPanel panel2, JTextField txtField, JButton button){
+        panel.setBackground(Color.white);
+        panel2.setBackground(Color.white);
+        txtField.setEnabled(true);
+        txtField.setEditable(true);
+        button.setEnabled(true);
+    }
 
+    private void turnOnDate( JPanel pnl1, JPanel pnl2 ,JDateChooser dateChooser, JDateChooser dateChooser2){
+        pnl1.setBackground(Color.white);
+        pnl2.setBackground(Color.white);
+        dateChooser.setEnabled(true);
+        dateChooser2.setEnabled(true);
+    }
+
+    private void turnOffDate( JPanel pnl1, JPanel pnl2 ,JDateChooser dateChooser, JDateChooser dateChooser2){
+        pnl1.setBackground(offColor);
+        pnl2.setBackground(offColor);
+        dateChooser.setDate(null);
+        dateChooser2.setDate(null);
+        dateChooser.setEnabled(false);
+        dateChooser2.setEnabled(false);
+    }
+
+    private void turnOffSpn(JPanel pnl1, JPanel pnl2, JSpinner spn1, JSpinner spn2){
+        pnl1.setBackground(offColor);
+        pnl2.setBackground(offColor);
+        spn1.setValue(0);
+        spn2.setValue(0);
+        spn1.setEnabled(false);
+        spn2.setEnabled(false);
+    }
+
+    private void turnOnSpn(JPanel pnl1, JPanel pnl2, JSpinner spn1, JSpinner spn2){
+        pnl1.setBackground(Color.white);
+        pnl2.setBackground(Color.white);
+        spn1.setEnabled(true);
+        spn2.setEnabled(true);
+    }
+
+    private void turnOnRad(JPanel pnl1, JPanel pnl2, JPanel pnl3){
+        pnl1.setBackground(Color.white);
+        pnl2.setBackground(Color.white);
+        pnl3.setBackground(Color.white);
+        radStatusAll.setEnabled(true);
+        radHavePaid.setEnabled(true);
+        radNotPay.setEnabled(true);
+        radStatusAll.setSelected(true);
+    }
+
+    private void turnOffRad(JPanel pnl1, JPanel pnl2, JPanel pnl3){
+        pnl1.setBackground(offColor);
+        pnl2.setBackground(offColor);
+        pnl3.setBackground(offColor);
+        radStatusAll.setSelected(true);
+        radStatusAll.setEnabled(false);
+        radHavePaid.setEnabled(false);
+        radNotPay.setEnabled(false);
+
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -236,50 +326,77 @@ public class PenaltyFilterDialog extends JDialog {
         btnReject = new javax.swing.JButton();
         headerPanel = new javax.swing.JPanel();
         lblHeader = new javax.swing.JLabel();
-        contentPanel = new javax.swing.JPanel();
-        searchEmployeePanel = new javax.swing.JPanel();
+        bodyPanel = new javax.swing.JPanel();
+        descriptionPanel = new javax.swing.JPanel();
+        searchPanel = new javax.swing.JPanel();
+        employeePanel = new javax.swing.JPanel();
+        employeeHeaderPanel = new javax.swing.JPanel();
+        checkboxSearchEmployee = new javax.swing.JCheckBox();
         checkboxEmployee = new javax.swing.JCheckBox();
         employeeInputPanel = new javax.swing.JPanel();
+        searchEmployeeIdPanel = new javax.swing.JPanel();
         lblEmployeeID = new javax.swing.JLabel();
-        lblEmployeeName = new javax.swing.JLabel();
-        btnChooseEmployee = new GUI.Component.Button.ButtonChosen();
-        txtEmployeeName = new javax.swing.JTextField();
         txtEmployeeID = new javax.swing.JTextField();
-        searchReaderPanel = new javax.swing.JPanel();
+        btnChooseEmployee = new GUI.Component.Button.ButtonChosen();
+        searchEmployeeNamePanel = new javax.swing.JPanel();
+        lblEmployeeName = new javax.swing.JLabel();
+        txtEmployeeName = new javax.swing.JTextField();
+        readerPanel = new javax.swing.JPanel();
+        readerHeaderPanel = new javax.swing.JPanel();
+        checkboxSearchReader = new javax.swing.JCheckBox();
         checkboxReader = new javax.swing.JCheckBox();
         readerInputPanel = new javax.swing.JPanel();
+        searchReaderIdPanel = new javax.swing.JPanel();
         lblReaderID = new javax.swing.JLabel();
         txtReaderID = new javax.swing.JTextField();
         btnChooseReader = new GUI.Component.Button.ButtonChosen();
-        txtReaderName = new javax.swing.JTextField();
+        searchReaderNamePanel = new javax.swing.JPanel();
         lblReaderName = new javax.swing.JLabel();
-        searchAmountPanel = new javax.swing.JPanel();
+        txtReaderName = new javax.swing.JTextField();
+        amountPanel = new javax.swing.JPanel();
+        amountHeaderPanel = new javax.swing.JPanel();
+        checkboxSearchAmount = new javax.swing.JCheckBox();
         checkboxAmount = new javax.swing.JCheckBox();
         amountInputPanel = new javax.swing.JPanel();
-        txtMinAmount = new javax.swing.JSpinner();
+        searchMinAmountPanel = new javax.swing.JPanel();
         lblMinAmount = new javax.swing.JLabel();
+        txtMinAmount = new javax.swing.JSpinner();
+        searchMaxAmountPanel = new javax.swing.JPanel();
         lblMaxAmount = new javax.swing.JLabel();
         txtMaxAmount = new javax.swing.JSpinner();
-        searchStatusPanel = new javax.swing.JPanel();
+        statusPanel = new javax.swing.JPanel();
+        statusHeaderPanel = new javax.swing.JPanel();
+        checkboxSearchStatus = new javax.swing.JCheckBox();
         checkboxStatus = new javax.swing.JCheckBox();
         statusInputPanel = new javax.swing.JPanel();
+        subStatusPanel1 = new javax.swing.JPanel();
         radStatusAll = new javax.swing.JRadioButton();
+        subStatusPanel2 = new javax.swing.JPanel();
         radHavePaid = new javax.swing.JRadioButton();
+        subStatusPanel3 = new javax.swing.JPanel();
         radNotPay = new javax.swing.JRadioButton();
-        searchPayDate = new javax.swing.JPanel();
+        payDatePanel = new javax.swing.JPanel();
+        subPanel = new javax.swing.JPanel();
+        checkboxSearchPayDate = new javax.swing.JCheckBox();
         checkboxPayDate = new javax.swing.JCheckBox();
         payDateInputPanel = new javax.swing.JPanel();
-        lblPayDateStart = new javax.swing.JLabel();
+        searchStartPayDatePanel = new javax.swing.JPanel();
+        lblStartPayDate = new javax.swing.JLabel();
         txtPayDateStart = new com.toedter.calendar.JDateChooser();
-        lblPayDateEnd = new javax.swing.JLabel();
+        searchEndPayDatePanel = new javax.swing.JPanel();
+        lblEndPayDate = new javax.swing.JLabel();
         txtPayDateEnd = new com.toedter.calendar.JDateChooser();
-        searchPenaltyDate = new javax.swing.JPanel();
+        penaltyDatePanel = new javax.swing.JPanel();
+        penaltyDateHeaderPanel = new javax.swing.JPanel();
+        checkboxSearchPenaltyDate = new javax.swing.JCheckBox();
         checkboxPenaltyDate = new javax.swing.JCheckBox();
         penaltyDateInputPanel = new javax.swing.JPanel();
-        lblPenaltyStart = new javax.swing.JLabel();
+        searchStartPenaltyDatePanel = new javax.swing.JPanel();
+        lblStartPenaltyDate = new javax.swing.JLabel();
         txtPenaltyStart = new com.toedter.calendar.JDateChooser();
+        searchEndPenaltyDatePanel = new javax.swing.JPanel();
+        lblEndPenaltyDate = new javax.swing.JLabel();
         txtPenaltyEnd = new com.toedter.calendar.JDateChooser();
-        lblPenaltyEnd = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -364,380 +481,357 @@ public class PenaltyFilterDialog extends JDialog {
 
         getContentPane().add(headerPanel, java.awt.BorderLayout.NORTH);
 
-        contentPanel.setBackground(new java.awt.Color(255, 255, 255));
-        contentPanel.setLayout(new java.awt.GridLayout(3, 2, 5, 10));
+        bodyPanel.setBackground(new java.awt.Color(255, 255, 255));
+        bodyPanel.setLayout(new java.awt.BorderLayout());
 
-        searchEmployeePanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchEmployeePanel.setLayout(new java.awt.BorderLayout());
+        descriptionPanel.setBackground(new java.awt.Color(255, 255, 255));
+        descriptionPanel.setLayout(new java.awt.BorderLayout());
+        bodyPanel.add(descriptionPanel, java.awt.BorderLayout.PAGE_START);
 
-        checkboxEmployee.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxEmployee.setText("Kết hợp");
-        searchEmployeePanel.add(checkboxEmployee, java.awt.BorderLayout.PAGE_START);
+        searchPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchPanel.setLayout(new java.awt.GridLayout(3, 2, 5, 5));
 
-        employeeInputPanel.setBackground(new java.awt.Color(255, 255, 255));
-        employeeInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Nhân viên xử lý"));
+        employeePanel.setBackground(new java.awt.Color(255, 255, 255));
+        employeePanel.setLayout(new java.awt.BorderLayout());
 
-        lblEmployeeID.setText("Mã NV :");
-        lblEmployeeID.setPreferredSize(new java.awt.Dimension(42, 25));
+        employeeHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        employeeHeaderPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        employeeHeaderPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        lblEmployeeName.setText("Họ tên :");
-        lblEmployeeName.setPreferredSize(new java.awt.Dimension(42, 25));
-
-        btnChooseEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
+        checkboxSearchEmployee.setText("Tìm");
+        checkboxSearchEmployee.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnChooseEmployeeMouseClicked(evt);
+                checkboxSearchEmployeeMouseClicked(evt);
             }
         });
+        employeeHeaderPanel.add(checkboxSearchEmployee);
+
+        checkboxEmployee.setText("Kết hợp (AND)");
+        employeeHeaderPanel.add(checkboxEmployee);
+
+        employeePanel.add(employeeHeaderPanel, java.awt.BorderLayout.PAGE_START);
+
+        employeeInputPanel.setBackground(new java.awt.Color(255, 255, 255));
+        employeeInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Nhân viên"));
+        employeeInputPanel.setLayout(new java.awt.GridLayout(2, 0));
+
+        searchEmployeeIdPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchEmployeeIdPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
+        lblEmployeeID.setText("Mã NV :");
+        lblEmployeeID.setPreferredSize(new java.awt.Dimension(45, 16));
+        searchEmployeeIdPanel.add(lblEmployeeID);
+
+        txtEmployeeID.setPreferredSize(new java.awt.Dimension(100, 22));
+        searchEmployeeIdPanel.add(txtEmployeeID);
+
+        btnChooseEmployee.setPreferredSize(new java.awt.Dimension(35, 22));
+        btnChooseEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseEmployeeActionPerformed(evt);
+            }
+        });
+        searchEmployeeIdPanel.add(btnChooseEmployee);
+
+        employeeInputPanel.add(searchEmployeeIdPanel);
+
+        searchEmployeeNamePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchEmployeeNamePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
+        lblEmployeeName.setText("Tên NV :");
+        searchEmployeeNamePanel.add(lblEmployeeName);
 
         txtEmployeeName.setEditable(false);
-        txtEmployeeName.setPreferredSize(new java.awt.Dimension(73, 25));
+        txtEmployeeName.setPreferredSize(new java.awt.Dimension(160, 22));
+        searchEmployeeNamePanel.add(txtEmployeeName);
 
-        txtEmployeeID.setPreferredSize(new java.awt.Dimension(73, 25));
+        employeeInputPanel.add(searchEmployeeNamePanel);
 
-        javax.swing.GroupLayout employeeInputPanelLayout = new javax.swing.GroupLayout(employeeInputPanel);
-        employeeInputPanel.setLayout(employeeInputPanelLayout);
-        employeeInputPanelLayout.setHorizontalGroup(
-            employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(employeeInputPanelLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblEmployeeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblEmployeeName, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeInputPanelLayout.createSequentialGroup()
-                        .addComponent(txtEmployeeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnChooseEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtEmployeeName, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
-        );
-        employeeInputPanelLayout.setVerticalGroup(
-            employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(employeeInputPanelLayout.createSequentialGroup()
-                .addGap(0, 15, Short.MAX_VALUE)
-                .addGroup(employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblEmployeeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEmployeeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnChooseEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(employeeInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtEmployeeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEmployeeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
-        );
+        employeePanel.add(employeeInputPanel, java.awt.BorderLayout.CENTER);
 
-        searchEmployeePanel.add(employeeInputPanel, java.awt.BorderLayout.CENTER);
+        searchPanel.add(employeePanel);
 
-        contentPanel.add(searchEmployeePanel);
+        readerPanel.setBackground(new java.awt.Color(255, 255, 255));
+        readerPanel.setLayout(new java.awt.BorderLayout());
 
-        searchReaderPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchReaderPanel.setLayout(new java.awt.BorderLayout());
+        readerHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        readerHeaderPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        readerHeaderPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        checkboxReader.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxReader.setText("Kết hợp");
-        searchReaderPanel.add(checkboxReader, java.awt.BorderLayout.PAGE_START);
+        checkboxSearchReader.setText("Tìm");
+        checkboxSearchReader.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                checkboxSearchReaderMouseClicked(evt);
+            }
+        });
+        readerHeaderPanel.add(checkboxSearchReader);
+
+        checkboxReader.setText("Kết hợp (AND)");
+        readerHeaderPanel.add(checkboxReader);
+
+        readerPanel.add(readerHeaderPanel, java.awt.BorderLayout.PAGE_START);
 
         readerInputPanel.setBackground(new java.awt.Color(255, 255, 255));
         readerInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Độc giả"));
+        readerInputPanel.setLayout(new java.awt.GridLayout(2, 0));
+
+        searchReaderIdPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchReaderIdPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
         lblReaderID.setText("Mã ĐG :");
-        lblReaderID.setPreferredSize(new java.awt.Dimension(42, 25));
+        lblReaderID.setPreferredSize(new java.awt.Dimension(45, 16));
+        searchReaderIdPanel.add(lblReaderID);
 
-        txtReaderID.setPreferredSize(new java.awt.Dimension(73, 25));
+        txtReaderID.setPreferredSize(new java.awt.Dimension(100, 22));
+        searchReaderIdPanel.add(txtReaderID);
 
-        btnChooseReader.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnChooseReaderMouseClicked(evt);
-            }
-        });
+        btnChooseReader.setPreferredSize(new java.awt.Dimension(35, 22));
+        searchReaderIdPanel.add(btnChooseReader);
+
+        readerInputPanel.add(searchReaderIdPanel);
+
+        searchReaderNamePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchReaderNamePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
+        lblReaderName.setText("Tên ĐG :");
+        searchReaderNamePanel.add(lblReaderName);
 
         txtReaderName.setEditable(false);
-        txtReaderName.setPreferredSize(new java.awt.Dimension(73, 25));
+        txtReaderName.setPreferredSize(new java.awt.Dimension(160, 22));
+        searchReaderNamePanel.add(txtReaderName);
 
-        lblReaderName.setText("Họ tên :");
-        lblReaderName.setPreferredSize(new java.awt.Dimension(42, 25));
+        readerInputPanel.add(searchReaderNamePanel);
 
-        javax.swing.GroupLayout readerInputPanelLayout = new javax.swing.GroupLayout(readerInputPanel);
-        readerInputPanel.setLayout(readerInputPanelLayout);
-        readerInputPanelLayout.setHorizontalGroup(
-            readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(readerInputPanelLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblReaderID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblReaderName, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(readerInputPanelLayout.createSequentialGroup()
-                        .addComponent(txtReaderID, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnChooseReader, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtReaderName, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(68, Short.MAX_VALUE))
-        );
-        readerInputPanelLayout.setVerticalGroup(
-            readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(readerInputPanelLayout.createSequentialGroup()
-                .addGap(0, 15, Short.MAX_VALUE)
-                .addGroup(readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblReaderID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtReaderID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnChooseReader, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(readerInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtReaderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblReaderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
-        );
+        readerPanel.add(readerInputPanel, java.awt.BorderLayout.CENTER);
 
-        searchReaderPanel.add(readerInputPanel, java.awt.BorderLayout.CENTER);
+        searchPanel.add(readerPanel);
 
-        contentPanel.add(searchReaderPanel);
+        amountPanel.setBackground(new java.awt.Color(255, 255, 255));
+        amountPanel.setLayout(new java.awt.BorderLayout());
 
-        searchAmountPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchAmountPanel.setLayout(new java.awt.BorderLayout());
+        amountHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        amountHeaderPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        amountHeaderPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        checkboxAmount.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxAmount.setText("Kết hợp");
-        searchAmountPanel.add(checkboxAmount, java.awt.BorderLayout.PAGE_START);
+        checkboxSearchAmount.setText("Tìm");
+        checkboxSearchAmount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                checkboxSearchAmountMouseClicked(evt);
+            }
+        });
+        amountHeaderPanel.add(checkboxSearchAmount);
+
+        checkboxAmount.setText("Kết hợp (AND)");
+        amountHeaderPanel.add(checkboxAmount);
+
+        amountPanel.add(amountHeaderPanel, java.awt.BorderLayout.PAGE_START);
 
         amountInputPanel.setBackground(new java.awt.Color(255, 255, 255));
         amountInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiền phạt"));
+        amountInputPanel.setLayout(new java.awt.GridLayout(2, 0));
+
+        searchMinAmountPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchMinAmountPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
+        lblMinAmount.setText("Giá thấp nhất :");
+        lblMinAmount.setPreferredSize(new java.awt.Dimension(80, 16));
+        searchMinAmountPanel.add(lblMinAmount);
 
         txtMinAmount.setModel(new javax.swing.SpinnerNumberModel(0L, 0L, null, 10000L));
+        txtMinAmount.setPreferredSize(new java.awt.Dimension(100, 22));
         txtMinAmount.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 txtMinAmountStateChanged(evt);
             }
         });
+        searchMinAmountPanel.add(txtMinAmount);
 
-        lblMinAmount.setText("Giá thấp nhất :");
-        lblMinAmount.setPreferredSize(new java.awt.Dimension(77, 30));
+        amountInputPanel.add(searchMinAmountPanel);
+
+        searchMaxAmountPanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchMaxAmountPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
         lblMaxAmount.setText("Giá cao nhất :");
-        lblMaxAmount.setPreferredSize(new java.awt.Dimension(72, 30));
+        lblMaxAmount.setPreferredSize(new java.awt.Dimension(80, 16));
+        searchMaxAmountPanel.add(lblMaxAmount);
 
         txtMaxAmount.setModel(new javax.swing.SpinnerNumberModel(0L, 0L, null, 10000L));
+        txtMaxAmount.setPreferredSize(new java.awt.Dimension(100, 22));
         txtMaxAmount.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 txtMaxAmountStateChanged(evt);
             }
         });
+        searchMaxAmountPanel.add(txtMaxAmount);
 
-        javax.swing.GroupLayout amountInputPanelLayout = new javax.swing.GroupLayout(amountInputPanel);
-        amountInputPanel.setLayout(amountInputPanelLayout);
-        amountInputPanelLayout.setHorizontalGroup(
-            amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(amountInputPanelLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMinAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMinAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
-        );
-        amountInputPanelLayout.setVerticalGroup(
-            amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(amountInputPanelLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMinAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMinAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(amountInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtMaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
+        amountInputPanel.add(searchMaxAmountPanel);
 
-        searchAmountPanel.add(amountInputPanel, java.awt.BorderLayout.PAGE_END);
+        amountPanel.add(amountInputPanel, java.awt.BorderLayout.CENTER);
 
-        contentPanel.add(searchAmountPanel);
+        searchPanel.add(amountPanel);
 
-        searchStatusPanel.setBackground(new java.awt.Color(255, 255, 255));
-        searchStatusPanel.setLayout(new java.awt.BorderLayout());
+        statusPanel.setBackground(new java.awt.Color(255, 255, 255));
+        statusPanel.setLayout(new java.awt.BorderLayout());
 
-        checkboxStatus.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxStatus.setText("Kết hợp");
-        searchStatusPanel.add(checkboxStatus, java.awt.BorderLayout.PAGE_START);
+        statusHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        statusHeaderPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        statusHeaderPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+
+        checkboxSearchStatus.setText("Tìm");
+        checkboxSearchStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                checkboxSearchStatusMouseClicked(evt);
+            }
+        });
+        statusHeaderPanel.add(checkboxSearchStatus);
+
+        checkboxStatus.setText("Kết hợp (AND)");
+        statusHeaderPanel.add(checkboxStatus);
+
+        statusPanel.add(statusHeaderPanel, java.awt.BorderLayout.PAGE_START);
 
         statusInputPanel.setBackground(new java.awt.Color(255, 255, 255));
         statusInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Trạng thái"));
+        statusInputPanel.setLayout(new java.awt.GridLayout(3, 0));
 
-        radStatusAll.setBackground(new java.awt.Color(255, 255, 255));
+        subStatusPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        subStatusPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
         btnGroupStatus.add(radStatusAll);
-        radStatusAll.setSelected(true);
         radStatusAll.setText("Tất cả");
-        radStatusAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radStatusAllActionPerformed(evt);
-            }
-        });
+        subStatusPanel1.add(radStatusAll);
 
-        radHavePaid.setBackground(new java.awt.Color(255, 255, 255));
+        statusInputPanel.add(subStatusPanel1);
+
+        subStatusPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        subStatusPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
         btnGroupStatus.add(radHavePaid);
         radHavePaid.setText("Đã thanh toán");
-        radHavePaid.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                radHavePaidStateChanged(evt);
-            }
-        });
+        subStatusPanel2.add(radHavePaid);
 
-        radNotPay.setBackground(new java.awt.Color(255, 255, 255));
+        statusInputPanel.add(subStatusPanel2);
+
+        subStatusPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        subStatusPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
         btnGroupStatus.add(radNotPay);
         radNotPay.setText("Chưa thanh toán");
+        subStatusPanel3.add(radNotPay);
 
-        javax.swing.GroupLayout statusInputPanelLayout = new javax.swing.GroupLayout(statusInputPanel);
-        statusInputPanel.setLayout(statusInputPanelLayout);
-        statusInputPanelLayout.setHorizontalGroup(
-            statusInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusInputPanelLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(statusInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(radStatusAll, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radHavePaid, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radNotPay, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(175, Short.MAX_VALUE))
-        );
-        statusInputPanelLayout.setVerticalGroup(
-            statusInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusInputPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(radStatusAll)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radHavePaid)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radNotPay)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
+        statusInputPanel.add(subStatusPanel3);
 
-        searchStatusPanel.add(statusInputPanel, java.awt.BorderLayout.CENTER);
+        statusPanel.add(statusInputPanel, java.awt.BorderLayout.CENTER);
 
-        contentPanel.add(searchStatusPanel);
+        searchPanel.add(statusPanel);
 
-        searchPayDate.setBackground(new java.awt.Color(255, 255, 255));
-        searchPayDate.setLayout(new java.awt.BorderLayout());
+        payDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        payDatePanel.setLayout(new java.awt.BorderLayout());
 
-        checkboxPayDate.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxPayDate.setText("Kết hợp");
-        searchPayDate.add(checkboxPayDate, java.awt.BorderLayout.PAGE_START);
+        subPanel.setBackground(new java.awt.Color(255, 255, 255));
+        subPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        subPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+
+        checkboxSearchPayDate.setText("Tìm");
+        checkboxSearchPayDate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                checkboxSearchPayDateMouseClicked(evt);
+            }
+        });
+        subPanel.add(checkboxSearchPayDate);
+
+        checkboxPayDate.setText("Kết hợp (AND)");
+        subPanel.add(checkboxPayDate);
+
+        payDatePanel.add(subPanel, java.awt.BorderLayout.PAGE_START);
 
         payDateInputPanel.setBackground(new java.awt.Color(255, 255, 255));
         payDateInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Ngày nộp phạt"));
+        payDateInputPanel.setLayout(new java.awt.GridLayout(2, 0));
 
-        lblPayDateStart.setText("Từ ngày :");
+        searchStartPayDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchStartPayDatePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 7));
 
-        txtPayDateStart.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPayDateStartPropertyChange(evt);
+        lblStartPayDate.setText("Từ ngày :");
+        lblStartPayDate.setPreferredSize(new java.awt.Dimension(60, 16));
+        searchStartPayDatePanel.add(lblStartPayDate);
+
+        txtPayDateStart.setPreferredSize(new java.awt.Dimension(120, 22));
+        searchStartPayDatePanel.add(txtPayDateStart);
+
+        payDateInputPanel.add(searchStartPayDatePanel);
+
+        searchEndPayDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchEndPayDatePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
+
+        lblEndPayDate.setText("Đến ngày :");
+        lblEndPayDate.setPreferredSize(new java.awt.Dimension(60, 16));
+        searchEndPayDatePanel.add(lblEndPayDate);
+
+        txtPayDateEnd.setPreferredSize(new java.awt.Dimension(120, 22));
+        searchEndPayDatePanel.add(txtPayDateEnd);
+
+        payDateInputPanel.add(searchEndPayDatePanel);
+
+        payDatePanel.add(payDateInputPanel, java.awt.BorderLayout.CENTER);
+
+        searchPanel.add(payDatePanel);
+
+        penaltyDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        penaltyDatePanel.setLayout(new java.awt.BorderLayout());
+
+        penaltyDateHeaderPanel.setBackground(new java.awt.Color(255, 255, 255));
+        penaltyDateHeaderPanel.setPreferredSize(new java.awt.Dimension(364, 20));
+        penaltyDateHeaderPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+
+        checkboxSearchPenaltyDate.setText("Tìm");
+        checkboxSearchPenaltyDate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                checkboxSearchPenaltyDateMouseClicked(evt);
             }
         });
+        penaltyDateHeaderPanel.add(checkboxSearchPenaltyDate);
 
-        lblPayDateEnd.setText("Đến ngày :");
+        checkboxPenaltyDate.setText("Kết hợp (AND)");
+        penaltyDateHeaderPanel.add(checkboxPenaltyDate);
 
-        txtPayDateEnd.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPayDateEndPropertyChange(evt);
-            }
-        });
-
-        javax.swing.GroupLayout payDateInputPanelLayout = new javax.swing.GroupLayout(payDateInputPanel);
-        payDateInputPanel.setLayout(payDateInputPanelLayout);
-        payDateInputPanelLayout.setHorizontalGroup(
-            payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(payDateInputPanelLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPayDateEnd)
-                    .addComponent(lblPayDateStart))
-                .addGap(18, 18, 18)
-                .addGroup(payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPayDateStart, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPayDateEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(69, Short.MAX_VALUE))
-        );
-        payDateInputPanelLayout.setVerticalGroup(
-            payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(payDateInputPanelLayout.createSequentialGroup()
-                .addGap(0, 22, Short.MAX_VALUE)
-                .addGroup(payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPayDateStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPayDateStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(payDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtPayDateEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblPayDateEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
-        );
-
-        searchPayDate.add(payDateInputPanel, java.awt.BorderLayout.CENTER);
-
-        contentPanel.add(searchPayDate);
-
-        searchPenaltyDate.setBackground(new java.awt.Color(255, 255, 255));
-        searchPenaltyDate.setLayout(new java.awt.BorderLayout());
-
-        checkboxPenaltyDate.setBackground(new java.awt.Color(255, 255, 255));
-        checkboxPenaltyDate.setText("Kết hợp");
-        searchPenaltyDate.add(checkboxPenaltyDate, java.awt.BorderLayout.PAGE_START);
+        penaltyDatePanel.add(penaltyDateHeaderPanel, java.awt.BorderLayout.PAGE_START);
 
         penaltyDateInputPanel.setBackground(new java.awt.Color(255, 255, 255));
         penaltyDateInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Ngày phạt"));
+        penaltyDateInputPanel.setLayout(new java.awt.GridLayout(2, 0));
 
-        lblPenaltyStart.setText("Từ ngày :");
+        searchStartPenaltyDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchStartPenaltyDatePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 7));
 
-        txtPenaltyStart.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPenaltyStartPropertyChange(evt);
-            }
-        });
+        lblStartPenaltyDate.setText("Từ ngày :");
+        lblStartPenaltyDate.setPreferredSize(new java.awt.Dimension(60, 16));
+        searchStartPenaltyDatePanel.add(lblStartPenaltyDate);
 
-        txtPenaltyEnd.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPenaltyEndPropertyChange(evt);
-            }
-        });
+        txtPenaltyStart.setPreferredSize(new java.awt.Dimension(120, 22));
+        searchStartPenaltyDatePanel.add(txtPenaltyStart);
 
-        lblPenaltyEnd.setText("Đến ngày :");
+        penaltyDateInputPanel.add(searchStartPenaltyDatePanel);
 
-        javax.swing.GroupLayout penaltyDateInputPanelLayout = new javax.swing.GroupLayout(penaltyDateInputPanel);
-        penaltyDateInputPanel.setLayout(penaltyDateInputPanelLayout);
-        penaltyDateInputPanelLayout.setHorizontalGroup(
-            penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(penaltyDateInputPanelLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPenaltyEnd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPenaltyStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtPenaltyStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPenaltyEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
-        penaltyDateInputPanelLayout.setVerticalGroup(
-            penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(penaltyDateInputPanelLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPenaltyStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPenaltyStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(penaltyDateInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtPenaltyEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblPenaltyEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
+        searchEndPenaltyDatePanel.setBackground(new java.awt.Color(255, 255, 255));
+        searchEndPenaltyDatePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
-        searchPenaltyDate.add(penaltyDateInputPanel, java.awt.BorderLayout.CENTER);
+        lblEndPenaltyDate.setText("Đến ngày :");
+        lblEndPenaltyDate.setPreferredSize(new java.awt.Dimension(60, 16));
+        searchEndPenaltyDatePanel.add(lblEndPenaltyDate);
 
-        contentPanel.add(searchPenaltyDate);
+        txtPenaltyEnd.setPreferredSize(new java.awt.Dimension(120, 22));
+        searchEndPenaltyDatePanel.add(txtPenaltyEnd);
 
-        getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
+        penaltyDateInputPanel.add(searchEndPenaltyDatePanel);
+
+        penaltyDatePanel.add(penaltyDateInputPanel, java.awt.BorderLayout.CENTER);
+
+        searchPanel.add(penaltyDatePanel);
+
+        bodyPanel.add(searchPanel, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(bodyPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -750,31 +844,35 @@ public class PenaltyFilterDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_closeDialog
 
-    private void radStatusAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radStatusAllActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radStatusAllActionPerformed
-
-    private void btnChooseEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseEmployeeMouseClicked
-        ChooseEmployeeDialog chooseEmployeeDialog = new ChooseEmployeeDialog(this);
-        chooseEmployeeDialog.setVisible(true);
-        if (chooseEmployeeDialog.getSelectedEmployee() != null) {
-            Employee currentEmployee = chooseEmployeeDialog.getSelectedEmployee();
-            txtEmployeeID.setText(currentEmployee.getId().toString());
-            txtEmployeeName.setText(Controller.formatFullName(currentEmployee.getFirstName()+ " "+ currentEmployee.getLastName()));
-        }
-    }//GEN-LAST:event_btnChooseEmployeeMouseClicked
-
-    private void btnChooseReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseReaderMouseClicked
-        ChooseReaderDialog chooseReaderDialog = new ChooseReaderDialog(this);
-        chooseReaderDialog.setVisible(true);
-        if(chooseReaderDialog.getSelectedReader() != null ){
-            ReaderDTO reader = chooseReaderDialog.getSelectedReader();
-            txtReaderID.setText(reader.getId());
-            txtReaderName.setText(Controller.formatFullName(reader.getLastName() + " " + reader.getFirstName()));
-        }
-    }//GEN-LAST:event_btnChooseReaderMouseClicked
-
     private void btnCombineAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCombineAllMouseClicked
+        employeeInputPanel.setBackground(Color.white);
+        readerInputPanel.setBackground(Color.white);
+        payDateInputPanel.setBackground(Color.white);
+        penaltyDateInputPanel.setBackground(Color.white);
+        amountInputPanel.setBackground(Color.white);
+        statusInputPanel.setBackground(Color.white);
+
+        turnOnTxt(searchEmployeeIdPanel, searchEmployeeNamePanel, txtEmployeeID,  btnChooseEmployee);
+        turnOnTxt(searchReaderIdPanel,searchReaderNamePanel,txtReaderID, btnChooseReader);
+        turnOnDate(searchStartPayDatePanel, searchEndPayDatePanel, txtPayDateStart, txtPayDateEnd);
+        turnOnDate(searchStartPenaltyDatePanel, searchEndPenaltyDatePanel, txtPenaltyStart, txtPenaltyEnd);
+        turnOnSpn(searchMinAmountPanel, searchMaxAmountPanel, txtMinAmount, txtMaxAmount);
+        turnOnRad(subStatusPanel1, subStatusPanel2, subStatusPanel3);
+
+        checkboxSearchStatus.setSelected(true);
+        checkboxSearchEmployee.setSelected(true);
+        checkboxSearchPenaltyDate.setSelected(true);
+        checkboxSearchReader.setSelected(true);
+        checkboxSearchPayDate.setSelected(true);
+        checkboxSearchAmount.setSelected(true);
+
+        checkboxEmployee.setVisible(true);
+        checkboxReader.setVisible(true);
+        checkboxPenaltyDate.setVisible(true);
+        checkboxAmount.setVisible(true);
+        checkboxPayDate.setVisible(true);
+        checkboxStatus.setVisible(true);
+
         checkboxEmployee.setSelected(true);
         checkboxReader.setSelected(true);
         checkboxPenaltyDate.setSelected(true);
@@ -783,7 +881,9 @@ public class PenaltyFilterDialog extends JDialog {
         checkboxStatus.setSelected(true);
     }//GEN-LAST:event_btnCombineAllMouseClicked
 
-    private void btnDeleteCombineMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteCombineMouseClicked
+    private void btnDeleteCombineMouseClicked(java.awt.event.MouseEvent evt) {
+
+//GEN-FIRST:event_btnDeleteCombineMouseClicked
         checkboxEmployee.setSelected(false);
         checkboxReader.setSelected(false);
         checkboxPenaltyDate.setSelected(false);
@@ -791,72 +891,6 @@ public class PenaltyFilterDialog extends JDialog {
         checkboxPayDate.setSelected(false);
         checkboxStatus.setSelected(false);
     }//GEN-LAST:event_btnDeleteCombineMouseClicked
-
-    private void txtMinAmountStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtMinAmountStateChanged
-        Long minPrice = (Long)txtMinAmount.getValue();
-        Long maxPrice = (Long)txtMaxAmount.getValue();
-        
-        if(minPrice > maxPrice){
-            txtMaxAmount.setValue(minPrice);
-        }
-    }//GEN-LAST:event_txtMinAmountStateChanged
-
-    private void txtMaxAmountStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtMaxAmountStateChanged
-        Long minPrice = (Long)txtMinAmount.getValue();
-        Long maxPrice = (Long)txtMaxAmount.getValue();
-        
-        if(maxPrice < minPrice){
-            txtMinAmount.setValue(maxPrice);
-        }
-    }//GEN-LAST:event_txtMaxAmountStateChanged
-
-    private void txtPayDateStartPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtPayDateStartPropertyChange
-        Date startDate = txtPayDateStart.getDate();
-        Date endDate = txtPayDateEnd.getDate();
-        if(startDate == null && endDate == null )
-            return;
-        if(startDate != null && endDate != null ) {
-            if (startDate.after(endDate)) {
-                txtPayDateEnd.setDate(startDate);
-            }
-        }
-    }//GEN-LAST:event_txtPayDateStartPropertyChange
-
-    private void txtPayDateEndPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtPayDateEndPropertyChange
-        Date startDate = txtPayDateStart.getDate();
-        Date endDate = txtPayDateEnd.getDate();
-        if(startDate == null && endDate == null )
-            return;
-        if(startDate != null && endDate != null ) {
-            if (endDate.before(startDate)) {
-                txtPayDateStart.setDate(endDate);
-            }
-        }
-    }//GEN-LAST:event_txtPayDateEndPropertyChange
-
-    private void txtPenaltyStartPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtPenaltyStartPropertyChange
-        Date startDate = txtPenaltyStart.getDate();
-        Date endDate = txtPenaltyEnd.getDate();
-        if(startDate == null && endDate == null )
-            return;
-        if(startDate != null && endDate != null ) {
-            if (startDate.after(endDate)) {
-                txtPenaltyEnd.setDate(startDate);
-            }
-        }
-    }//GEN-LAST:event_txtPenaltyStartPropertyChange
-
-    private void txtPenaltyEndPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtPenaltyEndPropertyChange
-        Date startDate = txtPenaltyStart.getDate();
-        Date endDate = txtPenaltyEnd.getDate();
-        if(startDate == null && endDate == null )
-            return;
-        if(startDate != null && endDate != null ) {
-            if (endDate.before(startDate)) {
-                txtPenaltyStart.setDate(endDate);
-            }
-        }
-    }//GEN-LAST:event_txtPenaltyEndPropertyChange
 
     private void btnSubmitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSubmitKeyPressed
     }//GEN-LAST:event_btnSubmitKeyPressed
@@ -886,8 +920,14 @@ public class PenaltyFilterDialog extends JDialog {
 
 
 
-        if( (Long)txtMaxAmount.getValue() != 0 ){
-            Long[] amountRange = new Long[]{(Long)txtMinAmount.getValue(), (Long)txtMaxAmount.getValue()};
+        Number minNum = (Number) txtMinAmount.getValue();
+        Number maxNum = (Number) txtMaxAmount.getValue();
+
+        long min = minNum.longValue();
+        long max = maxNum.longValue();
+
+        if (max != 0) {
+            Long[] amountRange = new Long[]{min, max};
             System.out.println(amountRange[0] + "   " + amountRange[1]);
             conditionList.add(new SearchCondition(SearchCondition.Field.AMOUNT, amountRange, checkboxAmount.isSelected()));
         }
@@ -916,24 +956,119 @@ public class PenaltyFilterDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnRejectMouseClicked
 
-    private void radHavePaidStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radHavePaidStateChanged
-        if(checkboxStatus.isSelected() && checkboxPayDate.isSelected()){
-            if(radHavePaid.isSelected()){
-                txtPayDateStart.setEnabled(true);
-                txtPayDateEnd.setEnabled(true);
-            }
-            else {
-                txtPayDateStart.setDate(null);
-                txtPayDateEnd.setDate(null);
-                txtPayDateStart.setEnabled(false);
-                txtPayDateEnd.setEnabled(false);
-            }
+    private void btnChooseEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseEmployeeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnChooseEmployeeActionPerformed
+
+    private void checkboxSearchEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchEmployeeMouseClicked
+        if(checkboxSearchEmployee.isSelected()) {
+            turnOnTxt(searchEmployeeIdPanel, searchEmployeeNamePanel, txtEmployeeID, btnChooseEmployee);
+            employeeInputPanel.setBackground(Color.white);
+            checkboxEmployee.setVisible(true);
         }
-    }//GEN-LAST:event_radHavePaidStateChanged
+        else {
+            turnOffTxt(searchEmployeeIdPanel, searchEmployeeNamePanel, txtEmployeeID, btnChooseEmployee);
+            employeeInputPanel.setBackground(offColor);
+            checkboxEmployee.setVisible(false);
+            checkboxEmployee.setSelected(false);
+        }
+    }//GEN-LAST:event_checkboxSearchEmployeeMouseClicked
+
+    private void checkboxSearchReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchReaderMouseClicked
+        if(checkboxSearchReader.isSelected()) {
+            turnOnTxt(searchReaderIdPanel, searchReaderNamePanel, txtReaderID, btnChooseReader);
+            readerInputPanel.setBackground(Color.white);
+            checkboxReader.setVisible(true);
+        }
+        else {
+            turnOffTxt(searchReaderIdPanel, searchReaderNamePanel, txtReaderID, btnChooseReader);
+            readerInputPanel.setBackground(offColor);
+            checkboxReader.setVisible(false);
+            checkboxReader.setSelected(false);
+        }
+    }//GEN-LAST:event_checkboxSearchReaderMouseClicked
+
+    private void checkboxSearchPayDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchPayDateMouseClicked
+        if(checkboxSearchPayDate.isSelected()) {
+            turnOnDate(searchStartPayDatePanel, searchEndPayDatePanel, txtPayDateStart, txtPayDateEnd);
+            payDateInputPanel.setBackground(Color.white);
+            checkboxPayDate.setVisible(true);
+        }
+        else {
+            turnOffDate(searchStartPayDatePanel, searchEndPayDatePanel, txtPayDateStart, txtPayDateEnd);
+            payDateInputPanel.setBackground(offColor);
+            checkboxPayDate.setVisible(false);
+            checkboxPayDate.setSelected(false);
+        }
+    }//GEN-LAST:event_checkboxSearchPayDateMouseClicked
+
+    private void checkboxSearchPenaltyDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchPenaltyDateMouseClicked
+        if(checkboxSearchPenaltyDate.isSelected()){
+            turnOnDate(searchStartPenaltyDatePanel, searchEndPenaltyDatePanel, txtPayDateStart, txtPenaltyEnd);
+            penaltyDateInputPanel.setBackground(Color.white);
+            checkboxPenaltyDate.setVisible(true);
+        }
+        else {
+            turnOffDate(searchStartPenaltyDatePanel, searchEndPenaltyDatePanel, txtPenaltyStart, txtPenaltyEnd);
+            penaltyDateInputPanel.setBackground(offColor);
+            checkboxPenaltyDate.setSelected(false);
+            checkboxPenaltyDate.setVisible(false);
+        }
+    }//GEN-LAST:event_checkboxSearchPenaltyDateMouseClicked
+
+
+    private void checkboxSearchAmountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchAmountMouseClicked
+        if(checkboxSearchAmount.isSelected()) {
+            turnOnSpn(searchMinAmountPanel, searchMaxAmountPanel, txtMinAmount, txtMaxAmount);
+            amountInputPanel.setBackground(Color.white);
+            checkboxAmount.setVisible(true);
+        }
+        else {
+            turnOffSpn(searchMinAmountPanel, searchMaxAmountPanel, txtMinAmount, txtMaxAmount);
+            amountInputPanel.setBackground(offColor);
+            checkboxAmount.setSelected(false);
+            checkboxAmount.setVisible(false);
+        }
+    }//GEN-LAST:event_checkboxSearchAmountMouseClicked
+
+    private void checkboxSearchStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxSearchStatusMouseClicked
+        if(checkboxSearchStatus.isSelected()){
+            turnOnRad(subStatusPanel1, subStatusPanel2, subStatusPanel3);
+            statusInputPanel.setBackground(Color.white);
+            checkboxStatus.setVisible(true);
+        }
+        else{
+            turnOffRad(subStatusPanel1, subStatusPanel2, subStatusPanel3);
+            statusInputPanel.setBackground(offColor);
+            checkboxStatus.setVisible(false);
+            checkboxStatus.setSelected(false);
+        }
+    }//GEN-LAST:event_checkboxSearchStatusMouseClicked
+
+    private void txtMinAmountStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtMinAmountStateChanged
+        Long min = Long.parseLong(txtMinAmount.getValue().toString());
+        Long max = Long.parseLong(txtMaxAmount.getValue().toString());
+
+        if(min > max){
+            txtMaxAmount.setValue(min);
+        }
+    }//GEN-LAST:event_txtMinAmountStateChanged
+
+    private void txtMaxAmountStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtMaxAmountStateChanged
+        Long min = Long.parseLong(txtMinAmount.getValue().toString());
+        Long max = Long.parseLong(txtMaxAmount.getValue().toString());
+
+        if(min > max){
+            txtMinAmount.setValue(max);
+        }
+    }//GEN-LAST:event_txtMaxAmountStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel amountHeaderPanel;
     private javax.swing.JPanel amountInputPanel;
+    private javax.swing.JPanel amountPanel;
+    private javax.swing.JPanel bodyPanel;
     private GUI.Component.Button.ButtonChosen btnChooseEmployee;
     private GUI.Component.Button.ButtonChosen btnChooseReader;
     private javax.swing.JButton btnCombineAll;
@@ -947,37 +1082,61 @@ public class PenaltyFilterDialog extends JDialog {
     private javax.swing.JCheckBox checkboxPayDate;
     private javax.swing.JCheckBox checkboxPenaltyDate;
     private javax.swing.JCheckBox checkboxReader;
+    private javax.swing.JCheckBox checkboxSearchAmount;
+    private javax.swing.JCheckBox checkboxSearchEmployee;
+    private javax.swing.JCheckBox checkboxSearchPayDate;
+    private javax.swing.JCheckBox checkboxSearchPenaltyDate;
+    private javax.swing.JCheckBox checkboxSearchReader;
+    private javax.swing.JCheckBox checkboxSearchStatus;
     private javax.swing.JCheckBox checkboxStatus;
-    private javax.swing.JPanel contentPanel;
+    private javax.swing.JPanel descriptionPanel;
+    private javax.swing.JPanel employeeHeaderPanel;
     private javax.swing.JPanel employeeInputPanel;
+    private javax.swing.JPanel employeePanel;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JLabel lblEmployeeID;
     private javax.swing.JLabel lblEmployeeName;
+    private javax.swing.JLabel lblEndPayDate;
+    private javax.swing.JLabel lblEndPenaltyDate;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblMaxAmount;
     private javax.swing.JLabel lblMinAmount;
-    private javax.swing.JLabel lblPayDateEnd;
-    private javax.swing.JLabel lblPayDateStart;
-    private javax.swing.JLabel lblPenaltyEnd;
-    private javax.swing.JLabel lblPenaltyStart;
     private javax.swing.JLabel lblReaderID;
     private javax.swing.JLabel lblReaderName;
+    private javax.swing.JLabel lblStartPayDate;
+    private javax.swing.JLabel lblStartPenaltyDate;
     private javax.swing.JPanel leftButtonsPanel;
     private javax.swing.JPanel middleButtonsPanel;
     private javax.swing.JPanel payDateInputPanel;
+    private javax.swing.JPanel payDatePanel;
+    private javax.swing.JPanel penaltyDateHeaderPanel;
     private javax.swing.JPanel penaltyDateInputPanel;
+    private javax.swing.JPanel penaltyDatePanel;
     private javax.swing.JRadioButton radHavePaid;
     private javax.swing.JRadioButton radNotPay;
     private javax.swing.JRadioButton radStatusAll;
+    private javax.swing.JPanel readerHeaderPanel;
     private javax.swing.JPanel readerInputPanel;
+    private javax.swing.JPanel readerPanel;
     private javax.swing.JPanel rightButtonsPanel;
-    private javax.swing.JPanel searchAmountPanel;
-    private javax.swing.JPanel searchEmployeePanel;
-    private javax.swing.JPanel searchPayDate;
-    private javax.swing.JPanel searchPenaltyDate;
-    private javax.swing.JPanel searchReaderPanel;
-    private javax.swing.JPanel searchStatusPanel;
+    private javax.swing.JPanel searchEmployeeIdPanel;
+    private javax.swing.JPanel searchEmployeeNamePanel;
+    private javax.swing.JPanel searchEndPayDatePanel;
+    private javax.swing.JPanel searchEndPenaltyDatePanel;
+    private javax.swing.JPanel searchMaxAmountPanel;
+    private javax.swing.JPanel searchMinAmountPanel;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JPanel searchReaderIdPanel;
+    private javax.swing.JPanel searchReaderNamePanel;
+    private javax.swing.JPanel searchStartPayDatePanel;
+    private javax.swing.JPanel searchStartPenaltyDatePanel;
+    private javax.swing.JPanel statusHeaderPanel;
     private javax.swing.JPanel statusInputPanel;
+    private javax.swing.JPanel statusPanel;
+    private javax.swing.JPanel subPanel;
+    private javax.swing.JPanel subStatusPanel1;
+    private javax.swing.JPanel subStatusPanel2;
+    private javax.swing.JPanel subStatusPanel3;
     private javax.swing.JTextField txtEmployeeID;
     private javax.swing.JTextField txtEmployeeName;
     private javax.swing.JSpinner txtMaxAmount;

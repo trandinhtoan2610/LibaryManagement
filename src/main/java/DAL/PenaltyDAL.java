@@ -184,19 +184,21 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
     public List<StatisticsPreciousData<Long>> getPreciousEachEmployee(String year){
         List<StatisticsPreciousData<Long>> employeeList = new ArrayList<>();
         String sql = "SELECT \n" +
-                "    p.employeeID AS 'employeeID',\n" +
-                "    SUM(CASE WHEN QUARTER(p.payDate) = 1 THEN p.totalAmount ELSE 0 END) AS sumQ1,\n" +
-                "    SUM(CASE WHEN QUARTER(p.payDate) = 2 THEN p.totalAmount ELSE 0 END) AS sumQ2,\n" +
-                "    SUM(CASE WHEN QUARTER(p.payDate) = 3 THEN p.totalAmount ELSE 0 END) AS sumQ3,\n" +
-                "    SUM(CASE WHEN QUARTER(p.payDate) = 4 THEN p.totalAmount ELSE 0 END) AS sumQ4,\n" +
-                "    COUNT(CASE WHEN QUARTER(p.payDate) = 1 THEN p.id ELSE NULL END) AS countQ1,\n" +
-                "    COUNT(CASE WHEN QUARTER(p.payDate) = 2 THEN p.id ELSE NULL END) AS countQ2,\n" +
-                "    COUNT(CASE WHEN QUARTER(p.payDate) = 3 THEN p.id ELSE NULL END) AS countQ3,\n" +
-                "    COUNT(CASE WHEN QUARTER(p.payDate) = 4 THEN p.id ELSE NULL END) AS countQ4\n" +
-                "FROM penalty AS p\n" +
-                "JOIN employee AS e ON e.id = p.employeeID\n" +
-                "WHERE p.payDate IS NOT NULL AND p.employeeID IS NOT NULL AND YEAR(p.payDate) = ? \n" +
-                "GROUP BY employeeID;\n";
+                "\t\te.id AS employeeID,\n" +
+                "\t\tSUM(CASE WHEN QUARTER(p.payDate)=1 THEN p.totalamount ELSE 0 END) AS 'sumQ1',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(p.payDate)=2 THEN p.totalamount ELSE 0 END) AS 'sumQ2',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(p.payDate)=3 THEN p.totalamount ELSE 0 END) AS 'sumQ3',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(p.payDate)=4 THEN p.totalamount ELSE 0 END) AS 'sumQ4',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(p.payDate)=1 THEN p.id ELSE NULL END) AS 'countQ1',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(p.payDate)=2 THEN p.id ELSE NULL END) AS 'countQ2',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(p.payDate)=3 THEN p.id ELSE NULL END) AS 'countQ3',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(p.payDate)=4 THEN p.id ELSE NULL END) AS 'countQ4'\n" +
+                "\n" +
+                "FROM employee AS e\n" +
+                "LEFT JOIN penalty AS p ON p.employeeID = e.id AND YEAR(p.payDate) = ? \n" +
+                "\n" +
+                "GROUP BY e.id \n" +
+                "ORDER BY sumQ1 DESC";
 
 
         try(Connection c = DatabaseConnection.getConnection();
@@ -229,25 +231,34 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
 
     public List<StatisticsPreciousData<String>> getPreciousEachReader(String year){
         List<StatisticsPreciousData<String>> readerList = new ArrayList<>();
-        String sql = "SELECT \n" +
-                "    readerId AS readerID,\n" +
-                "    SUM(CASE WHEN QUARTER(penaltyDate) = 1 THEN totalAmount ELSE 0 END) AS sumQ1,\n" +
-                "    SUM(CASE WHEN QUARTER(penaltyDate) = 2 THEN totalAmount ELSE 0 END) AS sumQ2,\n" +
-                "    SUM(CASE WHEN QUARTER(penaltyDate) = 3 THEN totalAmount ELSE 0 END) AS sumQ3,\n" +
-                "    SUM(CASE WHEN QUARTER(penaltyDate) = 4 THEN totalAmount ELSE 0 END) AS sumQ4,\n" +
-                "    COUNT(CASE WHEN QUARTER(penaltyDate) = 1 THEN id END) AS countQ1,\n" +
-                "    COUNT(CASE WHEN QUARTER(penaltyDate) = 2 THEN id END) AS countQ2,\n" +
-                "    COUNT(CASE WHEN QUARTER(penaltyDate) = 3 THEN id END) AS countQ3,\n" +
-                "    COUNT(CASE WHEN QUARTER(penaltyDate) = 4 THEN id END) AS countQ4\n" +
-                "FROM (\n" +
-                "    SELECT DISTINCT p.id, p.penaltyDate, p.totalAmount, r.id AS readerId\n" +
-                "    FROM penaltydetails pd\n" +
-                "    JOIN penalty p ON p.id = pd.penaltyId\n" +
-                "    JOIN borrow_in_sheet b ON b.id = pd.borrowId\n" +
-                "    JOIN reader r ON r.id = b.readerId\n" +
-                ") AS sub\n" +
-                "WHERE YEAR(penaltyDate) = ? " +
-                "GROUP BY readerID;";
+        String sql = "WITH details AS (\n" +
+                "\tSELECT \n" +
+                "\t\t\tDISTINCT p.id AS penaltyID,\n" +
+                "\t\t\tb.readerId,\n" +
+                "\t\t\tp.payDate,\n" +
+                "\t\t\tp.totalamount\n" +
+                "\t\t\n" +
+                "\tFROM penaltydetails AS pd\n" +
+                "\tJOIN penalty AS p ON pd.penaltyId = p.id \n" +
+                "\tJOIN borrow_in_sheet AS b ON b.id = pd.borrowId\n" +
+                "\tWHERE p.`status` = 'Đã_Thanh_Toán'\n" +
+                ")\n" +
+                "\n" +
+                "SELECT \n" +
+                "\t\tr.id AS 'readerID',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(d.payDate)=1 THEN d.totalamount ELSE 0 END) AS 'sumQ1',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(d.payDate)=2 THEN d.totalamount ELSE 0 END) AS 'sumQ2',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(d.payDate)=3 THEN d.totalamount ELSE 0 END) AS 'sumQ3',\n" +
+                "\t\tSUM(CASE WHEN QUARTER(d.payDate)=4 THEN d.totalamount ELSE 0 END) AS 'sumQ4',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(d.payDate)=1 THEN d.penaltyID ELSE NULL END) AS 'countQ1',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(d.payDate)=2 THEN d.penaltyID ELSE NULL END) AS 'countQ2',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(d.payDate)=3 THEN d.penaltyID ELSE NULL END) AS 'countQ3',\n" +
+                "\t\tCOUNT(CASE WHEN QUARTER(d.payDate)=4 THEN d.penaltyID ELSE NULL END) AS 'countQ4'\n" +
+                "\t\t\n" +
+                "FROM reader AS r\n" +
+                "Left JOIN details AS d ON d.readerId = r.id AND YEAR(d.payDate) = ? \n" +
+                "GROUP BY r.id \n" +
+                "ORDER BY sumQ1 DESC";
 
         try(Connection c= DatabaseConnection.getConnection();
             PreparedStatement pst = c.prepareStatement(sql);
@@ -349,7 +360,7 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
                 "\tIFNULL(SUM(d.totalAmount),0) AS penaltyFee\n" +
                 "FROM months \n" +
                 "LEFT JOIN details AS d ON months.month = d.month\n" +
-                "GROUP BY months.month\n";
+                "GROUP BY months.month \n";
 
         try (Connection c = DatabaseConnection.getConnection();
             PreparedStatement pst = c.prepareStatement(sql);

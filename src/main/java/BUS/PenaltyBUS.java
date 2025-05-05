@@ -142,7 +142,7 @@ public class PenaltyBUS {
             System.out.println("Lỗi BUS khi lấy sl phiếu phạt");
             e.printStackTrace();
         }
-        return null;
+        return "0";
     }
 
     public String countEmployeePenalty(){
@@ -162,17 +162,17 @@ public class PenaltyBUS {
             System.out.println("Lỗi BUS khi lấy sl độc giả");
             e.printStackTrace();
         }
-        return null;
+        return 0L;
     }
 
     public String countLostBook(){
         try{
-            return penaltyDAL.countLostBook();
+            return penaltyDAL.countLostBook() == null ? "0" : penaltyDAL.countLostBook();
         }catch (Exception e){
             System.out.println("Lỗi BUS khi lấy sl sách tổn thất");
             e.printStackTrace();
         }
-        return null;
+        return "0";
     }
 
     public List<StatisticsPreciousData<Long>> getPreciousPenaltyEmployee (String year){
@@ -230,5 +230,7 @@ public class PenaltyBUS {
 
         return null;
     }
+
+
 
 }
