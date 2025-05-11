@@ -26,9 +26,6 @@ public class PenaltyDAL implements IRepositoryDetails<PenaltyDTO> {
                 rs.getDate("payDate"),
                 rs.getObject("employeeID") == null ? null : rs.getLong("employeeID")
             );
-
-
-
     @Override
     public PenaltyDTO findById(String id) {
         String sql = "SELECT * FROM penalty WHERE id = ? ";

@@ -166,7 +166,16 @@ INSERT INTO `Role` (`name`) VALUES
                                 ('Employee');
 
 -- Insert Employees
-INSERT INTO `Employee` (`firstName`, `lastName`, `gender`, `username`, `password`, `roleId`, `phone`, `address`, `salary`, `isActive`) VALUES
+INSERT INTO `Employee` (`firstName`, `lastName`, `gender`, `username`, `password`, `roleId`, `phone`, `address`, `salary`, `isActive`) VALUES ('Admin',
+                                                                                                                                               '',
+                                                                                                                                               'Nam',
+                                                                                                                                               'admin',
+                                                                                                                                               'admin',
+                                                                                                                                               1,
+                                                                                                                                               '0912345670',
+                                                                                                                                               '123 Đường ABC, Quận 1, TP.HCM',
+                                                                                                                                               0,
+                                                                                                                                               1),
                                                                                                                                            ('Nguyễn', 'Văn Thành', 'Nam', 'thanhnv_admin', 'hashed_pw', 1, '0912345670', '123 Đường ABC, Quận 1, TP.HCM', 15000000, 1),
                                                                                                                                            ('Trần', 'Thị Lan', 'Nữ', 'lantt_staff', 'hashed_pw', 2, '0987654321', '456 Đường XYZ, Quận 3, TP.HCM', 9000000, 1),
                                                                                                                                            ('Lê', 'Hoàng Minh', 'Nam', 'minhlh_emp', 'hashed_pw', 3, '0912345678', '789 Đường KLM, Quận Bình Thạnh, TP.HCM', 7500000, 1),

@@ -96,5 +96,4 @@ public class BorrowSheetBUS {
     public List<StatusData> getStatusDataByDate(Date startDate, Date endDate) {
         return borrowSheetDAL.getListStatusByDate(startDate, endDate);
     }
-
 }
